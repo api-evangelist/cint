@@ -1,0 +1,30 @@
+generated: '2026-07-18'
+method: searched
+source: openapi/cint-demand-openapi.yml
+docs: https://developer.cint.com/en/guides#authentication-process
+note: >-
+  Bearer JWT is the primary scheme; tokens (client credentials) are issued via the
+  onboarding Starter Kit. API Key auth (Authorization header) is also supported.
+  Every request must also send the Cint-API-Version date header.
+summary:
+  types:
+  - apiKey
+  - http
+  api_key_in:
+  - header
+schemes:
+- name: BearerAuth
+  type: http
+  scheme: bearer
+  bearerFormat: JWT
+  description: Bearer token used for authentication and authorization. See [Authentication Process](https://developer.cint.com/en/guides#authentication-process)
+    documentation for more information.
+  sources:
+  - openapi/cint-demand-openapi.yml
+- name: ApiKeyAuth
+  type: apiKey
+  in: header
+  parameter: Authorization
+  description: API Key Authentication
+  sources:
+  - openapi/cint-demand-openapi.yml
