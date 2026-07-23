@@ -1,0 +1,2835 @@
+openapi: 3.0.3
+info:
+  title: Demand Accounts Manage Profiles for Launched Target Groups API
+  description: 'Cint''s demand ordering API is REST oriented. It has predictable resource based URLs, accepts JSON-encoded request bodies, returns JSON-encoded responses, and uses standard HTTP response codes, authentication, and verbs. Error responses are also JSON-encoded and follow a standard format, providing a unique error ID and detailed information about what went wrong.
+
+
+    Authentication is handled via bearer tokens passed in the `Authorization` header. All requests must also include a `Cint-API-Version` header with a date in `YYYY-MM-DD` format to specify the desired API version. Depending on the version you use, endpoint behavior may differ as we improve our API with every version release.
+
+
+    While many operations work on a single object per request, the demand ordering API also provides asynchronous batch endpoints for performing bulk updates efficiently on certain resources. For safety, `POST` requests support an `Idempotency-Key` header to allow for safe retries without accidentally performing the same operation twice.
+
+    '
+  version: '2025-12-18'
+servers:
+- description: Production server
+  url: https://api.cint.com/v1
+security:
+- BearerAuth: []
+tags:
+- name: Manage Profiles for Launched Target Groups
+  description: Management of Target Group profiles after launch—including creating, updating, retrieving, and deleting profile configurations, along with their conditions, quotas, and interlock settings.
+paths:
+  /demand/accounts/{account_id}/projects/{project_id}/target-groups/{target_group_id}/profiles:
+    parameters:
+    - $ref: '#/components/parameters/AccountID'
+    - $ref: '#/components/parameters/ProjectID'
+    - $ref: '#/components/parameters/TargetGroupID'
+    - $ref: '#/components/parameters/CintAPIVersion-2025-12-18'
+    get:
+      operationId: list_profiles
+      summary: List profiles for a target group
+      tags:
+      - Manage Profiles for Launched Target Groups
+      description: Returns a list of all non-control, blended and regular profiles for the target group after launch.
+      responses:
+        '200':
+          description: Successfully return list of profiles.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProfilesResponseV3'
+        '400':
+          $ref: '#/components/responses/Error_BadRequest'
+        '401':
+          $ref: '#/components/responses/Error_Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error_Forbidden'
+        '404':
+          $ref: '#/components/responses/Error_NotFound'
+        '500':
+          $ref: '#/components/responses/Error_Internal'
+  /demand/accounts/{account_id}/projects/{project_id}/target-groups/{target_group_id}/profiles/{profile_id}:
+    parameters:
+    - $ref: '#/components/parameters/AccountID'
+    - $ref: '#/components/parameters/ProjectID'
+    - $ref: '#/components/parameters/TargetGroupID'
+    - $ref: '#/components/parameters/ProfileIDV2'
+    - $ref: '#/components/parameters/CintAPIVersion-2025-12-18'
+    get:
+      operationId: get_profile
+      summary: Retrieve a profile
+      tags:
+      - Manage Profiles for Launched Target Groups
+      description: Returns a regular profile detail or blended profile detail by profile ID.
+      responses:
+        '200':
+          description: Successfully return the profile.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegularProfileV3'
+        '401':
+          $ref: '#/components/responses/Error_Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error_Forbidden'
+        '404':
+          $ref: '#/components/responses/Error_NotFound'
+        '500':
+          $ref: '#/components/responses/Error_Internal'
+  /demand/accounts/{account_id}/projects/{project_id}/target-groups/{target_group_id}/profiles/completes-goal:
+    parameters:
+    - $ref: '#/components/parameters/AccountID'
+    - $ref: '#/components/parameters/ProjectID'
+    - $ref: '#/components/parameters/TargetGroupID'
+    - $ref: '#/components/parameters/CintAPIVersion-2025-12-18'
+    put:
+      operationId: update_profile_filling_goal
+      summary: Update completes goal on a target group and its profiles
+      tags:
+      - Manage Profiles for Launched Target Groups
+      description: 'Updates the completes goal for a target group, both at the root target group level level and for individual quotas.
+
+
+        Key behaviors:
+
+
+        * You can update the target group `completes_goal`, individual quota goals within `profiles`, or both in a single request.
+
+        * If you only update the total `completes_goal`, the goals for individual quotas will be recalculated based on supplier distribution data.
+
+        * To get the necessary `profile_id` and `id` (for the quota), you must first call the `GET /.../profiles` endpoint.
+
+        '
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FillingGoalUpdateRequestV3'
+      responses:
+        '200':
+          description: Successfully updated the filling goal.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProfilesResponseV3'
+        '400':
+          $ref: '#/components/responses/Error_BadRequest'
+        '401':
+          $ref: '#/components/responses/Error_Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error_Forbidden'
+        '404':
+          $ref: '#/components/responses/Error_NotFound'
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationStructureErrorResponseDemographics'
+        '500':
+          $ref: '#/components/responses/Error_Internal'
+  /demand/accounts/{account_id}/projects/{project_id}/target-groups/{target_group_id}/profiles/delete-profiles:
+    parameters:
+    - $ref: '#/components/parameters/ProjectID'
+    - $ref: '#/components/parameters/AccountID'
+    - $ref: '#/components/parameters/TargetGroupID'
+    - $ref: '#/components/parameters/CintAPIVersion-2025-12-18'
+    post:
+      operationId: batch_delete_profiles
+      summary: Delete profiles
+      tags:
+      - Manage Profiles for Launched Target Groups
+      description: Allows the user to delete multiple profiles and quotas associated to the profile on a target group.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BatchProfileDeletionRequestV3'
+      responses:
+        '204':
+          description: Successfully deleted profiles
+        '400':
+          $ref: '#/components/responses/Error_BadRequest'
+        '401':
+          $ref: '#/components/responses/Error_Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error_Forbidden'
+        '404':
+          $ref: '#/components/responses/Error_NotFound'
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationStructureErrorResponseDemographics'
+        '500':
+          $ref: '#/components/responses/Error_Internal'
+  /demand/accounts/{account_id}/projects/{project_id}/target-groups/{target_group_id}/profiles/manage-profiles:
+    parameters:
+    - $ref: '#/components/parameters/AccountID'
+    - $ref: '#/components/parameters/ProjectID'
+    - $ref: '#/components/parameters/TargetGroupID'
+    - $ref: '#/components/parameters/CintAPIVersion-2025-12-18'
+    post:
+      operationId: manage_target_group_profiles
+      summary: Manage a target group's profiles
+      tags:
+      - Manage Profiles for Launched Target Groups
+      description: "Replaces all profiles on a launched target group with the set of profiles provided in the request.\n\n:::warning \nThis is a destructive \"all or nothing\" operation. Any existing profiles on the target group that are not included in this request will be deleted.\n:::\n\nThe request is fully validated before any changes are applied. If any profile in the request is invalid, the entire operation is halted, and no changes are made to the target group.\n\nThe API automatically removes duplicate open-ended values in this request before validation and saving, but rejects duplicates in selection or range conditions.\n"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ManageProfilesRequestV3'
+      responses:
+        '201':
+          description: Successfully applied profiles to the target group.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProfilesResponseV3'
+        '400':
+          $ref: '#/components/responses/Error_BadRequest_DemandAPI'
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationErrorResponseDemographics'
+        '500':
+          $ref: '#/components/responses/Error_Internal_DemandAPI'
+components:
+  schemas:
+    ClientErrorDemandAPI:
+      type: object
+      properties:
+        object:
+          type: string
+        title:
+          type: string
+        detail:
+          type: string
+        invalid_params:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+              reason:
+                type: string
+            required:
+            - name
+            - reason
+        instance:
+          type: string
+        type:
+          type: string
+      required:
+      - object
+      - detail
+    RegularProfileV3:
+      oneOf:
+      - title: Regular Profile
+        type: object
+        required:
+        - object
+        - id
+        - quotas_enabled
+        - name
+        - description
+        - targets
+        properties:
+          object:
+            type: string
+            description: Object field to distinguish the operation.
+            enum:
+            - regular
+            example: regular
+          id:
+            type: string
+            description: The unique identifier for the profile.
+            format: ULID
+            example: 01JQM2QN1FDN1WZA3JZX639MAR
+          quotas_enabled:
+            type: boolean
+            description: Flag indicating if quotas are enabled.
+            example: true
+          name:
+            type: string
+            description: The name of the profile.
+            example: HISPANIC
+          description:
+            type: string
+            description: A short summary of the profile. Summary language will be based on the target group's locale.
+            example: Are you of Hispanic, Latino, or Spanish origin?
+          description_translated:
+            type: string
+            description: A short summary of the profile by default english language.
+            example: Are you of Hispanic, Latino, or Spanish origin?
+          targets:
+            $ref: '#/components/schemas/QuotaV3'
+      - title: Blended Profile
+        type: object
+        required:
+        - object
+        - id
+        - quotas_enabled
+        - name
+        - description
+        - targets
+        properties:
+          object:
+            type: string
+            description: Object field to distinguish the operation.
+            enum:
+            - blended
+            example: blended
+          blended_type:
+            type: string
+            description: The blended_type field defines the functional behavior of the blended profile as either interlock or control. If omitted, the system defaults to interlock. This field distinguishes between profiles requiring a full matrix expansion (interlock) and those used for isolating specific demographic segments (control).
+            enum:
+            - interlock
+            - control
+            example: interlock
+          id:
+            type: string
+            description: The unique identifier for the profile.
+            format: ULID
+            example: 01JQM2QN1FDN1WZA3JZX639MAR
+          quotas_enabled:
+            type: boolean
+            description: Flag indicating if quotas are enabled.
+            example: true
+          name:
+            type: string
+            description: The name of the profile.
+            example: HISPANIC
+          description:
+            type: string
+            description: A short summary of the profile. Summary language will be based on the target group's locale.
+            example: Are you of Hispanic, Latino, or Spanish origin?
+          description_translated:
+            type: string
+            description: A short summary of the profile by default english language.
+            example: Are you of Hispanic, Latino, or Spanish origin?
+          targets:
+            $ref: '#/components/schemas/QuotaV3'
+    InvalidParamStructure:
+      title: Invalid request structure
+      type: object
+      description: An error related to the structure of the request payload itself.
+      required:
+      - error_type
+      - name
+      - reason
+      properties:
+        error_type:
+          type: string
+          description: The type of validation error.
+          enum:
+          - structural_error
+        name:
+          type: string
+          description: Error name.
+        reason:
+          type: string
+          description: Error reason.
+        detail:
+          type: string
+    CompletesGoal:
+      type: number
+      description: Specifies the target group's required number of survey completions or pre-screen responses.  Formerly referred to as the "filling goal," this value sets the benchmark for the number of valid responses  needed to achieve the desired level of data reliability.
+      format: int
+      minimum: 1
+      example: 1500
+    FillingGoalUpdateRequestV3:
+      oneOf:
+      - title: Only total completes goal
+        type: object
+        description: Completes goal update request.
+        required:
+        - completes_goal
+        properties:
+          completes_goal:
+            $ref: '#/components/schemas/CompletesGoal'
+          profiles:
+            type: array
+            description: A list of profiles and filling goals with the associated profile IDs
+            nullable: true
+            minItems: 0
+            maxItems: 0
+            items:
+              type: object
+              properties:
+                profile_id:
+                  $ref: '#/components/schemas/ProfileID'
+                quotas:
+                  type: array
+                  description: A list of filling goals with the associated quota IDs
+                  items:
+                    type: object
+                    properties:
+                      quota_id:
+                        type: string
+                        description: The quota ID of the quota being updated
+                        example: '1234'
+                      completes_goal:
+                        $ref: '#/components/schemas/CompletesGoal'
+      - title: Only profile specific completes goal
+        type: object
+        description: Completes goal update request.
+        required:
+        - profiles
+        properties:
+          completes_goal:
+            type: number
+            nullable: true
+          profiles:
+            type: array
+            description: A list of profiles and completes goals with the associated profile IDs
+            minItems: 1
+            maxItems: 1500
+            uniqueItems: true
+            items:
+              type: object
+              required:
+              - profile_id
+              - targets
+              properties:
+                profile_id:
+                  $ref: '#/components/schemas/ProfileID'
+                targets:
+                  type: array
+                  description: A list of filling goals with the associated quota IDs
+                  minItems: 1
+                  maxItems: 200
+                  uniqueItems: true
+                  items:
+                    type: object
+                    required:
+                    - id
+                    - quota
+                    properties:
+                      id:
+                        type: string
+                        format: ULID
+                        description: The quota ID of the quota being updated
+                        example: 01HW8NWD653V44M5FXWD5FJD9Q
+                      quota:
+                        type: object
+                        required:
+                        - completes_goal
+                        properties:
+                          completes_goal:
+                            $ref: '#/components/schemas/CompletesGoal'
+      - title: Both
+        type: object
+        description: Completes goal update request.
+        required:
+        - completes_goal
+        - profiles
+        properties:
+          completes_goal:
+            $ref: '#/components/schemas/CompletesGoal'
+          profiles:
+            type: array
+            description: A list of profiles and filling goals with the associated profile IDs
+            minItems: 1
+            maxItems: 1500
+            uniqueItems: true
+            items:
+              type: object
+              required:
+              - profile_id
+              - targets
+              properties:
+                profile_id:
+                  $ref: '#/components/schemas/ProfileID'
+                targets:
+                  type: array
+                  description: A list of completes goals with the associated quota IDs
+                  minItems: 1
+                  maxItems: 200
+                  uniqueItems: true
+                  items:
+                    type: object
+                    required:
+                    - id
+                    - quota
+                    properties:
+                      id:
+                        type: string
+                        format: ULID
+                        description: The quota ID of the quota being updated
+                        example: 01HW8NWD653V44M5FXWD5FJD9Q
+                      quota:
+                        type: object
+                        required:
+                        - completes_goal
+                        properties:
+                          completes_goal:
+                            $ref: '#/components/schemas/CompletesGoal'
+      example:
+        completes_goal: 150
+        profiles:
+        - profile_id: 01K3VKDD5V7RASKQEHCA8RTGRD
+          targets:
+          - id: 01K3VKDD5V7RASKQEHCA8RTGRE
+            quota:
+              completes_goal: 45
+    QuotaV3:
+      type: array
+      minItems: 1
+      items:
+        $ref: '#/components/schemas/QuotaDetailsV3'
+    RequestDraftQuotaPercentageV3:
+      type: object
+      description: Profile target with condition or conditions and percentage value in quota.
+      required:
+      - conditions
+      - quota
+      properties:
+        conditions:
+          type: array
+          description: List of conditions for the target.
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/InterlockProfileConditionsV3'
+        quota:
+          type: object
+          required:
+          - completes_goal_percentage
+          properties:
+            name:
+              type: string
+              description: Name of the quota used for tracking. This will be deprecated, functionally replaced by the `target.name` field one layer up in the contract.
+              deprecated: true
+              example: SF_Quota_12
+            completes_goal_percentage:
+              type: number
+              multipleOf: 0.01
+              minimum: 0
+              maximum: 100
+              description: Percentage of total completes goal quota applied to this condition(s).
+              example: 40
+    InvalidParam:
+      type: object
+      description: Describes a single invalid parameter in a request.
+      properties:
+        name:
+          type: string
+          description: The name of the parameter that failed validation.
+        reason:
+          type: string
+          description: A short explanation of why the parameter was invalid.
+      required:
+      - name
+      - reason
+    ProfileTargetsResponseSelectionConditionsV3:
+      type: object
+      required:
+      - object
+      - question_id
+      - option
+      properties:
+        object:
+          type: string
+          description: Object field to distinguish between different types of control selections.  Always is `selection`.
+          enum:
+          - selection
+          example: selection
+        question_id:
+          $ref: '#/components/schemas/QuestionID'
+        option:
+          type: string
+          description: the identifier for the condition
+          example: '1'
+        condition_name:
+          type: string
+          description: The name of the condition. This field will be present if the condition is part of a blended or grouped target.
+          example: Dogs
+        condition_name_translated:
+          type: string
+          description: The name of the condition translated (when appropriate and available). This field will be present if the condition is part of a blended or grouped target.
+          example: Perros
+    ProfileID:
+      type: string
+      description: Profile identifier
+      example: 01K4X9PNVF1ZFA7F1DSN1ZJWWK
+    QuestionID:
+      type: integer
+      description: The unique identifier for a profiling question.
+      example: 12413
+    ProfileIDV2:
+      type: string
+      format: ULID
+      description: Profile identifier
+      example: 01HY0PYB3TW23RQRVNFYRC2PP6
+    ProfileTargetsResponseRangeConditionsV3:
+      type: object
+      required:
+      - object
+      - question_id
+      - min
+      - max
+      properties:
+        object:
+          type: string
+          description: Object field to distinguish between different types of control selections.  Always is `range`.
+          enum:
+          - range
+          example: range
+        question_id:
+          $ref: '#/components/schemas/QuestionID'
+        min:
+          type: integer
+          format: int32
+          minimum: 1
+          maximum: 99
+          description: The minimum numeric value (inclusive).
+          example: 18
+        max:
+          type: integer
+          format: int32
+          minimum: 1
+          maximum: 99
+          description: The maximum numeric value (inclusive).
+          example: 24
+        condition_name:
+          type: string
+          description: The name of the condition. This field will be present if the condition is part of a blended or grouped target.
+          example: 18 to 24
+        condition_name_translated:
+          type: string
+          description: The name of the condition translated (when appropriate and available). This field will be present if the condition is part of a blended or grouped target.
+          example: 18 to 24
+    TargetGroupID:
+      description: A unique identifier for the target group, in ULID format.
+      type: string
+      pattern: ^[0-9A-Z]{26}$
+      example: 01BTGNYV6HRNK8K8VKZASZCFP1
+    QuotaDetailsV3:
+      oneOf:
+      - title: Targets with conditions and quota
+        type: object
+        description: Targets with conditions and quota.
+        required:
+        - id
+        - conditions
+        - quota
+        properties:
+          id:
+            type: string
+            description: The unique identifier for the quota.
+            format: ULID
+            example: 01JQMD8R7F0VW45KPWQ7WYNCFP
+          name:
+            type: string
+            description: The name of the target.
+            example: Target-Male
+          text:
+            type: string
+            description: Text of the used for display purpose.
+            example: Condition Text
+          text_translated:
+            type: string
+            description: Translated text of the condition used for display purpose.
+            example: Condition Text
+          conditions:
+            type: array
+            description: List of conditions.
+            minItems: 1
+            items:
+              $ref: '#/components/schemas/ResponseProfileConditionsV3'
+          quota:
+            type: object
+            required:
+            - completes_goal_percentage
+            - quota_nominal
+            - completes_goal
+            properties:
+              name:
+                type: string
+                description: Name of the quota used for tracking. This will be deprecated, functionally replaced by the `target.name` field one layer up in the contract.
+                deprecated: true
+                example: SF_Quota_12
+              completes_goal_percentage:
+                type: number
+                multipleOf: 0.01
+                minimum: 0
+                maximum: 100
+                description: Percentage of total completes goal quota applied to this condition(s).
+                example: 40
+              quota_nominal:
+                type: integer
+                minimum: 0
+                description: Total desired quota nominal applied to this condition(s).
+                example: 40
+              completes_goal:
+                type: integer
+                minimum: 0
+                description: Total desired completes goal applied to this condition(s).
+                example: 40
+              completes:
+                type: integer
+                minimum: 0
+                description: Actual completes filled by responded or supplier.
+                example: 40
+              prescreens:
+                type: integer
+                minimum: 0
+                description: Actual prescreens filled by responded or supplier.
+                example: 40
+      - title: No quota
+        type: object
+        description: Targets with conditions and quota.
+        required:
+        - id
+        - conditions
+        properties:
+          id:
+            type: string
+            description: The unique identifier for the quota.
+            format: ULID
+            example: 01JQMD8R7F0VW45KPWQ7WYNCFP
+          name:
+            type: string
+            description: The name of the target.
+            example: Target Name
+          text:
+            type: string
+            description: Text of the used for display purpose.
+            example: Condition Text
+          text_translated:
+            type: string
+            description: Translated text of the condition used for display purpose.
+            example: Condition Text
+          conditions:
+            type: array
+            description: List of conditions for the quota.
+            minItems: 1
+            items:
+              $ref: '#/components/schemas/InterlockProfileConditionsV3'
+    Traceparent:
+      type: string
+      description: 'The traceparent header carries essential trace context information. This includes the trace ID and parent span ID  as defined by the W3C trace context specification. It is used to pinpoint the position of an incoming request within  the trace graph, facilitating the tracking of distributed operations.
+
+        Note: This field is optional and will be automatically generated by the service if not provided in the request.  The generated value will be included in the response header.'
+      example: 00-0af7651916cd43dd8448eb211c80319c-b7ad6b7169203331-01
+    InvalidParamData:
+      title: Invalid request data
+      type: object
+      description: An error related to invalid business logic or data values.
+      required:
+      - error_type
+      - name
+      - reason
+      properties:
+        error_type:
+          type: string
+          description: The type of validation error.
+          enum:
+          - data_validation_error
+        name:
+          type: string
+          description: Error name code.
+          enum:
+          - profile_validation_error_001
+          - profile_validation_error_002
+          - profile_validation_error_003
+          - profile_validation_error_004
+          - profile_validation_error_005
+          - profile_validation_error_006
+          - profile_validation_error_007
+          - profile_validation_error_008
+          - profile_validation_error_009
+          - profile_validation_error_010
+          - profile_validation_error_011
+          - profile_validation_error_012
+          - profile_validation_error_013
+          - profile_validation_error_014
+          - profile_validation_error_015
+          - profile_validation_error_016
+          - profile_validation_error_017
+          - profile_validation_error_018
+          - profile_validation_error_019
+          - profile_validation_error_020
+          - profile_validation_error_021
+          - profile_validation_error_023
+          - profile_validation_error_024
+          - profile_validation_error_025
+          - profile_validation_error_026
+          - profile_validation_error_030
+          - profile_validation_error_032
+          - profile_validation_error_033
+          - profile_validation_error_034
+          - profile_validation_error_035
+          - profile_validation_error_036
+          - profile_validation_error_037
+          - profile_validation_error_038
+          - profile_validation_error_039
+          - profile_validation_error_040
+          - profile_validation_error_041
+          - profile_validation_error_042
+          - profile_validation_error_043
+          - profile_validation_error_044
+          - profile_validation_error_045
+          - profile_validation_error_046
+          - profile_validation_error_047
+          - profile_validation_error_048
+          - profile_validation_error_049
+          - profile_validation_error_050
+          - profile_validation_error_051
+          - profile_validation_error_052
+          - profile_validation_error_053
+          - profile_validation_error_054
+          - profile_validation_error_055
+          - profile_validation_error_056
+          - profile_validation_error_057
+          - profile_validation_error_058
+          - profile_validation_error_059
+          - profile_validation_error_060
+          - profile_validation_error_061
+          - profile_validation_error_062
+          - profile_validation_error_063
+          - profile_validation_error_064
+          - profile_validation_error_065
+          - profile_validation_error_066
+          - profile_validation_error_067
+          - profile_validation_error_068
+          - profile_validation_error_070
+          - profile_validation_error_071
+          - profile_validation_error_072
+          - profile_validation_error_073
+          - profile_validation_error_074
+          - profile_validation_error_075
+          - profile_validation_error_076
+          - profile_validation_error_077
+          - profile_validation_error_078
+        reason:
+          type: string
+          description: Error reason code.
+          enum:
+          - profile_condition_min_greater_than_max_001
+          - profile_condition_max_less_than_min_error_002
+          - profile_condition_not_unique_003
+          - quota_indexes_out_of_bounds_004
+          - group_quota_not_unique_005
+          - profile_not_unique_006
+          - ungroup_quota_not_unique_007
+          - quota_percentage_not_in_sync_with_nominal_008
+          - incorrect_sum_of_percentage_009
+          - incorrect_sum_of_nominal_010
+          - unable_to_add_dependency_011
+          - profile_with_invalid_condition_012
+          - not_supported_profile_type_013
+          - profile_condition_ranges_should_not_overlap_014
+          - invalid_question_id_015
+          - total_completes_goal_cannot_be_less_than_one_016
+          - total_completes_goal_cannot_be_greater_than_max_017
+          - invalid_zip_code_018
+          - not_supported_question_option_020
+          - zip_not_supported_in_blended_021
+          - blended_profiles_cannot_have_more_than_3_questions_023
+          - number_of_quotas_in_blended_cannot_be_greater_than_max_024
+          - quota_will_be_always_enabled_for_blended_profile_025
+          - at_least_one_quota_object_should_be_populated_with_completes_goal_or_completes_goal_percentage_value_026
+          - total_number_of_quotas_cannot_be_greater_than_max_030
+          - invalid_open_ended_option_032
+          - quota_conditions_out_of_bounds_033
+          - blended_profile_cannot_be_more_than_1_034
+          - start_at_and_end_at_cannot_be_same_035
+          - end_at_cannot_be_before_start_at_036
+          - invalid_start_at_or_end_at_date_format_037
+          - zip_values_cannot_be_greater_than_max_038
+          - duplicate_condition_039
+          - template_locale_does_not_match_target_group_locale_040
+          - template_allows_only_percentage_adjustment_041
+          - nominal_adjustment_cannot_have_percentage_042
+          - percentage_adjustment_cannot_have_nominal_043
+          - profile_id_not_found_044
+          - target_id_not_found_for_profile_045
+          - quota_value_less_than_completes_046
+          - quota_value_greater_than_completes_goal_047
+          - regular_profile_cannot_have_more_than_one_question_048
+          - profiles_to_be_blended_cannot_have_only_one_question_049
+          - profiles_and_profile_adjustment_type_must_be_provided_050
+          - at_least_one_profile_must_be_in_profiles_object_051
+          - completes_goal_percentage_must_be_populated_for_quota_enabled_profile_052
+          - completes_goal_must_be_populated_for_quota_enabled_profile_053
+          - allow_all_values_must_be_populated_for_open_ended_condition_054
+          - open_ended_values_must_be_of_same_length_as_option_mask_055
+          - duplicate_quota_name_056
+          - target_name_or_quota_name_must_be_provided_for_multiple_conditions_057
+          - blended_profile_cannot_have_only_one_condition_058
+          - profile_adjustment_type_and_quota_fields_do_not_match_059
+          - completes_goal_and_profiles_must_be_provided_060
+          - disabled_profile_cannot_have_completes_goal_061
+          - profiles_to_be_blended_cannot_be_null_062
+          - at_least_one_quota_should_have_completes_goal_greater_than_zero_063
+          - at_least_one_quota_should_have_completes_goal_percentage_greater_than_zero_064
+          - allow_all_values_target_cannot_have_quota_065
+          - blended_profile_with_control_as_blended_type_cannot_be_more_than_1_066
+          - blended_profile_with_control_as_blended_type_should_match_with_regular_profiles_067
+          - blended_profile_with_control_as_blended_type_cannot_share_questions_with_blended_type_as_interlock_or_null_blended_type_068
+          - blended_profile_with_control_as_blended_type_cannot_have_more_than_max_targets_070
+          - blended_profile_with_control_as_blended_type_cannot_have_less_than_1_target_071
+          - blended_profile_with_control_as_blended_type_must_have_target_or_quota_name_072
+          - blended_profile_with_control_as_blended_type_cannot_have_duplicate_target_or_quota_name_073
+          - control_blended_profiles_associated_with_target_groups_are_not_supported_for_supplier_distribution_074
+          - total_completes_goal_cannot_be_less_than_control_blended_profile_completes_goal_075
+          - total_completes_goal_cannot_be_less_than_collected_076
+          - total_number_of_profiles_cannot_be_greater_than_max_077
+          - total_number_of_conditions_cannot_be_greater_than_max_078
+        detail:
+          type: string
+        metadata:
+          type: object
+          properties:
+            question_id:
+              type: array
+              items:
+                type: integer
+              description: The question id of the question that failed validation.
+            profile_id:
+              type: string
+              format: ulid
+              description: The profile id of the profile that failed validation.
+            interlock_id:
+              type: string
+              format: ulid
+              description: The interlock id of the interlock that failed validation.
+            quota_id:
+              type: string
+              format: ulid
+              description: The quota id of the quota that failed validation.
+            error_level:
+              type: string
+              enum:
+              - warning
+              - error
+              description: The level of the error.
+      example:
+        error_type: data_validation_error
+        name: profile_validation_error_001
+        reason: profile_condition_min_greater_than_max_001
+        detail: The minimum value cannot be greater than the maximum value.
+        metadata:
+          profile_id: 01H8XGJWBWBAQ4J1Z5F4A9C3K8
+          question_id:
+          - 123
+          error_level: error
+    InternalErrorDemandAPI:
+      type: object
+      properties:
+        object:
+          type: string
+        detail:
+          type: string
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+              reason:
+                type: string
+            required:
+            - name
+            - reason
+      required:
+      - object
+      - detail
+    RequestDraftQuotaNominalV3:
+      type: object
+      description: Profile target with condition or conditions and nominal value in quota.
+      required:
+      - conditions
+      - quota
+      properties:
+        conditions:
+          type: array
+          description: List of conditions.
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/InterlockProfileConditionsV3'
+        quota:
+          type: object
+          required:
+          - completes_goal
+          properties:
+            name:
+              type: string
+              description: Name of the quota used for tracking. This will be deprecated, functionally replaced by the `target.name` field one layer up in the contract.
+              deprecated: true
+              example: SF_Quota_12
+            completes_goal:
+              type: number
+              format: int32
+              minimum: 0
+              description: Total completes goal quota applied to this condition(s).
+              example: 40
+    RequestDraftNoQuotaV3:
+      type: object
+      description: No quotas specified. The request will proceed without applying any quotas.
+      required:
+      - object
+      - conditions
+      properties:
+        object:
+          type: string
+          description: Object field to distinguish the operation.
+          enum:
+          - nominal
+          example: nominal
+        conditions:
+          type: array
+          description: List of conditions.
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/InterlockProfileConditionsV3'
+    Error:
+      type: object
+      description: The standard error object returned for all failed API requests.
+      required:
+      - object
+      - detail
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: A unique identifier for this specific error instance.
+        object:
+          type: string
+          description: A short informative string identifying the type of the error
+          pattern: ^([a-z]*_)*([a-z]*)$
+        detail:
+          type: string
+          description: An error message provides a concise overview of the cause of the error.
+        invalid_params:
+          type: array
+          nullable: true
+          description: An optional field containing a list of invalid parameters may be presented in validation errors for additional information.
+          items:
+            $ref: '#/components/schemas/InvalidParam'
+    ProfileTargetsRangeConditionsV3:
+      title: Range condition
+      type: object
+      description: A profiling condition that targets a numeric range (e.g. age).
+      required:
+      - object
+      - question_id
+      - min
+      - max
+      properties:
+        object:
+          type: string
+          description: The type of profiling condition. For this object, the value is always 'range'.
+          enum:
+          - range
+          example: range
+        question_id:
+          $ref: '#/components/schemas/QuestionID'
+        min:
+          type: integer
+          format: int32
+          minimum: 1
+          maximum: 99
+          description: The minimum numeric value (inclusive).
+          example: 18
+        max:
+          type: integer
+          format: int32
+          minimum: 1
+          maximum: 99
+          description: The maximum numeric value (inclusive).
+          example: 24
+    ValidationErrorResponseDemographics:
+      type: object
+      properties:
+        object:
+          type: string
+          default: unprocessable_entity_error
+        title:
+          type: string
+          default: profile request validation
+        detail:
+          type: string
+          pattern: ^Validation error.*?$
+        invalid_params:
+          type: array
+          items:
+            oneOf:
+            - $ref: '#/components/schemas/InvalidParamData'
+            - $ref: '#/components/schemas/InvalidParamStructure'
+            discriminator:
+              propertyName: error_type
+              mapping:
+                data_validation_error: '#/components/schemas/InvalidParamData'
+                structural_error: '#/components/schemas/InvalidParamStructure'
+    ResponseProfileConditionsV3:
+      oneOf:
+      - $ref: '#/components/schemas/ProfileTargetsResponseSelectionConditionsV3'
+      - $ref: '#/components/schemas/ProfileTargetsResponseRangeConditionsV3'
+      - $ref: '#/components/schemas/ProfileTargetsResponseOpenEndedConditionsV3'
+    BatchProfileDeletionRequestV3:
+      type: object
+      required:
+      - profile_ids
+      properties:
+        profile_ids:
+          type: array
+          description: IDs of the profiles you want to delete
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/ProfileIDV2'
+    ProjectID:
+      description: The character string representing a unique project ID (ULID format).
+      type: string
+      pattern: ^[0-9A-Z]{26}$
+      example: 01BTGNYV6HRNK8K8VKZASZCFP0
+    ProfileTargetsResponseOpenEndedConditionsV3:
+      oneOf:
+      - title: Allow All Values
+        description: If `allow_all_values` is true, `open_ended_values` must be null.
+        type: object
+        properties:
+          object:
+            type: string
+            description: Object field to distinguish between different types of control selections.  Always is `open_ended`.
+            enum:
+            - open_ended
+            example: open_ended
+          question_id:
+            $ref: '#/components/schemas/QuestionID'
+          allow_all_values:
+            type: boolean
+            enum:
+            - true
+            description: Flag to allow all values.
+          open_ended_values:
+            type: array
+            minItems: 0
+            maxItems: 0
+            items:
+              type: string
+            nullable: true
+            description: Must be null when `allow_all_values` is true.
+          condition_name:
+            type: string
+            description: The name of the condition. This field will be present if the condition is part of a blended or grouped target.
+            example: Open Ended 1
+          condition_name_translated:
+            type: string
+            description: The name of the condition translated (when appropriate and available). This field will be present if the condition is part of a blended or grouped target.
+            example: Open Ended 1
+        required:
+        - object
+        - question_id
+        - allow_all_values
+        - open_ended_values
+      - title: Specific Open End Values
+        description: If `allow_all_values` is false, `open_ended_values` must contain at least one open end value.
+        type: object
+        properties:
+          object:
+            type: string
+            description: Object field to distinguish between different types of control selections.  Always is `open_ended`.
+            enum:
+            - open_ended
+            example: open_ended
+          question_id:
+            $ref: '#/components/schemas/QuestionID'
+          allow_all_values:
+            type: boolean
+            enum:
+            - false
+            description: Flag to allow only specific open end values.
+          open_ended_values:
+            type: array
+            items:
+              type: string
+            minItems: 1
+            maxItems: 10000
+            description: List of applicable open end values. Required when `allow_all_values` is false. Note that only 10,000 values may be provided. For more than 10,000, please reach out to your integration consultant.
+          condition_name:
+            type: string
+            description: The name of the condition. This field will be present if the condition is part of a blended or grouped target.
+            example: Open Ended 1
+          condition_name_translated:
+            type: string
+            description: The name of the condition translated (when appropriate and available). This field will be present if the condition is part of a blended or grouped target.
+            example: Open Ended 1
+        required:
+        - object
+        - question_id
+        - allow_all_values
+        - open_ended_values
+      example:
+        object: open_ended
+        question_id: 45
+        open_ended_values: []
+        allow_all_values: true
+        condition_name: Open Ended Values
+        condition_name_translated: Open Ended Values Translated
+    ProfilesResponseV3:
+      oneOf:
+      - title: Only profiles
+        type: object
+        required:
+        - locale
+        - completes_goal
+        - profiles
+        properties:
+          locale:
+            type: string
+            example: eng-us
+          completes_goal:
+            $ref: '#/components/schemas/CompletesGoal'
+          profiles:
+            type: array
+            minItems: 1
+            items:
+              $ref: '#/components/schemas/RegularProfileV3'
+      - title: No profiles
+        type: object
+        required:
+        - locale
+        - completes_goal
+        properties:
+          locale:
+            type: string
+            example: eng-us
+          completes_goal:
+            $ref: '#/components/schemas/CompletesGoal'
+          profiles:
+            type: array
+            minItems: 0
+            maxItems: 0
+            nullable: true
+            items:
+              $ref: '#/components/schemas/RegularProfileV3'
+      example:
+        locale: spa_us
+        completes_goal: 1000
+        profiles:
+        - object: regular
+          id: 01JY5Q1GY7JWX1JHQH8D1W2N9Z
+          name: birth gender
+          description: ¿Es usted…?
+          description_translated: What is your gender?
+          quotas_enabled: true
+          targets:
+          - id: 01JY5V5NDSVHG8S3FX63Y73K3F
+            text: Hombre
+            text_translated: Male
+            conditions:
+            - object: selection
+              question_id: 43
+              option: '1'
+            quota:
+              name: SF-BirthGender-Quota-1
+              completes_goal_percentage: 49.21
+              completes_goal: 492
+              quota_nominal: 492
+              completes: 0
+              prescreens: 0
+          - id: 01JY5V67FAY2N5TB8TSK6HWM2G
+            text: Mujer
+            text_translated: Female
+            conditions:
+            - object: selection
+              question_id: 43
+              option: '2'
+            quota:
+              name: SF-BirthGender-Quota-2
+              completes_goal_percentage: 50.79
+              completes_goal: 508
+              quota_nominal: 508
+              completes: 0
+              prescreens: 0
+        - object: regular
+          id: 01JY5RJZ2BXP43NC1KHTJKH9SH
+          description: Por favor, indique su edad.
+          description_translated: What is your age?
+          quotas_enabled: true
+          targets:
+          - id: 01JY5V6KT0FSXXXHS8CFST9NWW
+            text: 15 to 19
+            text_translated: 15 to 19
+            conditions:
+            - object: range
+              question_id: 42
+              min: 15
+              max: 19
+            quota:
+              completes_goal_percentage: 28.21
+              completes_goal: 282
+              quota_nominal: 282
+              completes: 10
+              prescreens: 10
+          - id: 01JY5V6ZPM95SM01DC61QA8PV4
+            text: 20 to 29
+            text_translated: 20 to 29
+            conditions:
+            - object: range
+              question_id: 42
+              min: 20
+              max: 29
+            quota:
+              completes_goal_percentage: 30.79
+              completes_goal: 308
+              quota_nominal: 308
+              completes: 102
+              prescreens: 10
+          - id: 01JY5V79FGETBEWBB3Q8BZGGQQ
+            text: 30 to 39
+            text_translated: 30 to 39
+            conditions:
+            - object: range
+              question_id: 42
+              min: 30
+              max: 39
+            quota:
+              completes_goal_percentage: 21.4
+              completes_goal: 214
+              quota_nominal: 214
+              completes: 70
+              prescreens: 10
+          - id: 01JY5V7M90KG77VGR0Y6C6ZYDD
+            text: 40 to 99
+            text_translated: 40 to 99
+            conditions:
+            - object: range
+              question_id: 42
+              min: 40
+              max: 99
+            quota:
+              completes_goal_percentage: 19.6
+              completes_goal: 196
+              quota_nominal: 196
+              completes: 64
+              prescreens: 10
+        - object: regular
+          id: 01JY5S4CXZKEYQ2HHBY8AMABCY
+          description: ¿Cuál es su código postal?
+          description_translated: What is your zip code?
+          quotas_enabled: true
+          targets:
+          - id: 01JY5V9AXTDM6SHJEAHR9ZB87J
+            text: ZIP_1
+            text_translated: ZIP_1
+            conditions:
+            - object: open_ended
+              question_id: 45
+              allow_all_values: false
+              open_ended_values:
+              - '98001'
+              - '98007'
+              - '98125'
+              - '98258'
+            quota:
+              completes_goal_percentage: 50
+              completes_goal: 500
+              quota_nominal: 500
+              completes: 0
+              prescreens: 0
+          - id: 01JY5VAENK83GWHSBP535E13KZ
+            text: ZIP_2
+            text_translated: ZIP_2
+            conditions:
+            - object: open_ended
+              question_id: 45
+              allow_all_values: false
+              open_ended_values:
+              - '78001'
+              - '78007'
+              - '78125'
+              - '78258'
+            quota:
+              completes_goal_percentage: 50
+              completes_goal: 500
+              quota_nominal: 500
+              completes: 0
+              prescreens: 0
+        - object: blended
+          id: 01JY5SFFC6AX91XSRYPRV7TGD4
+          name: Number of movies watched near grocery
+          description: In the past 2 months, how many movies have you seen in a theater? English - Kosovo, Thinking about grocery shopping for your household, about how often do you shop at each of the following stores for groceries?
+          description_translated: In the past 2 months, how many movies have you seen in a theater?, Thinking about grocery shopping for your household, about how often do you shop at each of the following stores for groceries?
+          quotas_enabled: true
+          targets:
+          - id: 01JY5VVGQA2GYHQQ52NR90MQY7
+            text: 0 movies, Wal- Mart
+            text_translated: 0 movies, Wal- Mart
+            conditions:
+            - object: selection
+              question_id: 157
+              option: '1'
+            - object: selection
+              question_id: 63
+              option: '1'
+            quota:
+              name: SF-Walmart-1
+              completes_goal_percentage: 2
+              completes_goal: 20
+              quota_nominal: 20
+              completes: 0
+              prescreens: 0
+          - id: 01JY5VZ4NR4AK9C98G45DZMQAQ
+            text: 1 movies, Wal- Mart
+            text_translated: 1 movies, Wal- Mart
+            conditions:
+            - object: selection
+              question_id: 157
+              option: '2'
+            - object: selection
+              question_id: 63
+              option: '1'
+            quota:
+              name: SF-Walmart-2
+              completes_goal_percentage: 2
+              completes_goal: 20
+              quota_nominal: 20
+              completes: 0
+              prescreens: 0
+          - id: 01JY5W0M1BD55GAH6JZNMTB748
+            text: 2 movies, Wal- Mart
+            text_translated: 2 movies, Wal- Mart
+            conditions:
+            - object: selection
+              question_id: 157
+              option: '3'
+            - object: selection
+              question_id: 63
+              option: '1'
+            quota:
+              name: SF-Walmart-3
+              completes_goal_percentage: 2
+              completes_goal: 20
+              quota_nominal: 20
+              completes: 0
+              prescreens: 0
+          - id: 01JY5W27HMMM64G75NEAKXRMPR
+            text: 3 movies, Wal- Mart
+            text_translated: 3 movies, Wal- Mart
+            conditions:
+            - object: selection
+              question_id: 157
+              option: '4'
+            - object: selection
+              question_id: 63
+              option: '1'
+            quota:
+              name: SF-Walmart-4
+              completes_goal_percentage: 2
+              completes_goal: 20
+              quota_nominal: 20
+              completes: 0
+              prescreens: 0
+          - id: 01JY5W3XKS1PMC78M298YRY75Z
+            text: 4 movies, Wal- Mart
+            text_translated: 4 movies, Wal- Mart
+            conditions:
+            - object: selection
+              question_id: 157
+              option: '5'
+            - object: selection
+              question_id: 63
+              option: '1'
+            quota:
+              name: SF-Walmart-5
+              completes_goal_percentage: 2
+              completes_goal: 20
+              quota_nominal: 20
+          - id: 01JY5W56Z2PVS17KAE223SYMWT
+            text: 5 movies, Wal- Mart
+            text_translated: 5 movies, Wal- Mart
+            conditions:
+            - object: selection
+              question_id: 157
+              option: '6'
+            - object: selection
+              question_id: 63
+              option: '1'
+            quota:
+              name: SF-Walmart-6
+              completes_goal_percentage: 2
+              completes_goal: 20
+              quota_nominal: 20
+              completes: 0
+              prescreens: 0
+          - id: 01JY5W6C7QERBXJK94TZAP350Z
+            text: 6 movies, Wal- Mart
+            text_translated: 6 movies, Wal- Mart
+            conditions:
+            - object: selection
+              question_id: 157
+              option: '7'
+            - object: selection
+              question_id: 63
+              option: '1'
+            quota:
+              name: SF-Walmart-7
+              completes_goal_percentage: 2
+              completes_goal: 20
+              quota_nominal: 20
+              completes: 0
+              prescreens: 0
+          - id: 01JY5W93WT3K33YPMTSZCYPTYZ
+            text: 0 movies, Target
+            text_translated: 0 movies, Target
+            conditions:
+            - object: selection
+              question_id: 157
+              option: '1'
+            - object: selection
+              question_id: 63
+              option: '2'
+            quota:
+              name: SF-Target-1
+              completes_goal_percentage: 2
+              completes_goal: 20
+              quota_nominal: 20
+              completes: 0
+              prescreens: 0
+          - id: 01JY5WA51A4SE3AXVDDAKBXJ5P
+            text: 1 movies, Target
+            text_translated: 1 movies, Target
+            conditions:
+            - object: selection
+              question_id: 157
+              option: '2'
+            - object: selection
+              question_id: 63
+              option: '2'
+            quota:
+              name: SF-Target-2
+              completes_goal_percentage: 2
+              completes_goal: 20
+              quota_nominal: 20
+              completes: 0
+              prescreens: 0
+          - id: 01JY5WB080HA1CZC0532YXSPT6
+            text: 2 movies, Target
+            text_translated: 2 movies, Target
+            conditions:
+            - object: selection
+              question_id: 157
+              option: '3'
+            - object: selection
+              question_id: 63
+              option: '2'
+            quota:
+              name: SF-Target-3
+              completes_goal_percentage: 2
+              completes_goal: 20
+              quota_nominal: 20
+              completes: 0
+              prescreens: 0
+          - id: 01JY5WBRGCMEM7B4GD6THCGP91
+            text: 3 movies, Target
+            text_translated: 3 movies, Target
+            conditions:
+            - object: selection
+              question_id: 157
+              option: '4'
+            - object: selection
+              question_id: 63
+              option: '2'
+            quota:
+              name: SF-Target-4
+              completes_goal_percentage: 2
+              completes_goal: 20
+              quota_nominal: 20
+              completes: 0
+              prescreens: 0
+          - id: 01JY5WCCC9QJPA8G7E3FYY6W73
+            text: 4 movies, Target
+            text_translated: 4 movies, Target
+            conditions:
+            - object: selection
+              question_id: 157
+              option: '5'
+            - object: selection
+              question_id: 63
+              option: '2'
+            quota:
+              name: SF-Target-5
+              completes_goal_percentage: 2
+              completes_goal: 20
+              quota_nominal: 20
+              completes: 0
+              prescreens: 0
+          - id: 01JY5WD1S8N7SYYBK7JBX894Y9
+            text: 5 movies, Target
+            text_translated: 5 movies, Target
+            conditions:
+            - object: selection
+              question_id: 157
+              option: '6'
+            - object: selection
+              question_id: 63
+              option: '2'
+            quota:
+              name: SF-Target-6
+              completes_goal_percentage: 2
+              completes_goal: 20
+              quota_nominal: 20
+              completes: 0
+              prescreens: 0
+          - id: 01JY5WDPWFMX6A6Q4G1FPAM16R
+            text: 6 movies, Target
+            text_translated: 6 movies, Target
+            conditions:
+            - object: selection
+              question_id: 157
+              option: '7'
+            - object: selection
+              question_id: 63
+              option: '2'
+            quota:
+              name: SF-Target-7
+              completes_goal_percentage: 2
+              completes_goal: 20
+              quota_nominal: 20
+              completes: 0
+              prescreens: 0
+          - id: 01JY5WEA4MHF8DFXY3YV0DRAN2
+            text: 0 movies, CVS
+            text_translated: 0 movies, CVS
+            conditions:
+            - object: selection
+              question_id: 157
+              option: '1'
+            - object: selection
+              question_id: 63
+              option: '7'
+            quota:
+              name: SF-CVS-1
+              completes_goal_percentage: 2
+              completes_goal: 20
+              quota_nominal: 20
+              completes: 0
+              prescreens: 0
+          - id: 01JY5WFA8Z81MNNZ4PKJMXGE81
+            text: 1 movies, CVS
+            text_translated: 1 movies, CVS
+            conditions:
+            - object: selection
+              question_id: 157
+              option: '2'
+            - object: selection
+              question_id: 63
+              option: '7'
+            quota:
+              name: SF-CVS-2
+              completes_goal_percentage: 2
+              completes_goal: 20
+              quota_nominal: 20
+              completes: 0
+              prescreens: 0
+          - id: 01JY5WG16B26G90MY3TSBSJF0N
+            text: 2 movies, CVS
+            text_translated: 2 movies, CVS
+            conditions:
+            - object: selection
+              question_id: 157
+              option: '3'
+            - object: selection
+              question_id: 63
+              option: '7'
+            quota:
+              name: SF-CVS-3
+              completes_goal_percentage: 2
+              completes_goal: 20
+              quota_nominal: 20
+              completes: 0
+              prescreens: 0
+          - id: 01JY5WGNA26K4RKST2FWH2CNXM
+            text: 3 movies, CVS
+            text_translated: 3 movies, CVS
+            conditions:
+            - object: selection
+              question_id: 157
+              option: '4'
+            - object: selection
+              question_id: 63
+              option: '7'
+            quota:
+              name: SF-CVS-4
+              completes_goal_percentage: 2
+              completes_goal: 20
+              quota_nominal: 20
+              completes: 0
+              prescreens: 0
+          - id: 01JY5WH8AHVXWS76S6S7YNTSX3
+            text: 4 movies, CVS
+            text_translated: 4 movies, CVS
+            conditions:
+            - object: selection
+              question_id: 157
+              option: '5'
+            - object: selection
+              question_id: 63
+              option: '7'
+            quota:
+              name: SF-CVS-5
+              completes_goal_percentage: 2
+              completes_goal: 20
+              quota_nominal: 20
+              completes: 0
+              prescreens: 0
+          - id: 01JY5WHVES46Z3Z8D4S0N8X09R
+            text: 5 movies, CVS
+            text_translated: 5 movies, CVS
+            conditions:
+            - object: selection
+              question_id: 157
+              option: '6'
+            - object: selection
+              question_id: 63
+              option: '7'
+            quota:
+              name: SF-CVS-6
+              completes_goal_percentage: 2
+              completes_goal: 20
+              quota_nominal: 20
+              completes: 0
+              prescreens: 0
+          - id: 01JY5WJJVE15JT1SW6ZD56H579
+            text: 6 movies, CVS
+            text_translated: 6 movies, CVS
+            conditions:
+            - object: selection
+              question_id: 157
+              option: '7'
+            - object: selection
+              question_id: 63
+              option: '7'
+            quota:
+              name: SF-CVS-7
+              completes_goal_percentage: 2
+              completes_goal: 20
+              quota_nominal: 20
+              completes: 0
+              prescreens: 0
+          - id: 01JY5XWWE35A9B577VCMQ0PT0V
+            text: Group 1, Kroger
+            text_translated: Group 1, Kroger
+            conditions:
+            - object: selection
+              question_id: 157
+              option: '1'
+            - object: selection
+              question_id: 157
+              option: '2'
+            - object: selection
+              question_id: 157
+              option: '3'
+            - object: selection
+              question_id: 157
+              option: '4'
+            - object: selection
+              question_id: 63
+              option: '8'
+            quota:
+              name: SF-KROGER
+              completes_goal_percentage: 2
+              completes_goal: 20
+              quota_nominal: 20
+        - object: regular
+          id: 01JY5SZRBCNCYJ96A1CCSDH9D7
+          description: ¿Es usted Hispano, Latino o del origen Español?
+          description_translated: Are you of Hispanic, Latino, or Spanish origin?
+          quotas_enabled: true
+          targets:
+          - id: 01JY5WKJHBTPFBGK21VGK3YSK0
+            text: Group-1
+            text_translated: Group-1
+            conditions:
+            - object: selection
+              question_id: 47
+              option: '4'
+            - object: selection
+              question_id: 47
+              option: '5'
+            - object: selection
+              question_id: 47
+              option: '6'
+            - object: selection
+              question_id: 47
+              option: '7'
+            quota:
+              name: Group-1
+              completes_goal_percentage: 49.21
+              completes_goal: 492
+              quota_nominal: 492
+              completes: 0
+              prescreens: 0
+          - id: 01JY5WMBJQBMHHBBVXNR5BRKNS
+            text: Guatemala
+            text_translated: Guatemala
+            conditions:
+            - object: selection
+              question_id: 47
+              option: '8'
+            quota:
+              completes_goal_percentage: 50.79
+              completes_goal: 508
+              quota_nominal: 508
+              completes: 0
+              prescreens: 0
+        - object: regular
+          id: 01JY5T5QZRVCY69TK00BWHSXRZ
+          description: ¿Cuál es su raza?
+          description_translated: What is your race?
+          quotas_enabled: false
+          targets:
+          - id: 01JY5WNZGMFCAMQTJV6J3QFQAB
+            text: Asiático - Chino
+            text_translated: Chinese
+            conditions:
+            - object: selection
+              question_id: 113
+              option: '5'
+          - id: 01JY5WQD67B8273R1MR3CMKPBW
+            text: Asiático - Coreano
+            text_translated: Korean
+            conditions:
+            - object: selection
+              question_id: 113
+              option: '8'
+          - id: 01JY5WRH7PYZA7P776CX8G6P73
+            text: Asiático - Filipino
+            text_translated: Filipino
+            conditions:
+            - object: selection
+              question_id: 113
+              option: '6'
+          - id: 01JY5WSD5BYXZ85J3JJDK4JDSE
+            text: Asiático - Indio
+            text_translated: Indian
+            conditions:
+            - object: selection
+              question_id: 113
+              option: '4'
+        - object: regular
+          id: 01KNNMHHA3WX7ZJA5YBTBN8VNA
+          name: STATE
+          description: ¿Cuál es su estado?
+          description_translated: What is your state?
+          quotas_enabled: false
+          targets:
+          - id: 01KNNMJ725HPFGAWN5PRGFX85Z
+            text: ALABAMA
+            text_translated: ALABAMA
+            conditions:
+            - object: selection
+              question_id: 96
+              option: '1'
+          - id: 01KNNMJV51XJ88TF7ESTRPQBGK
+            text: FLORIDA
+            text_translated: FLORIDA
+            conditions:
+            - object: selection
+              question_id: 96
+              option: '10'
+          - id: 01KNNMKBS9EFZJZ3TS32C86VNB
+            text: GEORGIA
+            text_translated: GEORGIA
+            conditions:
+            - object: selection
+              question_id: 96
+              option: '11'
+        - object: blended
+          blended_type: control
+          id: 01KS0CT2B46RSYQG1VTWZR1YYE
+          name: Control quota
+          description: What is your gender?, What is your age?, What is your state?
+          description_translated: What is your gender?, What is your age?, What is your state?
+          quotas_enabled: true
+          targets:
+          - id: 01KS0CT2B46RSYQG1VTWZR1YYF
+            name: Control quota 1
+            text: Control quota 1
+            text_translated: Control quota 1
+            conditions:
+            - object: selection
+              question_id: 43
+              option: '1'
+              condition_name: Male
+              condition_name_translated: Male
+            - object: range
+              question_id: 42
+              min: 20
+              max: 29
+              condition_name: 20 to 29
+              condition_name_translated: 20 to 29
+            - object: selection
+              question_id: 96
+              option: '1'
+              condition_name: Alabama
+              condition_name_translated: Alabama
+            quota:
+              completes_goal_percentage: 0.0
+              completes_goal: 0
+              quota_nominal: 0
+          - id: 01KS0CT2B46RSYQG1VTWZR1YYM
+            name: Control quota 2
+            text: Control quota 2
+            text_translated: Control quota 2
+            conditions:
+            - object: selection
+              question_id: 43
+              option: '2'
+              condition_name: Female
+              condition_name_translated: Female
+            - object: range
+              question_id: 42
+              min: 30
+              max: 39
+              condition_name: 30 to 39
+              condition_name_translated: 30 to 39
+            - object: selection
+              question_id: 96
+              option: '1'
+              condition_name: Alabama
+              condition_name_translated: Alabama
+            quota:
+              completes_goal_percentage: 10.0
+              completes_goal: 0
+              quota_nominal: 0
+          - id: 01KS0CT2B46RSYQG1VTWZR1YYC
+            name: Control quota 3
+            text: Control quota 3
+            text_translated: Control quota 3
+            conditions:
+            - object: selection
+              question_id: 43
+              option: '1'
+              condition_name: Male
+              condition_name_translated: Male
+            - object: range
+              question_id: 42
+              min: 30
+              max: 39
+              condition_name: 30 to 39
+              condition_name_translated: 30 to 39
+            - object: selection
+              question_id: 96
+              option: '1'
+              condition_name: Alabama
+              condition_name_translated: Alabama
+            quota:
+              completes_goal_percentage: 0.0
+              completes_goal: 0
+              quota_nominal: 0
+    InterlockProfileConditionsV3:
+      description: A polymorphic object representing a single profiling condition, which can be a `selection`, `range`, or `open_ended` type.
+      oneOf:
+      - $ref: '#/components/schemas/ProfileTargetsSelectionConditionsV3'
+      - $ref: '#/components/schemas/ProfileTargetsRangeConditionsV3'
+      - $ref: '#/components/schemas/ProfileTargetsOpenEndedConditionsV3'
+    ValidationStructureErrorResponseDemographics:
+      type: object
+      properties:
+        object:
+          type: string
+          default: unprocessable_entity_error
+        title:
+          type: string
+          default: profile request validation
+        detail:
+          type: string
+          pattern: ^Validation error.*?$
+        invalid_params:
+          type: array
+          description: An array of detailed validation errors for specific parts of the profile configuration.
+          items:
+            oneOf:
+            - $ref: '#/components/schemas/InvalidParamData'
+            - $ref: '#/components/schemas/InvalidParamStructure'
+            discriminator:
+              propertyName: error_type
+              mapping:
+                data_validation_error: '#/components/schemas/InvalidParamData'
+                structural_error: '#/components/schemas/InvalidParamStructure'
+      example:
+        object: unprocessable_entity_error
+        title: profile request validation
+        detail: 'Validation error: The provided profile configuration is invalid.'
+        invalid_params:
+        - error_type: data_validation_error
+          name: profile_validation_error_001
+          reason: profile_condition_min_greater_than_max_001
+          detail: The minimum value cannot be greater than the maximum value.
+          metadata:
+            profile_id: 01H8XGJWBWBAQ4J1Z5F4A9C3K8
+            question_id:
+            - 123
+            error_level: error
+      required:
+      - object
+      - detail
+    RequestDraftQuotaV3:
+      description: "A request targets block must be one of:\n  • a nominal target based on profile adjustement type (see RequestDraftGroupedQuotaNominalV3)\n  • a percentage target based on profile adjustment type (see RequestDraftGroupedQuotaV3)\n  • no target (empty object) should be in alignment with quota_enabled field as false.\n"
+      oneOf:
+      - title: Targets with nominal value in quota
+        type: array
+        minItems: 1
+        items:
+          $ref: '#/components/schemas/RequestDraftQuotaNominalV3'
+      - title: Targets with percentage value in quota
+        type: array
+        minItems: 1
+        items:
+          $ref: '#/components/schemas/RequestDraftQuotaPercentageV3'
+      - title: Targets with conditions and no quota
+        type: array
+        minItems: 1
+        items:
+          $ref: '#/components/schemas/RequestDraftNoQuotaV3'
+    RequestDraftRegularProfileV3:
+      oneOf:
+      - title: Regular Profile
+        type: object
+        required:
+        - object
+        - quotas_enabled
+        - targets
+        properties:
+          object:
+            type: string
+            description: 'Object field to distinguish the operation.
+
+              '
+            enum:
+            - regular
+            example: regular
+          name:
+            type: string
+            description: "The name of the regular profile. \n"
+            example: SF_YoungAge
+          quotas_enabled:
+            type: boolean
+            description: Flag indicating if quotas are enabled.
+            example: true
+          targets:
+            $ref: '#/components/schemas/RequestDraftQuotaV3'
+      - title: Blended Profile
+        type: object
+        required:
+        - object
+        - name
+        - quotas_enabled
+        - targets
+        properties:
+          object:
+            type: string
+            description: 'Object field to distinguish the operation.
+
+              '
+            enum:
+            - blended
+            example: blended
+          blended_type:
+            type: string
+            description: The blended_type field defines the functional behavior of the blended profile as either interlock or control. If omitted, the system defaults to interlock. This field distinguishes between profiles requiring a full matrix expansion (interlock) and those used for isolating specific demographic segments (control).
+            enum:
+            - interlock
+            - control
+            example: interlock
+          name:
+            type: string
+            description: The name of the profile.
+            example: SF_YoungAge
+          quotas_enabled:
+            type: boolean
+            description: Flag indicating if quotas are enabled.
+            example: true
+          targets:
+            $ref: '#/components/schemas/RequestDraftQuotaV3'
+    ProfileTargetsSelectionConditionsV3:
+      title: Selection condition
+      type: object
+      description: A profiling condition that targets a specific answer option (e.g. gender).
+      required:
+      - object
+      - question_id
+      - option
+      properties:
+        object:
+          type: string
+          description: The type of profiling condition. For this object, the value is always 'selection'.
+          enum:
+          - selection
+          example: selection
+        question_id:
+          $ref: '#/components/schemas/QuestionID'
+        option:
+          type: string
+          description: The unique identifier for the selected answer option.
+          example: '1'
+    Tracestate:
+      type: string
+      description: 'The tracestate header provides additional contextual information to the traceparent header.  This enriches the tracing context and offers more fine-grained control
+
+        Note: This field is optional and will be automatically generated by the service if not provided in the request.  The generated value will be included in the response header.'
+      example: ot=foo:bar;k1:13
+    IsSyntheticTraffic:
+      type: boolean
+      default: false
+      description: Boolean value representing whether request is the product of synthetic traffic. By default, set to false.
+    ManageProfilesRequestV3:
+      oneOf:
+      - title: Only template ID
+        type: object
+        required:
+        - completes_goal
+        - profiling
+        properties:
+          completes_goal:
+            $ref: '#/components/schemas/CompletesGoal'
+          profiling:
+            type: object
+            required:
+            - template_id
+            - profile_adjustment_type
+            properties:
+              template_id:
+                type: string
+                format: UUID
+                description: The ID of the profile template. If the template is available then all the profiles associated to the template will be applied to targe group.
+                example: e198c976-ce22-436d-acc1-95aa318cc54d
+              profile_adjustment_type:
+                type: string
+                description: Type of profile adjustment. Only percentage is allowed when template ID is provided.
+                enum:
+                - percentage
+      - title: Template ID along with profiles
+        type: object
+        required:
+        - completes_goal
+        - profiling
+        properties:
+          completes_goal:
+            $ref: '#/components/schemas/CompletesGoal'
+          profiling:
+            type: object
+            required:
+            - template_id
+            - profile_adjustment_type
+            - profiles
+            properties:
+              template_id:
+                type: string
+                format: UUID
+                description: The ID of the profile template. If the template is available then all the profiles associated to the template will be applied to targe group.
+                example: e198c976-ce22-436d-acc1-95aa318cc54d
+              profile_adjustment_type:
+                type: string
+                description: Type of profile adjustment. Only percentage is allowed when template ID is provided.
+                enum:
+                - percentage
+              profiles:
+                type: array
+                minItems: 1
+                items:
+                  $ref: '#/components/schemas/RequestDraftRegularProfileV3'
+      - title: Only profiles populated with percentage as profile adjustment type
+        type: object
+        required:
+        - completes_goal
+        - profiling
+        properties:
+          completes_goal:
+            $ref: '#/components/schemas/CompletesGoal'
+          profiling:
+            type: object
+            required:
+            - profile_adjustment_type
+            - profiles
+            properties:
+              profile_adjustment_type:
+                type: string
+                description: Type of profile adjustment.
+                enum:
+                - percentage
+                example: percentage
+              profiles:
+                type: array
+                minItems: 1
+                items:
+                  $ref: '#/components/schemas/RequestDraftRegularProfileV3'
+      - title: Only profiles populated with nominal as profile adjustment type
+        type: object
+        required:
+        - completes_goal
+        - profiling
+        properties:
+          completes_goal:
+            $ref: '#/components/schemas/CompletesGoal'
+          profiling:
+            type: object
+            required:
+            - profile_adjustment_type
+            - profiles
+            properties:
+              profile_adjustment_type:
+                type: string
+                description: Type of profile adjustment.
+                enum:
+                - nominal
+                example: nominal
+              profiles:
+                type: array
+                minItems: 1
+                items:
+                  $ref: '#/components/schemas/RequestDraftRegularProfileV3'
+      example:
+        completes_goal: 1000
+        profiling:
+          template_id: e198c976-ce22-436d-acc1-95aa318cc54d
+          profile_adjustment_type: percentage
+          profiles:
+          - object: regular
+            name: birth gender
+            quotas_enabled: true
+            targets:
+            - conditions:
+              - object: selection
+                question_id: 43
+                option: '1'
+              quota:
+                name: SF-BirthGender-Quota-1
+                completes_goal_percentage: 49.21
+            - conditions:
+              - object: selection
+                question_id: 43
+                option: '2'
+              quota:
+                name: SF-BirthGender-Quota-2
+                completes_goal_percentage: 50.79
+          - object: regular
+            quotas_enabled: true
+            targets:
+            - conditions:
+              - object: range
+                question_id: 42
+                min: 15
+                max: 19
+              quota:
+                completes_goal_percentage: 28.21
+            - conditions:
+              - object: range
+                question_id: 42
+                min: 20
+                max: 29
+              quota:
+                completes_goal_percentage: 30.79
+            - conditions:
+              - object: range
+                question_id: 42
+                min: 30
+                max: 39
+              quota:
+                completes_goal_percentage: 21.4
+            - conditions:
+              - object: range
+                question_id: 42
+                min: 40
+                max: 99
+              quota:
+                completes_goal_percentage: 19.6
+          - object: regular
+            quotas_enabled: true
+            targets:
+            - conditions:
+              - object: open_ended
+                question_id: 45
+                allow_all_values: false
+                open_ended_values:
+                - '98001'
+                - '98007'
+                - '98125'
+                - '98258'
+              quota:
+                completes_goal_percentage: 50
+            - conditions:
+              - object: open_ended
+                question_id: 45
+                allow_all_values: false
+                open_ended_values:
+                - '78001'
+                - '78007'
+                - '78125'
+                - '78258'
+              quota:
+                completes_goal_percentage: 50
+          - object: blended
+            name: Number of movies watched near grocery
+            quotas_enabled: true
+            targets:
+            - conditions:
+              - object: selection
+                question_id: 157
+                option: '1'
+              - object: selection
+                question_id: 63
+                option: '1'
+              quota:
+                name: SF-Walmart-1
+                completes_goal_percentage: 2
+            - conditions:
+              - object: selection
+                question_id: 157
+                option: '2'
+              - object: selection
+                question_id: 63
+                option: '1'
+              quota:
+                name: SF-Walmart-2
+                completes_goal_percentage: 2
+            - conditions:
+              - object: selection
+                question_id: 157
+                option: '3'
+              - object: selection
+                question_id: 63
+                option: '1'
+              quota:
+                name: SF-Walmart-3
+                completes_goal_percentage: 2
+            - conditions:
+              - object: selection
+                question_id: 157
+                option: '4'
+              - object: selection
+                question_id: 63
+                option: '1'
+              quota:
+                name: SF-Walmart-4
+                completes_goal_percentage: 2
+            - conditions:
+              - object: selection
+                question_id: 157
+                option: '5'
+              - object: selection
+                question_id: 63
+                option: '1'
+              quota:
+                name: SF-Walmart-5
+                completes_goal_percentage: 2
+            - conditions:
+              - object: selection
+                question_id: 157
+                option: '6'
+              - object: selection
+                question_id: 63
+                option: '1'
+              quota:
+                name: SF-Walmart-6
+                completes_goal_percentage: 2
+            - conditions:
+              - object: selection
+                question_id: 157
+                option: '7'
+              - object: selection
+                question_id: 63
+                option: '1'
+              quota:
+                name: SF-Walmart-7
+                completes_goal_percentage: 2
+            - conditions:
+              - object: selection
+                question_id: 157
+                option: '1'
+              - object: selection
+                question_id: 63
+                option: '2'
+              quota:
+                name: SF-Target-1
+                completes_goal_percentage: 2
+            - conditions:
+              - object: selection
+                question_id: 157
+                option: '2'
+              - object: selection
+                question_id: 63
+                option: '2'
+              quota:
+                name: SF-Target-2
+                completes_goal_percentage: 2
+            - conditions:
+              - object: selection
+                question_id: 157
+                option: '3'
+              - object: selection
+                question_id: 63
+                option: '2'
+              quota:
+                name: SF-Target-3
+                completes_goal_percentage: 2
+            - conditions:
+              - object: selection
+                question_id: 157
+                option: '4'
+              - object: selection
+                question_id: 63
+                option: '2'
+              quota:
+                name: SF-Target-4
+                completes_goal_percentage: 2
+            - conditions:
+              - object: selection
+                question_id: 157
+                option: '5'
+              - object: selection
+                question_id: 63
+                option: '2'
+              quota:
+                name: SF-Target-5
+                completes_goal_percentage: 2
+            - conditions:
+              - object: selection
+                question_id: 157
+                option: '6'
+              - object: selection
+                question_id: 63
+                option: '2'
+              quota:
+                name: SF-Target-6
+                completes_goal_percentage: 2
+            - conditions:
+              - object: selection
+                question_id: 157
+                option: '7'
+              - object: selection
+                question_id: 63
+                option: '2'
+              quota:
+                name: SF-Target-7
+                completes_goal_percentage: 2
+            - conditions:
+              - object: selection
+                question_id: 157
+                option: '1'
+              - object: selection
+                question_id: 63
+                option: '7'
+              quota:
+                name: SF-CVS-1
+                completes_goal_percentage: 2
+            - conditions:
+              - object: selection
+                question_id: 157
+                option: '2'
+              - object: selection
+                question_id: 63
+                option: '7'
+              quota:
+                name: SF-CVS-2
+                completes_goal_percentage: 2
+            - conditions:
+              - object: selection
+                question_id: 157
+                option: '3'
+              - object: selection
+                question_id: 63
+                option: '7'
+              quota:
+                name: SF-CVS-3
+                completes_goal_percentage: 2
+            - conditions:
+              - object: selection
+                question_id: 157
+                option: '4'
+              - object: selection
+                question_id: 63
+                option: '7'
+              quota:
+                name: SF-CVS-4
+                completes_goal_percentage: 2
+            - conditions:
+              - object: selection
+                question_id: 157
+                option: '5'
+              - object: selection
+                question_id: 63
+                option: '7'
+              quota:
+                name: SF-CVS-5
+                completes_goal_percentage: 2
+            - conditions:
+              - object: selection
+                question_id: 157
+                option: '6'
+              - object: selection
+                question_id: 63
+                option: '7'
+              quota:
+                name: SF-CVS-6
+                completes_goal_percentage: 2
+            - conditions:
+              - object: selection
+                question_id: 157
+                option: '7'
+              - object: selection
+                question_id: 63
+                option: '7'
+              quota:
+                name: SF-CVS-7
+                completes_goal_percentage: 2
+            - conditions:
+              - object: selection
+                question_id: 157
+                option: '1'
+              - object: selection
+                question_id: 157
+                option: '2'
+              - object: selection
+                question_id: 157
+                option: '3'
+              - object: selection
+                question_id: 157
+                option: '4'
+              - object: selection
+                question_id: 63
+                option: '8'
+              quota:
+                name: SF-KROGER
+                completes_goal_percentage: 2
+          - object: regular
+            quotas_enabled: true
+            targets:
+            - conditions:
+              - object: selection
+                question_id: 47
+                option: '4'
+              - object: selection
+                question_id: 47
+                option: '5'
+              - object: selection
+                question_id: 47
+                option: '6'
+              - object: selection
+                question_id: 47
+                option: '7'
+              quota:
+                name: Group-1
+                completes_goal_percentage: 49.21
+            - conditions:
+              - object: selection
+                question_id: 47
+                option: '8'
+              quota:
+                completes_goal_percentage: 50.79
+          - object: regular
+            quotas_enabled: false
+            targets:
+            - conditions:
+              - object: selection
+                question_id: 113
+                option: '5'
+            - conditions:
+              - object: selection
+                question_id: 113
+                option: '8'
+            - conditions:
+              - object: selection
+                question_id: 113
+                option: '6'
+            - conditions:
+              - object: selection
+                question_id: 113
+                option: '4'
+          - object: regular
+            quotas_enabled: false
+            targets:
+            - conditions:
+              - object: selection
+                question_id: 96
+                option: '1'
+            - conditions:
+              - object: selection
+                question_id: 96
+                option: '10'
+            - conditions:
+              - object: selection
+                question_id: 96
+                option: '11'
+          - object: blended
+            blended_type: control
+            name: Control quota
+            quotas_enabled: true
+            targets:
+            - name: Control quota 1
+              conditions:
+              - object: selection
+                question_id: 43
+                option: '1'
+              - object: range
+                question_id: 42
+                min: 20
+                max: 29
+              - object: selection
+                question_id: 96
+                option: '1'
+              quota:
+                completes_goal_percentage: 0.0
+                completes_goal: 0
+                quota_nominal: 0
+            - name: Control quota 2
+              conditions:
+              - object: selection
+                question_id: 43
+                option: '2'
+              - object: range
+                question_id: 42
+                min: 30
+                max: 39
+              - object: selection
+                question_id: 96
+                option: '1'
+              quota:
+                completes_goal_percentage: 10.0
+                completes_goal: 0
+                quota_nominal: 0
+            - name: Control quota 3
+              conditions:
+              - object: selection
+                question_id: 43
+                option: '1'
+              - object: range
+                question_id: 42
+                min: 30
+                max: 39
+              - object: selection
+                question_id: 96
+                option: '1'
+              quota:
+                completes_goal_percentage: 0.0
+                completes_goal: 0
+                quota_nominal: 0
+    AccountID:
+      description: The account's unique identifier.
+      type: integer
+      format: int32
+      example: 101
+    ProfileTargetsOpenEndedConditionsV3:
+      title: Open-ended condition
+      description: A profiling condition that targets open-ended text values.
+      oneOf:
+      - title: Allow All Values
+        description: If `allow_all_values` is true, `open_ended_values` must be null.
+        type: object
+        properties:
+          object:
+            type: string
+            description: The type of profiling condition. For this object, the value is always 'open_ended'.
+            enum:
+            - open_ended
+            example: open_ended
+          question_id:
+            $ref: '#/components/schemas/QuestionID'
+          allow_all_values:
+            type: boolean
+            enum:
+            - true
+            description: Flag to allow all values.
+          open_ended_values:
+            type: array
+            minItems: 0
+            maxItems: 0
+            items:
+              type: string
+            nullable: true
+            description: Must be null when `allow_all_values` is true.
+        required:
+        - object
+        - question_id
+        - allow_all_values
+        - open_ended_values
+      - title: Specific Open End Values
+        description: If `allow_all_values` is false, `open_ended_values` must contain at least one open end value.
+        type: object
+        properties:
+          object:
+            type: string
+            description: Object field to distinguish between different types of control selections.  Always is `open_ended`.
+            enum:
+            - open_ended
+            example: open_ended
+          question_id:
+            $ref: '#/components/schemas/QuestionID'
+          allow_all_values:
+            type: boolean
+            enum:
+            - false
+            description: Flag to allow only specific open end values.
+          open_ended_values:
+            type: array
+            items:
+              type: string
+            minItems: 1
+            maxItems: 10000
+            description: List of applicable open end values. Required when `allow_all_values` is false. Note that only 10,000 values may be provided. For more than 10,000, please contact your integration consultant.
+        required:
+        - object
+        - question_id
+        - allow_all_values
+        - open_ended_values
+      example:
+        object: open_ended
+        question_id: 45
+        open_ended_values: []
+        allow_all_values: true
+  responses:
+    Error_NotFound:
+      description: A requested resource isn't found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            id: 7a5972ba-0825-4360-b852-fa2430e47034
+            object: not_found_error
+            detail: resource not found
+    Error_Internal:
+      description: A request failed due to an internal error.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            id: d94b8bb2-a540-4a91-9c05-2aa3ae9a5e1e
+            object: unexpected_internal_error
+            detail: an internal error has led to the failure of this operation
+    Error_BadRequest_DemandAPI:
+      description: A request is not valid and can't be processed.
+      headers:
+        traceparent:
+          $ref: '#/components/headers/Traceparent'
+        tracestate:
+          $ref: '#/components/headers/Tracestate'
+        is-synthetic-traffic:
+          $ref: '#/components/headers/IsSyntheticTraffic'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ClientErrorDemandAPI'
+    Error_Internal_DemandAPI:
+      description: A request failed due to an internal error.
+      headers:
+        traceparent:
+          $ref: '#/components/headers/Traceparent'
+        tracestate:
+          $ref: '#/components/headers/Tracestate'
+        is-synthetic-traffic:
+          $ref: '#/components/headers/IsSyntheticTraffic'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/InternalErrorDemandAPI'
+    Error_Forbidden:
+      description: A requested is forbidden.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            id: fe68cdd2-ee87-4dbf-8950-63c5cbca94c7
+            object: authorization_error
+            detail: you don't have the right permissions to perform this operation
+    Error_Unauthorized:
+      description: A request is unauthorized.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            id: 1dcf0f40-f0d1-4cf6-8c00-c3d019d32faf
+            object: authorization_error
+            detail: no valid authorization provided for this operation
+    Error_BadRequest:
+      description: A request is not valid and can't be processed.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            id: 9e278238-d011-4e05-8327-1ce1d5d26254
+            object: bad_request_error
+            detail: Expected field 'foo' is missing.
+  headers:
+    IsSyntheticTraffic:
+      description: 'Boolean value representing whether request is the product of synthetic traffic. By default, set to false. '
+      schema:
+        $ref: '#/components/schemas/IsSyntheticTraffic'
+    Tracestate:
+      description: The `tracestate` header complements the `traceparent` header by carrying vendor-specific trace information. This allows different services to add their own data to a trace.
+      required: false
+      schema:
+        $ref: '#/components/schemas/Tracestate'
+    Traceparent:
+      description: The `traceparent` header carries the trace ID and parent span ID, as defined by the W3C Trace Context specification. It's used to trace a single request as it moves through multiple services.
+      required: false
+      schema:
+        $ref: '#/components/schemas/Traceparent'
+  parameters:
+    ProjectID:
+      name: project_id
+      description: A unique identifier for the project, in ULID format.
+      in: path
+      required: true
+      schema:
+        $ref: '#/components/schemas/ProjectID'
+    CintAPIVersion-2025-12-18:
+      name: Cint-API-Version
+      in: header
+      required: true
+      schema:
+        type: string
+        example: 2025-12-18
+      description: 'This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.
+
+        '
+    ProfileIDV2:
+      name: profile_id
+      description: The character string representing a unique profile ID (ULID format).
+      in: path
+      required: true
+      schema:
+        $ref: '#/components/schemas/ProfileIDV2'
+    TargetGroupID:
+      name: target_group_id
+      description: A unique identifier for the target group, in ULID format.
+      in: path
+      required: true
+      schema:
+        $ref: '#/components/schemas/TargetGroupID'
+    AccountID:
+      name: account_id
+      description: The account's unique identifier.
+      in: path
+      required: true
+      schema:
+        $ref: '#/components/schemas/AccountID'
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Bearer token used for authentication and authorization. See [Authentication Process](https://developer.cint.com/en/guides#authentication-process) documentation for more information.
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: API Key Authentication

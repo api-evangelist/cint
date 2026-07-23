@@ -1,0 +1,912 @@
+openapi: 3.0.3
+info:
+  title: Demand Accounts Projects API
+  description: 'Cint''s demand ordering API is REST oriented. It has predictable resource based URLs, accepts JSON-encoded request bodies, returns JSON-encoded responses, and uses standard HTTP response codes, authentication, and verbs. Error responses are also JSON-encoded and follow a standard format, providing a unique error ID and detailed information about what went wrong.
+
+
+    Authentication is handled via bearer tokens passed in the `Authorization` header. All requests must also include a `Cint-API-Version` header with a date in `YYYY-MM-DD` format to specify the desired API version. Depending on the version you use, endpoint behavior may differ as we improve our API with every version release.
+
+
+    While many operations work on a single object per request, the demand ordering API also provides asynchronous batch endpoints for performing bulk updates efficiently on certain resources. For safety, `POST` requests support an `Idempotency-Key` header to allow for safe retries without accidentally performing the same operation twice.
+
+    '
+  version: '2025-12-18'
+servers:
+- description: Production server
+  url: https://api.cint.com/v1
+security:
+- BearerAuth: []
+tags:
+- name: Projects
+  description: Create, list and update projects. Projects are a flexible container for Target Groups and enable basic aggregation and automation.
+paths:
+  /demand/accounts/{account_id}/projects:
+    parameters:
+    - $ref: '#/components/parameters/AccountID'
+    - $ref: '#/components/parameters/CintAPIVersion-2025-12-18'
+    get:
+      summary: List projects for an account
+      operationId: list_account_projects
+      description: 'This endpoint returns a paginated list of projects for a specific account.
+
+        The response includes summary details for each project, such as its name, last activity, and key statistics.
+
+        '
+      parameters:
+      - $ref: '#/components/parameters/ProjectManagerIDFilter'
+      - $ref: '#/components/parameters/ProjectStatusFilter'
+      - $ref: '#/components/parameters/ProjectNameFilter'
+      - $ref: '#/components/parameters/ProjectSearchString'
+      - $ref: '#/components/parameters/EndBefore'
+      - $ref: '#/components/parameters/StartAfter'
+      - $ref: '#/components/parameters/PageSize'
+      tags:
+      - Projects
+      responses:
+        '200':
+          description: Returns a paginated list of projects.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectsList'
+              example:
+                next_cursor: bff6a669-a469-409d-8c94-dcf92258043a
+                url: /accounts/101/projects
+                has_more: true
+                projects:
+                - id: 01HD6WD8W4G8FMTFCX0JPR8TXN
+                  human_readable_id: FT354J
+                  account_id: 101
+                  name: Test Project
+                  target_group_count: 1
+                  status: active
+                  last_activity_at: '2023-01-01T23:00:00.000Z'
+                  statistics:
+                    filling_goal: 1000
+                    current_completes: 412
+                    current_prescreens: 546
+                    incidence_rate_median: 0.05
+                    length_of_interview_median_seconds: 600
+                    conversion_rate_average: 0.05
+                    drop_off_rate_average: 0.05
+          headers:
+            traceparent:
+              $ref: '#/components/headers/Traceparent'
+            tracestate:
+              $ref: '#/components/headers/Tracestate'
+        '400':
+          $ref: '#/components/responses/Error_BadRequest'
+        '401':
+          $ref: '#/components/responses/Error_Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error_Forbidden'
+        '404':
+          $ref: '#/components/responses/Error_NotFound'
+        '500':
+          $ref: '#/components/responses/Error_Internal'
+    post:
+      summary: Create a new project
+      description: 'This endpoint creates a new project. Project creation is an asynchronous process.
+
+
+        A successful request is accepted for processing and immediately returns a `202 Accepted` response with the new project''s unique `id`.
+
+
+        To prevent duplicate projects from being created due to network issues, this endpoint requires an `Idempotency-Key` header.
+
+        '
+      operationId: create_project
+      parameters:
+      - $ref: '#/components/parameters/IdempotencyKeyRequired'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProjectInfo'
+            example:
+              name: New Q1 Marketing Study
+              project_manager_id: b551326b-ac9d-4d32-8823-4f025787dab9
+              project_customer_reference_number: Q1-MKTG-STUDY-001
+      responses:
+        '202':
+          description: Confirms that the project creation request has been accepted for processing.
+          headers:
+            traceparent:
+              $ref: '#/components/headers/Traceparent'
+            tracestate:
+              $ref: '#/components/headers/Tracestate'
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectIDResponse'
+              example:
+                id: 01GV070G3SJECZAGE3Q3J6FV56
+        '400':
+          $ref: '#/components/responses/Error_BadRequest'
+        '401':
+          $ref: '#/components/responses/Error_Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error_Forbidden'
+        '404':
+          $ref: '#/components/responses/Error_NotFound'
+        '500':
+          $ref: '#/components/responses/Error_Internal'
+      tags:
+      - Projects
+  /demand/accounts/{account_id}/projects/{project_id}:
+    parameters:
+    - $ref: '#/components/parameters/AccountID'
+    - $ref: '#/components/parameters/ProjectID'
+    - $ref: '#/components/parameters/CintAPIVersion-2025-12-18'
+    get:
+      summary: Retrieve a project
+      description: This endpoint retrieves the full details for a single project, specified by its unique `id`.
+      operationId: get_project_by_id
+      responses:
+        '200':
+          description: Returns the full details for the specified project.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectDetails'
+              example:
+                id: 01BTGNYV6HRNK8K8VKZASZCFP0
+                human_readable_id: FT354J
+                name: Test Project
+                project_manager_id: b551326b-ac9d-4d32-8823-4f025787dab9
+                account_id: 101
+                project_customer_reference_number: RF-4567
+          headers:
+            traceparent:
+              $ref: '#/components/headers/Traceparent'
+            tracestate:
+              $ref: '#/components/headers/Tracestate'
+            etag:
+              $ref: '#/components/headers/ETag'
+        '400':
+          $ref: '#/components/responses/Error_BadRequest'
+        '401':
+          $ref: '#/components/responses/Error_Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error_Forbidden'
+        '404':
+          $ref: '#/components/responses/Error_NotFound'
+        '500':
+          $ref: '#/components/responses/Error_Internal'
+      tags:
+      - Projects
+    put:
+      summary: Update a project
+      description: 'This endpoint updates the details of an existing project.
+
+
+        To prevent race conditions, this endpoint uses optimistic locking. You must provide the `If-Match` header with the `ETag` value of the resource you intend to update.
+
+
+        You can get the latest `ETag` by performing a `GET` request on the project first.
+
+        '
+      operationId: update_project
+      parameters:
+      - $ref: '#/components/parameters/IfMatchRequired'
+      - $ref: '#/components/parameters/IdempotencyKeyRequired'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProjectInfoUpdate'
+            example:
+              name: Updated Q1 Marketing Study
+              project_manager_id: b551326b-ac9d-4d32-8823-4f025787dab9
+              project_customer_reference_number: Q1-MKTG-STUDY-002
+      responses:
+        '200':
+          description: Returns the updated project's `id` and `human_readable_id`.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectIDWithHumanReadableIDResponse'
+              example:
+                id: 01BTGNYV6HRNK8K8VKZASZCFP0
+                human_readable_id: FT354J
+          headers:
+            traceparent:
+              $ref: '#/components/headers/Traceparent'
+            tracestate:
+              $ref: '#/components/headers/Tracestate'
+            idempotency-key:
+              $ref: '#/components/headers/IdempotencyKey'
+        '400':
+          $ref: '#/components/responses/Error_BadRequest'
+        '401':
+          $ref: '#/components/responses/Error_Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error_Forbidden'
+        '404':
+          $ref: '#/components/responses/Error_NotFound'
+        '412':
+          $ref: '#/components/responses/Precondition_Failed'
+        '500':
+          $ref: '#/components/responses/Error_Internal'
+      tags:
+      - Projects
+  /demand/accounts/{account_id}/projects/{project_id}/overview:
+    parameters:
+    - $ref: '#/components/parameters/AccountID'
+    - $ref: '#/components/parameters/ProjectID'
+    - $ref: '#/components/parameters/CintAPIVersion-2025-12-18'
+    get:
+      summary: Retrieve a project summary
+      description: This endpoint retrieves a summary overview of a single project, including its status and key performance statistics.
+      operationId: project_overview
+      responses:
+        '200':
+          description: Returns a summary overview of the specified project.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectOverview'
+              example:
+                id: 01BTGNYV6HRNK8K8VKZASZCFP0
+                human_readable_id: FT354J
+                name: Test Project
+                account_id: 101
+                status: active
+                statistics:
+                  filling_goal: 1000
+                  current_completes: 412
+                  current_prescreens: 546
+                  incidence_rate_median: 0.05
+                  length_of_interview_median_seconds: 600
+                  conversion_rate_average: 0.05
+                  drop_off_rate_average: 0.05
+                project_manager_id: b551326b-ac9d-4d32-8823-4f025787dab9
+                project_customer_reference_number: RF-4567
+                created_at: '2023-01-01T23:00:00.000Z'
+        '401':
+          $ref: '#/components/responses/Error_Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error_Forbidden'
+        '404':
+          $ref: '#/components/responses/Error_NotFound'
+        '500':
+          $ref: '#/components/responses/Error_Internal'
+      tags:
+      - Projects
+components:
+  schemas:
+    ProjectIDWithHumanReadableIDResponse:
+      type: object
+      description: The response payload containing a project's `id` and `human_readable_id`.
+      properties:
+        id:
+          $ref: '#/components/schemas/ProjectID'
+        human_readable_id:
+          $ref: '#/components/schemas/ProjectHumanReadableID'
+    ProjectInfoUpdate:
+      type: object
+      description: The request payload for updating an existing project.
+      required:
+      - name
+      - project_manager_id
+      - project_customer_reference_number
+      properties:
+        name:
+          type: string
+          description: The name of the project. Any leading or trailing whitespace will be trimmed.
+          minLength: 5
+          maxLength: 128
+          example: A Project
+        project_manager_id:
+          $ref: '#/components/schemas/UserID'
+        project_customer_reference_number:
+          type: string
+          pattern: ^[a-zA-Z0-9\-_ ]*$
+          nullable: true
+          minLength: 3
+          maxLength: 128
+          description: 'A customer-provided reference number assigned to the project.
+
+
+            :::danger Deletion Warning
+
+            If this field is omitted from the request body during an update, the existing customer reference number will be permanently deleted.
+
+            :::
+
+            '
+          example: RF-4567
+    ETag:
+      type: string
+      description: The `ETag` header provides a unique identifier that represents the current version state of a particular resource.
+      example: W/"1234"
+    ProjectIDResponse:
+      type: object
+      description: Response containing only the project ID.
+      properties:
+        id:
+          type: string
+          format: ulid
+          pattern: ^[0-9A-Z]{26}$
+          example: 01GV070G3SJECZAGE3Q3J6FV56
+    InvalidParam:
+      type: object
+      description: Describes a single invalid parameter in a request.
+      properties:
+        name:
+          type: string
+          description: The name of the parameter that failed validation.
+        reason:
+          type: string
+          description: A short explanation of why the parameter was invalid.
+      required:
+      - name
+      - reason
+    ProjectsList:
+      type: object
+      description: Paginated list of Projects.
+      required:
+      - projects
+      - url
+      - has_more
+      properties:
+        projects:
+          type: array
+          description: Array of Project list items, representing the results of the query.
+          items:
+            $ref: '#/components/schemas/ProjectListItem'
+        url:
+          type: string
+          description: URL which produced this list (without query parameters).
+          example: /accounts/543587/projects
+        has_more:
+          type: boolean
+          description: If `true`, there are more results to fetch by providing the `next_cursor` in a subsequent request. If `false`, you are on the last page of results.
+        next_cursor:
+          $ref: '#/components/schemas/NextCursor'
+    ProjectListItem:
+      type: object
+      description: A single project summary object, typically returned in a list.
+      required:
+      - id
+      - account_id
+      - name
+      - status
+      - last_activity_at
+      - target_group_count
+      - statistics
+      properties:
+        id:
+          type: string
+          pattern: ^[0-9A-Z]{26}$
+          description: A unique identifier for the project in ULID format.
+          example: 01HD6WD8W4G8FMTFCX0JPR8TXN
+        human_readable_id:
+          description: The project's human-readable ID, unique within the account.
+          $ref: '#/components/schemas/ProjectHumanReadableID'
+        account_id:
+          description: The unique identifier of the account this project belongs to.
+          $ref: '#/components/schemas/AccountID'
+        project_customer_reference_number:
+          type: string
+          description: A customer-provided reference number assigned to the project.
+          minLength: 3
+          maxLength: 128
+          example: RF-4567
+        name:
+          type: string
+          description: The name of the project.
+          example: Test Project
+        highlighted_name:
+          type: string
+          description: 'The name of the project, with parts that matched the search string being highlighted between HTML emphasis tags. If there was no search string, or the search string matched this project based on the identifier (and not based on the name), this property will be omitted.
+
+            '
+          example: <em>Test</em> Project
+        target_group_human_readable_ids:
+          type: array
+          description: 'If the search string matched one or more of the ID''s of target groups contained within the project, those target groups will be listed here. If no such matches were found, this property will be omitted.
+
+            '
+          items:
+            $ref: '#/components/schemas/TargetGroupHumanReadableID'
+        target_group_count:
+          type: integer
+          format: int32
+          minimum: 0
+          maximum: 1000
+          example: 1
+          description: The total number of target groups in this project.
+        status:
+          description: The current status of the project.
+          $ref: '#/components/schemas/ProjectStatus'
+        last_activity_at:
+          type: string
+          format: date-time
+          description: The timestamp of the last activity on the project, in ISO 8601 format.
+          example: '2023-01-01T23:00:00.000Z'
+        statistics:
+          description: An object containing key performance statistics for the project.
+          $ref: '#/components/schemas/ProjectStatistics'
+        target_group_customer_reference_numbers:
+          type: array
+          description: 'If the search string matched one or more of the customer reference numbers of target groups contained within the project, those target groups will be listed here. If no such matches were found, this property will be omitted.
+
+            '
+          items:
+            $ref: '#/components/schemas/TargetGroupCustomerReferenceNumber'
+    Traceparent:
+      type: string
+      description: 'The traceparent header carries essential trace context information. This includes the trace ID and parent span ID  as defined by the W3C trace context specification. It is used to pinpoint the position of an incoming request within  the trace graph, facilitating the tracking of distributed operations.
+
+        Note: This field is optional and will be automatically generated by the service if not provided in the request.  The generated value will be included in the response header.'
+      example: 00-0af7651916cd43dd8448eb211c80319c-b7ad6b7169203331-01
+    Error:
+      type: object
+      description: The standard error object returned for all failed API requests.
+      required:
+      - object
+      - detail
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: A unique identifier for this specific error instance.
+        object:
+          type: string
+          description: A short informative string identifying the type of the error
+          pattern: ^([a-z]*_)*([a-z]*)$
+        detail:
+          type: string
+          description: An error message provides a concise overview of the cause of the error.
+        invalid_params:
+          type: array
+          nullable: true
+          description: An optional field containing a list of invalid parameters may be presented in validation errors for additional information.
+          items:
+            $ref: '#/components/schemas/InvalidParam'
+    ProjectDetails:
+      type: object
+      description: The full details of a single project.
+      required:
+      - id
+      - name
+      - project_manager_id
+      - account_id
+      properties:
+        id:
+          description: The project's unique identifier in ULID format.
+          $ref: '#/components/schemas/ProjectID'
+        human_readable_id:
+          description: The project's human-readable ID, unique within the account.
+          $ref: '#/components/schemas/ProjectHumanReadableID'
+        name:
+          type: string
+          description: Name of the Project.
+          example: Test Project
+        project_manager_id:
+          description: Project manager ID.
+          $ref: '#/components/schemas/UserID'
+        account_id:
+          $ref: '#/components/schemas/AccountID'
+        project_customer_reference_number:
+          type: string
+          description: Customer reference number assigned to the project.
+          example: RF-4567
+    TargetGroupCustomerReferenceNumber:
+      type: string
+      pattern: ^[a-zA-Z0-9\-_ ]*$
+      minLength: 3
+      maxLength: 128
+      description: A customer-provided reference number for the target group.
+      example: AB-00246246
+    ProjectID:
+      description: The character string representing a unique project ID (ULID format).
+      type: string
+      pattern: ^[0-9A-Z]{26}$
+      example: 01BTGNYV6HRNK8K8VKZASZCFP0
+    ProjectHumanReadableID:
+      description: The project's human-readable ID. This ID is unique within the scope of an account.
+      type: string
+      minLength: 6
+      maxLength: 6
+      example: FT354J
+    ProjectInfo:
+      type: object
+      description: The request payload for creating a new project
+      properties:
+        name:
+          type: string
+          description: The name of the project. Any leading or trailing whitespace will be trimmed.
+          minLength: 5
+          maxLength: 128
+          example: A Project
+        project_manager_id:
+          type: string
+          format: uuid
+          example: 96C65204-90C2-4DCB-9393-B8226DD50C76
+          description: Project manager ID.
+        project_customer_reference_number:
+          type: string
+          description: A customer-provided reference number assigned to the project.
+          minLength: 3
+          maxLength: 128
+          pattern: ^[a-zA-Z0-9\-_ ]*$
+          example: RF-4567
+      required:
+      - name
+      - project_manager_id
+    TargetGroupHumanReadableID:
+      description: The target group's human-readable ID. This ID is unique within the scope of an account.
+      type: string
+      minLength: 7
+      maxLength: 7
+      example: 9NRV3B9
+    ProjectStatus:
+      type: string
+      enum:
+      - active
+      - inactive
+      description: The status of the project.
+      example: active
+    Tracestate:
+      type: string
+      description: 'The tracestate header provides additional contextual information to the traceparent header.  This enriches the tracing context and offers more fine-grained control
+
+        Note: This field is optional and will be automatically generated by the service if not provided in the request.  The generated value will be included in the response header.'
+      example: ot=foo:bar;k1:13
+    UserID:
+      type: string
+      format: uuid
+      description: A unique identifier for the user.
+      example: b551326b-ac9d-4d32-8823-4f025787dab9
+    IdempotencyKey:
+      type: string
+      description: 'A shallow unique ID used as part of the deduplication mechanism for mutable operations.
+
+        We suggest using UUIDv4 or another random string with sufficient entropy to avoid collisions.'
+      maxLength: 255
+      example: 01BTGNYV6HRNK8K8VKZASZCFP0
+    ProjectStatistics:
+      type: object
+      description: An object containing key performance statistics for a project.
+      required:
+      - filling_goal
+      - current_completes
+      - current_prescreens
+      - incidence_rate_median
+      - length_of_interview_median_seconds
+      - conversion_rate_average
+      - drop_off_rate_average
+      properties:
+        filling_goal:
+          type: integer
+          format: int32
+          description: The filling goal indicates the desired total number of completes across all target groups within the project.
+          minimum: 0
+          example: 1000
+        current_completes:
+          type: integer
+          format: int32
+          description: Current number of completes for the target groups within the project.
+          minimum: 0
+          example: 412
+        current_prescreens:
+          type: integer
+          format: int32
+          description: Current number of prescreens for the target groups within the project.
+          minimum: 0
+          example: 546
+        incidence_rate_median:
+          type: number
+          format: float
+          description: Current median incidence rate of the target groups within the project.
+          minimum: 0
+          maximum: 1
+          example: 0.05
+        length_of_interview_median_seconds:
+          type: integer
+          format: int32
+          description: Current median length of interview of the target groups within the project in seconds.
+          minimum: 0
+          example: 1
+        conversion_rate_average:
+          type: number
+          format: float
+          description: Current average conversion rate of the target groups within the project.
+          minimum: 0
+          maximum: 1
+          example: 0.05
+        drop_off_rate_average:
+          type: number
+          format: float
+          description: Current average drop-off rate of the target groups within the project.
+          minimum: 0
+          maximum: 1
+          example: 0.05
+    AccountID:
+      description: The account's unique identifier.
+      type: integer
+      format: int32
+      example: 101
+    ProjectOverview:
+      type: object
+      description: A summary overview of a single project, including its status and key performance statistics.
+      required:
+      - id
+      - human_readable_id
+      - account_id
+      - status
+      - statistics
+      - project_manager_id
+      - created_at
+      properties:
+        id:
+          description: The project's unique identifier in ULID format.
+          $ref: '#/components/schemas/ProjectID'
+        human_readable_id:
+          description: The project's human-readable ID, unique within the account.
+          $ref: '#/components/schemas/ProjectHumanReadableID'
+        name:
+          type: string
+          description: Name of the Project.
+          example: Test Project
+        account_id:
+          $ref: '#/components/schemas/AccountID'
+        status:
+          $ref: '#/components/schemas/ProjectStatus'
+        statistics:
+          $ref: '#/components/schemas/ProjectStatistics'
+        project_manager_id:
+          description: Project manager ID.
+          $ref: '#/components/schemas/UserID'
+        project_customer_reference_number:
+          type: string
+          description: Customer reference number assigned to the project.
+          example: RF-4567
+        created_at:
+          type: string
+          format: date-time
+          description: Date and time when the project was created (RFC3339 UTC format, 3 fractional digits).
+          example: '2023-01-01T23:00:00.000Z'
+    NextCursor:
+      description: 'An identifier for pagination that indicates there are more items available.
+
+        When present, use this value to retrieve the next page of results.
+
+        '
+      type: string
+      nullable: true
+      example: bff6a669-a469-409d-8c94-dcf92258043a
+  parameters:
+    ProjectNameFilter:
+      name: name
+      in: query
+      deprecated: true
+      description: '**Deprecated:** Use the `search_string` parameter instead.
+
+
+        Filters by the project name. If only `name` is supplied, it is treated as a `search_string`. If both `name` and `search_string` are supplied, `name` is ignored.
+
+        '
+      schema:
+        type: string
+        example: Test Project
+    ProjectID:
+      name: project_id
+      description: A unique identifier for the project, in ULID format.
+      in: path
+      required: true
+      schema:
+        $ref: '#/components/schemas/ProjectID'
+    ProjectSearchString:
+      name: search_string
+      in: query
+      description: 'Searches for projects based on a string match in any of the following fields.
+
+        * Project name
+
+        * Project''s human-readable ID
+
+        * Human-readable IDs of any target groups within the project
+
+        '
+      schema:
+        type: string
+        example: Test Project
+        minLength: 5
+        maxLength: 128
+    ProjectManagerIDFilter:
+      name: project_manager_id
+      in: query
+      description: Filters the list of projects by the assigned project manager's ID.
+      schema:
+        $ref: '#/components/schemas/UserID'
+    EndBefore:
+      name: end_before
+      in: query
+      description: Returns a list of objects that come before the provided pagination cursor. This is used for navigating to a previous page.
+      schema:
+        type: string
+      example: 7daa40ad-303b-40a2-89df-a9760400cde7
+    CintAPIVersion-2025-12-18:
+      name: Cint-API-Version
+      in: header
+      required: true
+      schema:
+        type: string
+        example: 2025-12-18
+      description: 'This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.
+
+        '
+    IdempotencyKeyRequired:
+      name: idempotency-key
+      in: header
+      required: true
+      description: A shallow unique ID used as part of the deduplication mechanism for mutable operations,  this header is required.
+      schema:
+        $ref: '#/components/schemas/IdempotencyKey'
+    PageSize:
+      name: page_size
+      in: query
+      description: A limit on the number of objects to be returned, between 1 and 100.
+      schema:
+        type: integer
+        default: 10
+      example: 15
+    StartAfter:
+      name: start_after
+      in: query
+      description: Returns a list of objects after the provided pagination cursor, using the next_cursor from the previous response.
+      schema:
+        type: string
+      example: bff6a669-a469-409d-8c94-dcf92258043a
+    IfMatchRequired:
+      name: If-Match
+      required: true
+      description: 'The `ETag` value of the resource, used for optimistic locking.
+
+
+        Providing the ETag ensures you don''t accidentally overwrite changes made by another request.
+
+        You can get this value from the `ETag` header of a `GET` request for the resource.
+
+        '
+      in: header
+      schema:
+        type: string
+        format: etag
+        example: W/"1234"
+    ProjectStatusFilter:
+      name: status
+      in: query
+      description: Filters the list of projects by their status.
+      schema:
+        $ref: '#/components/schemas/ProjectStatus'
+    AccountID:
+      name: account_id
+      description: The account's unique identifier.
+      in: path
+      required: true
+      schema:
+        $ref: '#/components/schemas/AccountID'
+  responses:
+    Error_NotFound:
+      description: A requested resource isn't found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            id: 7a5972ba-0825-4360-b852-fa2430e47034
+            object: not_found_error
+            detail: resource not found
+    Error_Internal:
+      description: A request failed due to an internal error.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            id: d94b8bb2-a540-4a91-9c05-2aa3ae9a5e1e
+            object: unexpected_internal_error
+            detail: an internal error has led to the failure of this operation
+    Error_Forbidden:
+      description: A requested is forbidden.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            id: fe68cdd2-ee87-4dbf-8950-63c5cbca94c7
+            object: authorization_error
+            detail: you don't have the right permissions to perform this operation
+    Precondition_Failed:
+      description: The resource could not be modified because the ETag in the If-Match header does not match the current version. This means the resource was updated by another request after you retrieved it.
+      headers:
+        traceparent:
+          description: The `traceparent` header carries the trace ID and parent span ID, as defined by the W3C Trace Context specification. It's used to trace a single request as it moves through multiple services.
+          required: false
+          schema:
+            $ref: '#/components/schemas/Traceparent'
+        tracestate:
+          description: The `tracestate` header complements the `traceparent` header by carrying vendor-specific trace information. This allows different services to add their own data to a trace.
+          required: false
+          schema:
+            $ref: '#/components/schemas/Tracestate'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            id: 3d61d9c3-68ee-4026-b436-6e76a2b33932
+            object: precondition_failed_error
+            detail: The resource has been modified since you last retrieved it. Please fetch the latest version and try your request again.
+    Error_Unauthorized:
+      description: A request is unauthorized.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            id: 1dcf0f40-f0d1-4cf6-8c00-c3d019d32faf
+            object: authorization_error
+            detail: no valid authorization provided for this operation
+    Error_BadRequest:
+      description: A request is not valid and can't be processed.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            id: 9e278238-d011-4e05-8327-1ce1d5d26254
+            object: bad_request_error
+            detail: Expected field 'foo' is missing.
+  headers:
+    ETag:
+      description: The `ETag` header provides a unique identifier that represents the current version of a resource. It's used for caching and to prevent concurrent modification issues.
+      required: true
+      schema:
+        $ref: '#/components/schemas/ETag'
+    Tracestate:
+      description: The `tracestate` header complements the `traceparent` header by carrying vendor-specific trace information. This allows different services to add their own data to a trace.
+      required: false
+      schema:
+        $ref: '#/components/schemas/Tracestate'
+    Traceparent:
+      description: The `traceparent` header carries the trace ID and parent span ID, as defined by the W3C Trace Context specification. It's used to trace a single request as it moves through multiple services.
+      required: false
+      schema:
+        $ref: '#/components/schemas/Traceparent'
+    IdempotencyKey:
+      description: 'A unique key that you can provide to safely retry requests without accidentally performing the same operation twice.
+
+
+        We suggest using a UUID v4 or another random string with sufficient entropy to avoid collisions.
+
+
+        Examples:
+
+        - 96C65204-90C2-4DCB-9393-B8226DD50C76
+
+        - 01BTGNYV6HRNK8K8VKZASZCFP0
+
+        '
+      required: false
+      schema:
+        $ref: '#/components/schemas/IdempotencyKey'
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Bearer token used for authentication and authorization. See [Authentication Process](https://developer.cint.com/en/guides#authentication-process) documentation for more information.
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: API Key Authentication

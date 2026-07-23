@@ -1,0 +1,840 @@
+openapi: 3.0.3
+info:
+  title: Demand Accounts Profiling Templates API
+  description: 'Cint''s demand ordering API is REST oriented. It has predictable resource based URLs, accepts JSON-encoded request bodies, returns JSON-encoded responses, and uses standard HTTP response codes, authentication, and verbs. Error responses are also JSON-encoded and follow a standard format, providing a unique error ID and detailed information about what went wrong.
+
+
+    Authentication is handled via bearer tokens passed in the `Authorization` header. All requests must also include a `Cint-API-Version` header with a date in `YYYY-MM-DD` format to specify the desired API version. Depending on the version you use, endpoint behavior may differ as we improve our API with every version release.
+
+
+    While many operations work on a single object per request, the demand ordering API also provides asynchronous batch endpoints for performing bulk updates efficiently on certain resources. For safety, `POST` requests support an `Idempotency-Key` header to allow for safe retries without accidentally performing the same operation twice.
+
+    '
+  version: '2025-12-18'
+servers:
+- description: Production server
+  url: https://api.cint.com/v1
+security:
+- BearerAuth: []
+tags:
+- name: Profiling Templates
+  description: Create, manage and reuse audience descriptions and templates to allow for efficient and automated targeting workflows on the Cint Exchange.
+paths:
+  /demand/accounts/{account_id}/profiling-templates:
+    parameters:
+    - $ref: '#/components/parameters/AccountID'
+    - $ref: '#/components/parameters/CintAPIVersion-2025-12-18'
+    get:
+      tags:
+      - Profiling Templates
+      operationId: list_profile_templates
+      summary: List profile templates
+      description: This endpoint returns a paginated list of your available profile templates. You can filter the list by scope and locale.
+      parameters:
+      - $ref: '#/components/parameters/PageSize'
+      - $ref: '#/components/parameters/StartAfter'
+      - $ref: '#/components/parameters/EndBefore'
+      - $ref: '#/components/parameters/Order'
+      - $ref: '#/components/parameters/ProfilingTemplatesScope'
+      - $ref: '#/components/parameters/ProfilingTemplatesLocales'
+      responses:
+        '200':
+          description: Returns a paginated list of profile templates.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProfileTemplatesList'
+              example:
+                next_cursor: a1b2c3d4-e5f6-7890-abcd-ef1234567890
+                templates:
+                - id: 01HY7WJ4QZ5XN6ZJ8Y9X0A1B2C
+                  name: Standard B2C Demographics
+                  description: A standard demographic template for B2C surveys.
+                  label: Standard B2C Demographics
+                  scope: global
+                  locales:
+                  - eng-us
+                  - eng-gb
+                  - deu-de
+                - id: 01HY7WJ4R0A2B3C4D5E6F7G8H9
+                  name: Custom Tech Industry Survey
+                  description: A custom template for tech industry surveys.
+                  label: Custom Tech Industry Survey
+                  scope: account
+                  locales:
+                  - eng-us
+        '400':
+          $ref: '#/components/responses/Error_BadRequest'
+        '401':
+          $ref: '#/components/responses/Error_Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error_Forbidden'
+        '404':
+          $ref: '#/components/responses/Error_NotFound'
+        '500':
+          $ref: '#/components/responses/Error_Internal'
+    post:
+      tags:
+      - Profiling Templates
+      operationId: create_profile_template
+      summary: Create a profile template
+      description: This endpoint creates a new profile template with a specified name, scope, and set of questions.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProfileTemplateRequest'
+            example:
+              name: New IT Decision Makers Template
+              scope: account
+              locales:
+              - eng-us
+              questions:
+              - question_id: job_title
+                answer_options:
+                - cio
+                - cto
+                - it_manager
+              - question_id: company_size
+                answer_options:
+                - 1-50
+                - 51-200
+                - 201-1000
+      responses:
+        '201':
+          description: Returns the newly created profile template, including its unique `id`.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProfileTemplateResponse'
+              example:
+                id: 01HY7XM...NEWLY_CREATED_ID
+                name: New IT Decision Makers Template
+                scope: account
+                locales:
+                - eng-us
+                created_at: '2024-01-15T14:30:00Z'
+                updated_at: '2024-01-15T14:30:00Z'
+                questions:
+                - question_id: job_title
+                  answer_options:
+                  - cio
+                  - cto
+                  - it_manager
+                - question_id: company_size
+                  answer_options:
+                  - 1-50
+                  - 51-200
+                  - 201-1000
+        '400':
+          $ref: '#/components/responses/Error_BadRequest'
+        '401':
+          $ref: '#/components/responses/Error_Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error_Forbidden'
+        '404':
+          $ref: '#/components/responses/Error_NotFound'
+        '500':
+          $ref: '#/components/responses/Error_Internal'
+  /demand/accounts/{account_id}/profiling-templates/{profile_template_id}:
+    parameters:
+    - $ref: '#/components/parameters/AccountID'
+    - $ref: '#/components/parameters/ProfileTemplateID'
+    - $ref: '#/components/parameters/CintAPIVersion-2025-12-18'
+    get:
+      tags:
+      - Profiling Templates
+      operationId: get_profile_template
+      summary: Get a profile template
+      description: This endpoint returns a single profile template, specified by its unique `id`.
+      parameters:
+      - $ref: '#/components/parameters/ProfilingTemplatesLocales'
+      responses:
+        '200':
+          description: Returns the specified profile template.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProfileTemplateResponse'
+              example:
+                id: 01HY7WJ4QZ5XN6ZJ8Y9X0A1B2C
+                name: Standard B2C Demographics
+                scope: global
+                locales:
+                - eng-us
+                - eng-gb
+                - deu-de
+                created_at: '2023-10-26T10:00:00Z'
+                updated_at: '2023-10-26T10:15:00Z'
+                questions:
+                - question_id: gender
+                  answer_options:
+                  - male
+                  - female
+                  - other
+                - question_id: age
+                  answer_options:
+                  - 18-24
+                  - 25-34
+                  - 35-44
+        '400':
+          $ref: '#/components/responses/Error_BadRequest'
+        '401':
+          $ref: '#/components/responses/Error_Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error_Forbidden'
+        '404':
+          $ref: '#/components/responses/Error_NotFound'
+        '500':
+          $ref: '#/components/responses/Error_Internal'
+    put:
+      tags:
+      - Profiling Templates
+      operationId: edit_profile_template
+      summary: Edit a profile template
+      description: This endpoint updates an existing profile template. You can modify its name, scope, locales, and questions.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProfileTemplateRequest'
+            example:
+              name: Updated Standard B2C Demographics
+              scope: global
+              locales:
+              - eng-us
+              - eng-gb
+              - deu-de
+              - fra-fr
+              questions:
+              - question_id: gender
+                answer_options:
+                - male
+                - female
+                - other
+                - prefer_not_to_say
+              - question_id: age
+                answer_options:
+                - 18-24
+                - 25-34
+                - 35-44
+                - 45-54
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProfileTemplateResponse'
+        '400':
+          $ref: '#/components/responses/Error_BadRequest'
+        '401':
+          $ref: '#/components/responses/Error_Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error_Forbidden'
+        '404':
+          $ref: '#/components/responses/Error_NotFound'
+        '500':
+          $ref: '#/components/responses/Error_Internal'
+    delete:
+      tags:
+      - Profiling Templates
+      operationId: delete_profile_template
+      summary: Delete a profile template
+      description: 'This endpoint permanently deletes a profile template.
+
+
+        :::danger Destructive Action
+
+        This operation cannot be undone.
+
+        :::
+
+        '
+      parameters:
+      - $ref: '#/components/parameters/ProfilingTemplatesLocales'
+      responses:
+        '204':
+          description: Confirms that the profile template was deleted successfully.
+          headers:
+            traceparent:
+              $ref: '#/components/headers/Traceparent'
+            tracestate:
+              $ref: '#/components/headers/Tracestate'
+        '401':
+          $ref: '#/components/responses/Error_Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error_Forbidden'
+        '404':
+          $ref: '#/components/responses/Error_NotFound'
+        '500':
+          $ref: '#/components/responses/Error_Internal'
+components:
+  schemas:
+    ProfileTemplateScopeless:
+      type: object
+      properties:
+        name:
+          type: string
+          description: A user-defined name for the template.
+          example: My Template
+        description:
+          type: string
+          description: A description for the template.
+          example: My Template Description
+        label:
+          type: string
+          description: A label for the template.
+          example: My Template Label
+        locales:
+          type: array
+          description: A list of locale codes where this template is applicable.
+          items:
+            $ref: '#/components/schemas/LocaleCode'
+    TemplateRegularProfiles:
+      type: object
+      required:
+      - object
+      - quotas_enabled
+      - targets
+      properties:
+        object:
+          type: string
+          description: A field that identifies the profile type. The value is always `regular` for this schema.
+          enum:
+          - regular
+          example: regular
+        name:
+          type: string
+          description: The name of the profile.
+          example: Age
+        description:
+          type: string
+          description: A short summary of the profile.
+          example: What is your age?
+        quotas_enabled:
+          type: boolean
+          description: Indicates if quotas are enabled for this profile.
+          example: true
+        targets:
+          description: Defines the specific quota targets and their conditions for this profile.
+          $ref: '#/components/schemas/TemplatesQuotaV3'
+    ProfileTemplatesList:
+      type: object
+      properties:
+        templates:
+          type: array
+          description: A list of profile template summary objects.
+          items:
+            $ref: '#/components/schemas/ProfileTemplateListItem'
+        next_cursor:
+          $ref: '#/components/schemas/NextCursor'
+    InvalidParam:
+      type: object
+      description: Describes a single invalid parameter in a request.
+      properties:
+        name:
+          type: string
+          description: The name of the parameter that failed validation.
+        reason:
+          type: string
+          description: A short explanation of why the parameter was invalid.
+      required:
+      - name
+      - reason
+    TemplateQuotaDetailsV3:
+      description: 'Represents a single quota target within a profile template. A target consists of a set of conditions and may or may not have a specific percentage of completes allocated to it. The structure will be one of the following options:
+
+        * An object with a `quota` field for targets with a defined percentage.
+
+        * An object without a `quota` field for targets that are for profiling only.
+
+        '
+      oneOf:
+      - type: object
+        description: A target that defines a set of conditions and the percentage of completes allocated to them
+        required:
+        - conditions
+        - quota
+        properties:
+          name:
+            type: string
+            description: The name of the target.
+            example: Target Name
+          text:
+            type: string
+            description: The display text for the condition.
+            example: Condition Text
+          text_translated:
+            type: string
+            description: Translated text of the condition used for display purpose.
+            example: Condition Text
+          conditions:
+            type: array
+            description: List of conditions.
+            minItems: 1
+            items:
+              $ref: '#/components/schemas/InterlockProfileConditionsV3'
+          quota:
+            type: object
+            required:
+            - completes_goal_percentage
+            properties:
+              completes_goal_percentage:
+                type: number
+                multipleOf: 0.01
+                minimum: 0
+                maximum: 100
+                description: The percentage of the total completes goal that is allocated to this target.
+                example: 40
+      - title: No quota
+        type: object
+        description: A target that defines a set of conditions that do not have a specific quota percentage assigned.
+        required:
+        - conditions
+        properties:
+          name:
+            type: string
+            description: The name of the target.
+            example: Target Name
+          text:
+            type: string
+            description: The display text for the condition.
+            example: Condition Text
+          text_translated:
+            type: string
+            description: Translated text of the condition used for display purpose.
+            example: Condition Text
+          conditions:
+            type: array
+            description: List of conditions for the quota.
+            minItems: 1
+            items:
+              $ref: '#/components/schemas/InterlockProfileConditionsV3'
+    QuestionID:
+      type: integer
+      description: The unique identifier for a profiling question.
+      example: 12413
+    ProfileTemplateID:
+      type: string
+      description: A unique identifier for the template.
+      format: uuid
+      example: 12345678-1234-1234-1234-123456789012
+    ProfileTemplateOverview:
+      description: Represents the overview information for a profile template, combining the base details with its `scope`.
+      allOf:
+      - $ref: '#/components/schemas/ProfileTemplateScopeless'
+      - properties:
+          scope:
+            type: string
+            description: 'The scope of the profile template, which determines its availability.
+
+              *   `global`: Choose this if you want the template to be available for all accounts.
+
+              *   `account`: Choose this if you want the template to be available only for a specified account.
+
+              '
+            enum:
+            - global
+            - account
+            example: global
+    LocaleCode:
+      type: string
+      description: Unique text code of the locale.
+      example: eng_us
+    Traceparent:
+      type: string
+      description: 'The traceparent header carries essential trace context information. This includes the trace ID and parent span ID  as defined by the W3C trace context specification. It is used to pinpoint the position of an incoming request within  the trace graph, facilitating the tracking of distributed operations.
+
+        Note: This field is optional and will be automatically generated by the service if not provided in the request.  The generated value will be included in the response header.'
+      example: 00-0af7651916cd43dd8448eb211c80319c-b7ad6b7169203331-01
+    ProfileTemplateListItem:
+      type: object
+      description: A summary view of a profile template, typically returned in a list. It combines the template's overview with its unique `id`.
+      allOf:
+      - properties:
+          id:
+            $ref: '#/components/schemas/ProfileTemplateID'
+      - $ref: '#/components/schemas/ProfileTemplateOverview'
+    Error:
+      type: object
+      description: The standard error object returned for all failed API requests.
+      required:
+      - object
+      - detail
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: A unique identifier for this specific error instance.
+        object:
+          type: string
+          description: A short informative string identifying the type of the error
+          pattern: ^([a-z]*_)*([a-z]*)$
+        detail:
+          type: string
+          description: An error message provides a concise overview of the cause of the error.
+        invalid_params:
+          type: array
+          nullable: true
+          description: An optional field containing a list of invalid parameters may be presented in validation errors for additional information.
+          items:
+            $ref: '#/components/schemas/InvalidParam'
+    ProfileTargetsRangeConditionsV3:
+      title: Range condition
+      type: object
+      description: A profiling condition that targets a numeric range (e.g. age).
+      required:
+      - object
+      - question_id
+      - min
+      - max
+      properties:
+        object:
+          type: string
+          description: The type of profiling condition. For this object, the value is always 'range'.
+          enum:
+          - range
+          example: range
+        question_id:
+          $ref: '#/components/schemas/QuestionID'
+        min:
+          type: integer
+          format: int32
+          minimum: 1
+          maximum: 99
+          description: The minimum numeric value (inclusive).
+          example: 18
+        max:
+          type: integer
+          format: int32
+          minimum: 1
+          maximum: 99
+          description: The maximum numeric value (inclusive).
+          example: 24
+    ProfileTemplateRequest:
+      description: The request payload for creating or updating a profile template.
+      allOf:
+      - $ref: '#/components/schemas/ProfileTemplateScopeless'
+      - properties:
+          profiling:
+            $ref: '#/components/schemas/ProfilingTemplate'
+      - required:
+        - name
+        - locales
+        - label
+        - profiling
+    InterlockProfileConditionsV3:
+      description: A polymorphic object representing a single profiling condition, which can be a `selection`, `range`, or `open_ended` type.
+      oneOf:
+      - $ref: '#/components/schemas/ProfileTargetsSelectionConditionsV3'
+      - $ref: '#/components/schemas/ProfileTargetsRangeConditionsV3'
+      - $ref: '#/components/schemas/ProfileTargetsOpenEndedConditionsV3'
+    ProfileTemplateResponse:
+      type: object
+      description: The response payload for a single, complete profile template, including its overview details and full profiling question set.
+      allOf:
+      - properties:
+          id:
+            $ref: '#/components/schemas/ProfileTemplateID'
+      - $ref: '#/components/schemas/ProfileTemplateOverview'
+      - properties:
+          profiling:
+            $ref: '#/components/schemas/ProfilingTemplate'
+    ProfileTargetsSelectionConditionsV3:
+      title: Selection condition
+      type: object
+      description: A profiling condition that targets a specific answer option (e.g. gender).
+      required:
+      - object
+      - question_id
+      - option
+      properties:
+        object:
+          type: string
+          description: The type of profiling condition. For this object, the value is always 'selection'.
+          enum:
+          - selection
+          example: selection
+        question_id:
+          $ref: '#/components/schemas/QuestionID'
+        option:
+          type: string
+          description: The unique identifier for the selected answer option.
+          example: '1'
+    Tracestate:
+      type: string
+      description: 'The tracestate header provides additional contextual information to the traceparent header.  This enriches the tracing context and offers more fine-grained control
+
+        Note: This field is optional and will be automatically generated by the service if not provided in the request.  The generated value will be included in the response header.'
+      example: ot=foo:bar;k1:13
+    TemplatesQuotaV3:
+      type: array
+      description: A list of quota targets for the profile template.
+      minItems: 1
+      items:
+        $ref: '#/components/schemas/TemplateQuotaDetailsV3'
+    AccountID:
+      description: The account's unique identifier.
+      type: integer
+      format: int32
+      example: 101
+    NextCursor:
+      description: 'An identifier for pagination that indicates there are more items available.
+
+        When present, use this value to retrieve the next page of results.
+
+        '
+      type: string
+      nullable: true
+      example: bff6a669-a469-409d-8c94-dcf92258043a
+    ProfileTargetsOpenEndedConditionsV3:
+      title: Open-ended condition
+      description: A profiling condition that targets open-ended text values.
+      oneOf:
+      - title: Allow All Values
+        description: If `allow_all_values` is true, `open_ended_values` must be null.
+        type: object
+        properties:
+          object:
+            type: string
+            description: The type of profiling condition. For this object, the value is always 'open_ended'.
+            enum:
+            - open_ended
+            example: open_ended
+          question_id:
+            $ref: '#/components/schemas/QuestionID'
+          allow_all_values:
+            type: boolean
+            enum:
+            - true
+            description: Flag to allow all values.
+          open_ended_values:
+            type: array
+            minItems: 0
+            maxItems: 0
+            items:
+              type: string
+            nullable: true
+            description: Must be null when `allow_all_values` is true.
+        required:
+        - object
+        - question_id
+        - allow_all_values
+        - open_ended_values
+      - title: Specific Open End Values
+        description: If `allow_all_values` is false, `open_ended_values` must contain at least one open end value.
+        type: object
+        properties:
+          object:
+            type: string
+            description: Object field to distinguish between different types of control selections.  Always is `open_ended`.
+            enum:
+            - open_ended
+            example: open_ended
+          question_id:
+            $ref: '#/components/schemas/QuestionID'
+          allow_all_values:
+            type: boolean
+            enum:
+            - false
+            description: Flag to allow only specific open end values.
+          open_ended_values:
+            type: array
+            items:
+              type: string
+            minItems: 1
+            maxItems: 10000
+            description: List of applicable open end values. Required when `allow_all_values` is false. Note that only 10,000 values may be provided. For more than 10,000, please contact your integration consultant.
+        required:
+        - object
+        - question_id
+        - allow_all_values
+        - open_ended_values
+      example:
+        object: open_ended
+        question_id: 45
+        open_ended_values: []
+        allow_all_values: true
+    ProfilingTemplate:
+      type: object
+      required:
+      - profile_adjustment_type
+      - profiles
+      properties:
+        profile_adjustment_type:
+          type: string
+          description: The method used to specify quota targets. The only supported value is `percentage`, where you specify a proportion of the total completes for each target.
+          example: percentage
+          enum:
+          - percentage
+        profiles:
+          type: array
+          minItems: 1
+          description: List of regular profiles.
+          items:
+            $ref: '#/components/schemas/TemplateRegularProfiles'
+  parameters:
+    Order:
+      name: order
+      in: query
+      description: 'The order in which to return the list objects.
+
+        Default is `desc`, which returns objects in descending created_at order.
+
+        '
+      schema:
+        type: string
+        enum:
+        - desc
+        - asc
+        default: desc
+    ProfileTemplateID:
+      name: profile_template_id
+      in: path
+      schema:
+        $ref: '#/components/schemas/ProfileTemplateID'
+      required: true
+      description: A unique identifier for the profile template.
+    ProfilingTemplatesLocales:
+      name: locales
+      in: query
+      description: 'Comma-separated list of locales to filter templates by. If multiple locales are provided,
+
+        templates that match any of the locales will be returned (OR logic).
+
+
+        Examples:
+
+        - eng_us
+
+        - eng_us,jpn_jp
+
+        '
+      schema:
+        type: string
+        example: eng_us,jpn_jp
+    CintAPIVersion-2025-12-18:
+      name: Cint-API-Version
+      in: header
+      required: true
+      schema:
+        type: string
+        example: 2025-12-18
+      description: 'This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.
+
+        '
+    EndBefore:
+      name: end_before
+      in: query
+      description: Returns a list of objects that come before the provided pagination cursor. This is used for navigating to a previous page.
+      schema:
+        type: string
+      example: 7daa40ad-303b-40a2-89df-a9760400cde7
+    PageSize:
+      name: page_size
+      in: query
+      description: A limit on the number of objects to be returned, between 1 and 100.
+      schema:
+        type: integer
+        default: 10
+      example: 15
+    StartAfter:
+      name: start_after
+      in: query
+      description: Returns a list of objects after the provided pagination cursor, using the next_cursor from the previous response.
+      schema:
+        type: string
+      example: bff6a669-a469-409d-8c94-dcf92258043a
+    ProfilingTemplatesScope:
+      name: scope
+      in: query
+      description: Filter templates by scope. If scope is not provided, both global and account templates will be returned.
+      schema:
+        type: string
+        enum:
+        - global
+        - account
+        example: account
+    AccountID:
+      name: account_id
+      description: The account's unique identifier.
+      in: path
+      required: true
+      schema:
+        $ref: '#/components/schemas/AccountID'
+  responses:
+    Error_NotFound:
+      description: A requested resource isn't found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            id: 7a5972ba-0825-4360-b852-fa2430e47034
+            object: not_found_error
+            detail: resource not found
+    Error_Internal:
+      description: A request failed due to an internal error.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            id: d94b8bb2-a540-4a91-9c05-2aa3ae9a5e1e
+            object: unexpected_internal_error
+            detail: an internal error has led to the failure of this operation
+    Error_Forbidden:
+      description: A requested is forbidden.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            id: fe68cdd2-ee87-4dbf-8950-63c5cbca94c7
+            object: authorization_error
+            detail: you don't have the right permissions to perform this operation
+    Error_Unauthorized:
+      description: A request is unauthorized.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            id: 1dcf0f40-f0d1-4cf6-8c00-c3d019d32faf
+            object: authorization_error
+            detail: no valid authorization provided for this operation
+    Error_BadRequest:
+      description: A request is not valid and can't be processed.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            id: 9e278238-d011-4e05-8327-1ce1d5d26254
+            object: bad_request_error
+            detail: Expected field 'foo' is missing.
+  headers:
+    Tracestate:
+      description: The `tracestate` header complements the `traceparent` header by carrying vendor-specific trace information. This allows different services to add their own data to a trace.
+      required: false
+      schema:
+        $ref: '#/components/schemas/Tracestate'
+    Traceparent:
+      description: The `traceparent` header carries the trace ID and parent span ID, as defined by the W3C Trace Context specification. It's used to trace a single request as it moves through multiple services.
+      required: false
+      schema:
+        $ref: '#/components/schemas/Traceparent'
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Bearer token used for authentication and authorization. See [Authentication Process](https://developer.cint.com/en/guides#authentication-process) documentation for more information.
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: API Key Authentication

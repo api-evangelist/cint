@@ -1,0 +1,166 @@
+openapi: 3.0.3
+info:
+  title: Demand Accounts Fulfillment API
+  description: 'Cint''s demand ordering API is REST oriented. It has predictable resource based URLs, accepts JSON-encoded request bodies, returns JSON-encoded responses, and uses standard HTTP response codes, authentication, and verbs. Error responses are also JSON-encoded and follow a standard format, providing a unique error ID and detailed information about what went wrong.
+
+
+    Authentication is handled via bearer tokens passed in the `Authorization` header. All requests must also include a `Cint-API-Version` header with a date in `YYYY-MM-DD` format to specify the desired API version. Depending on the version you use, endpoint behavior may differ as we improve our API with every version release.
+
+
+    While many operations work on a single object per request, the demand ordering API also provides asynchronous batch endpoints for performing bulk updates efficiently on certain resources. For safety, `POST` requests support an `Idempotency-Key` header to allow for safe retries without accidentally performing the same operation twice.
+
+    '
+  version: '2025-12-18'
+servers:
+- description: Production server
+  url: https://api.cint.com/v1
+security:
+- BearerAuth: []
+tags:
+- name: Fulfillment
+  description: ':::info
+
+    Fulfillment endpoints are for S2S enabled clients only.
+
+    :::
+
+    Endpoints for managing respondent statuses while a target group is fielding.'
+paths:
+  /fulfillment/respondents/{RID}:
+    servers:
+    - url: https://s2s.cint.com
+    get:
+      description: Retrieves the current status of a session that has taken a survey for your target group.
+      summary: Retrieve a respondent's session status
+      operationId: get_respondent_status
+      tags:
+      - Fulfillment
+      security: []
+      parameters:
+      - $ref: '#/components/parameters/RID'
+      - $ref: '#/components/parameters/AuthorizationHeader'
+      responses:
+        '200':
+          description: Retrieving the respondent status was successful.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/respondent_fulfilment_result'
+        '404':
+          description: respondent status could not be found.
+        '422':
+          description: An error occurred while processing the request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/respondent_fillfilment_transition_result'
+  /fulfillment/respondents/transition:
+    servers:
+    - url: https://s2s.cint.com
+    post:
+      description: "Updates the respondent's status defined by the status code in the body of the request.\n\nThe following table contains the possible codes that can be supplied in the body's `status` field: \n\n| Cint Status Definition | S2S Code |\n| :---- | :---- |\n| Complete | **5** |\n| Screenout | **2** |\n| Quality Terminate | **4** |\n| Quota Full | **3** |\n"
+      summary: Update a respondent's status
+      operationId: update_respondent_status
+      tags:
+      - Fulfillment
+      security: []
+      parameters:
+      - $ref: '#/components/parameters/AuthorizationHeader'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/respondent_fillfilment_transition_request'
+      responses:
+        '200':
+          description: The respondent's status was successfully updated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/respondent_fillfilment_transition_result'
+        '404':
+          description: The respondent status could not be found.
+        '422':
+          description: An error occurred while processing the request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/respondent_fillfilment_transition_result'
+components:
+  schemas:
+    respondent_fulfilment_result:
+      title: Respondent Fulfillment Result
+      type: object
+      description: Provides information on the fulfillment status of a respondent's request.
+      properties:
+        id:
+          type: string
+          example: 6780395e-94fa-1eb7-612c-d2e19af42758
+        status:
+          type: integer
+          example: 1
+        links:
+          type: array
+          items:
+            type: object
+            properties:
+              href:
+                type: string
+                example: https://goo.gl/forms/yukKhXoZOxzw8p2w2?&fedResponseID=6780395e-94fa-1eb7-612c-d2e19af42758
+    respondent_fillfilment_transition_request:
+      title: Respondent Fulfillment Transition Request
+      type: object
+      description: Provides information on the transition request of a respondent's status.
+      properties:
+        id:
+          type: string
+          example: 6780395e-94fa-1eb7-612c-d2e19af42758
+          description: The session ID (RID) of the respondent.
+        status:
+          type: integer
+          example: 5
+          description: The status to which the respondent is being transitioned.
+      required:
+      - id
+      - status
+    respondent_fillfilment_transition_result:
+      title: Respondent fulfillment session id transition result
+      type: object
+      description: Respondent's session status result.
+      properties:
+        id:
+          type: string
+          example: 6780395e-94fa-1eb7-612c-d2e19af42758
+          description: The session ID (RID) of the respondent whose status was updated.
+        status:
+          type: integer
+          example: 5
+          description: The status to which the session (RID) was updated to.
+  parameters:
+    RID:
+      in: path
+      name: RID
+      schema:
+        type: string
+        example: 6780395e-94fa-1eb7-612c-d2e19af42758
+      required: true
+      description: "The session ID of the respondent routed to your survey. \nThe ID is passed in the URL path as a parameter and is of type UUID4.\n"
+    AuthorizationHeader:
+      name: Authorization
+      in: header
+      required: true
+      schema:
+        type: string
+        example: <api_key>
+      description: API Key for authentication.
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Bearer token used for authentication and authorization. See [Authentication Process](https://developer.cint.com/en/guides#authentication-process) documentation for more information.
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: API Key Authentication

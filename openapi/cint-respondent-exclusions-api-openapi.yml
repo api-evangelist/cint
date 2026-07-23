@@ -1,0 +1,1509 @@
+openapi: 3.0.3
+info:
+  title: Demand Accounts Respondent Exclusions API
+  description: 'Cint''s demand ordering API is REST oriented. It has predictable resource based URLs, accepts JSON-encoded request bodies, returns JSON-encoded responses, and uses standard HTTP response codes, authentication, and verbs. Error responses are also JSON-encoded and follow a standard format, providing a unique error ID and detailed information about what went wrong.
+
+
+    Authentication is handled via bearer tokens passed in the `Authorization` header. All requests must also include a `Cint-API-Version` header with a date in `YYYY-MM-DD` format to specify the desired API version. Depending on the version you use, endpoint behavior may differ as we improve our API with every version release.
+
+
+    While many operations work on a single object per request, the demand ordering API also provides asynchronous batch endpoints for performing bulk updates efficiently on certain resources. For safety, `POST` requests support an `Idempotency-Key` header to allow for safe retries without accidentally performing the same operation twice.
+
+    '
+  version: '2025-12-18'
+servers:
+- description: Production server
+  url: https://api.cint.com/v1
+security:
+- BearerAuth: []
+tags:
+- name: Respondent Exclusions
+paths:
+  /demand/accounts/{account_id}/exclusion-groups:
+    parameters:
+    - $ref: '#/components/parameters/CintAPIVersion-2025-12-18'
+    get:
+      operationId: get_exclusion_groups_by_account_id
+      summary: Lists exclusion groups for an account
+      description: Lists the exclusion groups for your account, ordered by creation date. Use exclusion groups to prevent respondents from participating in multiple target groups, even across different projects.
+      tags:
+      - Respondent Exclusions
+      parameters:
+      - $ref: '#/components/parameters/AccountID'
+      - $ref: '#/components/parameters/PageSize1000'
+      - $ref: '#/components/parameters/StartAfter'
+      - $ref: '#/components/parameters/EndBefore'
+      responses:
+        '200':
+          description: A list of exclusion groups was retrieved successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetExclusionGroupsByAccountIdResponse'
+              example:
+                data:
+                - exclusion_group_id: 01JW97M2Y5Q5KB0N543B4G4T5Y
+                  tag: 2025 Tracker
+                  description: 2025 Ongoing Tracker Study
+                  create_date: '2025-05-27T09:28:21.229Z'
+                  update_date: '2025-05-27T10:30:00.516Z'
+                - exclusion_group_id: 01JW97M2Y5Q5KB0N543B4G4T5Z
+                  tag: Q3 Product Launch
+                  description: Excludes respondents from all Q3 product launch studies.
+                  create_date: '2025-04-15T11:00:00.000Z'
+                  update_date: null
+                next_cursor: MDFKUkc0UFdISDRKMEpWRVRTTTNKTlZKWlcmMGVmZmRjOTctMTYxZS00NmJlLWJlM2MtNTU5NTYyMWU3ZDcx
+                url: accounts/101/exclusion-groups
+        '400':
+          $ref: '#/components/responses/Error_BadRequest'
+        '401':
+          $ref: '#/components/responses/Error_Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error_Forbidden'
+        '500':
+          $ref: '#/components/responses/Error_Internal'
+    post:
+      operationId: create_exclusion_group
+      summary: Creates an exclusion group
+      description: 'Creates a new exclusion group for your account and returns its unique ID.
+
+        Key behaviors:
+
+        * You can create multiple exclusion groups with the same tag. * A target group can belong to multiple exclusion groups. * An exclusion group can contain a maximum of 100 target groups.'
+      tags:
+      - Respondent Exclusions
+      parameters:
+      - $ref: '#/components/parameters/AccountID'
+      requestBody:
+        description: Create Exclusion Group with the required data
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateExclusionGroupRequest'
+            example:
+              tag: 2025 Tracker
+              description: Excludes all respondents who participate in the 2025 ongoing tracker study.
+      responses:
+        '201':
+          description: The exclusion group was created successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateExclusionGroupResponse'
+              example:
+                exclusion_group_id: 01JW97M2Y5Q5KB0N543B4G4T5Y
+        '400':
+          $ref: '#/components/responses/Error_BadRequest'
+        '401':
+          $ref: '#/components/responses/Error_Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error_Forbidden'
+        '500':
+          $ref: '#/components/responses/Error_Internal'
+  /demand/accounts/{account_id}/exclusion-groups/{exclusion_group_id}:
+    parameters:
+    - $ref: '#/components/parameters/AccountID'
+    - $ref: '#/components/parameters/ExclusionGroupID'
+    - $ref: '#/components/parameters/CintAPIVersion-2025-12-18'
+    get:
+      operationId: get_exclusion_group_by_id
+      summary: Retrieves exclusion group by ID
+      description: Retrieves the details of a specific exclusion group, including its tag, description, and creation date.
+      tags:
+      - Respondent Exclusions
+      responses:
+        '200':
+          description: The exclusion group details were retrieved successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExclusionGroupInfo'
+              example:
+                exclusion_group_id: 01JW97M2Y5Q5KB0N543B4G4T5Y
+                tag: 2025 Tracker
+                description: 2025 Ongoing Tracker Study
+                create_date: '2025-05-27T09:28:21.229Z'
+                update_date: '2025-05-27T10:30:00.516Z'
+        '400':
+          $ref: '#/components/responses/Error_BadRequest'
+        '401':
+          $ref: '#/components/responses/Error_Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error_Forbidden'
+        '404':
+          $ref: '#/components/responses/Error_NotFound'
+        '500':
+          $ref: '#/components/responses/Error_Internal'
+    put:
+      operationId: update_exclusion_group_by_id
+      summary: Updates exclusion group by ID
+      description: Updates the tag or description for a specific exclusion group.
+      tags:
+      - Respondent Exclusions
+      requestBody:
+        description: Update Exclusion Group request.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateExclusionGroupRequest'
+            example:
+              tag: 2025 Annual Tracker
+              description: Updated description for the 2025 ongoing tracker study.
+      responses:
+        '204':
+          description: Successfully updated the exclusion group.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+        '400':
+          $ref: '#/components/responses/Error_BadRequest'
+        '401':
+          $ref: '#/components/responses/Error_Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error_Forbidden'
+        '404':
+          $ref: '#/components/responses/Error_NotFound'
+        '500':
+          $ref: '#/components/responses/Error_Internal'
+    delete:
+      operationId: delete_exclusion_group_by_id
+      summary: Delete an Exclusion Group by its ID if it has no associated Target Groups
+      description: Deletes a specific exclusion group. **Prerequisite:** You must remove all target groups from an exclusion group before you can delete it. Attempting to delete a group that still contains target groups will result in a failed request with a conflict error.
+      tags:
+      - Respondent Exclusions
+      responses:
+        '204':
+          description: Successfully deleted the Exclusion Group.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+        '400':
+          $ref: '#/components/responses/Error_BadRequest'
+        '401':
+          $ref: '#/components/responses/Error_Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error_Forbidden'
+        '404':
+          $ref: '#/components/responses/Error_NotFound'
+        '409':
+          $ref: '#/components/responses/Error_Conflict'
+        '500':
+          $ref: '#/components/responses/Error_Internal'
+  /demand/accounts/{account_id}/exclusion-groups/{exclusion_group_id}/target-groups:
+    parameters:
+    - $ref: '#/components/parameters/CintAPIVersion-2025-12-18'
+    get:
+      operationId: get_exclusion_group_target_group_exclusions
+      summary: Lists target groups in an exclusion group
+      description: Lists the target groups that belong to a specific exclusion group. Respondents who complete one target group in this list will be excluded from participating in any of the others. **An exclusion group can contain a maximum of 100 target groups.**
+      tags:
+      - Respondent Exclusions
+      parameters:
+      - $ref: '#/components/parameters/AccountID'
+      - $ref: '#/components/parameters/ExclusionGroupID'
+      - $ref: '#/components/parameters/PageSize1000'
+      - $ref: '#/components/parameters/StartAfter'
+      - $ref: '#/components/parameters/EndBefore'
+      responses:
+        '200':
+          description: A list of target groups within the exclusion group was retrieved successfully.ns
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExclusionGroupTargetGroupsResponse'
+              example:
+                data:
+                - 01BTGNYV6HRNK8K8VKZASZCFP1
+                - 01BTGNYV6HRNK8K8VKZASZCFP2
+                - 01BTGNYV6HRNK8K8VKZASZCFP3
+                next_cursor: MDFKUkc0UFdISDRKMEpWRVRTTTNKTlZKWlcmMGVmZmRjOTctMTYxZS00NmJlLWJlM2MtNTU5NTYyMWU3ZDcx
+                url: accounts/101/exclusion-groups/01JW97M2Y5Q5KB0N543B4G4T5Y/exclusions/target-groups
+          headers:
+            traceparent:
+              $ref: '#/components/headers/Traceparent'
+            tracestate:
+              $ref: '#/components/headers/Tracestate'
+        '401':
+          $ref: '#/components/responses/Error_Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error_Forbidden'
+        '404':
+          $ref: '#/components/responses/Error_NotFound'
+        '500':
+          $ref: '#/components/responses/Error_Internal'
+  /demand/accounts/{account_id}/exclusion-groups/{exclusion_group_id}/target-groups/add:
+    parameters:
+    - $ref: '#/components/parameters/CintAPIVersion-2025-12-18'
+    post:
+      operationId: add_target_groups_to_exclusion_group
+      summary: Add Target Groups to an Exclusion Group
+      description: 'Adds one or more target groups to an exclusion group. Target groups can be from any project within your account. **Key behaviors** * An exclusion group can contain a maximum of 100 target groups. * Adding a target group to this list only affects the exclusion status for **future** respondents; it does not apply retroactively. '
+      tags:
+      - Respondent Exclusions
+      parameters:
+      - $ref: '#/components/parameters/AccountID'
+      - $ref: '#/components/parameters/ExclusionGroupID'
+      requestBody:
+        description: A list of target group IDs to add to the exclusion group.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddTargetGroupExclusionGroupRequest'
+            example:
+              data:
+              - 01BTGNYV6HRNK8K8VKZASZCFP1
+              - 01BTGNYV6HRNK8K8VKZASZCFP2
+      responses:
+        '204':
+          description: The target groups were added to the exclusion group successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+        '400':
+          $ref: '#/components/responses/Error_BadRequest'
+        '401':
+          $ref: '#/components/responses/Error_Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error_Forbidden'
+        '404':
+          $ref: '#/components/responses/Error_NotFound'
+        '500':
+          $ref: '#/components/responses/Error_Internal'
+  /demand/accounts/{account_id}/exclusion-groups/{exclusion_group_id}/target-groups/remove:
+    parameters:
+    - $ref: '#/components/parameters/CintAPIVersion-2025-12-18'
+    post:
+      operationId: remove_target_groups_from_exclusion_group
+      summary: Remove Target Groups from an Exclusion Group
+      description: Removes one or more target groups from an exclusion group. **Important behavior:** Removing a target group from this list only affects the exclusion status for **future** respondents; it does not apply retroactively.
+      tags:
+      - Respondent Exclusions
+      parameters:
+      - $ref: '#/components/parameters/AccountID'
+      - $ref: '#/components/parameters/ExclusionGroupID'
+      requestBody:
+        description: A list of target group IDs to remove from the exclusion group.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RemoveTargetGroupExclusionGroupRequest'
+            example:
+              data:
+              - 01BTGNYV6HRNK8K8VKZASZCFP1
+              - 01BTGNYV6HRNK8K8VKZASZCFP2
+      responses:
+        '204':
+          description: The target groups were removed from the exclusion group successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+        '400':
+          $ref: '#/components/responses/Error_BadRequest'
+        '401':
+          $ref: '#/components/responses/Error_Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error_Forbidden'
+        '404':
+          $ref: '#/components/responses/Error_NotFound'
+        '500':
+          $ref: '#/components/responses/Error_Internal'
+  /demand/accounts/{account_id}/projects/{project_id}/exclusion-policies:
+    parameters:
+    - $ref: '#/components/parameters/CintAPIVersion-2025-12-18'
+    put:
+      operationId: update_bulk_target_group_exclusions_api
+      summary: Update Target Group Project Exclusion Status
+      description: Updates the project-level exclusion status for multiple target groups in a single request. When you enable project exclusion for a target group, respondents who complete it will be prevented from entering any other target group within the same project that also has this setting enabled.
+      tags:
+      - Respondent Exclusions
+      parameters:
+      - $ref: '#/components/parameters/AccountID'
+      - $ref: '#/components/parameters/ProjectID'
+      requestBody:
+        description: The target groups and their desired exclusion statuses.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BulkTargetGroupProjectExclusionStatus'
+            example:
+            - target_group_id: 01HC2Z6TM8C4F3Y5CA6S2JR475
+              project_exclusion_enabled: true
+            - target_group_id: 01HC2Z6TM8C4F3Y5CA6S2JR476
+              project_exclusion_enabled: false
+      responses:
+        '204':
+          description: The exclusion policies for the target groups were updated successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+        '400':
+          $ref: '#/components/responses/Error_BadRequest'
+        '401':
+          $ref: '#/components/responses/Error_Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error_Forbidden'
+        '404':
+          $ref: '#/components/responses/Error_NotFound'
+        '500':
+          $ref: '#/components/responses/Error_Internal'
+  /demand/accounts/{account_id}/projects/{project_id}/exclusions:
+    parameters:
+    - $ref: '#/components/parameters/CintAPIVersion-2025-12-18'
+    get:
+      operationId: get_exclusion_by_project_api
+      summary: Lists project exclusion statuses for target groups
+      description: Lists the project-level exclusion status for all target groups within a project. This allows you to see which target groups will exclude respondents from one another at the project level.
+      tags:
+      - Respondent Exclusions
+      parameters:
+      - $ref: '#/components/parameters/AccountID'
+      - $ref: '#/components/parameters/ProjectID'
+      responses:
+        '200':
+          description: A list of exclusion statuses for the project's target groups was retrieved successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BulkTargetGroupProjectExclusionStatus'
+              example:
+              - target_group_id: 01HC2Z6TM8C4F3Y5CA6S2JR475
+                project_exclusion_enabled: true
+              - target_group_id: 01HC2Z6TM8C4F3Y5CA6S2JR476
+                project_exclusion_enabled: false
+              - target_group_id: 01HC2Z6TM8C4F3Y5CA6S2JR477
+                project_exclusion_enabled: true
+          headers:
+            traceparent:
+              $ref: '#/components/headers/Traceparent'
+            tracestate:
+              $ref: '#/components/headers/Tracestate'
+        '401':
+          $ref: '#/components/responses/Error_Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error_Forbidden'
+        '404':
+          $ref: '#/components/responses/Error_NotFound'
+        '500':
+          $ref: '#/components/responses/Error_Internal'
+  /demand/accounts/{account_id}/projects/{project_id}/target-groups/{target_group_id}/exclusion-policy:
+    parameters:
+    - $ref: '#/components/parameters/AccountID'
+    - $ref: '#/components/parameters/ProjectID'
+    - $ref: '#/components/parameters/TargetGroupID'
+    - $ref: '#/components/parameters/CintAPIVersion-2025-12-18'
+    get:
+      operationId: get_target_group_exclusion_policy_api
+      summary: Retrieves the project exclusion status for a target group
+      description: Retrieves the project-level exclusion status for a single target group. If the `project_exclusion_enabled` field is `true`, respondents who complete any other target group in the same project (that also has this setting enabled) will be excluded from this one.
+      tags:
+      - Respondent Exclusions
+      responses:
+        '200':
+          description: The project exclusion status was retrieved successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectExclusionStatusResponse'
+              example:
+                project_exclusion_enabled: true
+                create_date: '2024-06-18T14:23:45Z'
+                updated_by: User1234
+                update_date: '2024-06-19T10:00:00.000Z'
+          headers:
+            traceparent:
+              $ref: '#/components/headers/Traceparent'
+            tracestate:
+              $ref: '#/components/headers/Tracestate'
+        '401':
+          $ref: '#/components/responses/Error_Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error_Forbidden'
+        '404':
+          $ref: '#/components/responses/Error_NotFound'
+        '500':
+          $ref: '#/components/responses/Error_Internal'
+  ? /demand/accounts/{account_id}/projects/{project_id}/target-groups/{target_group_id}/exclusions/access-respondent-guid/paginated
+  : get:
+      operationId: get_target_group_access_respondent_guid_exclusion_list_api_paginated
+      summary: Lists excluded Access Respondent GUIDs for a target group
+      description: Lists the Access Respondent GUIDs of all respondents who are excluded from this target group. This exclusion can be due to their participation in another target group within the same project or within a shared exclusion group.
+      tags:
+      - Respondent Exclusions
+      parameters:
+      - $ref: '#/components/parameters/AccountID'
+      - $ref: '#/components/parameters/ProjectID'
+      - $ref: '#/components/parameters/TargetGroupID'
+      - $ref: '#/components/parameters/PageSize1000'
+      - $ref: '#/components/parameters/StartAfter'
+      - $ref: '#/components/parameters/EndBefore'
+      - $ref: '#/components/parameters/CintAPIVersion-2025-12-18'
+      responses:
+        '200':
+          description: A paginated list of excluded Access Respondent GUIDs was retrieved successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CobraIDListPaginatedResponse'
+              example:
+                data:
+                - 5a3b2ada-0066-4dcb-afdd-7302be78ce9e
+                - 5a3b2ada-0066-4dcb-afdd-7302be78ce9f
+                next_cursor: MDlM2MtNTU5NTYyMWU3ZDcx
+                url: accounts/1/projects/01JBHD5A2NEW7JTV8KZGGTC2V2/target-groups/01JNNEJ3GC0Y713BBKGKC147DP/exclusions/access-respondent-guid/paginated
+        '401':
+          $ref: '#/components/responses/Error_Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error_Forbidden'
+        '404':
+          $ref: '#/components/responses/Error_NotFound'
+        '500':
+          $ref: '#/components/responses/Error_Internal'
+  /demand/accounts/{account_id}/projects/{project_id}/target-groups/{target_group_id}/exclusions/jobs/remove-all-respondents:
+    parameters:
+    - $ref: '#/components/parameters/CintAPIVersion-2025-12-18'
+    post:
+      operationId: exclusion_create_remove_all_respondents_job
+      summary: Creates a job to remove all respondent exclusions by type
+      description: 'Creates a job to remove all the specified exclusion respondents for the specified Target Group ID. This returns an identifier that can retrieve the job execution information, including the status.
+
+        Only one job can run at a time for a Target Group. If another job is already running before the endpoint is called for the same Target Group, a conflict response will be returned.
+
+        While execution time may vary, removing 10,000 respondents typically takes between 3 and 5 minutes.'
+      tags:
+      - Respondent Exclusions
+      parameters:
+      - $ref: '#/components/parameters/AccountID'
+      - $ref: '#/components/parameters/ProjectID'
+      - $ref: '#/components/parameters/TargetGroupID'
+      - $ref: '#/components/parameters/ExclusionRespondentEntityType'
+      responses:
+        '201':
+          description: The job was created successfully. Use the returned `job_id` to track its status.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateRemoveAllRespondentExclusionsJobResponse'
+              example:
+                job_id: 01BTGNYV6HRNK8K8VKZASZCFP1
+        '400':
+          $ref: '#/components/responses/Error_BadRequest'
+        '401':
+          $ref: '#/components/responses/Error_Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error_Forbidden'
+        '404':
+          $ref: '#/components/responses/Error_NotFound'
+        '409':
+          $ref: '#/components/responses/Error_Conflict'
+        '500':
+          $ref: '#/components/responses/Error_Internal'
+  ? /demand/accounts/{account_id}/projects/{project_id}/target-groups/{target_group_id}/exclusions/jobs/remove-all-respondents/{job_id}
+  : parameters:
+    - $ref: '#/components/parameters/CintAPIVersion-2025-12-18'
+    get:
+      operationId: get_all_respondent_exclusions_removal_job
+      summary: Retrieve remove all respondent exclusions job status
+      description: Gets the status of a job within the target group to remove all the respondent ID based exclusions on a target group. Each job will only remove one type of ID. You should be checking this endpoint regularly to see the status of your work. While execution time may vary, removing 10,000 respondents typically takes between 3 and 5 minutes. You should be wary while performing this action whilst the target group is live as the order of operations will mean that there will be a time with no active Respondent ID based exclusions on the Target Group.
+      tags:
+      - Respondent Exclusions
+      parameters:
+      - $ref: '#/components/parameters/AccountID'
+      - $ref: '#/components/parameters/ProjectID'
+      - $ref: '#/components/parameters/TargetGroupID'
+      - $ref: '#/components/parameters/JobID'
+      responses:
+        '200':
+          description: The information of a requested remove all Respondent ID exclusions job.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetRemoveAllRespondentExclusionsJobResponse'
+        '400':
+          $ref: '#/components/responses/Error_BadRequest'
+        '401':
+          $ref: '#/components/responses/Error_Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error_Forbidden'
+        '404':
+          $ref: '#/components/responses/Error_NotFound'
+        '500':
+          $ref: '#/components/responses/Error_Internal'
+  ? /demand/accounts/{account_id}/projects/{project_id}/target-groups/{target_group_id}/exclusions/jobs/upload-respondents-by-file
+  : parameters:
+    - $ref: '#/components/parameters/CintAPIVersion-2025-12-18'
+    post:
+      operationId: exclusion_create_upload_rids_by_file_job
+      summary: Creates a job to upload a file of respondent exclusions
+      description: Creates a job to upload new respondent exclusions by file for the specified Target Group ID. The new IDs will be added to the existing ones. The total number of IDs, both existing and new, must not exceed 100,000 IDs. This will return an identifier that can be used to retrieve the job execution information, including the status. Only one job can run at a time for a Target Group. If another job is already running before the endpoint is called for the same Target Group, a conflict response will be returned. The file must be in CSV or TXT format, without a header row. Each line should contain a single identifier. Only one single file can be uploaded and the file size must be less than 5MB. While execution time may vary, storing 10,000 new respondents typically takes between 3 and 5 minutes.
+      tags:
+      - Respondent Exclusions
+      parameters:
+      - $ref: '#/components/parameters/AccountID'
+      - $ref: '#/components/parameters/ProjectID'
+      - $ref: '#/components/parameters/TargetGroupID'
+      - $ref: '#/components/parameters/ExclusionRespondentEntityType'
+      - $ref: '#/components/parameters/RecontactPostContentType'
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+                  description: The file to upload. Must be a plain text or CSV file.
+            example:
+              file: '0F1CE179-A917-49FF-9D50-B05FC91F7BD4 75F1404C-65F6-4937-AD2A-588E4F66E07F 9C23131D-388B-4E03-97B3-CF783E491445 '
+      responses:
+        '201':
+          description: The job was created successfully. Use the returned `job_id` to track its status.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateRespondentExclusionsUploadByFileJobResponse'
+              example:
+                job_id: 01BTGNYV6HRNK8K8VKZASZCFP1
+        '400':
+          $ref: '#/components/responses/Error_BadRequest'
+        '401':
+          $ref: '#/components/responses/Error_Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error_Forbidden'
+        '404':
+          $ref: '#/components/responses/Error_NotFound'
+        '409':
+          $ref: '#/components/responses/Error_Conflict'
+        '413':
+          $ref: '#/components/responses/Error_ContentTooLarge'
+        '415':
+          $ref: '#/components/responses/Error_UnsupportedMediaType'
+        '500':
+          $ref: '#/components/responses/Error_Internal'
+  ? /demand/accounts/{account_id}/projects/{project_id}/target-groups/{target_group_id}/exclusions/jobs/upload-respondents-by-file/{job_id}
+  : parameters:
+    - $ref: '#/components/parameters/CintAPIVersion-2025-12-18'
+    get:
+      operationId: get_respondent_exclusions_upload_by_file_job
+      summary: Retrieve RID upload job status
+      description: Gets the status of a job within the target group to update respondent ID based exclusions, of any type of ID. You should be checking this endpoint regularly to see the status of your work. While execution time may vary, adding 10,000 respondents typically takes between 3 and 5 minutes.
+      tags:
+      - Respondent Exclusions
+      parameters:
+      - $ref: '#/components/parameters/AccountID'
+      - $ref: '#/components/parameters/ProjectID'
+      - $ref: '#/components/parameters/TargetGroupID'
+      - $ref: '#/components/parameters/JobID'
+      responses:
+        '200':
+          description: The information of a requested upload Respondent ID exclusions by file job.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetUploadRespondentExclusionsJobResponse'
+        '400':
+          $ref: '#/components/responses/Error_BadRequest'
+        '401':
+          $ref: '#/components/responses/Error_Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error_Forbidden'
+        '404':
+          $ref: '#/components/responses/Error_NotFound'
+        '500':
+          $ref: '#/components/responses/Error_Internal'
+  /demand/accounts/{account_id}/projects/{project_id}/target-groups/{target_group_id}/exclusions/overview:
+    parameters:
+    - $ref: '#/components/parameters/CintAPIVersion-2025-12-18'
+    get:
+      operationId: get_exclusions_overview
+      summary: Retrieves the number of currently excluded response IDs (RSID) on a target group.
+      description: Retrieves the number of currently excluded response IDs (RSID) on a target group - both response ID and GUID. This is useful to understand how close you are to any limits or the effect of deduplication or other asynchronous operations.
+      tags:
+      - Respondent Exclusions
+      parameters:
+      - $ref: '#/components/parameters/AccountID'
+      - $ref: '#/components/parameters/ProjectID'
+      - $ref: '#/components/parameters/TargetGroupID'
+      responses:
+        '200':
+          description: The number of respondent ID and GUID exclusions for the target group
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetTargetGroupExclusionsOverviewResponse'
+        '400':
+          $ref: '#/components/responses/Error_BadRequest'
+        '401':
+          $ref: '#/components/responses/Error_Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error_Forbidden'
+        '404':
+          $ref: '#/components/responses/Error_NotFound'
+        '500':
+          $ref: '#/components/responses/Error_Internal'
+  /demand/accounts/{account_id}/projects/{project_id}/target-groups/{target_group_id}/exclusions/rsid/paginated:
+    parameters:
+    - $ref: '#/components/parameters/CintAPIVersion-2025-12-18'
+    get:
+      operationId: get_target_group_rsid_exclusion_list_api_paginated
+      summary: Lists excluded Respondent IDs (RSIDs) for a target group
+      description: Lists the Respondent IDs (RSIDs) of all respondents who are excluded from this target group. This exclusion can be due to their participation in another target group within the same project, a shared exclusion group, or a direct file upload.
+      tags:
+      - Respondent Exclusions
+      parameters:
+      - $ref: '#/components/parameters/AccountID'
+      - $ref: '#/components/parameters/ProjectID'
+      - $ref: '#/components/parameters/TargetGroupID'
+      - $ref: '#/components/parameters/PageSize1000'
+      - $ref: '#/components/parameters/StartAfter'
+      - $ref: '#/components/parameters/EndBefore'
+      responses:
+        '200':
+          description: A paginated list of excluded Respondent IDs (RSIDs) was retrieved successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExclusionsRespondentIDListResponse'
+              example:
+                data:
+                - 5a3b2ada-0066-4dcb-afdd-7302be78ce9e
+                - 5a3b2ada-0066-4dcb-afdd-7302be78ce9f
+                - 5a3b2ada-0066-4dcb-afdd-7302be78ce9a
+                next_cursor: MDFKUkc0UFdISDRKMEpWRVRTTTNKTlZKWlcmMGVmZmRjOTctMTYxZS00NmJlLWJlM2MtNTU5NTYyMWU3ZDcx
+                url: accounts/101/projects/01BTGNYV6HRNK8K8VKZASZCFP0/target-groups/01BTGNYV6HRNK8K8VKZASZCFP1/exclusions/rsid/paginated
+        '401':
+          $ref: '#/components/responses/Error_Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error_Forbidden'
+        '404':
+          $ref: '#/components/responses/Error_NotFound'
+        '500':
+          $ref: '#/components/responses/Error_Internal'
+  /demand/accounts/{account_id}/target-groups/{target_group_id}/exclusion-groups:
+    parameters:
+    - $ref: '#/components/parameters/CintAPIVersion-2025-12-18'
+    get:
+      operationId: get_exclusion_groups_for_target_group
+      summary: Lists the exclusion groups of a specific target group
+      description: Lists all exclusion groups that a specific target group is a member of, ordered by creation date. When a respondent attempts to enter this target group, they will be checked against all other target groups in all of the exclusion groups listed here.
+      tags:
+      - Respondent Exclusions
+      parameters:
+      - $ref: '#/components/parameters/AccountID'
+      - $ref: '#/components/parameters/TargetGroupID'
+      - $ref: '#/components/parameters/PageSize'
+      - $ref: '#/components/parameters/StartAfter'
+      - $ref: '#/components/parameters/EndBefore'
+      responses:
+        '200':
+          description: A list of exclusion groups for the requested target group was retrieved successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetExclusionGroupsByTargetGroupResponse'
+              example:
+                data:
+                - exclusion_group_id: 01JW97M2Y5Q5KB0N543B4G4T5Y
+                  tag: 2025 Tracker
+                  description: 2025 Ongoing Tracker Study
+                  create_date: '2025-05-27T09:28:21.229Z'
+                  update_date: '2025-05-27T10:30:00.516Z'
+                - exclusion_group_id: 01JW97M2Y5Q5KB0N543B4G4T5Z
+                  tag: Automotive Studies
+                  description: All automotive studies for Q3/Q4 2025
+                  create_date: '2025-06-01T12:00:00.000Z'
+                  update_date: null
+                next_cursor: MDFKUkc0UFdISDRKMEpWRVRTTTNKTlZKWlcmMGVmZmRjOTctMTYxZS00NmJlLWJlM2MtNTU5NTYyMWU3ZDcx
+                url: accounts/101/target-groups/01BTGNYV6HRNK8K8VKZASZCFP1/exclusion-groups
+        '400':
+          $ref: '#/components/responses/Error_BadRequest'
+        '401':
+          $ref: '#/components/responses/Error_Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error_Forbidden'
+        '500':
+          $ref: '#/components/responses/Error_Internal'
+  /demand/accounts/{account_id}/projects/{project_id}/target-groups/{target_group_id}/respondent-activity-exclusions:
+    parameters:
+    - $ref: '#/components/parameters/AccountID'
+    - $ref: '#/components/parameters/ProjectID'
+    - $ref: '#/components/parameters/TargetGroupID'
+    - $ref: '#/components/parameters/CintAPIVersion-2025-12-18'
+    get:
+      operationId: get_target_group_respondent_activity_exclusions
+      summary: Retrieves respondent activity exclusions for a target group
+      description: 'Retrieves the list of target groups and/or projects whose respondents are to be excluded from taking the survey associated with the specified `target_group_id`.
+
+        '
+      tags:
+      - Respondent Exclusions
+      responses:
+        '200':
+          description: Respondent activity exclusions were retrieved successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RespondentActivityExclusionsResponse'
+              example:
+                respondent_activity_exclusions:
+                - type: target-group
+                  id: 01KH2714RHRTGCGQV47FHHY8S8
+                  duration: P90D
+                - type: project
+                  id: 01KH287TE2W1GKTJJ91QCCHWP9
+                  duration: P90D
+          headers:
+            traceparent:
+              $ref: '#/components/headers/Traceparent'
+            tracestate:
+              $ref: '#/components/headers/Tracestate'
+        '401':
+          $ref: '#/components/responses/Error_Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error_Forbidden'
+        '404':
+          $ref: '#/components/responses/Error_NotFound'
+        '500':
+          $ref: '#/components/responses/Error_Internal'
+    put:
+      operationId: set_target_group_respondent_activity_exclusions
+      summary: Set the respondent activity exclusions for a target group
+      description: "Set the list of target groups and/or projects whose respondents you want to exclude from the specified `target_group_id`. \n\nThe request body specifies the projects and target groups whose respondent activity should be excluded from the target group identified in the path.\nEach exclusion item can optionally specify a `duration` (ISO-8601 period format, date-based only, e.g. `P90D` for 90 days) controlling how far back to look for respondent activity. Must be between 1 and 396 days. A `duration` can also be set at the request root level to apply as the default for all items. Per-item durations override the request-level default. If neither is specified, the duration defaults to P90D (90 days).\nExclusions apply when there are completes within each exclusion item's configured `duration`. The request must not include the same target group specified in the path parameters, nor the project it belongs to, as a target group cannot exclude its own respondent activity or that of its parent project.\n\n:::important\nThis operation will overwrite any previous existing list. Make sure to include previously saved target groups or projects in your request.\nIf the Target Group is already live, updating its respondent activity exclusions will only affect future respondent traffic. Any respondents who have already entered or completed the Target Group under the previous exclusion settings cannot be retroactively changed. Please review your changes carefully before switching the target group to live.\n:::\n"
+      tags:
+      - Respondent Exclusions
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SetRespondentActivityExclusionsRequest'
+      responses:
+        '204':
+          description: Successfully updated respondent activity exclusions.
+        '400':
+          $ref: '#/components/responses/Error_BadRequest'
+        '401':
+          $ref: '#/components/responses/Error_Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error_Forbidden'
+        '500':
+          $ref: '#/components/responses/Error_Internal'
+components:
+  schemas:
+    UpdateDate:
+      type: string
+      format: date-time
+      example: '2023-01-01T23:00:00.000Z'
+      description: Time of last update
+    JobID:
+      description: The character string representing a unique job ID.
+      type: string
+      example: 01BTGNYV6HRNK8K8VKZASZCFP1
+    SetRespondentActivityExclusionsRequest:
+      type: object
+      required:
+      - respondent_activity_exclusions
+      properties:
+        duration:
+          type: string
+          format: duration
+          default: P90D
+          description: 'Default exclusion period in ISO-8601 period format (date-based only, e.g. P30D, P2W, P3M, P1Y) applied to all items that do not specify their own duration. Must be between 1 and 396 days. Time-based values such as PT1H are not supported. If omitted, items without an explicit duration default to P90D (90 days). **Note**: month-based periods are calendar-aware and adjust to the last valid day of the resulting month. For example, looking back one month from March 31 results in February 28 (or February 29 in a leap year). If the duration is provided using week format (e.g. P2W), the week value will be translated and persisted in days as a normalization process (e.g. P2W becomes P14D).'
+          example: P90D
+        respondent_activity_exclusions:
+          $ref: '#/components/schemas/RespondentActivityExclusionsList'
+    ExclusionGroupTag:
+      description: A user-defined tag that acts as a name for the exclusion group.
+      type: string
+      maxLength: 128
+      example: 2025 Tracker
+    UpdatedBy:
+      type: string
+      description: Who last updated this entity
+      example: User1234
+    ExclusionGroupID:
+      description: A unique identifier for the exclusion group, in ULID format.
+      type: string
+      pattern: ^[0-9A-Z]{26}$
+      example: 01BTGNYV6HRNK8K8VKZASZCFP1
+    ExclusionsJobFailureReason:
+      type: object
+      description: The reason for the failure of a job.
+      required:
+      - code
+      - description
+      properties:
+        code:
+          type: string
+          example: JobExecutionStartMessageFailed
+        description:
+          type: string
+          example: The job execution start message failed. Please contact Cint for further assistance.
+    CobraIDListPaginatedResponse:
+      type: object
+      description: List of paginated Access Respondent GUIDs
+      properties:
+        data:
+          type: array
+          items:
+            type: string
+            format: uuid
+          description: List of Access Respondent GUIDs
+          example:
+          - 5a3b2ada-0066-4dcb-afdd-7302be78ce9e
+          - 5a3b2ada-0066-4dcb-afdd-7302be78ce9f
+        next_cursor:
+          type: string
+          description: An ID of the next list of items and indicator that there are more items than currently viewable
+          example: MDFKUkc0UFdISDRKMEpWRVRTTTNKTlZKWlcmMGVmZmRjOTctMTYxZS00NmJlLWJlM2MtNTU5NTYyMWU3ZDcx
+        url:
+          type: string
+          description: The relative URL for the next page of results.
+          example: accounts/1/projects/01JBHD5A2NEW7JTV8KZGGTC2V2/target-groups/01JNNEJ3GC0Y713BBKGKC147DP/exclusions/access-respondent-guid/paginated
+    GetExclusionGroupsByTargetGroupResponse:
+      type: object
+      description: List of Exclusion Groups including the given target group
+      required:
+      - data
+      - url
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/ExclusionGroupInfo'
+        next_cursor:
+          type: string
+          description: An ID of the next list of items and indicator that there are more items than currently viewable.
+          example: MDFKUkc0UFdISDRKMEpWRVRTTTNKTlZKWlcmMGVmZmRjOTctMTYxZS00NmJlLWJlM2MtNTU5NTYyMWU3ZDcx
+        url:
+          type: string
+          description: URL to fetch the next page of Exclusion Groups.
+          example: accounts/13/exclusion-groups/01JW97M2Y5Q5KB0N543B4G4T5Y/exclusions/target-groups
+    RespondentActivityExclusionsIdObjectRequest:
+      type: object
+      required:
+      - type
+      - id
+      properties:
+        type:
+          description: The type of entity related to the `id`. This value can either be `target-group` or `project`.
+          type: string
+          enum:
+          - target-group
+          - project
+          example: target-group
+        id:
+          description: the unique entity ID.
+          type: string
+          format: ulid
+          example: 01KH2714RHRTGCGQV47FHHY8S8
+        duration:
+          description: 'The exclusion period for this item in ISO-8601 period format (date-based only, e.g. P30D, P2W, P3M, P1Y). Must be between 1 and 396 days. Time-based values such as PT1H are not supported. Overrides the request-level duration if both are provided. If neither this nor the request-level duration is set, defaults to P90D (90 days). **Note**: month-based periods are calendar-aware and adjust to the last valid day of the resulting month. For example, looking back one month from March 31 results in February 28 (or February 29 in a leap year). If the duration is provided using week format (e.g. P2W), the week value will be translated and persisted in days as a normalization process (e.g. P2W becomes P14D).'
+          type: string
+          format: duration
+          default: P90D
+    ExclusionEnabled:
+      type: boolean
+      description: Indicates if the target group should exclude respondents from other target groups within the same project.
+    InvalidParam:
+      type: object
+      description: Describes a single invalid parameter in a request.
+      properties:
+        name:
+          type: string
+          description: The name of the parameter that failed validation.
+        reason:
+          type: string
+          description: A short explanation of why the parameter was invalid.
+      required:
+      - name
+      - reason
+    ExclusionsJobPartialSuccessReason:
+      type: object
+      description: The reason for the partial success of a job.
+      required:
+      - description
+      properties:
+        description:
+          type: string
+          example: Upload partially successful. 500 respondent IDs uploaded successfully, 10 failed (invalid or empty).
+    CreateDate:
+      type: string
+      format: datetime
+      description: The time that this exclusions container was created
+      example: '2024-06-18T14:23:45Z'
+    AddTargetGroupExclusionGroupRequest:
+      type: object
+      description: A list of target group IDs to add to an exclusion group.
+      properties:
+        data:
+          type: array
+          maxItems: 100
+          description: An array of unique target group IDs to add.
+          items:
+            $ref: '#/components/schemas/TargetGroupID'
+    CreateRespondentExclusionsUploadByFileJobResponse:
+      type: object
+      description: The response returned when a job to upload respondent exclusions by file is successfully created.
+      required:
+      - job_id
+      properties:
+        job_id:
+          $ref: '#/components/schemas/JobID'
+    CreateRemoveAllRespondentExclusionsJobResponse:
+      type: object
+      description: The response returned when a job to remove all respondent exclusions is successfully created.
+      required:
+      - job_id
+      properties:
+        job_id:
+          $ref: '#/components/schemas/JobID'
+    CreateExclusionGroupResponse:
+      type: object
+      required:
+      - exclusion_group_id
+      properties:
+        exclusion_group_id:
+          $ref: '#/components/schemas/ExclusionGroupID'
+    RemoveTargetGroupExclusionGroupRequest:
+      type: object
+      description: A list of target group IDs to remove from an exclusion group.
+      properties:
+        data:
+          type: array
+          description: An array of unique target group IDs to remove from the exclusion group.
+          items:
+            $ref: '#/components/schemas/TargetGroupID'
+    ExclusionsRespondentIDListResponse:
+      type: object
+      description: List of Respondent IDs
+      properties:
+        data:
+          type: array
+          items:
+            type: string
+            format: uuid
+          description: List of Respondent IDs
+          example:
+          - 5a3b2ada-0066-4dcb-afdd-7302be78ce9e
+          - 5a3b2ada-0066-4dcb-afdd-7302be78ce9f
+        next_cursor:
+          type: string
+          description: An ID of the next list of items and indicator that there are more items than currently viewable
+          example: MDFKUkc0UFdISDRKMEpWRVRTTTNKTlZKWlcmMGVmZmRjOTctMTYxZS00NmJlLWJlM2MtNTU5NTYyMWU3ZDcx
+        url:
+          type: string
+          description: URL to fetch the next page of Respondent IDs
+          example: accounts/{{accountID}}/projects/{{projectID}}/target-groups/{{targetGroupID}}/exclusions/rsid/paginated
+    TargetGroupID:
+      description: A unique identifier for the target group, in ULID format.
+      type: string
+      pattern: ^[0-9A-Z]{26}$
+      example: 01BTGNYV6HRNK8K8VKZASZCFP1
+    UpdateExclusionGroupRequest:
+      type: object
+      description: The details to update for an exclusion group. All fields are optional.
+      properties:
+        tag:
+          $ref: '#/components/schemas/ExclusionGroupTag'
+        description:
+          $ref: '#/components/schemas/ExclusionGroupDescription'
+    Traceparent:
+      type: string
+      description: 'The traceparent header carries essential trace context information. This includes the trace ID and parent span ID  as defined by the W3C trace context specification. It is used to pinpoint the position of an incoming request within  the trace graph, facilitating the tracking of distributed operations.
+
+        Note: This field is optional and will be automatically generated by the service if not provided in the request.  The generated value will be included in the response header.'
+      example: 00-0af7651916cd43dd8448eb211c80319c-b7ad6b7169203331-01
+    ExclusionEntityTypeWithRsidAndAccessRespondentGuid:
+      type: string
+      description: The entity type of the excluded respondent identifier. Possible values are `RSID` (Respondent ID) or `ACCESS_RESPONDENT_GUID` (Access Respondent GUID).
+      enum:
+      - RSID
+      - ACCESS_RESPONDENT_GUID
+      example: RSID
+    Error:
+      type: object
+      description: The standard error object returned for all failed API requests.
+      required:
+      - object
+      - detail
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: A unique identifier for this specific error instance.
+        object:
+          type: string
+          description: A short informative string identifying the type of the error
+          pattern: ^([a-z]*_)*([a-z]*)$
+        detail:
+          type: string
+          description: An error message provides a concise overview of the cause of the error.
+        invalid_params:
+          type: array
+          nullable: true
+          description: An optional field containing a list of invalid parameters may be presented in validation errors for additional information.
+          items:
+            $ref: '#/components/schemas/InvalidParam'
+    ExclusionGroupDescription:
+      description: A user-defined description that explains the purpose of the exclusion group
+      type: string
+      maxLength: 500
+      example: 2025 Ongoing Tracker Study
+    ExclusionGroupInfo:
+      type: object
+      description: Contains the details of a single exclusion group.
+      required:
+      - exclusion_group_id
+      - tag
+      - description
+      - create_date
+      properties:
+        exclusion_group_id:
+          $ref: '#/components/schemas/ExclusionGroupID'
+        tag:
+          $ref: '#/components/schemas/ExclusionGroupTag'
+        description:
+          $ref: '#/components/schemas/ExclusionGroupDescription'
+        create_date:
+          type: string
+          format: date-time
+          description: The date when the exclusion group was created
+          example: '2024-05-27T09:28:21.229Z'
+        update_date:
+          type: string
+          format: date-time
+          description: The date when the exclusion group was last updated
+          example: '2024-05-27T10:28:21.5166203383Z'
+    GetUploadRespondentExclusionsJobResponse:
+      type: object
+      description: Status and details of a given upload Respondent Exclusions job.
+      required:
+      - job_id
+      - created_at
+      - created_by
+      - status
+      properties:
+        job_id:
+          $ref: '#/components/schemas/JobID'
+        created_at:
+          type: string
+          format: date-time
+          example: '2023-01-01T23:00:00.000Z'
+        completed_at:
+          type: string
+          format: date-time
+          example: '2023-01-01T23:00:00.000Z'
+        status:
+          $ref: '#/components/schemas/ExclusionsJobStatus'
+        created_by:
+          $ref: '#/components/schemas/UserID'
+        failure_reason:
+          $ref: '#/components/schemas/ExclusionsJobFailureReason'
+        partial_success_reason:
+          $ref: '#/components/schemas/ExclusionsJobPartialSuccessReason'
+        job_trace_id:
+          $ref: '#/components/schemas/JobTraceId'
+    ProjectID:
+      description: The character string representing a unique project ID (ULID format).
+      type: string
+      pattern: ^[0-9A-Z]{26}$
+      example: 01BTGNYV6HRNK8K8VKZASZCFP0
+    GetExclusionGroupsByAccountIdResponse:
+      type: object
+      description: List of Exclusion Groups within a given Account
+      required:
+      - data
+      - url
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/ExclusionGroupInfo'
+        next_cursor:
+          type: string
+          description: An ID of the next list of items and indicator that there are more items than currently viewable.
+          example: MDFKUkc0UFdISDRKMEpWRVRTTTNKTlZKWlcmMGVmZmRjOTctMTYxZS00NmJlLWJlM2MtNTU5NTYyMWU3ZDcx
+        url:
+          type: string
+          description: URL to fetch the next page of Exclusion Groups
+          example: accounts/13/exclusion-groups
+    Tracestate:
+      type: string
+      description: 'The tracestate header provides additional contextual information to the traceparent header.  This enriches the tracing context and offers more fine-grained control
+
+        Note: This field is optional and will be automatically generated by the service if not provided in the request.  The generated value will be included in the response header.'
+      example: ot=foo:bar;k1:13
+    UserID:
+      type: string
+      format: uuid
+      description: A unique identifier for the user.
+      example: b551326b-ac9d-4d32-8823-4f025787dab9
+    RespondentActivityExclusionsIdObjectResponse:
+      type: object
+      properties:
+        type:
+          description: The type of entity related to the `id`. This value can either be `target-group` or `project`.
+          type: string
+          enum:
+          - target-group
+          - project
+          example: target-group
+        id:
+          description: the unique entity ID.
+          type: string
+          format: ulid
+          example: 01KH2714RHRTGCGQV47FHHY8S8
+        duration:
+          description: the period of time the target group or project should be excluded for. This syntax follows the ISO 8601 standard for duration.
+          type: string
+          format: duration
+          example: P90D
+    RespondentActivityExclusionsResponse:
+      type: object
+      description: The list of target groups and projects whose respondents should be excluded from this target group's survey.
+      properties:
+        respondent_activity_exclusions:
+          type: array
+          items:
+            $ref: '#/components/schemas/RespondentActivityExclusionsIdObjectResponse'
+    AccountID:
+      description: The account's unique identifier.
+      type: integer
+      format: int32
+      example: 101
+    ProjectExclusionStatusResponse:
+      type: object
+      description: The project-level exclusion status for a single target group.
+      properties:
+        project_exclusion_enabled:
+          $ref: '#/components/schemas/ExclusionEnabled'
+        create_date:
+          $ref: '#/components/schemas/CreateDate'
+        updated_by:
+          $ref: '#/components/schemas/UpdatedBy'
+        update_date:
+          $ref: '#/components/schemas/UpdateDate'
+    JobTraceId:
+      type: string
+      description: The trace ID from the creation job request. Only present when the job status is 'Failed'. The trace ID as defined by the W3C trace context specification.
+      example: 0af7651916cd43dd8448eb211c80319c
+    GetTargetGroupExclusionsOverviewResponse:
+      type: object
+      description: The number of exclusions (both respondent ID and GUID) for the requested target group
+      required:
+      - saved_respondent_ids_count
+      properties:
+        saved_respondent_ids_count:
+          type: integer
+          description: The number of saved respondent IDs
+          minimum: 0
+          maximum: 100000
+          example: 1000
+        saved_access_respondent_guids_count:
+          type: integer
+          description: The number of saved Access Respondent GUIDs
+          minimum: 0
+          maximum: 100000
+          example: 1000
+    BulkTargetGroupProjectExclusionStatus:
+      type: array
+      description: A list of target groups and their project exclusion statuses.
+      items:
+        $ref: '#/components/schemas/TargetGroupExclusionAPIStatusPair'
+    ExclusionsJobStatus:
+      type: string
+      description: The status of an async Exclusions update job.
+      enum:
+      - Success
+      - Failed
+      - Processing
+      example: Success
+    CreateExclusionGroupRequest:
+      type: object
+      description: The details required to create a new exclusion group.
+      required:
+      - tag
+      - description
+      properties:
+        tag:
+          $ref: '#/components/schemas/ExclusionGroupTag'
+        description:
+          $ref: '#/components/schemas/ExclusionGroupDescription'
+    ExclusionGroupTargetGroupsResponse:
+      type: object
+      required:
+      - data
+      - url
+      description: A paginated list of target groups that are members of the exclusion group.
+      properties:
+        data:
+          type: array
+          description: List of Target Group IDs
+          items:
+            $ref: '#/components/schemas/TargetGroupID'
+        next_cursor:
+          type: string
+          nullable: true
+          description: The cursor to use in the start_after parameter to fetch the next page of results.
+          example: MDFKUkc0UFdISDRKMEpWRVRTTTNKTlZKWlcmMGVmZmRjOTctMTYxZS00NmJlLWJlM2MtNTU5NTYyMWU3ZDcx
+        url:
+          type: string
+          description: URL to fetch the next page of Target Group IDs.
+          example: accounts/13/exclusion-groups/01JW97M2Y5Q5KB0N543B4G4T5Y/exclusions/target-groups
+    RespondentActivityExclusionsList:
+      type: array
+      description: The list of target groups and projects whose respondents should be excluded from this target group's survey.
+      items:
+        $ref: '#/components/schemas/RespondentActivityExclusionsIdObjectRequest'
+    GetRemoveAllRespondentExclusionsJobResponse:
+      type: object
+      description: Status and details of a given remove all Respondent Exclusions job.
+      required:
+      - job_id
+      - created_at
+      - created_by
+      - status
+      properties:
+        job_id:
+          $ref: '#/components/schemas/JobID'
+        created_at:
+          type: string
+          format: date-time
+          example: '2023-01-01T23:00:00.000Z'
+        completed_at:
+          type: string
+          format: date-time
+          example: '2023-01-01T23:00:00.000Z'
+        status:
+          $ref: '#/components/schemas/ExclusionsJobStatus'
+        created_by:
+          $ref: '#/components/schemas/UserID'
+        failure_reason:
+          $ref: '#/components/schemas/ExclusionsJobFailureReason'
+        job_trace_id:
+          $ref: '#/components/schemas/JobTraceId'
+    TargetGroupExclusionAPIStatusPair:
+      type: object
+      description: Pairs a target group ID with its project-level exclusion status.
+      properties:
+        target_group_id:
+          type: string
+          description: The ID of the target group to which the exclusion policy should be applied
+          example: 01HC2Z6TM8C4F3Y5CA6S2JR475
+        project_exclusion_enabled:
+          type: boolean
+          description: Indicates if project-level exclusion is enabled for this target group.
+          example: true
+  responses:
+    Error_ContentTooLarge:
+      description: The request entity was larger than limits defined by the server.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            id: 7a5972ba-0825-4360-b852-fa2430e47034
+            object: content_too_large_error
+            detail: File upload limit exceeded
+    Error_NotFound:
+      description: A requested resource isn't found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            id: 7a5972ba-0825-4360-b852-fa2430e47034
+            object: not_found_error
+            detail: resource not found
+    Error_Internal:
+      description: A request failed due to an internal error.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            id: d94b8bb2-a540-4a91-9c05-2aa3ae9a5e1e
+            object: unexpected_internal_error
+            detail: an internal error has led to the failure of this operation
+    Error_UnsupportedMediaType:
+      description: The request content format is not supported.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            id: 7a5972ba-0825-4360-b852-fa2430e47034
+            object: unsupported_media_type_error
+            detail: The 'Content-Type' header is incorrectly set 'application/pdf'
+    Error_Forbidden:
+      description: A requested is forbidden.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            id: fe68cdd2-ee87-4dbf-8950-63c5cbca94c7
+            object: authorization_error
+            detail: you don't have the right permissions to perform this operation
+    Error_Conflict:
+      description: An already existing resource has conflicts with the request.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            id: 3d61d9c3-68ee-4026-b436-6e76a2b33932
+            object: conflict_error
+            detail: this operation causes conflict(s) on the resources
+    Error_Unauthorized:
+      description: A request is unauthorized.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            id: 1dcf0f40-f0d1-4cf6-8c00-c3d019d32faf
+            object: authorization_error
+            detail: no valid authorization provided for this operation
+    Error_BadRequest:
+      description: A request is not valid and can't be processed.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            id: 9e278238-d011-4e05-8327-1ce1d5d26254
+            object: bad_request_error
+            detail: Expected field 'foo' is missing.
+  parameters:
+    ProjectID:
+      name: project_id
+      description: A unique identifier for the project, in ULID format.
+      in: path
+      required: true
+      schema:
+        $ref: '#/components/schemas/ProjectID'
+    CintAPIVersion-2025-12-18:
+      name: Cint-API-Version
+      in: header
+      required: true
+      schema:
+        type: string
+        example: 2025-12-18
+      description: 'This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.
+
+        '
+    EndBefore:
+      name: end_before
+      in: query
+      description: Returns a list of objects that come before the provided pagination cursor. This is used for navigating to a previous page.
+      schema:
+        type: string
+      example: 7daa40ad-303b-40a2-89df-a9760400cde7
+    ExclusionRespondentEntityType:
+      name: entity_type
+      in: query
+      required: true
+      description: The entity type of the identifiers included in the file.
+      schema:
+        $ref: '#/components/schemas/ExclusionEntityTypeWithRsidAndAccessRespondentGuid'
+    PageSize:
+      name: page_size
+      in: query
+      description: A limit on the number of objects to be returned, between 1 and 100.
+      schema:
+        type: integer
+        default: 10
+      example: 15
+    StartAfter:
+      name: start_after
+      in: query
+      description: Returns a list of objects after the provided pagination cursor, using the next_cursor from the previous response.
+      schema:
+        type: string
+      example: bff6a669-a469-409d-8c94-dcf92258043a
+    PageSize1000:
+      name: page_size
+      in: query
+      required: false
+      description: A limit on the number of objects to be returned, between 1 and 1000.
+      schema:
+        type: integer
+        default: 1000
+      example: 100
+    JobID:
+      name: job_id
+      description: The character string representing a unique job ID.
+      in: path
+      required: true
+      schema:
+        $ref: '#/components/schemas/JobID'
+    ExclusionGroupID:
+      name: exclusion_group_id
+      in: path
+      required: true
+      description: A unique identifier for the exclusion group, in ULID format.
+      schema:
+        $ref: '#/components/schemas/ExclusionGroupID'
+    TargetGroupID:
+      name: target_group_id
+      description: A unique identifier for the target group, in ULID format.
+      in: path
+      required: true
+      schema:
+        $ref: '#/components/schemas/TargetGroupID'
+    RecontactPostContentType:
+      name: Content-Type
+      in: header
+      required: true
+      description: The multipart/form-data content type of the request body.
+      schema:
+        type: string
+        enum:
+        - multipart/form-data
+    AccountID:
+      name: account_id
+      description: The account's unique identifier.
+      in: path
+      required: true
+      schema:
+        $ref: '#/components/schemas/AccountID'
+  headers:
+    Tracestate:
+      description: The `tracestate` header complements the `traceparent` header by carrying vendor-specific trace information. This allows different services to add their own data to a trace.
+      required: false
+      schema:
+        $ref: '#/components/schemas/Tracestate'
+    Traceparent:
+      description: The `traceparent` header carries the trace ID and parent span ID, as defined by the W3C Trace Context specification. It's used to trace a single request as it moves through multiple services.
+      required: false
+      schema:
+        $ref: '#/components/schemas/Traceparent'
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Bearer token used for authentication and authorization. See [Authentication Process](https://developer.cint.com/en/guides#authentication-process) documentation for more information.
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: API Key Authentication

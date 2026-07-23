@@ -1,0 +1,563 @@
+openapi: 3.0.3
+info:
+  title: Demand Accounts Fielding Assistant API
+  description: 'Cint''s demand ordering API is REST oriented. It has predictable resource based URLs, accepts JSON-encoded request bodies, returns JSON-encoded responses, and uses standard HTTP response codes, authentication, and verbs. Error responses are also JSON-encoded and follow a standard format, providing a unique error ID and detailed information about what went wrong.
+
+
+    Authentication is handled via bearer tokens passed in the `Authorization` header. All requests must also include a `Cint-API-Version` header with a date in `YYYY-MM-DD` format to specify the desired API version. Depending on the version you use, endpoint behavior may differ as we improve our API with every version release.
+
+
+    While many operations work on a single object per request, the demand ordering API also provides asynchronous batch endpoints for performing bulk updates efficiently on certain resources. For safety, `POST` requests support an `Idempotency-Key` header to allow for safe retries without accidentally performing the same operation twice.
+
+    '
+  version: '2025-12-18'
+servers:
+- description: Production server
+  url: https://api.cint.com/v1
+security:
+- BearerAuth: []
+tags:
+- name: Fielding Assistant
+  description: Get, update Target Group Fielding Assistant assignments. Fielding Assistant provides optional modules to automate common workflows and optimise your Target Group.
+paths:
+  /demand/accounts/{account_id}/projects/{project_id}/target-groups/{target_group_id}/fielding-assistant-assignment:
+    parameters:
+    - $ref: '#/components/parameters/AccountID'
+    - $ref: '#/components/parameters/ProjectID'
+    - $ref: '#/components/parameters/TargetGroupID'
+    - $ref: '#/components/parameters/CintAPIVersion-2025-12-18'
+    get:
+      operationId: get_fielding_assistant_assignment
+      summary: Retrieves the Fielding Assistant assignment for a target group
+      description: "Retrieves the current Fielding Assistant configuration for a target group. The response will show which modules, if any, are currently enabled. Examples:\n\n  * Pricing\n  * Quota overlay\n  * Pacing\n  * Soft launch"
+      tags:
+      - Fielding Assistant
+      responses:
+        '200':
+          description: The Fielding Assistant assignment details were retrieved successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FieldingAssistantModulesAssignment'
+              example:
+                pricing:
+                  type: dynamic
+                  maximum_cpi":
+                    value: '5.00'
+                    currency_code: USD
+                    currency_scale: 2
+                pacing:
+                  type: linear
+                  increment_interval: P1D
+                quota_overlay:
+                  prevent_overfill": true
+                  balance_fill: true
+                soft_launch: null
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+        '400':
+          $ref: '#/components/responses/Error_BadRequest'
+        '401':
+          $ref: '#/components/responses/Error_Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error_Forbidden'
+        '404':
+          $ref: '#/components/responses/Error_NotFound'
+        '500':
+          $ref: '#/components/responses/Error_Internal'
+    put:
+      operationId: create_or_update_fielding_assistant_assignment
+      summary: Create or update the Fielding Assistant assignment
+      description: 'Creates or fully replaces the Fielding Assistant assignment for a target group. This is an "all or nothing" operation.
+
+        To modify an existing assignment, you must first GET the current configuration, make your changes,
+
+        and then PUT the entire modified object back. Sending a request with only one module will disable all others.
+
+        To disable all modules, send an empty object `{}`. This endpoint uses the `If-Match` header for optimistic locking.
+
+        '
+      tags:
+      - Fielding Assistant
+      parameters:
+      - $ref: '#/components/parameters/IfMatch'
+      - $ref: '#/components/parameters/IfNoneMatch'
+      requestBody:
+        description: Fielding assistant assignment request.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FieldingAssistantModulesAssignmentRequestModel'
+            examples:
+              full_configuration:
+                summary: Enable Dynamic Pricing and Linear Pacing
+                description: Example configuration with dynamic pricing, linear pacing, and quota overlay modules enabled
+                value:
+                  pricing:
+                    type: dynamic
+                    maximum_cpi:
+                      value: '5.00'
+                      currency_code: USD
+                  pacing:
+                    type: linear
+                    increment_interval: P1D
+                  quota_overlay:
+                    prevent_overfill: true
+                    balance_fill: true
+              disable_all:
+                summary: Disable All Modules
+                description: Send an empty object to disable all Fielding Assistant modules
+                value: {}
+      responses:
+        '204':
+          description: Fielding assistant assignment on target group successfully created or updated.
+        '400':
+          $ref: '#/components/responses/Error_BadRequest'
+        '401':
+          $ref: '#/components/responses/Error_Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error_Forbidden'
+        '404':
+          $ref: '#/components/responses/Error_NotFound'
+        '412':
+          $ref: '#/components/responses/Precondition_Failed'
+        '500':
+          $ref: '#/components/responses/Error_Internal'
+components:
+  schemas:
+    FieldingAssistantModulesAssignment:
+      title: Fielding Assistant modules assignment
+      description: A container for all enabled Fielding Assistant modules for a target group. Each module is optional; if a module is omitted or set to `null`, it is considered disabled.
+      type: object
+      properties:
+        pricing:
+          oneOf:
+          - $ref: '#/components/schemas/ModuleDynamicPricing'
+          - $ref: '#/components/schemas/ModuleRateCardPricing'
+          nullable: true
+        quota_overlay:
+          allOf:
+          - $ref: '#/components/schemas/ModuleQuotaOverlay'
+          nullable: true
+        pacing:
+          oneOf:
+          - $ref: '#/components/schemas/ModuleLinearPacing'
+          - $ref: '#/components/schemas/ModuleAdaptivePacing'
+          - $ref: '#/components/schemas/ModuleGeminiPacing'
+          nullable: true
+        soft_launch:
+          allOf:
+          - $ref: '#/components/schemas/ModuleSoftLaunch'
+          nullable: true
+    ModuleSoftLaunch:
+      title: Soft launch
+      type: object
+      description: Manages a soft launch of a target group. During a soft launch, pacing modules are ignored.
+      properties:
+        end_at:
+          type: string
+          description: The soft launch will be finished at this date, and the target group paused regardless of the fill.
+          format: date-time
+          example: '2023-01-01T23:00:00.000Z'
+        filling_goal_percentage:
+          description: The percentage of the full filling goal to collect during the soft launch phase.
+          type: integer
+          minimum: 1
+          maximum: 100
+          example: 1
+        demographics_strictness_percentage:
+          description: Controls how strictly the soft launch's demographic distribution should follow the full launch's distribution. A value of `100` aims to match the distribution perfectly, while `0` allows any distribution.
+          type: integer
+          minimum: 0
+          maximum: 100
+          example: 1
+      required:
+      - end_at
+      - filling_goal_percentage
+      - demographics_strictness_percentage
+    ETag:
+      type: string
+      description: The `ETag` header provides a unique identifier that represents the current version state of a particular resource.
+      example: W/"1234"
+    ModuleGeminiPacing:
+      title: Gemini pacing
+      type: object
+      description: Always collects at most as many completes on each quota, as were collected on an exposed target group. Intended for Measurement control target groups.
+      properties:
+        type:
+          type: string
+          enum:
+          - gemini
+          description: The type of module. For this object, the value is always 'gemini'.
+        exposed_target_group_id:
+          type: string
+          format: ulid
+          description: Uniquely identifies exposed target group by ID.
+          example: 01HC2Z6TM8C4F3Y5CA6S2JR475
+      required:
+      - type
+      - exposed_target_group_id
+    IncrementInterval:
+      type: string
+      format: duration
+      example: P1DT5H
+      description: 'The duration between each quota increment, in ISO-8601 format.
+
+
+        Key details:
+
+
+        * **Format:** Must follow the `PnDTnHnMnS` pattern (e.g., `P1D` for one day, `PT12H` for 12 hours).
+
+        * **Limit:** The duration must be less than 398 days.
+
+        '
+    InvalidParam:
+      type: object
+      description: Describes a single invalid parameter in a request.
+      properties:
+        name:
+          type: string
+          description: The name of the parameter that failed validation.
+        reason:
+          type: string
+          description: A short explanation of why the parameter was invalid.
+      required:
+      - name
+      - reason
+    ModuleDynamicPricing:
+      title: Dynamic pricing
+      type: object
+      description: 'Controls the Cost Per Interview (CPI) to achieve a 100% fill rate by the target group''s end date as cost-effectively as possible.
+
+
+        Key behaviors:
+
+
+        * **Prerequisite:** This module can only be used for target groups configured with dynamic pricing.
+
+        * You must specify either `total_budget` or `maximum_cpi`, but not both.
+
+        * If you specify `minimum_cpi`, it must be lower than the `maximum_cpi`.
+
+        * The `total_budget` setting can overrule the `minimum_cpi`.
+
+        '
+      properties:
+        type:
+          type: string
+          enum:
+          - dynamic
+          description: The type of module. For this object, the value is always 'dynamic'.
+        total_budget:
+          description: The maximum total amount to spend for the target number of completes.
+          allOf:
+          - $ref: '#/components/schemas/MonetaryAmount'
+        maximum_cpi:
+          description: The maximum cost per interview (CPI) that the module is allowed to set.
+          allOf:
+          - $ref: '#/components/schemas/MonetaryAmount'
+        minimum_cpi:
+          description: The minimum cost per interview (CPI) that the module is allowed to set.
+          allOf:
+          - $ref: '#/components/schemas/MonetaryAmount'
+      required:
+      - type
+    TargetGroupID:
+      description: A unique identifier for the target group, in ULID format.
+      type: string
+      pattern: ^[0-9A-Z]{26}$
+      example: 01BTGNYV6HRNK8K8VKZASZCFP1
+    Traceparent:
+      type: string
+      description: 'The traceparent header carries essential trace context information. This includes the trace ID and parent span ID  as defined by the W3C trace context specification. It is used to pinpoint the position of an incoming request within  the trace graph, facilitating the tracking of distributed operations.
+
+        Note: This field is optional and will be automatically generated by the service if not provided in the request.  The generated value will be included in the response header.'
+      example: 00-0af7651916cd43dd8448eb211c80319c-b7ad6b7169203331-01
+    Error:
+      type: object
+      description: The standard error object returned for all failed API requests.
+      required:
+      - object
+      - detail
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: A unique identifier for this specific error instance.
+        object:
+          type: string
+          description: A short informative string identifying the type of the error
+          pattern: ^([a-z]*_)*([a-z]*)$
+        detail:
+          type: string
+          description: An error message provides a concise overview of the cause of the error.
+        invalid_params:
+          type: array
+          nullable: true
+          description: An optional field containing a list of invalid parameters may be presented in validation errors for additional information.
+          items:
+            $ref: '#/components/schemas/InvalidParam'
+    MonetaryAmount:
+      type: object
+      description: Represents a monetary value, including the amount and its currency.
+      properties:
+        value:
+          type: string
+          description: A decimal encapsulated in a string representing the value in the denomination indicated by the code.
+          example: '2.7352'
+        currency_code:
+          $ref: '#/components/schemas/CurrencyCode'
+        currency_scale:
+          allOf:
+          - nullable: true
+          - type: integer
+            description: The number of digits after the decimal separator, as defined by ISO 4217.
+            example: 2
+    FieldingAssistantModulesAssignmentRequestModel:
+      title: Fielding Assistant modules assignment
+      description: Having an assignment enables Fielding Assistant modules on a specified target group.  All modules are optional, their omission means they are not enabled.
+      type: object
+      properties:
+        pricing:
+          description: The pricing module configuration. The `type` field within the object determines the model (`dynamic` or `rate_card`).
+          oneOf:
+          - $ref: '#/components/schemas/ModuleDynamicPricing'
+          - $ref: '#/components/schemas/ModuleRateCardPricing'
+          nullable: true
+        quota_overlay:
+          $ref: '#/components/schemas/ModuleQuotaOverlay'
+        pacing:
+          description: The pacing module configuration. The `type` field within the object determines the pacing strategy (`linear`, `adaptive`, or `gemini`).
+          oneOf:
+          - $ref: '#/components/schemas/ModuleLinearPacing'
+          - $ref: '#/components/schemas/ModuleAdaptivePacing'
+          - $ref: '#/components/schemas/ModuleGeminiPacing'
+          nullable: true
+        soft_launch:
+          $ref: '#/components/schemas/ModuleSoftLaunch'
+    ProjectID:
+      description: The character string representing a unique project ID (ULID format).
+      type: string
+      pattern: ^[0-9A-Z]{26}$
+      example: 01BTGNYV6HRNK8K8VKZASZCFP0
+    ModuleRateCardPricing:
+      title: Rate Card pricing
+      type: object
+      description: Manages pricing for a target group that uses a rate card model. This module cannot be used with `dynamic` pricing.
+      properties:
+        type:
+          type: string
+          enum:
+          - rate_card
+          description: The type of module. For this object, the value is always 'rate_card'.
+        maximum_cpi:
+          description: The maximum cost per interview (CPI) that the module is allowed to set.
+          allOf:
+          - $ref: '#/components/schemas/MonetaryAmount'
+        boost_cpi:
+          description: Additional amount to be added to the CPI inferred from the rate card. Respects the `maximum_cpi` setting limit.
+          allOf:
+          - $ref: '#/components/schemas/MonetaryAmount'
+      required:
+      - type
+    ModuleLinearPacing:
+      title: Linear even pacing
+      type: object
+      description: Paces fielding by incrementing the completes goal in regular intervals until the target group's end date.
+      properties:
+        type:
+          type: string
+          enum:
+          - linear
+          description: The type of module. For this object, the value is always 'linear'.
+        increment_interval:
+          $ref: '#/components/schemas/IncrementInterval'
+      required:
+      - type
+      - increment_interval
+    ModuleQuotaOverlay:
+      title: Quota overlay
+      type: object
+      description: Controls how the overall completes goal is distributed across the target group's quotas.
+      properties:
+        prevent_overfill:
+          type: boolean
+          description: When `true`, this setting helps prevent quotas from exceeding their target number of completes.
+          example: true
+        balance_fill:
+          type: boolean
+          description: Whentrue, this setting ensures that quotas within the same demographic category fill at a similar rate.
+          example: true
+      required:
+      - prevent_overfill
+      - balance_fill
+    CurrencyCode:
+      type: string
+      description: The three-letter ISO 4217 currency code, in uppercase. The code must correspond to a currency supported by Cint Exchange.
+      example: USD
+    Tracestate:
+      type: string
+      description: 'The tracestate header provides additional contextual information to the traceparent header.  This enriches the tracing context and offers more fine-grained control
+
+        Note: This field is optional and will be automatically generated by the service if not provided in the request.  The generated value will be included in the response header.'
+      example: ot=foo:bar;k1:13
+    AccountID:
+      description: The account's unique identifier.
+      type: integer
+      format: int32
+      example: 101
+    ModuleAdaptivePacing:
+      title: Adaptive even pacing
+      type: object
+      description: Increments quotas in regular intervals, recalculating steps after each interval to evenly pace  the rest of the Completes Goal until the end date.
+      properties:
+        type:
+          type: string
+          enum:
+          - adaptive
+          description: The type of module. For this object, the value is always 'adaptive'.
+        increment_interval:
+          $ref: '#/components/schemas/IncrementInterval'
+      required:
+      - type
+      - increment_interval
+  responses:
+    Error_NotFound:
+      description: A requested resource isn't found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            id: 7a5972ba-0825-4360-b852-fa2430e47034
+            object: not_found_error
+            detail: resource not found
+    Error_Internal:
+      description: A request failed due to an internal error.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            id: d94b8bb2-a540-4a91-9c05-2aa3ae9a5e1e
+            object: unexpected_internal_error
+            detail: an internal error has led to the failure of this operation
+    Error_Forbidden:
+      description: A requested is forbidden.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            id: fe68cdd2-ee87-4dbf-8950-63c5cbca94c7
+            object: authorization_error
+            detail: you don't have the right permissions to perform this operation
+    Precondition_Failed:
+      description: The resource could not be modified because the ETag in the If-Match header does not match the current version. This means the resource was updated by another request after you retrieved it.
+      headers:
+        traceparent:
+          description: The `traceparent` header carries the trace ID and parent span ID, as defined by the W3C Trace Context specification. It's used to trace a single request as it moves through multiple services.
+          required: false
+          schema:
+            $ref: '#/components/schemas/Traceparent'
+        tracestate:
+          description: The `tracestate` header complements the `traceparent` header by carrying vendor-specific trace information. This allows different services to add their own data to a trace.
+          required: false
+          schema:
+            $ref: '#/components/schemas/Tracestate'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            id: 3d61d9c3-68ee-4026-b436-6e76a2b33932
+            object: precondition_failed_error
+            detail: The resource has been modified since you last retrieved it. Please fetch the latest version and try your request again.
+    Error_Unauthorized:
+      description: A request is unauthorized.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            id: 1dcf0f40-f0d1-4cf6-8c00-c3d019d32faf
+            object: authorization_error
+            detail: no valid authorization provided for this operation
+    Error_BadRequest:
+      description: A request is not valid and can't be processed.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            id: 9e278238-d011-4e05-8327-1ce1d5d26254
+            object: bad_request_error
+            detail: Expected field 'foo' is missing.
+  parameters:
+    ProjectID:
+      name: project_id
+      description: A unique identifier for the project, in ULID format.
+      in: path
+      required: true
+      schema:
+        $ref: '#/components/schemas/ProjectID'
+    CintAPIVersion-2025-12-18:
+      name: Cint-API-Version
+      in: header
+      required: true
+      schema:
+        type: string
+        example: 2025-12-18
+      description: 'This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.
+
+        '
+    IfNoneMatch:
+      name: If-None-Match
+      description: The ETag value of the resource you intend to update. This is used for optimistic locking to prevent you from accidentally overwriting changes made by someone else. You can get the ETag from a GET request for the resource. The `ETag` value should always be wrapped in double quotes, whether it is part of a weak `ETag` or standalone. Using `*` will match any version state.
+      in: header
+      schema:
+        type: string
+        format: etag
+        example: '1'
+    IfMatch:
+      name: If-Match
+      description: The ETag value of the resource you intend to update. This is used for optimistic locking to prevent you from accidentally overwriting changes made by someone else. You can get the ETag from a GET request for the resource. The `ETag` value should always be wrapped in double quotes, whether it is part of a weak `ETag` or standalone.
+      in: header
+      schema:
+        type: string
+        format: etag
+        example: W/"1234"
+    TargetGroupID:
+      name: target_group_id
+      description: A unique identifier for the target group, in ULID format.
+      in: path
+      required: true
+      schema:
+        $ref: '#/components/schemas/TargetGroupID'
+    AccountID:
+      name: account_id
+      description: The account's unique identifier.
+      in: path
+      required: true
+      schema:
+        $ref: '#/components/schemas/AccountID'
+  headers:
+    ETag:
+      description: The `ETag` header provides a unique identifier that represents the current version of a resource. It's used for caching and to prevent concurrent modification issues.
+      required: true
+      schema:
+        $ref: '#/components/schemas/ETag'
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Bearer token used for authentication and authorization. See [Authentication Process](https://developer.cint.com/en/guides#authentication-process) documentation for more information.
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: API Key Authentication

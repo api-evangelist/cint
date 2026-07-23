@@ -1,0 +1,1078 @@
+openapi: 3.0.3
+info:
+  title: Demand Accounts Profiling Quotas By Supplier API
+  description: 'Cint''s demand ordering API is REST oriented. It has predictable resource based URLs, accepts JSON-encoded request bodies, returns JSON-encoded responses, and uses standard HTTP response codes, authentication, and verbs. Error responses are also JSON-encoded and follow a standard format, providing a unique error ID and detailed information about what went wrong.
+
+
+    Authentication is handled via bearer tokens passed in the `Authorization` header. All requests must also include a `Cint-API-Version` header with a date in `YYYY-MM-DD` format to specify the desired API version. Depending on the version you use, endpoint behavior may differ as we improve our API with every version release.
+
+
+    While many operations work on a single object per request, the demand ordering API also provides asynchronous batch endpoints for performing bulk updates efficiently on certain resources. For safety, `POST` requests support an `Idempotency-Key` header to allow for safe retries without accidentally performing the same operation twice.
+
+    '
+  version: '2025-12-18'
+servers:
+- description: Production server
+  url: https://api.cint.com/v1
+security:
+- BearerAuth: []
+tags:
+- name: Profiling Quotas By Supplier
+  description: Get the distribution of available respondents for Target Group profiles, including retrieving supplier distribution per quota.
+paths:
+  ? /demand/accounts/{account_id}/projects/{project_id}/target-groups/{target_group_id}/profiles/{profile_id}/supplier-quota-distribution
+  : parameters:
+    - $ref: '#/components/parameters/AccountID'
+    - $ref: '#/components/parameters/ProjectID'
+    - $ref: '#/components/parameters/TargetGroupID'
+    - $ref: '#/components/parameters/ProfileIDV2'
+    - $ref: '#/components/parameters/CintAPIVersion-2025-12-18'
+    get:
+      summary: Retrieves the supplier distribution for a profile
+      description: Retrieves a profile's quota structure, including the projected distribution of completes across different suppliers based on historical data. You can use this data to understand how your quotas are likely to be filled.
+      operationId: get_panel_distribution_by_profile
+      responses:
+        '200':
+          description: The supplier distribution prediction was retrieved successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegularProfileV3'
+        '400':
+          $ref: '#/components/responses/Error_BadRequest_DemandAPI'
+        '401':
+          $ref: '#/components/responses/Error_Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error_Forbidden'
+        '404':
+          $ref: '#/components/responses/Error_NotFound'
+        '500':
+          $ref: '#/components/responses/Error_Internal_DemandAPI'
+      tags:
+      - Profiling Quotas By Supplier
+  /demand/accounts/{account_id}/supplier-quota-distribution/draft:
+    parameters:
+    - $ref: '#/components/parameters/AccountID'
+    - $ref: '#/components/parameters/CintAPIVersion-2025-12-18'
+    post:
+      summary: Calculates the supplier distribution for a new target group
+      description: 'Calculates the projected distribution of completes across different suppliers for a new, unsaved target group configuration.
+
+
+        You can use this endpoint to understand how your proposed quotas are likely to be filled by different panel sources.
+
+
+        **Note:** Providing supplier allocation details in the request is not yet supported but is planned for a future release.
+
+
+        The API automatically removes duplicate open-ended values in this request before calculating the distribution, but rejects duplicates in selection or range conditions.
+
+        '
+      operationId: get_panel_distribution_draft
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PanelDistributionRequestV3'
+      responses:
+        '200':
+          description: The supplier distribution prediction was calculated successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RequestDraftRegularProfileV3'
+        '400':
+          $ref: '#/components/responses/Error_BadRequest_DemandAPI'
+        '401':
+          $ref: '#/components/responses/Error_Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error_Forbidden'
+        '404':
+          $ref: '#/components/responses/Error_NotFound'
+        '500':
+          $ref: '#/components/responses/Error_Internal_DemandAPI'
+      tags:
+      - Profiling Quotas By Supplier
+components:
+  schemas:
+    ClientErrorDemandAPI:
+      type: object
+      properties:
+        object:
+          type: string
+        title:
+          type: string
+        detail:
+          type: string
+        invalid_params:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+              reason:
+                type: string
+            required:
+            - name
+            - reason
+        instance:
+          type: string
+        type:
+          type: string
+      required:
+      - object
+      - detail
+    RegularProfileV3:
+      oneOf:
+      - title: Regular Profile
+        type: object
+        required:
+        - object
+        - id
+        - quotas_enabled
+        - name
+        - description
+        - targets
+        properties:
+          object:
+            type: string
+            description: Object field to distinguish the operation.
+            enum:
+            - regular
+            example: regular
+          id:
+            type: string
+            description: The unique identifier for the profile.
+            format: ULID
+            example: 01JQM2QN1FDN1WZA3JZX639MAR
+          quotas_enabled:
+            type: boolean
+            description: Flag indicating if quotas are enabled.
+            example: true
+          name:
+            type: string
+            description: The name of the profile.
+            example: HISPANIC
+          description:
+            type: string
+            description: A short summary of the profile. Summary language will be based on the target group's locale.
+            example: Are you of Hispanic, Latino, or Spanish origin?
+          description_translated:
+            type: string
+            description: A short summary of the profile by default english language.
+            example: Are you of Hispanic, Latino, or Spanish origin?
+          targets:
+            $ref: '#/components/schemas/QuotaV3'
+      - title: Blended Profile
+        type: object
+        required:
+        - object
+        - id
+        - quotas_enabled
+        - name
+        - description
+        - targets
+        properties:
+          object:
+            type: string
+            description: Object field to distinguish the operation.
+            enum:
+            - blended
+            example: blended
+          blended_type:
+            type: string
+            description: The blended_type field defines the functional behavior of the blended profile as either interlock or control. If omitted, the system defaults to interlock. This field distinguishes between profiles requiring a full matrix expansion (interlock) and those used for isolating specific demographic segments (control).
+            enum:
+            - interlock
+            - control
+            example: interlock
+          id:
+            type: string
+            description: The unique identifier for the profile.
+            format: ULID
+            example: 01JQM2QN1FDN1WZA3JZX639MAR
+          quotas_enabled:
+            type: boolean
+            description: Flag indicating if quotas are enabled.
+            example: true
+          name:
+            type: string
+            description: The name of the profile.
+            example: HISPANIC
+          description:
+            type: string
+            description: A short summary of the profile. Summary language will be based on the target group's locale.
+            example: Are you of Hispanic, Latino, or Spanish origin?
+          description_translated:
+            type: string
+            description: A short summary of the profile by default english language.
+            example: Are you of Hispanic, Latino, or Spanish origin?
+          targets:
+            $ref: '#/components/schemas/QuotaV3'
+    CompletesGoal:
+      type: number
+      description: Specifies the target group's required number of survey completions or pre-screen responses.  Formerly referred to as the "filling goal," this value sets the benchmark for the number of valid responses  needed to achieve the desired level of data reliability.
+      format: int
+      minimum: 1
+      example: 1500
+    QuotaV3:
+      type: array
+      minItems: 1
+      items:
+        $ref: '#/components/schemas/QuotaDetailsV3'
+    RequestDraftQuotaPercentageV3:
+      type: object
+      description: Profile target with condition or conditions and percentage value in quota.
+      required:
+      - conditions
+      - quota
+      properties:
+        conditions:
+          type: array
+          description: List of conditions for the target.
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/InterlockProfileConditionsV3'
+        quota:
+          type: object
+          required:
+          - completes_goal_percentage
+          properties:
+            name:
+              type: string
+              description: Name of the quota used for tracking. This will be deprecated, functionally replaced by the `target.name` field one layer up in the contract.
+              deprecated: true
+              example: SF_Quota_12
+            completes_goal_percentage:
+              type: number
+              multipleOf: 0.01
+              minimum: 0
+              maximum: 100
+              description: Percentage of total completes goal quota applied to this condition(s).
+              example: 40
+    InvalidParam:
+      type: object
+      description: Describes a single invalid parameter in a request.
+      properties:
+        name:
+          type: string
+          description: The name of the parameter that failed validation.
+        reason:
+          type: string
+          description: A short explanation of why the parameter was invalid.
+      required:
+      - name
+      - reason
+    ProfileTargetsResponseSelectionConditionsV3:
+      type: object
+      required:
+      - object
+      - question_id
+      - option
+      properties:
+        object:
+          type: string
+          description: Object field to distinguish between different types of control selections.  Always is `selection`.
+          enum:
+          - selection
+          example: selection
+        question_id:
+          $ref: '#/components/schemas/QuestionID'
+        option:
+          type: string
+          description: the identifier for the condition
+          example: '1'
+        condition_name:
+          type: string
+          description: The name of the condition. This field will be present if the condition is part of a blended or grouped target.
+          example: Dogs
+        condition_name_translated:
+          type: string
+          description: The name of the condition translated (when appropriate and available). This field will be present if the condition is part of a blended or grouped target.
+          example: Perros
+    QuestionID:
+      type: integer
+      description: The unique identifier for a profiling question.
+      example: 12413
+    ProfileIDV2:
+      type: string
+      format: ULID
+      description: Profile identifier
+      example: 01HY0PYB3TW23RQRVNFYRC2PP6
+    ProfileTargetsResponseRangeConditionsV3:
+      type: object
+      required:
+      - object
+      - question_id
+      - min
+      - max
+      properties:
+        object:
+          type: string
+          description: Object field to distinguish between different types of control selections.  Always is `range`.
+          enum:
+          - range
+          example: range
+        question_id:
+          $ref: '#/components/schemas/QuestionID'
+        min:
+          type: integer
+          format: int32
+          minimum: 1
+          maximum: 99
+          description: The minimum numeric value (inclusive).
+          example: 18
+        max:
+          type: integer
+          format: int32
+          minimum: 1
+          maximum: 99
+          description: The maximum numeric value (inclusive).
+          example: 24
+        condition_name:
+          type: string
+          description: The name of the condition. This field will be present if the condition is part of a blended or grouped target.
+          example: 18 to 24
+        condition_name_translated:
+          type: string
+          description: The name of the condition translated (when appropriate and available). This field will be present if the condition is part of a blended or grouped target.
+          example: 18 to 24
+    TargetGroupID:
+      description: A unique identifier for the target group, in ULID format.
+      type: string
+      pattern: ^[0-9A-Z]{26}$
+      example: 01BTGNYV6HRNK8K8VKZASZCFP1
+    Traceparent:
+      type: string
+      description: 'The traceparent header carries essential trace context information. This includes the trace ID and parent span ID  as defined by the W3C trace context specification. It is used to pinpoint the position of an incoming request within  the trace graph, facilitating the tracking of distributed operations.
+
+        Note: This field is optional and will be automatically generated by the service if not provided in the request.  The generated value will be included in the response header.'
+      example: 00-0af7651916cd43dd8448eb211c80319c-b7ad6b7169203331-01
+    QuotaDetailsV3:
+      oneOf:
+      - title: Targets with conditions and quota
+        type: object
+        description: Targets with conditions and quota.
+        required:
+        - id
+        - conditions
+        - quota
+        properties:
+          id:
+            type: string
+            description: The unique identifier for the quota.
+            format: ULID
+            example: 01JQMD8R7F0VW45KPWQ7WYNCFP
+          name:
+            type: string
+            description: The name of the target.
+            example: Target-Male
+          text:
+            type: string
+            description: Text of the used for display purpose.
+            example: Condition Text
+          text_translated:
+            type: string
+            description: Translated text of the condition used for display purpose.
+            example: Condition Text
+          conditions:
+            type: array
+            description: List of conditions.
+            minItems: 1
+            items:
+              $ref: '#/components/schemas/ResponseProfileConditionsV3'
+          quota:
+            type: object
+            required:
+            - completes_goal_percentage
+            - quota_nominal
+            - completes_goal
+            properties:
+              name:
+                type: string
+                description: Name of the quota used for tracking. This will be deprecated, functionally replaced by the `target.name` field one layer up in the contract.
+                deprecated: true
+                example: SF_Quota_12
+              completes_goal_percentage:
+                type: number
+                multipleOf: 0.01
+                minimum: 0
+                maximum: 100
+                description: Percentage of total completes goal quota applied to this condition(s).
+                example: 40
+              quota_nominal:
+                type: integer
+                minimum: 0
+                description: Total desired quota nominal applied to this condition(s).
+                example: 40
+              completes_goal:
+                type: integer
+                minimum: 0
+                description: Total desired completes goal applied to this condition(s).
+                example: 40
+              completes:
+                type: integer
+                minimum: 0
+                description: Actual completes filled by responded or supplier.
+                example: 40
+              prescreens:
+                type: integer
+                minimum: 0
+                description: Actual prescreens filled by responded or supplier.
+                example: 40
+      - title: No quota
+        type: object
+        description: Targets with conditions and quota.
+        required:
+        - id
+        - conditions
+        properties:
+          id:
+            type: string
+            description: The unique identifier for the quota.
+            format: ULID
+            example: 01JQMD8R7F0VW45KPWQ7WYNCFP
+          name:
+            type: string
+            description: The name of the target.
+            example: Target Name
+          text:
+            type: string
+            description: Text of the used for display purpose.
+            example: Condition Text
+          text_translated:
+            type: string
+            description: Translated text of the condition used for display purpose.
+            example: Condition Text
+          conditions:
+            type: array
+            description: List of conditions for the quota.
+            minItems: 1
+            items:
+              $ref: '#/components/schemas/InterlockProfileConditionsV3'
+    InternalErrorDemandAPI:
+      type: object
+      properties:
+        object:
+          type: string
+        detail:
+          type: string
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+              reason:
+                type: string
+            required:
+            - name
+            - reason
+      required:
+      - object
+      - detail
+    RequestDraftQuotaNominalV3:
+      type: object
+      description: Profile target with condition or conditions and nominal value in quota.
+      required:
+      - conditions
+      - quota
+      properties:
+        conditions:
+          type: array
+          description: List of conditions.
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/InterlockProfileConditionsV3'
+        quota:
+          type: object
+          required:
+          - completes_goal
+          properties:
+            name:
+              type: string
+              description: Name of the quota used for tracking. This will be deprecated, functionally replaced by the `target.name` field one layer up in the contract.
+              deprecated: true
+              example: SF_Quota_12
+            completes_goal:
+              type: number
+              format: int32
+              minimum: 0
+              description: Total completes goal quota applied to this condition(s).
+              example: 40
+    RequestDraftNoQuotaV3:
+      type: object
+      description: No quotas specified. The request will proceed without applying any quotas.
+      required:
+      - object
+      - conditions
+      properties:
+        object:
+          type: string
+          description: Object field to distinguish the operation.
+          enum:
+          - nominal
+          example: nominal
+        conditions:
+          type: array
+          description: List of conditions.
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/InterlockProfileConditionsV3'
+    Error:
+      type: object
+      description: The standard error object returned for all failed API requests.
+      required:
+      - object
+      - detail
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: A unique identifier for this specific error instance.
+        object:
+          type: string
+          description: A short informative string identifying the type of the error
+          pattern: ^([a-z]*_)*([a-z]*)$
+        detail:
+          type: string
+          description: An error message provides a concise overview of the cause of the error.
+        invalid_params:
+          type: array
+          nullable: true
+          description: An optional field containing a list of invalid parameters may be presented in validation errors for additional information.
+          items:
+            $ref: '#/components/schemas/InvalidParam'
+    PanelDistributionRequestV3:
+      description: The request body for a panel distribution calculation. The `profile_adjustment_type` field (`percentage` or `nominal`) determines the structure of the `quota` objects within the `profile`.
+      oneOf:
+      - title: Profiles populated with percentage as profile adjustment type
+        type: object
+        required:
+        - locale
+        - completes_goal
+        - profile_adjustment_type
+        - start_at
+        - end_at
+        - profile
+        properties:
+          locale:
+            type: string
+            example: eng_us
+          completes_goal:
+            $ref: '#/components/schemas/CompletesGoal'
+          profile_adjustment_type:
+            type: string
+            description: Defines how quotas are specified in the `profile` object. Use `percentage` to define quotas as a percentage of the `completes_goal`, or `nominal` to define them as a specific number of completes.
+            enum:
+            - percentage
+            example: percentage
+          start_at:
+            type: string
+            description: Fielding start date. Start date-time in ISO 8601 format.
+            example: 2023-10-09 12:00:00+00:00
+          end_at:
+            type: string
+            description: Fielding end date. End date-time in ISO 8601 format.
+            example: 2023-10-23 12:00:00+00:00
+          collects_pii:
+            type: boolean
+            example: false
+          profile:
+            $ref: '#/components/schemas/RequestDraftRegularProfileV3'
+      - title: Profiles populated with nominal as profile adjustment type
+        type: object
+        required:
+        - locale
+        - completes_goal
+        - profile_adjustment_type
+        - start_at
+        - end_at
+        - profile
+        properties:
+          locale:
+            type: string
+            example: eng_us
+          completes_goal:
+            $ref: '#/components/schemas/CompletesGoal'
+          profile_adjustment_type:
+            type: string
+            description: Defines how quotas are specified in the `profile` object. Use `percentage` to define quotas as a percentage of the `completes_goal`, or `nominal` to define them as a specific number of completes.
+            enum:
+            - nominal
+            example: nominal
+          start_at:
+            type: string
+            description: Fielding start date. Start date-time in ISO 8601 format.
+            example: 2023-10-09 12:00:00+00:00
+          end_at:
+            type: string
+            description: Fielding end date. End date-time in ISO 8601 format.
+            example: 2023-10-23 12:00:00+00:00
+          collects_pii:
+            type: boolean
+            example: false
+          profile:
+            $ref: '#/components/schemas/RequestDraftRegularProfileV3'
+      example:
+        locale: eng_us
+        completes_goal: 1000
+        profile_adjustment_type: percentage
+        start_at: '2024-10-09T12:00:00.000Z'
+        end_at: '2024-10-23T12:00:00.000Z'
+        profile:
+          object: regular
+          name: Age and Gender
+          quotas_enabled: true
+          targets:
+          - name: Target-Male-18-34
+            conditions:
+            - object: selection
+              question_id: 43
+              option: '1'
+            - object: range
+              question_id: 42
+              min: 18
+              max: 34
+            quota:
+              name: Male 18-34
+              completes_goal_percentage: 25
+    ProfileTargetsRangeConditionsV3:
+      title: Range condition
+      type: object
+      description: A profiling condition that targets a numeric range (e.g. age).
+      required:
+      - object
+      - question_id
+      - min
+      - max
+      properties:
+        object:
+          type: string
+          description: The type of profiling condition. For this object, the value is always 'range'.
+          enum:
+          - range
+          example: range
+        question_id:
+          $ref: '#/components/schemas/QuestionID'
+        min:
+          type: integer
+          format: int32
+          minimum: 1
+          maximum: 99
+          description: The minimum numeric value (inclusive).
+          example: 18
+        max:
+          type: integer
+          format: int32
+          minimum: 1
+          maximum: 99
+          description: The maximum numeric value (inclusive).
+          example: 24
+    ResponseProfileConditionsV3:
+      oneOf:
+      - $ref: '#/components/schemas/ProfileTargetsResponseSelectionConditionsV3'
+      - $ref: '#/components/schemas/ProfileTargetsResponseRangeConditionsV3'
+      - $ref: '#/components/schemas/ProfileTargetsResponseOpenEndedConditionsV3'
+    ProjectID:
+      description: The character string representing a unique project ID (ULID format).
+      type: string
+      pattern: ^[0-9A-Z]{26}$
+      example: 01BTGNYV6HRNK8K8VKZASZCFP0
+    ProfileTargetsResponseOpenEndedConditionsV3:
+      oneOf:
+      - title: Allow All Values
+        description: If `allow_all_values` is true, `open_ended_values` must be null.
+        type: object
+        properties:
+          object:
+            type: string
+            description: Object field to distinguish between different types of control selections.  Always is `open_ended`.
+            enum:
+            - open_ended
+            example: open_ended
+          question_id:
+            $ref: '#/components/schemas/QuestionID'
+          allow_all_values:
+            type: boolean
+            enum:
+            - true
+            description: Flag to allow all values.
+          open_ended_values:
+            type: array
+            minItems: 0
+            maxItems: 0
+            items:
+              type: string
+            nullable: true
+            description: Must be null when `allow_all_values` is true.
+          condition_name:
+            type: string
+            description: The name of the condition. This field will be present if the condition is part of a blended or grouped target.
+            example: Open Ended 1
+          condition_name_translated:
+            type: string
+            description: The name of the condition translated (when appropriate and available). This field will be present if the condition is part of a blended or grouped target.
+            example: Open Ended 1
+        required:
+        - object
+        - question_id
+        - allow_all_values
+        - open_ended_values
+      - title: Specific Open End Values
+        description: If `allow_all_values` is false, `open_ended_values` must contain at least one open end value.
+        type: object
+        properties:
+          object:
+            type: string
+            description: Object field to distinguish between different types of control selections.  Always is `open_ended`.
+            enum:
+            - open_ended
+            example: open_ended
+          question_id:
+            $ref: '#/components/schemas/QuestionID'
+          allow_all_values:
+            type: boolean
+            enum:
+            - false
+            description: Flag to allow only specific open end values.
+          open_ended_values:
+            type: array
+            items:
+              type: string
+            minItems: 1
+            maxItems: 10000
+            description: List of applicable open end values. Required when `allow_all_values` is false. Note that only 10,000 values may be provided. For more than 10,000, please reach out to your integration consultant.
+          condition_name:
+            type: string
+            description: The name of the condition. This field will be present if the condition is part of a blended or grouped target.
+            example: Open Ended 1
+          condition_name_translated:
+            type: string
+            description: The name of the condition translated (when appropriate and available). This field will be present if the condition is part of a blended or grouped target.
+            example: Open Ended 1
+        required:
+        - object
+        - question_id
+        - allow_all_values
+        - open_ended_values
+      example:
+        object: open_ended
+        question_id: 45
+        open_ended_values: []
+        allow_all_values: true
+        condition_name: Open Ended Values
+        condition_name_translated: Open Ended Values Translated
+    InterlockProfileConditionsV3:
+      description: A polymorphic object representing a single profiling condition, which can be a `selection`, `range`, or `open_ended` type.
+      oneOf:
+      - $ref: '#/components/schemas/ProfileTargetsSelectionConditionsV3'
+      - $ref: '#/components/schemas/ProfileTargetsRangeConditionsV3'
+      - $ref: '#/components/schemas/ProfileTargetsOpenEndedConditionsV3'
+    Tracestate:
+      type: string
+      description: 'The tracestate header provides additional contextual information to the traceparent header.  This enriches the tracing context and offers more fine-grained control
+
+        Note: This field is optional and will be automatically generated by the service if not provided in the request.  The generated value will be included in the response header.'
+      example: ot=foo:bar;k1:13
+    IsSyntheticTraffic:
+      type: boolean
+      default: false
+      description: Boolean value representing whether request is the product of synthetic traffic. By default, set to false.
+    RequestDraftRegularProfileV3:
+      oneOf:
+      - title: Regular Profile
+        type: object
+        required:
+        - object
+        - quotas_enabled
+        - targets
+        properties:
+          object:
+            type: string
+            description: 'Object field to distinguish the operation.
+
+              '
+            enum:
+            - regular
+            example: regular
+          name:
+            type: string
+            description: "The name of the regular profile. \n"
+            example: SF_YoungAge
+          quotas_enabled:
+            type: boolean
+            description: Flag indicating if quotas are enabled.
+            example: true
+          targets:
+            $ref: '#/components/schemas/RequestDraftQuotaV3'
+      - title: Blended Profile
+        type: object
+        required:
+        - object
+        - name
+        - quotas_enabled
+        - targets
+        properties:
+          object:
+            type: string
+            description: 'Object field to distinguish the operation.
+
+              '
+            enum:
+            - blended
+            example: blended
+          blended_type:
+            type: string
+            description: The blended_type field defines the functional behavior of the blended profile as either interlock or control. If omitted, the system defaults to interlock. This field distinguishes between profiles requiring a full matrix expansion (interlock) and those used for isolating specific demographic segments (control).
+            enum:
+            - interlock
+            - control
+            example: interlock
+          name:
+            type: string
+            description: The name of the profile.
+            example: SF_YoungAge
+          quotas_enabled:
+            type: boolean
+            description: Flag indicating if quotas are enabled.
+            example: true
+          targets:
+            $ref: '#/components/schemas/RequestDraftQuotaV3'
+    RequestDraftQuotaV3:
+      description: "A request targets block must be one of:\n  • a nominal target based on profile adjustement type (see RequestDraftGroupedQuotaNominalV3)\n  • a percentage target based on profile adjustment type (see RequestDraftGroupedQuotaV3)\n  • no target (empty object) should be in alignment with quota_enabled field as false.\n"
+      oneOf:
+      - title: Targets with nominal value in quota
+        type: array
+        minItems: 1
+        items:
+          $ref: '#/components/schemas/RequestDraftQuotaNominalV3'
+      - title: Targets with percentage value in quota
+        type: array
+        minItems: 1
+        items:
+          $ref: '#/components/schemas/RequestDraftQuotaPercentageV3'
+      - title: Targets with conditions and no quota
+        type: array
+        minItems: 1
+        items:
+          $ref: '#/components/schemas/RequestDraftNoQuotaV3'
+    ProfileTargetsSelectionConditionsV3:
+      title: Selection condition
+      type: object
+      description: A profiling condition that targets a specific answer option (e.g. gender).
+      required:
+      - object
+      - question_id
+      - option
+      properties:
+        object:
+          type: string
+          description: The type of profiling condition. For this object, the value is always 'selection'.
+          enum:
+          - selection
+          example: selection
+        question_id:
+          $ref: '#/components/schemas/QuestionID'
+        option:
+          type: string
+          description: The unique identifier for the selected answer option.
+          example: '1'
+    AccountID:
+      description: The account's unique identifier.
+      type: integer
+      format: int32
+      example: 101
+    ProfileTargetsOpenEndedConditionsV3:
+      title: Open-ended condition
+      description: A profiling condition that targets open-ended text values.
+      oneOf:
+      - title: Allow All Values
+        description: If `allow_all_values` is true, `open_ended_values` must be null.
+        type: object
+        properties:
+          object:
+            type: string
+            description: The type of profiling condition. For this object, the value is always 'open_ended'.
+            enum:
+            - open_ended
+            example: open_ended
+          question_id:
+            $ref: '#/components/schemas/QuestionID'
+          allow_all_values:
+            type: boolean
+            enum:
+            - true
+            description: Flag to allow all values.
+          open_ended_values:
+            type: array
+            minItems: 0
+            maxItems: 0
+            items:
+              type: string
+            nullable: true
+            description: Must be null when `allow_all_values` is true.
+        required:
+        - object
+        - question_id
+        - allow_all_values
+        - open_ended_values
+      - title: Specific Open End Values
+        description: If `allow_all_values` is false, `open_ended_values` must contain at least one open end value.
+        type: object
+        properties:
+          object:
+            type: string
+            description: Object field to distinguish between different types of control selections.  Always is `open_ended`.
+            enum:
+            - open_ended
+            example: open_ended
+          question_id:
+            $ref: '#/components/schemas/QuestionID'
+          allow_all_values:
+            type: boolean
+            enum:
+            - false
+            description: Flag to allow only specific open end values.
+          open_ended_values:
+            type: array
+            items:
+              type: string
+            minItems: 1
+            maxItems: 10000
+            description: List of applicable open end values. Required when `allow_all_values` is false. Note that only 10,000 values may be provided. For more than 10,000, please contact your integration consultant.
+        required:
+        - object
+        - question_id
+        - allow_all_values
+        - open_ended_values
+      example:
+        object: open_ended
+        question_id: 45
+        open_ended_values: []
+        allow_all_values: true
+  responses:
+    Error_NotFound:
+      description: A requested resource isn't found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            id: 7a5972ba-0825-4360-b852-fa2430e47034
+            object: not_found_error
+            detail: resource not found
+    Error_BadRequest_DemandAPI:
+      description: A request is not valid and can't be processed.
+      headers:
+        traceparent:
+          $ref: '#/components/headers/Traceparent'
+        tracestate:
+          $ref: '#/components/headers/Tracestate'
+        is-synthetic-traffic:
+          $ref: '#/components/headers/IsSyntheticTraffic'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ClientErrorDemandAPI'
+    Error_Internal_DemandAPI:
+      description: A request failed due to an internal error.
+      headers:
+        traceparent:
+          $ref: '#/components/headers/Traceparent'
+        tracestate:
+          $ref: '#/components/headers/Tracestate'
+        is-synthetic-traffic:
+          $ref: '#/components/headers/IsSyntheticTraffic'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/InternalErrorDemandAPI'
+    Error_Forbidden:
+      description: A requested is forbidden.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            id: fe68cdd2-ee87-4dbf-8950-63c5cbca94c7
+            object: authorization_error
+            detail: you don't have the right permissions to perform this operation
+    Error_Unauthorized:
+      description: A request is unauthorized.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            id: 1dcf0f40-f0d1-4cf6-8c00-c3d019d32faf
+            object: authorization_error
+            detail: no valid authorization provided for this operation
+  headers:
+    IsSyntheticTraffic:
+      description: 'Boolean value representing whether request is the product of synthetic traffic. By default, set to false. '
+      schema:
+        $ref: '#/components/schemas/IsSyntheticTraffic'
+    Tracestate:
+      description: The `tracestate` header complements the `traceparent` header by carrying vendor-specific trace information. This allows different services to add their own data to a trace.
+      required: false
+      schema:
+        $ref: '#/components/schemas/Tracestate'
+    Traceparent:
+      description: The `traceparent` header carries the trace ID and parent span ID, as defined by the W3C Trace Context specification. It's used to trace a single request as it moves through multiple services.
+      required: false
+      schema:
+        $ref: '#/components/schemas/Traceparent'
+  parameters:
+    ProjectID:
+      name: project_id
+      description: A unique identifier for the project, in ULID format.
+      in: path
+      required: true
+      schema:
+        $ref: '#/components/schemas/ProjectID'
+    CintAPIVersion-2025-12-18:
+      name: Cint-API-Version
+      in: header
+      required: true
+      schema:
+        type: string
+        example: 2025-12-18
+      description: 'This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.
+
+        '
+    ProfileIDV2:
+      name: profile_id
+      description: The character string representing a unique profile ID (ULID format).
+      in: path
+      required: true
+      schema:
+        $ref: '#/components/schemas/ProfileIDV2'
+    TargetGroupID:
+      name: target_group_id
+      description: A unique identifier for the target group, in ULID format.
+      in: path
+      required: true
+      schema:
+        $ref: '#/components/schemas/TargetGroupID'
+    AccountID:
+      name: account_id
+      description: The account's unique identifier.
+      in: path
+      required: true
+      schema:
+        $ref: '#/components/schemas/AccountID'
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Bearer token used for authentication and authorization. See [Authentication Process](https://developer.cint.com/en/guides#authentication-process) documentation for more information.
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: API Key Authentication

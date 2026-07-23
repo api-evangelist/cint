@@ -1,0 +1,555 @@
+openapi: 3.0.3
+info:
+  title: Demand Accounts Respondent Unique Codes API
+  description: 'Cint''s demand ordering API is REST oriented. It has predictable resource based URLs, accepts JSON-encoded request bodies, returns JSON-encoded responses, and uses standard HTTP response codes, authentication, and verbs. Error responses are also JSON-encoded and follow a standard format, providing a unique error ID and detailed information about what went wrong.
+
+
+    Authentication is handled via bearer tokens passed in the `Authorization` header. All requests must also include a `Cint-API-Version` header with a date in `YYYY-MM-DD` format to specify the desired API version. Depending on the version you use, endpoint behavior may differ as we improve our API with every version release.
+
+
+    While many operations work on a single object per request, the demand ordering API also provides asynchronous batch endpoints for performing bulk updates efficiently on certain resources. For safety, `POST` requests support an `Idempotency-Key` header to allow for safe retries without accidentally performing the same operation twice.
+
+    '
+  version: '2025-12-18'
+servers:
+- description: Production server
+  url: https://api.cint.com/v1
+security:
+- BearerAuth: []
+tags:
+- name: Respondent Unique Codes
+  description: Allows you to insert respondent unique code(s) into the survey URL for each respondent entering the session.
+paths:
+  /demand/accounts/{account_id}/target-groups/{target_group_id}/respondent-unique-codes/live:
+    post:
+      operationId: upload_live_respondent_unique_codes
+      summary: Upload live respondent unique codes
+      description: "Uploads a batch of respondent unique codes for a target group. These codes are inserted into the **live URL** for each respondent who enters a survey session.\n\n:::note URL Setup Required\nBefore using this endpoint, you must set up your target group's live URL to include the `[%RESPONDENT_UNIQUE_CODE%]` placeholder.\n\n*Example live URL setup:*\n`https://example_live_url.com?id=[%RESPONDENT_UNIQUE_CODE%]`\n:::\n\n### Processing Rules\n\n*   **Batch Size**: You can submit a minimum of 1 and a maximum of 20,000 codes in a single request.\n*   **Code Format**: Codes must be between 1 and 128 characters and contain only alphanumeric characters, hyphens (`-`), and underscores (`_`). Leading and trailing whitespace will be removed.\n*   **Uniqueness**: Only unique codes are processed.\n    *   If you include duplicates within a single batch, only the first occurrence is considered.\n    *   If you upload codes that already exist for this target group's live URL, they will be ignored.\n\n:::caution Feature Access\nThis feature must be enabled for your account. If it's not enabled, this endpoint will return a `403 Forbidden` error. Please contact your account manager for more information.\n:::\n"
+      parameters:
+      - $ref: '#/components/parameters/AccountID'
+      - $ref: '#/components/parameters/TargetGroupID'
+      - $ref: '#/components/parameters/CintAPIVersion-2025-12-18'
+      tags:
+      - Respondent Unique Codes
+      requestBody:
+        description: The list of live respondent unique codes to upload.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UploadLiveRespondentUniqueCodesRequest'
+            example:
+              respondent_unique_codes:
+              - abc-123-xyz-789
+              - def-456-uvw-123
+              - ghi-789-rst-456
+      responses:
+        '200':
+          description: Returns a summary of the upload operation, including the number of new codes that were successfully added. Codes that were duplicates or already existed are ignored and not counted.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UploadLiveRespondentUniqueCodesResponse'
+              example:
+                uploaded_count: 3
+        '400':
+          $ref: '#/components/responses/Error_BadRequest'
+        '401':
+          $ref: '#/components/responses/Error_Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error_Forbidden'
+        '404':
+          $ref: '#/components/responses/Error_NotFound'
+        '429':
+          $ref: '#/components/responses/Error_RateLimit'
+        '500':
+          $ref: '#/components/responses/Error_Internal'
+  /demand/accounts/{account_id}/target-groups/{target_group_id}/respondent-unique-codes/live/stats:
+    get:
+      operationId: get_live_respondent_unique_codes_stats
+      summary: Get live respondent unique code stats
+      description: 'This endpoint returns a summary of the usage for live respondent unique codes for a specific target group. The response includes the total number of codes stored and the count of those that remain unconsumed.
+
+
+        :::caution Feature Access
+
+        This feature must be enabled for your account. If it''s not enabled, this endpoint will return a `403 Forbidden` error. Please contact your account manager for more information.
+
+        :::
+
+        '
+      parameters:
+      - $ref: '#/components/parameters/AccountID'
+      - $ref: '#/components/parameters/TargetGroupID'
+      - $ref: '#/components/parameters/CintAPIVersion-2025-12-18'
+      tags:
+      - Respondent Unique Codes
+      responses:
+        '200':
+          description: Returns the total and unconsumed counts of live respondent unique codes.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetLiveRespondentUniqueCodesStatsResponse'
+              example:
+                total_count: 1500
+                unconsumed_count: 850
+        '400':
+          $ref: '#/components/responses/Error_BadRequest'
+        '401':
+          $ref: '#/components/responses/Error_Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error_Forbidden'
+        '404':
+          $ref: '#/components/responses/Error_NotFound'
+        '429':
+          $ref: '#/components/responses/Error_RateLimit'
+        '500':
+          $ref: '#/components/responses/Error_Internal'
+  /demand/accounts/{account_id}/target-groups/{target_group_id}/respondent-unique-codes/live/unconsumed:
+    parameters:
+    - $ref: '#/components/parameters/CintAPIVersion-2025-12-18'
+    delete:
+      operationId: delete_unconsumed_live_respondent_unique_codes
+      summary: Delete all unconsumed live respondent unique codes
+      description: 'This endpoint permanently deletes all unconsumed **live** respondent unique codes for a specific target group.
+
+
+        :::danger Destructive Action
+
+        This action can potentially pause the target group if it''s currently live and runs out of codes. This operation cannot be undone.
+
+        :::
+
+
+        :::caution Feature Access
+
+        This feature must be enabled for your account. If it''s not enabled, this endpoint will return a `403 Forbidden` error. Please contact your account manager for more information.
+
+        :::
+
+        '
+      parameters:
+      - $ref: '#/components/parameters/AccountID'
+      - $ref: '#/components/parameters/TargetGroupID'
+      tags:
+      - Respondent Unique Codes
+      responses:
+        '204':
+          description: Confirms that all unconsumed live respondent unique codes were deleted successfully.
+        '400':
+          $ref: '#/components/responses/Error_BadRequest'
+        '401':
+          $ref: '#/components/responses/Error_Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error_Forbidden'
+        '404':
+          $ref: '#/components/responses/Error_NotFound'
+        '429':
+          $ref: '#/components/responses/Error_RateLimit'
+        '500':
+          $ref: '#/components/responses/Error_Internal'
+  /demand/accounts/{account_id}/target-groups/{target_group_id}/respondent-unique-codes/test:
+    parameters:
+    - $ref: '#/components/parameters/CintAPIVersion-2025-12-18'
+    post:
+      operationId: upload_test_respondent_unique_codes
+      summary: Upload test respondent unique codes
+      description: "Uploads a batch of respondent unique codes for a target group. These codes are inserted into the **test URL** for each respondent who enters a survey session for testing purposes.\n\n:::note URL Setup Required\nBefore using this endpoint, you must set up your target group's test URL to include the `[%RESPONDENT_UNIQUE_CODE%]` placeholder.\n\n*Example test URL setup:*\n`https://example_test_url.com?id=[%RESPONDENT_UNIQUE_CODE%]`\n:::\n\n### Processing Rules\n\n*   **Batch Size**: You can submit a minimum of 1 and a maximum of 20,000 codes in a single request.\n*   **Code Format**: Codes must be between 1 and 128 characters and contain only alphanumeric characters, hyphens (`-`), and underscores (`_`). Leading and trailing whitespace will be removed.\n*   **Uniqueness**: Only unique codes are processed.\n    *   If you include duplicates within a single batch, only the first occurrence is considered.\n    *   If you upload codes that already exist for this target group's test URL, they will be ignored.\n\n:::caution Feature Access\nThis feature must be enabled for your account. If it's not enabled, this endpoint will return a `403 Forbidden` error. Please contact your account manager for more information.\n:::\n"
+      parameters:
+      - $ref: '#/components/parameters/AccountID'
+      - $ref: '#/components/parameters/TargetGroupID'
+      tags:
+      - Respondent Unique Codes
+      requestBody:
+        description: The request body for uploading test respondent unique codes.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UploadTestRespondentUniqueCodesRequest'
+            example:
+              respondent_unique_codes:
+              - test-code-alpha-001
+              - test-code-beta-002
+              - test-code-gamma-003
+      responses:
+        '200':
+          description: Returns a summary of the upload operation, including the number of new codes that were successfully added. Codes that were duplicates or already existed are ignored and not counted.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UploadTestRespondentUniqueCodesResponse'
+              example:
+                uploaded_count: 3
+        '400':
+          $ref: '#/components/responses/Error_BadRequest'
+        '401':
+          $ref: '#/components/responses/Error_Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error_Forbidden'
+        '404':
+          $ref: '#/components/responses/Error_NotFound'
+        '429':
+          $ref: '#/components/responses/Error_RateLimit'
+        '500':
+          $ref: '#/components/responses/Error_Internal'
+  /demand/accounts/{account_id}/target-groups/{target_group_id}/respondent-unique-codes/test/stats:
+    parameters:
+    - $ref: '#/components/parameters/CintAPIVersion-2025-12-18'
+    get:
+      operationId: get_test_respondent_unique_codes_stats
+      summary: Get test respondent unique code stats
+      description: 'This endpoint returns a summary of the usage for **test** respondent unique codes for a specific target group. The response includes the total number of codes stored and the count of those that remain unconsumed.
+
+
+        :::caution Feature Access
+
+        This feature must be enabled for your account. If it''s not enabled, this endpoint will return a `403 Forbidden` error. Please contact your account manager for more information.
+
+        :::
+
+        '
+      parameters:
+      - $ref: '#/components/parameters/AccountID'
+      - $ref: '#/components/parameters/TargetGroupID'
+      tags:
+      - Respondent Unique Codes
+      responses:
+        '200':
+          description: Returns the total and unconsumed counts of test respondent unique codes.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetTestRespondentUniqueCodesStatsResponse'
+              example:
+                total_count: 500
+                unconsumed_count: 450
+        '400':
+          $ref: '#/components/responses/Error_BadRequest'
+        '401':
+          $ref: '#/components/responses/Error_Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error_Forbidden'
+        '404':
+          $ref: '#/components/responses/Error_NotFound'
+        '429':
+          $ref: '#/components/responses/Error_RateLimit'
+        '500':
+          $ref: '#/components/responses/Error_Internal'
+  /demand/accounts/{account_id}/target-groups/{target_group_id}/respondent-unique-codes/test/unconsumed:
+    parameters:
+    - $ref: '#/components/parameters/CintAPIVersion-2025-12-18'
+    delete:
+      operationId: delete_unconsumed_test_respondent_unique_codes
+      summary: Delete all unconsumed test respondent unique codes
+      description: 'This endpoint permanently deletes all unconsumed **test** respondent unique codes for a specific target group. These are the codes associated with the test URL that were previously added via the upload endpoint.
+
+
+        :::caution Feature Access
+
+        This feature must be enabled for your account. If it''s not enabled, this endpoint will return a `403 Forbidden` error. Please contact your account manager for more information.
+
+        :::
+
+        '
+      parameters:
+      - $ref: '#/components/parameters/AccountID'
+      - $ref: '#/components/parameters/TargetGroupID'
+      tags:
+      - Respondent Unique Codes
+      responses:
+        '204':
+          description: Confirms that all unconsumed test respondent unique codes were deleted successfully.
+        '400':
+          $ref: '#/components/responses/Error_BadRequest'
+        '401':
+          $ref: '#/components/responses/Error_Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error_Forbidden'
+        '404':
+          $ref: '#/components/responses/Error_NotFound'
+        '429':
+          $ref: '#/components/responses/Error_RateLimit'
+        '500':
+          $ref: '#/components/responses/Error_Internal'
+components:
+  schemas:
+    UploadTestRespondentUniqueCodesResponse:
+      type: object
+      required:
+      - uploaded_count
+      properties:
+        uploaded_count:
+          type: integer
+          minimum: 0
+          maximum: 20000
+          description: The number of respondent unique codes that were newly uploaded.
+          example: 1000
+    GetLiveRespondentUniqueCodesStatsResponse:
+      type: object
+      required:
+      - total_count
+      - unconsumed_count
+      properties:
+        total_count:
+          type: integer
+          minimum: 0
+          description: The total number of respondent unique codes in the target group.
+          example: 1000
+        unconsumed_count:
+          type: integer
+          minimum: 0
+          description: The count of respondent unique codes that have not yet been consumed.
+          example: 32
+    InvalidParam:
+      type: object
+      description: Describes a single invalid parameter in a request.
+      properties:
+        name:
+          type: string
+          description: The name of the parameter that failed validation.
+        reason:
+          type: string
+          description: A short explanation of why the parameter was invalid.
+      required:
+      - name
+      - reason
+    TargetGroupID:
+      description: A unique identifier for the target group, in ULID format.
+      type: string
+      pattern: ^[0-9A-Z]{26}$
+      example: 01BTGNYV6HRNK8K8VKZASZCFP1
+    Traceparent:
+      type: string
+      description: 'The traceparent header carries essential trace context information. This includes the trace ID and parent span ID  as defined by the W3C trace context specification. It is used to pinpoint the position of an incoming request within  the trace graph, facilitating the tracking of distributed operations.
+
+        Note: This field is optional and will be automatically generated by the service if not provided in the request.  The generated value will be included in the response header.'
+      example: 00-0af7651916cd43dd8448eb211c80319c-b7ad6b7169203331-01
+    UploadTestRespondentUniqueCodesRequest:
+      type: object
+      required:
+      - respondent_unique_codes
+      properties:
+        respondent_unique_codes:
+          type: array
+          minItems: 1
+          maxItems: 20000
+          description: A list of unique codes to upload for the target group.
+          items:
+            type: string
+            minLength: 1
+            maxLength: 128
+            description: A unique code, between 1 and 128 characters.
+            example: respondent-unique-code-12345
+          example:
+          - respondent-unique-code-12345
+          - respondent-unique-code-67890
+          - respondent-unique-code-ABCDE
+    Error:
+      type: object
+      description: The standard error object returned for all failed API requests.
+      required:
+      - object
+      - detail
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: A unique identifier for this specific error instance.
+        object:
+          type: string
+          description: A short informative string identifying the type of the error
+          pattern: ^([a-z]*_)*([a-z]*)$
+        detail:
+          type: string
+          description: An error message provides a concise overview of the cause of the error.
+        invalid_params:
+          type: array
+          nullable: true
+          description: An optional field containing a list of invalid parameters may be presented in validation errors for additional information.
+          items:
+            $ref: '#/components/schemas/InvalidParam'
+    UploadLiveRespondentUniqueCodesRequest:
+      type: object
+      required:
+      - respondent_unique_codes
+      properties:
+        respondent_unique_codes:
+          type: array
+          minItems: 1
+          maxItems: 20000
+          description: A list of unique codes to upload for the target group.
+          items:
+            type: string
+            minLength: 1
+            maxLength: 128
+            description: A respondent unique code to be uploaded.
+            example: respondent-unique-code-12345
+          example:
+          - respondent-unique-code-12345
+          - respondent-unique-code-67890
+          - respondent-unique-code-ABCDE
+    Tracestate:
+      type: string
+      description: 'The tracestate header provides additional contextual information to the traceparent header.  This enriches the tracing context and offers more fine-grained control
+
+        Note: This field is optional and will be automatically generated by the service if not provided in the request.  The generated value will be included in the response header.'
+      example: ot=foo:bar;k1:13
+    UploadLiveRespondentUniqueCodesResponse:
+      type: object
+      required:
+      - uploaded_count
+      properties:
+        uploaded_count:
+          type: integer
+          minimum: 0
+          maximum: 20000
+          description: The number of respondent unique codes that were newly uploaded.
+          example: 1000
+    AccountID:
+      description: The account's unique identifier.
+      type: integer
+      format: int32
+      example: 101
+    GetTestRespondentUniqueCodesStatsResponse:
+      type: object
+      required:
+      - total_count
+      - unconsumed_count
+      properties:
+        total_count:
+          type: integer
+          minimum: 0
+          description: The total number of respondent unique codes in the target group.
+          example: 1000
+        unconsumed_count:
+          type: integer
+          minimum: 0
+          description: The count of respondent unique codes that have not yet been consumed.
+          example: 32
+    TooManyRequestsProblemDetails:
+      type: object
+      title: Too many requests problem details
+      description: The error payload returned when the rate limit has been exceeded.
+      required:
+      - object
+      - details
+      properties:
+        object:
+          type: string
+          description: A machine-readable string identifying the type of error.
+          enum:
+          - too_many_requests_problem_details
+        details:
+          type: string
+          description: A human-readable message explaining that the rate limit was exceeded.
+  responses:
+    Error_NotFound:
+      description: A requested resource isn't found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            id: 7a5972ba-0825-4360-b852-fa2430e47034
+            object: not_found_error
+            detail: resource not found
+    Error_Internal:
+      description: A request failed due to an internal error.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            id: d94b8bb2-a540-4a91-9c05-2aa3ae9a5e1e
+            object: unexpected_internal_error
+            detail: an internal error has led to the failure of this operation
+    Error_RateLimit:
+      description: The request was rate limited. Please retry after the specified delay.
+      headers:
+        traceparent:
+          description: The `traceparent` header carries the trace ID and parent span ID, as defined by the W3C Trace Context specification. It's used to trace a single request as it moves through multiple services.
+          required: false
+          schema:
+            $ref: '#/components/schemas/Traceparent'
+        tracestate:
+          description: The `tracestate` header complements the `traceparent` header by carrying vendor-specific trace information. This allows different services to add their own data to a trace.
+          required: false
+          schema:
+            $ref: '#/components/schemas/Tracestate'
+        retry-After:
+          description: The number of seconds to wait before making a follow-up request.
+          schema:
+            type: integer
+            format: int32
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/TooManyRequestsProblemDetails'
+    Error_Forbidden:
+      description: A requested is forbidden.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            id: fe68cdd2-ee87-4dbf-8950-63c5cbca94c7
+            object: authorization_error
+            detail: you don't have the right permissions to perform this operation
+    Error_Unauthorized:
+      description: A request is unauthorized.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            id: 1dcf0f40-f0d1-4cf6-8c00-c3d019d32faf
+            object: authorization_error
+            detail: no valid authorization provided for this operation
+    Error_BadRequest:
+      description: A request is not valid and can't be processed.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            id: 9e278238-d011-4e05-8327-1ce1d5d26254
+            object: bad_request_error
+            detail: Expected field 'foo' is missing.
+  parameters:
+    CintAPIVersion-2025-12-18:
+      name: Cint-API-Version
+      in: header
+      required: true
+      schema:
+        type: string
+        example: 2025-12-18
+      description: 'This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.
+
+        '
+    TargetGroupID:
+      name: target_group_id
+      description: A unique identifier for the target group, in ULID format.
+      in: path
+      required: true
+      schema:
+        $ref: '#/components/schemas/TargetGroupID'
+    AccountID:
+      name: account_id
+      description: The account's unique identifier.
+      in: path
+      required: true
+      schema:
+        $ref: '#/components/schemas/AccountID'
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Bearer token used for authentication and authorization. See [Authentication Process](https://developer.cint.com/en/guides#authentication-process) documentation for more information.
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: API Key Authentication

@@ -1,0 +1,1286 @@
+openapi: 3.0.3
+info:
+  title: Demand Accounts Fielding API
+  description: 'Cint''s demand ordering API is REST oriented. It has predictable resource based URLs, accepts JSON-encoded request bodies, returns JSON-encoded responses, and uses standard HTTP response codes, authentication, and verbs. Error responses are also JSON-encoded and follow a standard format, providing a unique error ID and detailed information about what went wrong.
+
+
+    Authentication is handled via bearer tokens passed in the `Authorization` header. All requests must also include a `Cint-API-Version` header with a date in `YYYY-MM-DD` format to specify the desired API version. Depending on the version you use, endpoint behavior may differ as we improve our API with every version release.
+
+
+    While many operations work on a single object per request, the demand ordering API also provides asynchronous batch endpoints for performing bulk updates efficiently on certain resources. For safety, `POST` requests support an `Idempotency-Key` header to allow for safe retries without accidentally performing the same operation twice.
+
+    '
+  version: '2025-12-18'
+servers:
+- description: Production server
+  url: https://api.cint.com/v1
+security:
+- BearerAuth: []
+tags:
+- name: Fielding
+  description: Create, update and obtain Target Group Fielding runs and Fielding Assistant assignments. This is critical for launching, scheduling and completing Target Groups.
+paths:
+  /demand/accounts/{account_id}/projects/{project_id}/target-groups/{target_group_id}/fielding-run-jobs/launch-from-draft:
+    parameters:
+    - $ref: '#/components/parameters/CintAPIVersion-2025-12-18'
+    post:
+      summary: Job to launch a draft target group
+      description: 'Creates an asynchronous job to launch a `draft` target group, setting its status to `live`.
+
+
+        A `201 Created` response indicates that the job was successfully created, not that the target group is live.
+
+        To check the outcome, you must poll the job status URL returned in the `Location` header.
+
+        You can find the details for the status endpoint here: [Get launch job status](./get-launch-fielding-run-from-draft-job).
+
+        '
+      operationId: create_launch_fielding_run_from_draft_job
+      parameters:
+      - $ref: '#/components/parameters/IdempotencyKeyRequired'
+      - $ref: '#/components/parameters/AccountID'
+      - $ref: '#/components/parameters/ProjectID'
+      - $ref: '#/components/parameters/TargetGroupID'
+      requestBody:
+        description: The desired end date for the fielding run.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateLaunchFieldingRunFromDraftJobRequest'
+            example:
+              end_fielding_at: '2024-12-31T23:59:59.000Z'
+      tags:
+      - Fielding
+      responses:
+        '201':
+          description: The job was created successfully. Poll the URL in the `Location` header to track its status.
+          headers:
+            traceparent:
+              $ref: '#/components/headers/Traceparent'
+            tracestate:
+              $ref: '#/components/headers/Tracestate'
+            location:
+              $ref: '#/components/headers/Location'
+              example: /demand/accounts/101/projects/01BTGNYV6HRNK8K8VKZASZCFP0/target-groups/01BTGNYV6HRNK8K8VKZASZCFP1/fielding-run-jobs/launch-from-draft/01BTGNYV6HRNK8K8VKZASZCFP1
+        '400':
+          $ref: '#/components/responses/Error_BadRequest'
+        '401':
+          $ref: '#/components/responses/Error_Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error_Forbidden'
+        '429':
+          $ref: '#/components/responses/Error_RateLimit'
+        '500':
+          $ref: '#/components/responses/Error_Internal'
+  ? /demand/accounts/{account_id}/projects/{project_id}/target-groups/{target_group_id}/fielding-run-jobs/launch-from-draft/{job_id}
+  : parameters:
+    - $ref: '#/components/parameters/CintAPIVersion-2025-12-18'
+    get:
+      summary: Retrieves a "launch from draft" job status
+      description: 'Retrieves the status and results of a "launch from draft" job.
+
+
+        You should poll this endpoint periodically until the `status` field is either `Completed` or `Failed`.
+
+
+        * If the status is `Completed`, the `created_fielding_run_id` field will contain the ID of the new fielding run.
+
+        * If the status is `Failed`, the `failure_reason` object will provide details about the error.
+
+        '
+      operationId: get_launch_fielding_run_from_draft_job
+      parameters:
+      - $ref: '#/components/parameters/AccountID'
+      - $ref: '#/components/parameters/ProjectID'
+      - $ref: '#/components/parameters/TargetGroupID'
+      - $ref: '#/components/parameters/JobID'
+      tags:
+      - Fielding
+      responses:
+        '200':
+          description: The "launch from draft" job details were retrieved successfully.
+          headers:
+            traceparent:
+              $ref: '#/components/headers/Traceparent'
+            tracestate:
+              $ref: '#/components/headers/Tracestate'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetLaunchFieldingRunFromDraftJobResponse'
+              examples:
+                completed:
+                  summary: Completed
+                  description: A successfully completed launch job
+                  value:
+                    job_id: 01BTGNYV6HRNK8K8VKZASZCFP1
+                    created_fielding_run_id: 01BTGNYV6HRNK8K8VKZASZCFP2
+                    created_at: '2023-01-01T23:00:00.000Z'
+                    created_by: b551326b-ac9d-4d32-8823-4f025787dab9
+                    status: Completed
+                    failure_reason: null
+                    job_trace_id: null
+                failed:
+                  summary: Failed
+                  description: A failed launch job with error details
+                  value:
+                    job_id: 01BTGNYV6HRNK8K8VKZASZCFP1
+                    created_fielding_run_id: null
+                    created_at: '2023-01-01T23:00:00.000Z'
+                    created_by: b551326b-ac9d-4d32-8823-4f025787dab9
+                    status: Failed
+                    failure_reason:
+                      code: TargetGroupInvalidState
+                      description: The target group is not in a draft state and cannot be launched.
+                    job_trace_id: 0af7651916cd43dd8448eb211c80319c
+        '400':
+          $ref: '#/components/responses/Error_BadRequest'
+        '401':
+          $ref: '#/components/responses/Error_Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error_Forbidden'
+        '404':
+          $ref: '#/components/responses/Error_NotFound'
+        '429':
+          $ref: '#/components/responses/Error_RateLimit'
+        '500':
+          $ref: '#/components/responses/Error_Internal'
+  /demand/accounts/{account_id}/projects/{project_id}/target-groups/{target_group_id}/fielding-run-jobs/schedule-from-draft:
+    parameters:
+    - $ref: '#/components/parameters/CintAPIVersion-2025-12-18'
+    post:
+      summary: Schedules a draft target group to go live
+      description: 'Creates an asynchronous job to schedule a `draft` target group, setting its status to `scheduled`.
+
+
+        A `201 Created` response indicates that the job was successfully created, not that the target group is scheduled.
+
+        To check the outcome, you must poll the job status URL returned in the `Location` header.
+
+        You can find the details for the status endpoint here: [Get schedule job status](./get-schedule-fielding-run-from-draft-job).
+
+        '
+      operationId: create_schedule_fielding_run_from_draft_job
+      parameters:
+      - $ref: '#/components/parameters/IdempotencyKeyRequired'
+      - $ref: '#/components/parameters/AccountID'
+      - $ref: '#/components/parameters/ProjectID'
+      - $ref: '#/components/parameters/TargetGroupID'
+      requestBody:
+        description: The desired start and end dates for the fielding run.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateScheduleFieldingRunFromDraftJobRequest'
+            example:
+              start_fielding_at: '2024-09-01T09:00:00.000Z'
+              end_fielding_at": '2024-09-30T23:59:59.000Z'
+      tags:
+      - Fielding
+      responses:
+        '201':
+          description: The job was created successfully. Poll the URL in the `Location` header to track its status.
+          headers:
+            traceparent:
+              $ref: '#/components/headers/Traceparent'
+            tracestate:
+              $ref: '#/components/headers/Tracestate'
+            location:
+              $ref: '#/components/headers/Location'
+              example: /demand/accounts/101/projects/01BTGNYV6HRNK8K8VKZASZCFP0/target-groups/01BTGNYV6HRNK8K8VKZASZCFP1/fielding-run-jobs/schedule-from-draft/01BTGNYV6HRNK8K8VKZASZCFP1
+        '400':
+          $ref: '#/components/responses/Error_BadRequest'
+        '401':
+          $ref: '#/components/responses/Error_Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error_Forbidden'
+        '429':
+          $ref: '#/components/responses/Error_RateLimit'
+        '500':
+          $ref: '#/components/responses/Error_Internal'
+  ? /demand/accounts/{account_id}/projects/{project_id}/target-groups/{target_group_id}/fielding-run-jobs/schedule-from-draft/{job_id}
+  : parameters:
+    - $ref: '#/components/parameters/CintAPIVersion-2025-12-18'
+    get:
+      summary: Retrieves a "schedule from draft" job status
+      description: 'Retrieves the status and results of a "schedule from draft" job.
+
+
+        You should poll this endpoint periodically until the `status` field is either `Completed` or `Failed`.
+
+        Once the job is finished, the `created_fielding_run_id` field will contain the ID of the created fielding run.
+
+        '
+      operationId: get_schedule_fielding_run_from_draft_job
+      parameters:
+      - $ref: '#/components/parameters/AccountID'
+      - $ref: '#/components/parameters/ProjectID'
+      - $ref: '#/components/parameters/TargetGroupID'
+      - $ref: '#/components/parameters/JobID'
+      tags:
+      - Fielding
+      responses:
+        '200':
+          description: The "schedule from draft" job details were retrieved successfully.
+          headers:
+            traceparent:
+              $ref: '#/components/headers/Traceparent'
+            tracestate:
+              $ref: '#/components/headers/Tracestate'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetScheduleFieldingRunFromDraftJobResponse'
+              examples:
+                completed:
+                  summary: Completed
+                  description: A successfully completed schedule job
+                  value:
+                    job_id: 01BTGNYV6HRNK8K8VKZASZCFP1
+                    created_fielding_run_id: 01BTGNYV6HRNK8K8VKZASZCFP2
+                    created_at: '2023-01-01T23:00:00.000Z'
+                    created_by: b551326b-ac9d-4d32-8823-4f025787dab9
+                    status: Completed
+                    failure_reason: null
+                    job_trace_id: null
+                failed:
+                  summary: Failed
+                  description: A failed schedule job with error details
+                  value:
+                    job_id: 01BTGNYV6HRNK8K8VKZASZCFP1
+                    created_fielding_run_id: null
+                    created_at: '2023-01-01T23:00:00.000Z'
+                    created_by: b551326b-ac9d-4d32-8823-4f025787dab9
+                    status: Failed
+                    failure_reason:
+                      code: InvalidFieldingDates
+                      description: The provided start time is in the past.
+                    job_trace_id: 0af7651916cd43dd8448eb211c80319c
+        '400':
+          $ref: '#/components/responses/Error_BadRequest'
+        '401':
+          $ref: '#/components/responses/Error_Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error_Forbidden'
+        '404':
+          $ref: '#/components/responses/Error_NotFound'
+        '429':
+          $ref: '#/components/responses/Error_RateLimit'
+        '500':
+          $ref: '#/components/responses/Error_Internal'
+  /demand/accounts/{account_id}/projects/{project_id}/target-groups/{target_group_id}/fielding-runs:
+    parameters:
+    - $ref: '#/components/parameters/AccountID'
+    - $ref: '#/components/parameters/ProjectID'
+    - $ref: '#/components/parameters/TargetGroupID'
+    - $ref: '#/components/parameters/CintAPIVersion-2025-12-18'
+    get:
+      summary: Lists the fielding runs for a target group
+      description: 'Lists the fielding runs associated with a target group.
+
+
+        A fielding run defines the time period during which a target group is live and collecting data.
+
+
+        **Note:** A target group can have at most one fielding run at any time.
+
+        Therefore, the `data` array in the response will contain either zero or one item, and the `has_more` flag will always be `false`.
+
+        '
+      operationId: get_fielding_runs_by_target_group_id
+      tags:
+      - Fielding
+      responses:
+        '200':
+          description: The fielding run details were retrieved successfully.
+          headers:
+            traceparent:
+              $ref: '#/components/headers/Traceparent'
+            tracestate:
+              $ref: '#/components/headers/Tracestate'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetListFieldingRunsResponse'
+              example:
+                data:
+                - id: 01BTGNYV6HRNK8K8VKZASZCFP1
+                  last_changed_at: '2023-01-01T23:00:00.000Z'
+                  last_changed_by: b551326b-ac9d-4d32-8823-4f025787dab9
+                  start_fielding_at: '2023-01-02T09:00:00.000Z'
+                  end_fielding_at: '2023-01-31T23:59:59.000Z'
+                  status: live
+                  version: 5
+                has_more: false
+        '400':
+          $ref: '#/components/responses/Error_BadRequest'
+        '401':
+          $ref: '#/components/responses/Error_Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error_Forbidden'
+        '404':
+          $ref: '#/components/responses/Error_NotFound'
+        '429':
+          $ref: '#/components/responses/Error_RateLimit'
+        '500':
+          $ref: '#/components/responses/Error_Internal'
+  /demand/accounts/{account_id}/projects/{project_id}/target-groups/{target_group_id}/fielding-runs/{fielding_run_id}:
+    parameters:
+    - $ref: '#/components/parameters/AccountID'
+    - $ref: '#/components/parameters/ProjectID'
+    - $ref: '#/components/parameters/TargetGroupID'
+    - $ref: '#/components/parameters/FieldingRunID'
+    - $ref: '#/components/parameters/CintAPIVersion-2025-12-18'
+    get:
+      summary: Retrieves a fielding run
+      description: Retrieves the details of a specific fielding run, including its start and end times, status, and version.
+      operationId: get_fielding_run
+      tags:
+      - Fielding
+      responses:
+        '200':
+          description: The fielding run details were retrieved successfully. Note the `ETag` header, which is required for making updates.
+          headers:
+            traceparent:
+              $ref: '#/components/headers/Traceparent'
+            tracestate:
+              $ref: '#/components/headers/Tracestate'
+            etag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetFieldingRunResponse'
+              example:
+                id: 01BTGNYV6HRNK8K8VKZASZCFP1
+                last_changed_at: '2023-01-01T23:00:00.000Z'
+                last_changed_by: b551326b-ac9d-4d32-8823-4f025787dab9
+                start_fielding_at: '2023-01-02T09:00:00.000Z'
+                end_fielding_at: '2023-01-31T23:59:59.000Z'
+                status: scheduled
+                version: 5
+        '400':
+          $ref: '#/components/responses/Error_BadRequest'
+        '401':
+          $ref: '#/components/responses/Error_Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error_Forbidden'
+        '404':
+          $ref: '#/components/responses/Error_NotFound'
+        '429':
+          $ref: '#/components/responses/Error_RateLimit'
+        '500':
+          $ref: '#/components/responses/Error_Internal'
+    put:
+      summary: Updates a fielding run
+      description: 'Updates the `start_fielding_at` and `end_fielding_at` dates for a specific fielding run.
+
+
+        This endpoint uses optimistic locking. You must provide the fielding run''s current version in the `If-Match` header.
+
+        You can get this value from the `ETag` header of a `GET` request for this resource.
+
+
+        Fielding runs can only be updated for target groups in either scheduled, live or paused status. The operation will fail if the target group status is `completed`.
+
+        '
+      operationId: update_fielding_run
+      parameters:
+      - $ref: '#/components/parameters/IfMatchRequired'
+      tags:
+      - Fielding
+      requestBody:
+        description: The fielding run update request.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateFieldingRunRequest'
+            example:
+              start_fielding_at: '2024-10-01T09:00:00.000Z'
+              end_fielding_at: '2024-10-31T23:59:59.000Z'
+      responses:
+        '202':
+          description: The request to update the fielding run was accepted successfully. The `ETag` header in the response contains the new version of the resource.
+          headers:
+            traceparent:
+              $ref: '#/components/headers/Traceparent'
+            tracestate:
+              $ref: '#/components/headers/Tracestate'
+            etag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateFieldingRunResponse'
+        '400':
+          $ref: '#/components/responses/Error_BadRequest'
+        '401':
+          $ref: '#/components/responses/Error_Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error_Forbidden'
+        '404':
+          $ref: '#/components/responses/Error_NotFound'
+        '412':
+          $ref: '#/components/responses/Precondition_Failed'
+        '422':
+          $ref: '#/components/responses/Error_InvalidState'
+        '429':
+          $ref: '#/components/responses/Error_RateLimit'
+        '500':
+          $ref: '#/components/responses/Error_Internal'
+  ? /demand/accounts/{account_id}/projects/{project_id}/target-groups/{target_group_id}/fielding-runs/{fielding_run_id}/complete
+  : parameters:
+    - $ref: '#/components/parameters/CintAPIVersion-2025-12-18'
+    post:
+      operationId: complete_fielding_run
+      summary: Completes a fielding run
+      description: 'Immediately completes a `live` or `scheduled` fielding run, setting its status to `completed`.
+
+
+        This action will close the target group to new respondents, regardless of whether its completes goal or end date has been reached.
+
+
+        This endpoint uses optimistic locking. You must provide the fielding run''s current version in the `If-Match` header.
+
+        You can get this value from the `ETag` header of a `GET` request for this resource.
+
+        '
+      parameters:
+      - $ref: '#/components/parameters/AccountID'
+      - $ref: '#/components/parameters/ProjectID'
+      - $ref: '#/components/parameters/TargetGroupID'
+      - $ref: '#/components/parameters/FieldingRunID'
+      - $ref: '#/components/parameters/IfMatchRequired'
+      tags:
+      - Fielding
+      requestBody:
+        description: An empty request body is required for this operation.
+        required: false
+        content: {}
+      responses:
+        '204':
+          description: The request to complete the fielding run was accepted successfully.
+          headers:
+            traceparent:
+              $ref: '#/components/headers/Traceparent'
+            tracestate:
+              $ref: '#/components/headers/Tracestate'
+            etag:
+              $ref: '#/components/headers/ETag'
+        '400':
+          $ref: '#/components/responses/Error_BadRequest'
+        '401':
+          $ref: '#/components/responses/Error_Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error_Forbidden'
+        '404':
+          $ref: '#/components/responses/Error_NotFound'
+        '412':
+          $ref: '#/components/responses/Precondition_Failed'
+        '422':
+          $ref: '#/components/responses/Error_InvalidState'
+        '429':
+          $ref: '#/components/responses/Error_RateLimit'
+        '500':
+          $ref: '#/components/responses/Error_Internal'
+  ? /demand/accounts/{account_id}/projects/{project_id}/target-groups/{target_group_id}/fielding-runs/{fielding_run_id}/launch-now
+  : parameters:
+    - $ref: '#/components/parameters/AccountID'
+    - $ref: '#/components/parameters/ProjectID'
+    - $ref: '#/components/parameters/TargetGroupID'
+    - $ref: '#/components/parameters/FieldingRunID'
+    - $ref: '#/components/parameters/CintAPIVersion-2025-12-18'
+    post:
+      operationId: launch_now_fielding_run
+      summary: Launches fielding run immediately
+      description: 'Immediately launches a `scheduled` fielding run, setting its status to `live`.
+
+
+        This action updates the `start_fielding_at` timestamp to the current time.
+
+        The `end_fielding_at` timestamp is also recalculated to preserve the original fielding duration.
+
+
+        This endpoint uses optimistic locking. You must provide the fielding run''s current version in the `If-Match` header.
+
+        You can get this value from the `ETag` header of a `GET` request for the resource.
+
+        '
+      parameters:
+      - $ref: '#/components/parameters/IfMatchRequired'
+      tags:
+      - Fielding
+      requestBody:
+        description: An empty request body is required for this operation.
+        required: false
+        content: {}
+      responses:
+        '200':
+          description: The fielding run was launched successfully. The response body contains the updated start and end times.
+          headers:
+            traceparent:
+              $ref: '#/components/headers/Traceparent'
+            tracestate:
+              $ref: '#/components/headers/Tracestate'
+            etag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LaunchNowFieldingRunResponse'
+              example:
+                start_fielding_at: '2024-08-01T10:00:00.000Z'
+                end_fielding_at: '2024-08-15T10:00:00.000Z'
+        '400':
+          $ref: '#/components/responses/Error_BadRequest'
+        '401':
+          $ref: '#/components/responses/Error_Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error_Forbidden'
+        '404':
+          $ref: '#/components/responses/Error_NotFound'
+        '412':
+          $ref: '#/components/responses/Precondition_Failed'
+        '422':
+          $ref: '#/components/responses/Error_InvalidState'
+        '429':
+          $ref: '#/components/responses/Error_RateLimit'
+        '500':
+          $ref: '#/components/responses/Error_Internal'
+  /demand/accounts/{account_id}/projects/{project_id}/target-groups/{target_group_id}/fielding-runs/{fielding_run_id}/pause:
+    parameters:
+    - $ref: '#/components/parameters/CintAPIVersion-2025-12-18'
+    post:
+      operationId: pause_fielding_run
+      summary: Pauses a fielding run
+      description: 'Pauses a `live` fielding run, setting its status to `paused`.
+
+
+        While a fielding run is paused, it will not collect new completes. You can set it `live` again using the `resume` endpoint.
+
+
+        This endpoint uses optimistic locking. You must provide the fielding run''s current version in the `If-Match` header.
+
+        You can get this value from the `ETag` header of a `GET` request for this resource.
+
+        '
+      parameters:
+      - $ref: '#/components/parameters/AccountID'
+      - $ref: '#/components/parameters/ProjectID'
+      - $ref: '#/components/parameters/TargetGroupID'
+      - $ref: '#/components/parameters/FieldingRunID'
+      - $ref: '#/components/parameters/IfMatchRequired'
+      tags:
+      - Fielding
+      requestBody:
+        description: An empty request body is required for this operation.
+        required: false
+        content: {}
+      responses:
+        '204':
+          description: The fielding run was paused successfully.
+          headers:
+            traceparent:
+              $ref: '#/components/headers/Traceparent'
+            tracestate:
+              $ref: '#/components/headers/Tracestate'
+            etag:
+              $ref: '#/components/headers/ETag'
+        '400':
+          $ref: '#/components/responses/Error_BadRequest'
+        '401':
+          $ref: '#/components/responses/Error_Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error_Forbidden'
+        '404':
+          $ref: '#/components/responses/Error_NotFound'
+        '412':
+          $ref: '#/components/responses/Precondition_Failed'
+        '422':
+          $ref: '#/components/responses/Error_InvalidState'
+        '429':
+          $ref: '#/components/responses/Error_RateLimit'
+        '500':
+          $ref: '#/components/responses/Error_Internal'
+  ? /demand/accounts/{account_id}/projects/{project_id}/target-groups/{target_group_id}/fielding-runs/{fielding_run_id}/relaunch
+  : parameters:
+    - $ref: '#/components/parameters/CintAPIVersion-2025-12-18'
+    post:
+      operationId: relaunch_fielding_run
+      summary: Relaunches a fielding run
+      description: 'Relaunches a `completed` fielding run, setting its status back to `live`.
+
+
+        Key behaviors:
+
+
+        * A fielding run will only be relaunched if its completes goal and end date have not yet been reached.
+
+        * This endpoint uses optimistic locking. You must provide the fielding run''s current version in the `If-Match` header.
+
+        You can get this value from the `ETag` header of a `GET` request for this resource.
+
+        '
+      parameters:
+      - $ref: '#/components/parameters/AccountID'
+      - $ref: '#/components/parameters/ProjectID'
+      - $ref: '#/components/parameters/TargetGroupID'
+      - $ref: '#/components/parameters/FieldingRunID'
+      - $ref: '#/components/parameters/IfMatchRequired'
+      tags:
+      - Fielding
+      requestBody:
+        description: An empty request body is required for this operation.
+        required: false
+        content: {}
+      responses:
+        '204':
+          description: The fielding run was relaunched successfully.
+          headers:
+            traceparent:
+              $ref: '#/components/headers/Traceparent'
+            tracestate:
+              $ref: '#/components/headers/Tracestate'
+            etag:
+              $ref: '#/components/headers/ETag'
+        '400':
+          $ref: '#/components/responses/Error_BadRequest'
+        '401':
+          $ref: '#/components/responses/Error_Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error_Forbidden'
+        '404':
+          $ref: '#/components/responses/Error_NotFound'
+        '412':
+          $ref: '#/components/responses/Precondition_Failed'
+        '422':
+          $ref: '#/components/responses/Error_InvalidState'
+        '429':
+          $ref: '#/components/responses/Error_RateLimit'
+        '500':
+          $ref: '#/components/responses/Error_Internal'
+  /demand/accounts/{account_id}/projects/{project_id}/target-groups/{target_group_id}/fielding-runs/{fielding_run_id}/resume:
+    parameters:
+    - $ref: '#/components/parameters/CintAPIVersion-2025-12-18'
+    post:
+      operationId: resume_fielding_run
+      summary: Resumes a fielding run
+      description: 'Resumes a `paused` fielding run, setting its status back to `live`.
+
+
+        Key behaviors:
+
+
+        * A fielding run will only be resumed if its completes goal and end date have not yet been reached.
+
+        * This endpoint uses optimistic locking. You must provide the fielding run''s current version in the `If-Match` header.
+
+        You can get this value from the `ETag` header of a `GET` request for this resource.
+
+        '
+      parameters:
+      - $ref: '#/components/parameters/AccountID'
+      - $ref: '#/components/parameters/ProjectID'
+      - $ref: '#/components/parameters/TargetGroupID'
+      - $ref: '#/components/parameters/FieldingRunID'
+      - $ref: '#/components/parameters/IfMatchRequired'
+      tags:
+      - Fielding
+      requestBody:
+        description: An empty request body is required for this operation.
+        required: false
+        content: {}
+      responses:
+        '204':
+          description: The fielding run was resumed successfully.
+          headers:
+            traceparent:
+              $ref: '#/components/headers/Traceparent'
+            tracestate:
+              $ref: '#/components/headers/Tracestate'
+            etag:
+              $ref: '#/components/headers/ETag'
+        '400':
+          $ref: '#/components/responses/Error_BadRequest'
+        '401':
+          $ref: '#/components/responses/Error_Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error_Forbidden'
+        '404':
+          $ref: '#/components/responses/Error_NotFound'
+        '412':
+          $ref: '#/components/responses/Precondition_Failed'
+        '422':
+          $ref: '#/components/responses/Error_InvalidState'
+        '429':
+          $ref: '#/components/responses/Error_RateLimit'
+        '500':
+          $ref: '#/components/responses/Error_Internal'
+components:
+  schemas:
+    JobID:
+      description: The character string representing a unique job ID.
+      type: string
+      example: 01BTGNYV6HRNK8K8VKZASZCFP1
+    CreateLaunchFieldingRunFromDraftJobRequest:
+      type: object
+      description: Request body for creating a `launch fielding run from draft` job.
+      properties:
+        end_fielding_at:
+          type: string
+          format: date-time
+          description: 'The timestamp the fielding run is scheduled to end at (RFC3339 UTC format, 3 fractional digits). '
+          example: '2023-01-01T23:00:00.000Z'
+      required:
+      - end_fielding_at
+    GetListFieldingRunsResponse:
+      type: object
+      description: List of fielding runs for a given target group id.
+      properties:
+        data:
+          type: array
+          description: 'An array containing the fielding run for the target group.
+
+            **Note:** A target group can have at most one fielding run, so this array will contain zero or one item.
+
+            '
+          items:
+            $ref: '#/components/schemas/FieldingRunItem'
+        has_more:
+          type: boolean
+          description: This field is always `false` as a target group can have at most one fielding run.
+          enum:
+          - false
+      required:
+      - data
+      - has_more
+    ETag:
+      type: string
+      description: The `ETag` header provides a unique identifier that represents the current version state of a particular resource.
+      example: W/"1234"
+    CreateScheduleFieldingRunFromDraftJobRequest:
+      type: object
+      description: Request body for creating a `schedule fielding run from draft` job.
+      properties:
+        start_fielding_at:
+          type: string
+          format: date-time
+          description: The timestamp the fielding run is scheduled to start at(RFC3339 UTC format, 3 fractional digits). The start time cannot be in the past.
+          example: '2023-01-01T23:00:00.000Z'
+        end_fielding_at:
+          type: string
+          format: date-time
+          description: 'The timestamp the fielding run is scheduled to end at (RFC3339 UTC format, 3 fractional digits).  The end time has to be after the starting time. '
+          example: '2023-01-31T23:59:59.000Z'
+      required:
+      - start_fielding_at
+      - end_fielding_at
+    UpdateFieldingRunResponse:
+      type: object
+      description: Response for updating a fielding run for a given target group id.
+      properties:
+        id:
+          $ref: '#/components/schemas/FieldingRunID'
+      required:
+      - id
+    GetFieldingRunResponse:
+      allOf:
+      - $ref: '#/components/schemas/FieldingRunItem'
+      - description: Fielding run details.
+    FieldingRunStatus:
+      description: The current status of a fielding run. A `scheduled` run will become `live` at its start time. A `live` run is actively collecting completes.
+      type: string
+      enum:
+      - scheduled
+      - live
+      - paused
+      - completed
+    InvalidParam:
+      type: object
+      description: Describes a single invalid parameter in a request.
+      properties:
+        name:
+          type: string
+          description: The name of the parameter that failed validation.
+        reason:
+          type: string
+          description: A short explanation of why the parameter was invalid.
+      required:
+      - name
+      - reason
+    GetScheduleFieldingRunFromDraftJobResponse:
+      type: object
+      description: Schedule fielding run from draft job details.
+      properties:
+        job_id:
+          $ref: '#/components/schemas/JobID'
+        created_fielding_run_id:
+          $ref: '#/components/schemas/FieldingRunID'
+        created_at:
+          type: string
+          format: date-time
+          description: The date and time when the job was created.
+          example: '2023-01-01T23:00:00.000Z'
+        created_by:
+          $ref: '#/components/schemas/UserID'
+          description: The ID of the user who created the job.
+        status:
+          $ref: '#/components/schemas/FieldingRunJobStatus'
+          description: The current status of the job. Poll this endpoint until the status is `Completed` or `Failed`.
+        failure_reason:
+          $ref: '#/components/schemas/FieldingRunJobFailureReason'
+          description: Details about the failure. This field will be `null` if the job is successful or still processing.
+        job_trace_id:
+          $ref: '#/components/schemas/JobTraceId'
+      required:
+      - job_id
+      - created_at
+      - created_by
+      - status
+    TargetGroupID:
+      description: A unique identifier for the target group, in ULID format.
+      type: string
+      pattern: ^[0-9A-Z]{26}$
+      example: 01BTGNYV6HRNK8K8VKZASZCFP1
+    Traceparent:
+      type: string
+      description: 'The traceparent header carries essential trace context information. This includes the trace ID and parent span ID  as defined by the W3C trace context specification. It is used to pinpoint the position of an incoming request within  the trace graph, facilitating the tracking of distributed operations.
+
+        Note: This field is optional and will be automatically generated by the service if not provided in the request.  The generated value will be included in the response header.'
+      example: 00-0af7651916cd43dd8448eb211c80319c-b7ad6b7169203331-01
+    FieldingRunItem:
+      type: object
+      description: The version of the fielding run. This value is used in the `If-Match` header for optimistic locking when making updates.
+      properties:
+        id:
+          $ref: '#/components/schemas/FieldingRunID'
+        last_changed_at:
+          type: string
+          format: date-time
+          example: '2023-01-01T23:00:00.000Z'
+        last_changed_by:
+          $ref: '#/components/schemas/UserID'
+        start_fielding_at:
+          type: string
+          format: date-time
+          example: '2023-01-01T23:00:00.000Z'
+        end_fielding_at:
+          type: string
+          format: date-time
+          example: '2023-01-31T23:59:59.000Z'
+        status:
+          $ref: '#/components/schemas/FieldingRunStatus'
+        version:
+          type: integer
+          description: Identifies a fielding run version
+          example: 5
+      required:
+      - id
+      - last_changed_at
+      - last_changed_by
+      - start_fielding_at
+      - end_fielding_at
+      - status
+      - version
+    UpdateFieldingRunRequest:
+      type: object
+      description: Request for updating a fielding run for a given target group id.
+      properties:
+        start_fielding_at:
+          type: string
+          format: date-time
+          description: The new start time for the fielding run, in RFC3339 UTC format. The start time cannot be in the past.
+          example: '2023-01-01T23:00:00.000Z'
+        end_fielding_at:
+          type: string
+          format: date-time
+          description: The new end time for the fielding run, in RFC3339 UTC format. The `end_fielding_at` time cannot be before the `start_fielding_at` time.
+          example: '2023-01-31T23:59:59.000Z'
+      required:
+      - start_fielding_at
+      - end_fielding_at
+    Error:
+      type: object
+      description: The standard error object returned for all failed API requests.
+      required:
+      - object
+      - detail
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: A unique identifier for this specific error instance.
+        object:
+          type: string
+          description: A short informative string identifying the type of the error
+          pattern: ^([a-z]*_)*([a-z]*)$
+        detail:
+          type: string
+          description: An error message provides a concise overview of the cause of the error.
+        invalid_params:
+          type: array
+          nullable: true
+          description: An optional field containing a list of invalid parameters may be presented in validation errors for additional information.
+          items:
+            $ref: '#/components/schemas/InvalidParam'
+    GetLaunchFieldingRunFromDraftJobResponse:
+      type: object
+      description: Launch fielding run from draft job details.
+      properties:
+        job_id:
+          $ref: '#/components/schemas/JobID'
+        created_fielding_run_id:
+          $ref: '#/components/schemas/FieldingRunID'
+        created_at:
+          type: string
+          format: date-time
+          description: The date and time when the job was created.
+          example: '2023-01-01T23:00:00.000Z'
+        created_by:
+          $ref: '#/components/schemas/UserID'
+          description: The ID of the user who created the job.
+        status:
+          $ref: '#/components/schemas/FieldingRunJobStatus'
+          description: The current status of the job. Poll this endpoint until the status is `Completed` or `Failed`.
+        failure_reason:
+          $ref: '#/components/schemas/FieldingRunJobFailureReason'
+          description: Details about the failure. This field will be `null` if the job is successful or still processing.
+        job_trace_id:
+          $ref: '#/components/schemas/JobTraceId'
+      required:
+      - job_id
+      - created_at
+      - created_by
+      - status
+    FieldingRunJobFailureReason:
+      type: object
+      description: Provides details about why a fielding run job failed.
+      required:
+      - code
+      - description
+      properties:
+        code:
+          type: string
+          example: TargetGroupNotFound
+        description:
+          type: string
+          example: Target group not found.
+        reasons:
+          type: array
+          description: Optional. Includes one or more detailed reason objects about the failure, when applicable.
+          items:
+            $ref: '#/components/schemas/FieldingRunJobFailureReasonDetail'
+    FieldingRunID:
+      description: A unique identifier for the fielding run.
+      type: string
+      example: 01BTGNYV6HRNK8K8VKZASZCFP1
+    ProjectID:
+      description: The character string representing a unique project ID (ULID format).
+      type: string
+      pattern: ^[0-9A-Z]{26}$
+      example: 01BTGNYV6HRNK8K8VKZASZCFP0
+    LaunchNowFieldingRunResponse:
+      type: object
+      description: Response for launching a fielding run now.
+      properties:
+        start_fielding_at:
+          type: string
+          format: date-time
+          description: The timestamp the fielding run is scheduled to start at(RFC3339 UTC format, 3 fractional digits).
+          example: '2023-01-01T23:00:00.000Z'
+        end_fielding_at:
+          type: string
+          format: date-time
+          description: 'The timestamp the fielding run is scheduled to end at (RFC3339 UTC format, 3 fractional digits). '
+          example: '2023-01-10T23:00:00.000Z'
+      required:
+      - start_fielding_at
+      - end_fielding_at
+    FieldingRunJobFailureReasonDetail:
+      type: object
+      description: Provides granular, machine-readable details for a single validation error.
+      properties:
+        name:
+          description: A machine-readable code for the specific validation error.
+          type: string
+          example: profile_validation_error_001
+        reason:
+          description: A machine-readable code providing more context about the validation error.
+          type: string
+          example: profile_condition_min_greater_than_max_001
+        detail:
+          description: A human-readable message with specific details about the validation error.
+          type: string
+          example: QuestionID - 1, Details - Min > Max - 50-40
+    Tracestate:
+      type: string
+      description: 'The tracestate header provides additional contextual information to the traceparent header.  This enriches the tracing context and offers more fine-grained control
+
+        Note: This field is optional and will be automatically generated by the service if not provided in the request.  The generated value will be included in the response header.'
+      example: ot=foo:bar;k1:13
+    UserID:
+      type: string
+      format: uuid
+      description: A unique identifier for the user.
+      example: b551326b-ac9d-4d32-8823-4f025787dab9
+    IdempotencyKey:
+      type: string
+      description: 'A shallow unique ID used as part of the deduplication mechanism for mutable operations.
+
+        We suggest using UUIDv4 or another random string with sufficient entropy to avoid collisions.'
+      maxLength: 255
+      example: 01BTGNYV6HRNK8K8VKZASZCFP0
+    AccountID:
+      description: The account's unique identifier.
+      type: integer
+      format: int32
+      example: 101
+    FieldingRunJobStatus:
+      description: The status of an asynchronous job. `Processing` indicates the job is still running. `Completed` or `Failed` are terminal states.
+      type: string
+      enum:
+      - Completed
+      - Failed
+      - Processing
+    JobTraceId:
+      type: string
+      description: The trace ID from the creation job request. Only present when the job status is 'Failed'. The trace ID as defined by the W3C trace context specification.
+      example: 0af7651916cd43dd8448eb211c80319c
+    TooManyRequestsProblemDetails:
+      type: object
+      title: Too many requests problem details
+      description: The error payload returned when the rate limit has been exceeded.
+      required:
+      - object
+      - details
+      properties:
+        object:
+          type: string
+          description: A machine-readable string identifying the type of error.
+          enum:
+          - too_many_requests_problem_details
+        details:
+          type: string
+          description: A human-readable message explaining that the rate limit was exceeded.
+  responses:
+    Error_NotFound:
+      description: A requested resource isn't found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            id: 7a5972ba-0825-4360-b852-fa2430e47034
+            object: not_found_error
+            detail: resource not found
+    Error_Internal:
+      description: A request failed due to an internal error.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            id: d94b8bb2-a540-4a91-9c05-2aa3ae9a5e1e
+            object: unexpected_internal_error
+            detail: an internal error has led to the failure of this operation
+    Error_RateLimit:
+      description: The request was rate limited. Please retry after the specified delay.
+      headers:
+        traceparent:
+          description: The `traceparent` header carries the trace ID and parent span ID, as defined by the W3C Trace Context specification. It's used to trace a single request as it moves through multiple services.
+          required: false
+          schema:
+            $ref: '#/components/schemas/Traceparent'
+        tracestate:
+          description: The `tracestate` header complements the `traceparent` header by carrying vendor-specific trace information. This allows different services to add their own data to a trace.
+          required: false
+          schema:
+            $ref: '#/components/schemas/Tracestate'
+        retry-After:
+          description: The number of seconds to wait before making a follow-up request.
+          schema:
+            type: integer
+            format: int32
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/TooManyRequestsProblemDetails'
+    Error_Forbidden:
+      description: A requested is forbidden.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            id: fe68cdd2-ee87-4dbf-8950-63c5cbca94c7
+            object: authorization_error
+            detail: you don't have the right permissions to perform this operation
+    Precondition_Failed:
+      description: The resource could not be modified because the ETag in the If-Match header does not match the current version. This means the resource was updated by another request after you retrieved it.
+      headers:
+        traceparent:
+          description: The `traceparent` header carries the trace ID and parent span ID, as defined by the W3C Trace Context specification. It's used to trace a single request as it moves through multiple services.
+          required: false
+          schema:
+            $ref: '#/components/schemas/Traceparent'
+        tracestate:
+          description: The `tracestate` header complements the `traceparent` header by carrying vendor-specific trace information. This allows different services to add their own data to a trace.
+          required: false
+          schema:
+            $ref: '#/components/schemas/Tracestate'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            id: 3d61d9c3-68ee-4026-b436-6e76a2b33932
+            object: precondition_failed_error
+            detail: The resource has been modified since you last retrieved it. Please fetch the latest version and try your request again.
+    Error_InvalidState:
+      description: A request failed due to invalid state of the entity
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            id: d94b8bb2-a540-4a91-9c05-2aa3ae9a5e1e
+            object: invalid_state_error
+            detail: The entity does not meet the required state.
+    Error_Unauthorized:
+      description: A request is unauthorized.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            id: 1dcf0f40-f0d1-4cf6-8c00-c3d019d32faf
+            object: authorization_error
+            detail: no valid authorization provided for this operation
+    Error_BadRequest:
+      description: A request is not valid and can't be processed.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            id: 9e278238-d011-4e05-8327-1ce1d5d26254
+            object: bad_request_error
+            detail: Expected field 'foo' is missing.
+  headers:
+    Location:
+      description: 'Contains the URL where a new resource can be found, often returned with a `201 Created` response. It follows the format defined in RFC 7231.
+
+        '
+      required: true
+      schema:
+        type: string
+        format: uri-reference
+        description: A reference to the resource's location. This can be a full URL, a relative path, or just the resource ID.
+        example:
+          full-url:
+            summary: A full URL to the resource
+            value: https://api.cint.com/demand/business-units
+          relative-path:
+            summary: A relative path to the resource
+            value: /demand/business-units
+          resource-id:
+            summary: A resource ID
+            value: fe666fcd-490c-4cb4-b4e0-2f86e15c27e6
+    ETag:
+      description: The `ETag` header provides a unique identifier that represents the current version of a resource. It's used for caching and to prevent concurrent modification issues.
+      required: true
+      schema:
+        $ref: '#/components/schemas/ETag'
+    Tracestate:
+      description: The `tracestate` header complements the `traceparent` header by carrying vendor-specific trace information. This allows different services to add their own data to a trace.
+      required: false
+      schema:
+        $ref: '#/components/schemas/Tracestate'
+    Traceparent:
+      description: The `traceparent` header carries the trace ID and parent span ID, as defined by the W3C Trace Context specification. It's used to trace a single request as it moves through multiple services.
+      required: false
+      schema:
+        $ref: '#/components/schemas/Traceparent'
+  parameters:
+    ProjectID:
+      name: project_id
+      description: A unique identifier for the project, in ULID format.
+      in: path
+      required: true
+      schema:
+        $ref: '#/components/schemas/ProjectID'
+    CintAPIVersion-2025-12-18:
+      name: Cint-API-Version
+      in: header
+      required: true
+      schema:
+        type: string
+        example: 2025-12-18
+      description: 'This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.
+
+        '
+    IdempotencyKeyRequired:
+      name: idempotency-key
+      in: header
+      required: true
+      description: A shallow unique ID used as part of the deduplication mechanism for mutable operations,  this header is required.
+      schema:
+        $ref: '#/components/schemas/IdempotencyKey'
+    FieldingRunID:
+      name: fielding_run_id
+      description: A unique identifier for the fielding run.
+      in: path
+      required: true
+      schema:
+        $ref: '#/components/schemas/FieldingRunID'
+    JobID:
+      name: job_id
+      description: The character string representing a unique job ID.
+      in: path
+      required: true
+      schema:
+        $ref: '#/components/schemas/JobID'
+    IfMatchRequired:
+      name: If-Match
+      required: true
+      description: 'The `ETag` value of the resource, used for optimistic locking.
+
+
+        Providing the ETag ensures you don''t accidentally overwrite changes made by another request.
+
+        You can get this value from the `ETag` header of a `GET` request for the resource.
+
+        '
+      in: header
+      schema:
+        type: string
+        format: etag
+        example: W/"1234"
+    TargetGroupID:
+      name: target_group_id
+      description: A unique identifier for the target group, in ULID format.
+      in: path
+      required: true
+      schema:
+        $ref: '#/components/schemas/TargetGroupID'
+    AccountID:
+      name: account_id
+      description: The account's unique identifier.
+      in: path
+      required: true
+      schema:
+        $ref: '#/components/schemas/AccountID'
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Bearer token used for authentication and authorization. See [Authentication Process](https://developer.cint.com/en/guides#authentication-process) documentation for more information.
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: API Key Authentication

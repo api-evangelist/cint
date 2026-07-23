@@ -1,0 +1,828 @@
+openapi: 3.0.3
+info:
+  title: Demand Accounts Notifications Webhooks API
+  description: 'Cint''s demand ordering API is REST oriented. It has predictable resource based URLs, accepts JSON-encoded request bodies, returns JSON-encoded responses, and uses standard HTTP response codes, authentication, and verbs. Error responses are also JSON-encoded and follow a standard format, providing a unique error ID and detailed information about what went wrong.
+
+
+    Authentication is handled via bearer tokens passed in the `Authorization` header. All requests must also include a `Cint-API-Version` header with a date in `YYYY-MM-DD` format to specify the desired API version. Depending on the version you use, endpoint behavior may differ as we improve our API with every version release.
+
+
+    While many operations work on a single object per request, the demand ordering API also provides asynchronous batch endpoints for performing bulk updates efficiently on certain resources. For safety, `POST` requests support an `Idempotency-Key` header to allow for safe retries without accidentally performing the same operation twice.
+
+    '
+  version: '2025-12-18'
+servers:
+- description: Production server
+  url: https://api.cint.com/v1
+security:
+- BearerAuth: []
+tags:
+- name: Notifications Webhooks
+  description: Endpoints for managing your Notifications Webhooks.
+paths:
+  /accounts/{account_id}/webhooks:
+    parameters:
+    - $ref: '#/components/parameters/AccountID'
+    - $ref: '#/components/parameters/CintAPIVersion-2025-12-18'
+    get:
+      tags:
+      - Notifications Webhooks
+      summary: Lists all webhooks for an account
+      operationId: get_webhooks
+      description: Lists all of the webhook subscriptions that have been configured for your account.
+      parameters:
+      - $ref: '#/components/parameters/PageSize'
+      - $ref: '#/components/parameters/StartAfter'
+      - $ref: '#/components/parameters/EndBefore'
+      responses:
+        '200':
+          description: A list of webhooks was retrieved successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebhooksList'
+              example:
+                webhooks:
+                - id: e8e705b9-ef5a-437c-873a-4f49a679f802
+                  url: https://example.com/target-group-updated-webhook
+                  events:
+                  - target-group-updated
+                  created_at: '2023-01-01T23:00:00.000Z'
+                  updated_at: '2023-01-01T23:00:00.000Z'
+                - id: 3fda1b8d-bf76-4f38-bddb-8734cbec553f
+                  url: https://example.com/quota-fill-registered-webhook
+                  events:
+                  - quota-fill-registered
+                  created_at: '2023-01-01T23:00:00.000Z'
+                  updated_at: '2023-01-01T23:00:00.000Z'
+                has_more: true
+        '400':
+          $ref: '#/components/responses/Error_BadRequest'
+        '401':
+          $ref: '#/components/responses/Error_Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error_Forbidden'
+        '500':
+          $ref: '#/components/responses/Error_Internal'
+    post:
+      tags:
+      - Notifications Webhooks
+      summary: Creates a new webhook for an account
+      operationId: create_webhook
+      description: Creates a new webhook subscription for an account. This allows your application to receive real-time notifications for specific events.
+      requestBody:
+        $ref: '#/components/requestBodies/WebhookCreate'
+      responses:
+        '201':
+          description: 'The webhook was created successfully.
+
+
+            **Important:** The `secret` is only returned on creation. You must store it securely, as you will need it to verify the signature of incoming webhook requests.
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebhookCreated'
+              example:
+                id: 01JPVZD75DW4KRP7MPFMF6KGZX
+                url: https://example.com/webhook
+                events:
+                - target-group-updated
+                secret: FP7UPZpATKBcYJj4va95PYud+a3gCidRERiLO+9MoFE=
+                created_at: '2023-01-01T23:00:00.000Z'
+                updated_at: '2023-01-01T23:00:00.000Z'
+        '400':
+          $ref: '#/components/responses/Error_BadRequest'
+        '401':
+          $ref: '#/components/responses/Error_Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error_Forbidden'
+        '500':
+          $ref: '#/components/responses/Error_Internal'
+  /accounts/{account_id}/webhooks/{webhook_id}:
+    parameters:
+    - $ref: '#/components/parameters/AccountID'
+    - $ref: '#/components/parameters/WebhookID'
+    - $ref: '#/components/parameters/CintAPIVersion-2025-12-18'
+    get:
+      tags:
+      - Notifications Webhooks
+      summary: Retrieves a webhook for an account
+      operationId: get_webhook
+      description: Retrieves the details of a specific webhook subscription. Note the `ETag` header in the response, which is required for making updates or deletions.
+      responses:
+        '200':
+          description: The webhook was retrieved successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Webhook'
+              example:
+                id: 01JPVZD75DW4KRP7MPFMF6KGZX
+                url: https://example.com/webhook
+                events:
+                - quota-fill-registered
+                created_at: '2023-01-01T23:00:00.000Z'
+                updated_at: '2023-01-01T23:00:00.000Z'
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+        '401':
+          $ref: '#/components/responses/Error_Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error_Forbidden'
+        '404':
+          $ref: '#/components/responses/Error_NotFound'
+        '500':
+          $ref: '#/components/responses/Error_Internal'
+    put:
+      tags:
+      - Notifications Webhooks
+      summary: Updates a webhook for an account
+      operationId: update_webhook
+      description: 'Updates the URL or the list of subscribed events for a webhook.
+
+
+        This endpoint uses optimistic locking. You must provide the webhook''s current version in the `If-Match` header.
+
+        You can get this value from the `ETag` header of a `GET` request for this resource.
+
+        '
+      parameters:
+      - $ref: '#/components/parameters/IfMatch'
+      requestBody:
+        $ref: '#/components/requestBodies/WebhookUpdate'
+      responses:
+        '200':
+          description: The webhook was updated successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Webhook'
+              example:
+                id: 01JPVZD75DW4KRP7MPFMF6KGZX
+                url: https://example.com/webhook
+                events:
+                - quota-fill-registered
+                created_at: '2023-01-01T23:00:00.000Z'
+                updated_at: '2023-01-01T23:00:00.000Z'
+          headers:
+            idempotency-key:
+              $ref: '#/components/headers/IdempotencyKey'
+        '400':
+          $ref: '#/components/responses/Error_BadRequest'
+        '401':
+          $ref: '#/components/responses/Error_Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error_Forbidden'
+        '500':
+          $ref: '#/components/responses/Error_Internal'
+    delete:
+      tags:
+      - Notifications Webhooks
+      summary: Deletes a webhook for an account
+      operationId: delete_webhook
+      description: 'Permanently deletes a webhook subscription.
+
+
+        This endpoint uses optimistic locking. You must provide the webhook''s current version in the `If-Match` header to confirm the deletion.
+
+        You can get this value from the `ETag` header of a `GET` request for this resource.
+
+        '
+      parameters:
+      - $ref: '#/components/parameters/IfMatch'
+      responses:
+        '204':
+          description: The webhook was deleted successfully.
+        '401':
+          $ref: '#/components/responses/Error_Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error_Forbidden'
+        '404':
+          $ref: '#/components/responses/Error_NotFound'
+        '500':
+          $ref: '#/components/responses/Error_Internal'
+  /accounts/{account_id}/webhooks/{webhook_id}/events-history:
+    parameters:
+    - $ref: '#/components/parameters/AccountID'
+    - $ref: '#/components/parameters/WebhookID'
+    - $ref: '#/components/parameters/WebhookEventsDeliveryStatuses'
+    - $ref: '#/components/parameters/WebhookEventsTypes'
+    - $ref: '#/components/parameters/WebhookEventsEndTime'
+    - $ref: '#/components/parameters/WebhookEventsStartTime'
+    - $ref: '#/components/parameters/WebhookEventsOrder'
+    - $ref: '#/components/parameters/PageSize'
+    - $ref: '#/components/parameters/StartAfter'
+    - $ref: '#/components/parameters/EndBefore'
+    - $ref: '#/components/parameters/CintAPIVersion-2025-12-18'
+    get:
+      tags:
+      - Notifications Webhooks
+      summary: Returns webhook events history for replay and debugging purposes
+      operationId: list_webhook_events_history
+      description: 'Returns webhook events history for replay and debugging purposes. Filter events by type, delivery status, and time range to analyze past webhook deliveries and replay failed events.
+
+        '
+      responses:
+        '200':
+          $ref: '#/components/responses/WebhookEventsHistory'
+        '400':
+          $ref: '#/components/responses/Error_BadRequest'
+        '401':
+          $ref: '#/components/responses/Error_Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error_Forbidden'
+        '404':
+          $ref: '#/components/responses/Error_NotFound'
+        '500':
+          $ref: '#/components/responses/Error_Internal'
+  /accounts/{account_id}/webhooks/{webhook_id}/regenerate-secret:
+    parameters:
+    - $ref: '#/components/parameters/AccountID'
+    - $ref: '#/components/parameters/WebhookID'
+    - $ref: '#/components/parameters/CintAPIVersion-2025-12-18'
+    post:
+      tags:
+      - Notifications Webhooks
+      summary: Regenerates the secret for a webhook
+      operationId: regenerate_webhook_secret
+      description: 'Immediately invalidates the old secret and generates a new one for a webhook.
+
+
+        **Important:** After regenerating, you must update your webhook handler with the new secret to continue verifying payloads. The old secret will no longer work.
+
+        '
+      requestBody:
+        description: An empty request body is required for this operation.
+        required: false
+        content: {}
+      responses:
+        '200':
+          description: 'The new webhook secret was generated successfully.
+
+
+            **Important:** The new `secret` is only returned at this time. You must store it securely, as you will need it to verify the signature of incoming webhook requests.
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebhookSecretRegenerated'
+              example:
+                id: 01JPVZD75DW4KRP7MPFMF6KGZX
+                url: https://example.com/session-updated-webhook
+                events:
+                - session-updated
+                secret: FP7UPZpATKBcYJj4va95PYud+a3gCidRERiLO+9MoFE=
+                created_at: '2023-01-01T23:00:00.000Z'
+                updated_at: '2023-01-01T23:00:00.000Z'
+        '400':
+          $ref: '#/components/responses/Error_BadRequest'
+        '401':
+          $ref: '#/components/responses/Error_Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error_Forbidden'
+        '500':
+          $ref: '#/components/responses/Error_Internal'
+  /accounts/{account_id}/webhooks-events:
+    parameters:
+    - $ref: '#/components/parameters/AccountID'
+    - $ref: '#/components/parameters/CintAPIVersion-2025-12-18'
+    get:
+      tags:
+      - Notifications Webhooks
+      summary: List all available webhook event types
+      operationId: get_webhook_events
+      description: Lists all of the event types you can subscribe to when creating or updating a webhook subscription.
+      responses:
+        '200':
+          description: A list of available webhook events was retrieved successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebhookEventTypesList'
+              example:
+                events:
+                - target-group-updated
+                - quota-fill-registered
+                - session-updated
+        '400':
+          $ref: '#/components/responses/Error_BadRequest'
+        '401':
+          $ref: '#/components/responses/Error_Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error_Forbidden'
+        '500':
+          $ref: '#/components/responses/Error_Internal'
+components:
+  parameters:
+    WebhookEventsEndTime:
+      name: end_time
+      in: query
+      description: 'End time for retrieving webhook events. If not provided,
+
+        the current time will be used.
+
+        '
+      required: false
+      schema:
+        $ref: '#/components/schemas/TimeStamp'
+    WebhookID:
+      name: webhook_id
+      in: path
+      description: The ID of the webhook.
+      required: true
+      schema:
+        $ref: '#/components/schemas/WebhookID'
+    CintAPIVersion-2025-12-18:
+      name: Cint-API-Version
+      in: header
+      required: true
+      schema:
+        type: string
+        example: 2025-12-18
+      description: 'This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.
+
+        '
+    WebhookEventsTypes:
+      name: type
+      in: query
+      description: 'Filter by event type.
+
+
+        Can be used multiple times as query parameter to return events of multiple types. If not provided, events of all types will be returned.
+
+
+        Example: "?type=target-group-updated&type=quota-fill-registered"
+
+        '
+      required: false
+      style: form
+      explode: true
+      schema:
+        $ref: '#/components/schemas/WebhookEventTypes'
+    EndBefore:
+      name: end_before
+      in: query
+      description: Returns a list of objects that come before the provided pagination cursor. This is used for navigating to a previous page.
+      schema:
+        type: string
+      example: 7daa40ad-303b-40a2-89df-a9760400cde7
+    PageSize:
+      name: page_size
+      in: query
+      description: A limit on the number of objects to be returned, between 1 and 100.
+      schema:
+        type: integer
+        default: 10
+      example: 15
+    StartAfter:
+      name: start_after
+      in: query
+      description: Returns a list of objects after the provided pagination cursor, using the next_cursor from the previous response.
+      schema:
+        type: string
+      example: bff6a669-a469-409d-8c94-dcf92258043a
+    WebhookEventsOrder:
+      name: created_at_sort_order
+      in: query
+      description: 'Sort order for webhook events based on creation time.
+
+        Use ''asc'' for ascending order or ''desc'' for descending order.
+
+        '
+      required: false
+      schema:
+        type: string
+        enum:
+        - asc
+        - desc
+        default: asc
+    WebhookEventsStartTime:
+      name: start_time
+      in: query
+      description: Start time from which to retrieve webhook events.
+      required: true
+      schema:
+        $ref: '#/components/schemas/TimeStamp'
+    IfMatch:
+      name: If-Match
+      description: The ETag value of the resource you intend to update. This is used for optimistic locking to prevent you from accidentally overwriting changes made by someone else. You can get the ETag from a GET request for the resource. The `ETag` value should always be wrapped in double quotes, whether it is part of a weak `ETag` or standalone.
+      in: header
+      schema:
+        type: string
+        format: etag
+        example: W/"1234"
+    WebhookEventsDeliveryStatuses:
+      name: delivery_status
+      in: query
+      description: 'Filter by event delivery status.
+
+
+        Can be specified multiple times as a query parameter to return events
+
+        with multiple delivery statuses. If not provided,
+
+        events with all delivery statuses will be returned.
+
+
+        Example: "?delivery_status=pending&delivery_status=delivering"
+
+        '
+      required: false
+      style: form
+      explode: true
+      schema:
+        type: array
+        items:
+          $ref: '#/components/schemas/WebhookEventsDeliveryStatus'
+    AccountID:
+      name: account_id
+      description: The account's unique identifier.
+      in: path
+      required: true
+      schema:
+        $ref: '#/components/schemas/AccountID'
+  schemas:
+    WebhookEventTypes:
+      type: array
+      description: An array of webhook event type names.
+      items:
+        $ref: '#/components/schemas/WebhookEventType'
+      example:
+      - target-group-updated
+      - quota-fill-registered
+    ETag:
+      type: string
+      description: The `ETag` header provides a unique identifier that represents the current version state of a particular resource.
+      example: W/"1234"
+    WebhookEvent:
+      type: object
+      description: Represents a webhook event body, which varies by event type
+      properties:
+        id:
+          type: string
+          description: ULID for this webhook event
+          format: ulid
+        type:
+          $ref: '#/components/schemas/WebhookEventType'
+        payload:
+          type: object
+          description: The payload of the webhook event
+          additionalProperties: true
+        status:
+          $ref: '#/components/schemas/WebhookEventsDeliveryStatus'
+        created_at:
+          type: string
+          format: date-time
+          description: RFC3339 formatted timestamp of the event creation time
+      example:
+        id: 01JPVZD75DW4KRP7MPFMF6KGZX
+        type: target-group-updated
+        payload:
+          account_id: 1
+          changes:
+          - new_value:
+              currency_code: USD
+              currency_scale: 2
+              value: 10
+            object: user_requested_cpi_change
+          id: 38e9ce47-b292-4250-b1d3-17e31440e2d4
+          occurred_at: 2026-01-23 10:04:44.209000+00:00
+          project_id: 01JJ77E6X1Y2G1RG2KMPFPXKYZ
+          target_group_id: 01KFN50A2WJ5NW1NX39RRFFHKQ
+          user:
+          - las_user_id: 2783dacc-dc2c-4bc0-a011-50d9d2e2df07
+            type: las_user
+        status: delivered
+        created_at: 2026-01-23 10:04:44.562205+00:00
+    WebhookEventType:
+      type: string
+      description: Name of the event type that is valid for a webhook type notification.
+      enum:
+      - target-group-updated
+      - quota-fill-registered
+      - session-updated
+    WebhookUpdatedAt:
+      type: string
+      format: date-time
+      description: The timestamp when the webhook was last updated, in RFC3339 UTC format.
+      example: '2023-01-01T23:05:00.000Z'
+    WebhookEventsDeliveryStatus:
+      type: string
+      description: 'Delivery status of the webhook event.
+
+
+        Pending is the initial status assigned to an event when it is first persisted.
+
+
+        Delivering is a transient state indicating that delivery attempts are in progress.
+
+
+        Delivered is the final success state indicating that the event has been successfully delivered to the webhook endpoint.
+
+
+        Undelivered is a temporary failure state for a persisted event that could not be delivered but will be retried.
+
+
+        Bounced is a temporary infrastructure failure state. Events in this status are managed by a Circuit Breaker and are considered non-retryable until connectivity is restored.
+
+
+        Expired is the final terminal failure state. In this state, the event is retired, and no further automatic redelivery attempts will be made.
+
+        '
+      enum:
+      - pending
+      - delivering
+      - delivered
+      - undelivered
+      - bounced
+      - expired
+    InvalidParam:
+      type: object
+      description: Describes a single invalid parameter in a request.
+      properties:
+        name:
+          type: string
+          description: The name of the parameter that failed validation.
+        reason:
+          type: string
+          description: A short explanation of why the parameter was invalid.
+      required:
+      - name
+      - reason
+    Webhook:
+      type: object
+      description: Contains the details of a webhook subscription, excluding the secret.
+      properties:
+        id:
+          $ref: '#/components/schemas/WebhookID'
+        url:
+          $ref: '#/components/schemas/WebhookURL'
+        events:
+          $ref: '#/components/schemas/WebhookEventTypes'
+        created_at:
+          $ref: '#/components/schemas/WebhookCreatedAt'
+        updated_at:
+          $ref: '#/components/schemas/WebhookUpdatedAt'
+    WebhookSecret:
+      type: string
+      format: base64
+      description: "This is your webhook's secret signing key. You must use it to verify the authenticity and integrity of incoming webhook requests.\n\nEach webhook request includes a `Cint-Signature` header with two components:\n\n- `t` (timestamp): A Unix timestamp representing the time of the webhook call.\n\n- `v1` (signature v1): An HMAC SHA256 hash of the payload, generated by signing it with the secret key.\n\nThe payload used to create the signature is the concatenation of the timestamp (`t`) and the request body, separated\nby a period (`.`). For example:\n\n- Payload: `1732526080.{\"foo\":\"bar\"}`\n\n- Example of `Cint-Signature` header:\n\n```text\nCint-Signature: t=1732526080,v1=6532d4777122acc32cd388763fc0c0ba8732698d09cf99eea086e5a86f8d3ebe\n``` \n\nTo verify the signature, you can use the following CLI command:\n\n```bash\n$ export PAYLOAD='1732526080.{\"foo\":\"bar\"}'\n$ export SECRET=FP7UPZpATKBcYJj4va95PYud+a3gCidRERiLO+9MoFE=\n$ echo -n $PAYLOAD | openssl dgst -sha256 -hmac $SECRET\n# => (stdin)= 6532d4777122acc32cd388763fc0c0ba8732698d09cf99eea086e5a86f8d3ebe\n```\n"
+      example: FP7UPZpATKBcYJj4va95PYud+a3gCidRERiLO+9MoFE=
+    WebhookCreated:
+      type: object
+      description: The response object returned when a webhook is successfully created.
+      properties:
+        id:
+          $ref: '#/components/schemas/WebhookID'
+        url:
+          $ref: '#/components/schemas/WebhookURL'
+        events:
+          $ref: '#/components/schemas/WebhookEventTypes'
+        secret:
+          $ref: '#/components/schemas/WebhookSecret'
+        created_at:
+          $ref: '#/components/schemas/WebhookCreatedAt'
+        updated_at:
+          $ref: '#/components/schemas/WebhookUpdatedAt'
+    WebhookSecretRegenerated:
+      type: object
+      description: The response object returned when a webhook secret is successfully regenerated.
+      properties:
+        id:
+          $ref: '#/components/schemas/WebhookID'
+        url:
+          $ref: '#/components/schemas/WebhookURL'
+        events:
+          $ref: '#/components/schemas/WebhookEventTypes'
+        secret:
+          $ref: '#/components/schemas/WebhookSecret'
+        created_at:
+          $ref: '#/components/schemas/WebhookCreatedAt'
+        updated_at:
+          $ref: '#/components/schemas/WebhookUpdatedAt'
+    TimeStamp:
+      type: string
+      description: RFC3339 formatted timestamp.
+      format: date-time
+      example: '2023-10-05T14:48:00.000Z'
+    WebhooksList:
+      type: object
+      description: A list of all webhooks for a specific account.
+      properties:
+        webhooks:
+          type: array
+          description: A list of webhooks.
+          items:
+            $ref: '#/components/schemas/Webhook'
+        has_more:
+          description: A flag that's true if there are more webhooks to retrieve in a subsequent request.
+          type: boolean
+          example: true
+    Error:
+      type: object
+      description: The standard error object returned for all failed API requests.
+      required:
+      - object
+      - detail
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: A unique identifier for this specific error instance.
+        object:
+          type: string
+          description: A short informative string identifying the type of the error
+          pattern: ^([a-z]*_)*([a-z]*)$
+        detail:
+          type: string
+          description: An error message provides a concise overview of the cause of the error.
+        invalid_params:
+          type: array
+          nullable: true
+          description: An optional field containing a list of invalid parameters may be presented in validation errors for additional information.
+          items:
+            $ref: '#/components/schemas/InvalidParam'
+    WebhookID:
+      type: string
+      format: ulid
+      description: The ID of the webhook.
+      example: 01JPVZD75DW4KRP7MPFMF6KGZX
+    WebhookURL:
+      type: string
+      format: url
+      description: The HTTPS endpoint where webhook notifications will be sent.
+      example: https://example.com/webhook
+    IdempotencyKey:
+      type: string
+      description: 'A shallow unique ID used as part of the deduplication mechanism for mutable operations.
+
+        We suggest using UUIDv4 or another random string with sufficient entropy to avoid collisions.'
+      maxLength: 255
+      example: 01BTGNYV6HRNK8K8VKZASZCFP0
+    AccountID:
+      description: The account's unique identifier.
+      type: integer
+      format: int32
+      example: 101
+    WebhookCreatedAt:
+      type: string
+      format: date-time
+      description: The timestamp when the webhook was created, in RFC3339 UTC format.
+      example: '2023-01-01T23:00:00.000Z'
+    NextCursor:
+      description: 'An identifier for pagination that indicates there are more items available.
+
+        When present, use this value to retrieve the next page of results.
+
+        '
+      type: string
+      nullable: true
+      example: bff6a669-a469-409d-8c94-dcf92258043a
+    WebhookEventTypesList:
+      type: object
+      description: A response containing a list of valid events for webhooks.
+      properties:
+        events:
+          $ref: '#/components/schemas/WebhookEventTypes'
+  responses:
+    Error_NotFound:
+      description: A requested resource isn't found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            id: 7a5972ba-0825-4360-b852-fa2430e47034
+            object: not_found_error
+            detail: resource not found
+    Error_Internal:
+      description: A request failed due to an internal error.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            id: d94b8bb2-a540-4a91-9c05-2aa3ae9a5e1e
+            object: unexpected_internal_error
+            detail: an internal error has led to the failure of this operation
+    WebhookEventsHistory:
+      description: A response containing webhook events history for replay and debugging.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              events:
+                type: array
+                description: A list of webhook events
+                items:
+                  $ref: '#/components/schemas/WebhookEvent'
+              next_cursor:
+                $ref: '#/components/schemas/NextCursor'
+            additionalProperties: false
+    Error_Forbidden:
+      description: A requested is forbidden.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            id: fe68cdd2-ee87-4dbf-8950-63c5cbca94c7
+            object: authorization_error
+            detail: you don't have the right permissions to perform this operation
+    Error_Unauthorized:
+      description: A request is unauthorized.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            id: 1dcf0f40-f0d1-4cf6-8c00-c3d019d32faf
+            object: authorization_error
+            detail: no valid authorization provided for this operation
+    Error_BadRequest:
+      description: A request is not valid and can't be processed.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            id: 9e278238-d011-4e05-8327-1ce1d5d26254
+            object: bad_request_error
+            detail: Expected field 'foo' is missing.
+  requestBodies:
+    WebhookCreate:
+      description: The request body for creating a new webhook subscription.
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            description: The configuration for a new webhook subscription.
+            required:
+            - url
+            - events
+            properties:
+              url:
+                $ref: '#/components/schemas/WebhookURL'
+              events:
+                $ref: '#/components/schemas/WebhookEventTypes'
+          example:
+            url: https://example.com/webhook
+            events:
+            - target-group-updated
+    WebhookUpdate:
+      description: Update an existing webhook request body.
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            description: The updated configuration for an existing webhook. Both fields are optional.
+            properties:
+              url:
+                $ref: '#/components/schemas/WebhookURL'
+              events:
+                $ref: '#/components/schemas/WebhookEventTypes'
+          example:
+            url: https://example.com/webhook
+            events:
+            - session-updated
+  headers:
+    ETag:
+      description: The `ETag` header provides a unique identifier that represents the current version of a resource. It's used for caching and to prevent concurrent modification issues.
+      required: true
+      schema:
+        $ref: '#/components/schemas/ETag'
+    IdempotencyKey:
+      description: 'A unique key that you can provide to safely retry requests without accidentally performing the same operation twice.
+
+
+        We suggest using a UUID v4 or another random string with sufficient entropy to avoid collisions.
+
+
+        Examples:
+
+        - 96C65204-90C2-4DCB-9393-B8226DD50C76
+
+        - 01BTGNYV6HRNK8K8VKZASZCFP0
+
+        '
+      required: false
+      schema:
+        $ref: '#/components/schemas/IdempotencyKey'
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Bearer token used for authentication and authorization. See [Authentication Process](https://developer.cint.com/en/guides#authentication-process) documentation for more information.
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: API Key Authentication

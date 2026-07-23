@@ -1,0 +1,719 @@
+openapi: 3.0.3
+info:
+  title: Demand Accounts Definitions API
+  description: 'Cint''s demand ordering API is REST oriented. It has predictable resource based URLs, accepts JSON-encoded request bodies, returns JSON-encoded responses, and uses standard HTTP response codes, authentication, and verbs. Error responses are also JSON-encoded and follow a standard format, providing a unique error ID and detailed information about what went wrong.
+
+
+    Authentication is handled via bearer tokens passed in the `Authorization` header. All requests must also include a `Cint-API-Version` header with a date in `YYYY-MM-DD` format to specify the desired API version. Depending on the version you use, endpoint behavior may differ as we improve our API with every version release.
+
+
+    While many operations work on a single object per request, the demand ordering API also provides asynchronous batch endpoints for performing bulk updates efficiently on certain resources. For safety, `POST` requests support an `Idempotency-Key` header to allow for safe retries without accidentally performing the same operation twice.
+
+    '
+  version: '2025-12-18'
+servers:
+- description: Production server
+  url: https://api.cint.com/v1
+security:
+- BearerAuth: []
+tags:
+- name: Definitions
+  description: Platform-wide definitions endpoints.
+paths:
+  /accounts/{account_id}/business-units:
+    parameters:
+    - $ref: '#/components/parameters/AccountID'
+    - $ref: '#/components/parameters/CintAPIVersion-2025-12-18'
+    get:
+      tags:
+      - Definitions
+      summary: Lists business units for an account
+      operationId: get_business_units
+      description: "Lists available account business units. Business unit definitions are supposed to help you organize surveys between different parts of your organization. They also determine the currency used by their assigned surveys. \n\n:::info\nTo get default business unit assigned to the user within the account then use /accounts/{account_id}/users/{user_id}/business-units API mentioned under Accounts section.\n:::\n"
+      responses:
+        '200':
+          description: A list of business units was retrieved successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  business_units:
+                    type: array
+                    description: A list of business units.
+                    items:
+                      $ref: '#/components/schemas/BusinessUnit'
+              example:
+                business_units:
+                - id: 1234
+                  name: Example EMEA
+                  currency_code: EUR
+                  pricing_models:
+                  - rate_card
+                  - dynamic
+                - id: 5678
+                  name: Example APAC
+                  currency_code: JPY
+                  pricing_models:
+                  - rate_card
+        '400':
+          $ref: '#/components/responses/Error_BadRequest'
+        '401':
+          $ref: '#/components/responses/Error_Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error_Forbidden'
+        '500':
+          $ref: '#/components/responses/Error_Internal'
+  /accounts/{account_id}/clients:
+    parameters:
+    - $ref: '#/components/parameters/AccountID'
+    - $ref: '#/components/parameters/CintAPIVersion-2025-12-18'
+    get:
+      tags:
+      - Definitions
+      summary: Lists clients for an account
+      operationId: get_clients
+      description: Lists the clients that have been configured for the specified account.
+      parameters:
+      - $ref: '#/components/parameters/PageSize'
+      - $ref: '#/components/parameters/PageNumber'
+      responses:
+        '200':
+          description: A list of clients was retrieved successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  clients:
+                    type: array
+                    description: A list of clients.
+                    items:
+                      $ref: '#/components/schemas/ClientListItem'
+              example:
+                clients:
+                - id: 1234
+                  name: Acme Inc
+                - id: 5678
+                  name: Global Research Partners
+        '400':
+          $ref: '#/components/responses/Error_BadRequest'
+        '401':
+          $ref: '#/components/responses/Error_Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error_Forbidden'
+        '500':
+          $ref: '#/components/responses/Error_Internal'
+  /countries:
+    parameters:
+    - $ref: '#/components/parameters/CintAPIVersion-2025-12-18'
+    get:
+      tags:
+      - Definitions
+      summary: Lists all countries
+      operationId: get_countries
+      description: Lists all available countries. Countries are used for target group filtering purposes. `0/NA` is a special country code that can be used for scenarios where a country is not applicable.
+      responses:
+        '200':
+          description: A list of countries was retrieved successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  countries:
+                    type: array
+                    description: A list of countries.
+                    items:
+                      $ref: '#/components/schemas/CountryListItem'
+              example:
+                countries:
+                - id: 243
+                  code: GB
+                  name: United Kingdom
+                - id: 244
+                  code: US
+                  name: United States
+                - id: 116
+                  code: JP
+                  name: Japan
+        '400':
+          $ref: '#/components/responses/Error_BadRequest'
+        '401':
+          $ref: '#/components/responses/Error_Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error_Forbidden'
+        '500':
+          $ref: '#/components/responses/Error_Internal'
+  /industries:
+    parameters:
+    - $ref: '#/components/parameters/CintAPIVersion-2025-12-18'
+    get:
+      tags:
+      - Definitions
+      summary: Lists all industries
+      operationId: get_industries
+      description: Lists the available industries that you can associate with your target groups.
+      responses:
+        '200':
+          description: A list of industries was retrieved successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  industries:
+                    type: array
+                    description: A list of industries.
+                    items:
+                      $ref: '#/components/schemas/IndustryListItem'
+              example:
+                industries:
+                - id: 19
+                  code: politics
+                  name: Politics
+                - id: 20
+                  code: economy
+                  name: Economy
+        '400':
+          $ref: '#/components/responses/Error_BadRequest'
+        '401':
+          $ref: '#/components/responses/Error_Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error_Forbidden'
+        '500':
+          $ref: '#/components/responses/Error_Internal'
+  /industry-lockouts:
+    parameters:
+    - $ref: '#/components/parameters/CintAPIVersion-2025-12-18'
+    get:
+      tags:
+      - Definitions
+      summary: Lists all industry lockouts
+      operationId: get_industry_lockouts
+      description: Lists the available industry lockout options. You can apply an industry lockout to a target group to prevent respondents from participating if they have recently completed another target group in the same industry.
+      responses:
+        '200':
+          description: A list of industry lockouts was retrieved successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  industry_lockouts:
+                    type: array
+                    description: A list of industry lockouts.
+                    items:
+                      $ref: '#/components/schemas/IndustryLockoutItem'
+              example:
+                industry_lockouts:
+                - id: 90
+                  code: past_90_days
+                  name: Past 90 Days / 3 Months
+        '400':
+          $ref: '#/components/responses/Error_BadRequest'
+        '401':
+          $ref: '#/components/responses/Error_Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error_Forbidden'
+        '500':
+          $ref: '#/components/responses/Error_Internal'
+  /integration-use-cases:
+    parameters:
+    - $ref: '#/components/parameters/CintAPIVersion-2025-12-18'
+    get:
+      tags:
+      - Definitions
+      summary: List all supported integration cases
+      operationId: get_integration_use_cases
+      description: Lists all supported integration use cases, which indicate the purpose for which an integration will be used.
+      responses:
+        '200':
+          description: A list of integration use cases was retrieved successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  integration_use_cases:
+                    type: array
+                    description: A list of integration use cases.
+                    items:
+                      $ref: '#/components/schemas/IntegrationUseCaseListItem'
+                example:
+                  integration_use_cases:
+                  - id: manage_surveys
+                    name: Manage target groups
+                    description: Create, update, and retrieve target groups, allocations, groups, qualifications, and quotas.
+                  - id: performance_reporting
+                    name: Performance reporting
+                    description: Monitor target group performance and do reconciliation.
+                  - id: financial_reporting
+                    name: Financial reporting
+                    description: Generate cost summary reports for sets of target groups.
+        '400':
+          $ref: '#/components/responses/Error_BadRequest'
+        '401':
+          $ref: '#/components/responses/Error_Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error_Forbidden'
+        '500':
+          $ref: '#/components/responses/Error_Internal'
+  /locales:
+    parameters:
+    - $ref: '#/components/parameters/CintAPIVersion-2025-12-18'
+    get:
+      tags:
+      - Definitions
+      summary: Lists all locales
+      operationId: get_locales
+      description: Lists all available locales (a combination of country and language) that are well-supported on the platform. You can use this endpoint to discover which locales are recommended for the best performance and panelist availability. The output will include ISO 3166-1 alpha-2 country codes and associated ISO 639-2/T three-letter language codes. You will use this to form a valid locale string where you specify the three-letter language code, an underscore, and the two-letter country code e.g., eng_us. Use this locale when browsing profile library or creating a target group.
+      responses:
+        '200':
+          description: A list of locales was retrieved successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Locales'
+              example:
+                locales:
+                - country:
+                    code: in
+                    name: India
+                  languages:
+                  - is_preferred: true
+                    name: English
+                    code: eng
+                  - is_preferred: true
+                    name: Hindi
+                    code: hin
+                - country:
+                    code: us
+                    name: United States
+                  languages:
+                  - is_preferred: true
+                    name: English
+                    code: eng
+                  - is_preferred: false
+                    name: Spanish
+                    code: spa
+        '400':
+          $ref: '#/components/responses/Error_BadRequest'
+        '401':
+          $ref: '#/components/responses/Error_Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error_Forbidden'
+        '500':
+          $ref: '#/components/responses/Error_Internal'
+  /study-types:
+    parameters:
+    - $ref: '#/components/parameters/CintAPIVersion-2025-12-18'
+    get:
+      tags:
+      - Definitions
+      summary: Lists study types
+      operationId: get_study_types
+      description: Lists the available study types. You can assign a study type to a target group to indicate its purpose and associated limits.
+      responses:
+        '200':
+          description: A list of study types was retrieved successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  study_types:
+                    type: array
+                    description: A list of study types.
+                    items:
+                      $ref: '#/components/schemas/StudyTypeListItem'
+              example:
+                study_types:
+                - id: 1
+                  code: adhoc
+                  name: Adhoc
+                - id: 2
+                  code: diary
+                  name: Diary
+        '400':
+          $ref: '#/components/responses/Error_BadRequest'
+        '401':
+          $ref: '#/components/responses/Error_Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error_Forbidden'
+        '500':
+          $ref: '#/components/responses/Error_Internal'
+  /suppliers:
+    parameters:
+    - $ref: '#/components/parameters/CintAPIVersion-2025-12-18'
+    get:
+      tags:
+      - Definitions
+      summary: Lists suppliers
+      operationId: get_suppliers
+      description: Lists the suppliers available on the Cint Exchange. You can use the IDs retrieved from this endpoint to configure allocation templates.
+      responses:
+        '200':
+          description: A list of suppliers was retrieved successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  suppliers:
+                    type: array
+                    description: A list of suppliers.
+                    items:
+                      $ref: '#/components/schemas/SupplierDetailsItem'
+              example:
+                suppliers:
+                - id: 4351
+                  code: ACE
+                  name: Acme Inc
+                - id: 3334
+                  code: BCD
+                  name: BCD Inc
+        '400':
+          $ref: '#/components/responses/Error_BadRequest'
+        '401':
+          $ref: '#/components/responses/Error_Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error_Forbidden'
+        '500':
+          $ref: '#/components/responses/Error_Internal'
+components:
+  schemas:
+    CountryListItem:
+      type: object
+      description: Contains details for a single country.
+      readOnly: true
+      properties:
+        id:
+          type: integer
+          description: Unique identifier of the country.
+          example: 243
+        code:
+          type: string
+          description: Unique text code of the country.
+          example: GB
+        name:
+          type: string
+          description: A human-readable name for the country.
+          example: United Kingdom
+    SupplierDetailsItem:
+      type: object
+      description: Contains details for a single supplier.
+      readOnly: true
+      properties:
+        id:
+          type: integer
+          description: Unique identifier of the supplier.
+          example: 4321
+        code:
+          type: string
+          description: Unique text code of the supplier.
+          example: ACE
+        name:
+          type: string
+          description: A human-readable name for the supplier.
+          example: Acme Inc
+    InvalidParam:
+      type: object
+      description: Describes a single invalid parameter in a request.
+      properties:
+        name:
+          type: string
+          description: The name of the parameter that failed validation.
+        reason:
+          type: string
+          description: A short explanation of why the parameter was invalid.
+      required:
+      - name
+      - reason
+    IndustryListItem:
+      type: object
+      description: Contains details for a single industry.
+      readOnly: true
+      properties:
+        id:
+          type: integer
+          description: Unique identifier of the industry.
+          example: 19
+        code:
+          type: string
+          description: Unique text code of the industry.
+          example: politics
+        name:
+          type: string
+          description: A human-readable name for the industry.
+          example: Politics
+    StudyTypeListItem:
+      type: object
+      description: Contains details for a single study type.
+      readOnly: true
+      properties:
+        id:
+          type: integer
+          description: Unique identifier of the study type.
+          example: 1
+        code:
+          type: string
+          description: Unique text code of the study type.
+          example: adhoc
+        name:
+          type: string
+          description: A human-readable name for the study type.
+          example: Adhoc
+    ClientListItem:
+      type: object
+      description: Contains details for a single client.
+      readOnly: true
+      properties:
+        id:
+          type: integer
+          description: Unique identifier of the client.
+          example: 1234
+        name:
+          type: string
+          description: A human-readable name for the client.
+          example: Acme Inc
+    IndustryLockoutItem:
+      type: object
+      description: Contains details for a single industry lockout.
+      readOnly: true
+      properties:
+        id:
+          type: integer
+          description: Unique identifier of the industry lockout.
+          example: 90
+        code:
+          type: string
+          description: Unique text code of the industry lockout.
+          example: past_90_days
+        name:
+          type: string
+          description: A human-readable name for the industry lockout.
+          example: Past 90 Days / 3 Months
+    Error:
+      type: object
+      description: The standard error object returned for all failed API requests.
+      required:
+      - object
+      - detail
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: A unique identifier for this specific error instance.
+        object:
+          type: string
+          description: A short informative string identifying the type of the error
+          pattern: ^([a-z]*_)*([a-z]*)$
+        detail:
+          type: string
+          description: An error message provides a concise overview of the cause of the error.
+        invalid_params:
+          type: array
+          nullable: true
+          description: An optional field containing a list of invalid parameters may be presented in validation errors for additional information.
+          items:
+            $ref: '#/components/schemas/InvalidParam'
+    BusinessUnit:
+      type: object
+      description: Contains details for a single business unit.
+      readOnly: true
+      properties:
+        id:
+          type: integer
+          description: Unique identifier of the business unit.
+          example: 1234
+        name:
+          type: string
+          description: A human-readable name for the business unit.
+          example: Example
+        currency_code:
+          type: string
+          description: The ISO 4217 currency code for the business unit.
+          example: GBP
+        pricing_models:
+          type: array
+          description: Contains available pricing models for the business unit.
+          items:
+            type: string
+            description: The pricing model assigned to the business unit.
+            enum:
+            - rate_card
+            - dynamic
+            example: rate_card
+    AccountID:
+      description: The account's unique identifier.
+      type: integer
+      format: int32
+      example: 101
+    Locales:
+      type: object
+      description: Contains a list of suggested countries and their supported languages.
+      properties:
+        locales:
+          type: array
+          description: A list of suggested locales.
+          items:
+            type: object
+            properties:
+              country:
+                type: object
+                description: Contains details for a single country based on the locale.
+                properties:
+                  code:
+                    type: string
+                    description: The ISO 3166-1 alpha-2 country code.
+                  name:
+                    type: string
+                    description: The name of the country.
+              languages:
+                type: array
+                description: A list of supported country languages.
+                items:
+                  type: object
+                  properties:
+                    is_preferred:
+                      type: boolean
+                      description: Indicates whether the country language is preferred for the country.
+                    name:
+                      type: string
+                      description: A human-readable name for the country language.
+                    code:
+                      type: string
+                      description: The ISO 639-2 (3-letter) language code.
+      example:
+        locales:
+        - country:
+            code: in
+            name: India
+          languages:
+          - is_preferred: true
+            name: English
+            code: eng
+          - is_preferred: true
+            name: Hindi
+            code: hin
+          - is_preferred: false
+            name: Bengali
+            code: ben
+        - country:
+            code: us
+            name: United States
+          languages:
+          - is_preferred: true
+            name: English
+            code: eng
+          - is_preferred: true
+            name: Spanish
+            code: spa
+          - is_preferred: false
+            name: Chinese Simplified
+            code: chi
+    IntegrationUseCaseListItem:
+      type: object
+      description: Contains details for a single integration use case.
+      readOnly: true
+      properties:
+        id:
+          type: string
+          description: A unique identifier for the use case.
+          example: manage_surveys
+        name:
+          type: string
+          description: A name for the use case.
+          example: Manage target groups
+        description:
+          type: string
+          description: A description for the use case.
+          example: Create, update, and retrieve surveys, allocations, groups, qualifications, and quotas.
+  responses:
+    Error_Internal:
+      description: A request failed due to an internal error.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            id: d94b8bb2-a540-4a91-9c05-2aa3ae9a5e1e
+            object: unexpected_internal_error
+            detail: an internal error has led to the failure of this operation
+    Error_Forbidden:
+      description: A requested is forbidden.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            id: fe68cdd2-ee87-4dbf-8950-63c5cbca94c7
+            object: authorization_error
+            detail: you don't have the right permissions to perform this operation
+    Error_Unauthorized:
+      description: A request is unauthorized.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            id: 1dcf0f40-f0d1-4cf6-8c00-c3d019d32faf
+            object: authorization_error
+            detail: no valid authorization provided for this operation
+    Error_BadRequest:
+      description: A request is not valid and can't be processed.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            id: 9e278238-d011-4e05-8327-1ce1d5d26254
+            object: bad_request_error
+            detail: Expected field 'foo' is missing.
+  parameters:
+    CintAPIVersion-2025-12-18:
+      name: Cint-API-Version
+      in: header
+      required: true
+      schema:
+        type: string
+        example: 2025-12-18
+      description: 'This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.
+
+        '
+    PageSize:
+      name: page_size
+      in: query
+      description: A limit on the number of objects to be returned, between 1 and 100.
+      schema:
+        type: integer
+        default: 10
+      example: 15
+    PageNumber:
+      name: page_number
+      in: query
+      description: The page number of the results to retrieve.
+      schema:
+        type: integer
+        minimum: 0
+        default: 0
+      example: 2
+    AccountID:
+      name: account_id
+      description: The account's unique identifier.
+      in: path
+      required: true
+      schema:
+        $ref: '#/components/schemas/AccountID'
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Bearer token used for authentication and authorization. See [Authentication Process](https://developer.cint.com/en/guides#authentication-process) documentation for more information.
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: API Key Authentication

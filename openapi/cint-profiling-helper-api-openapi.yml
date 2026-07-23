@@ -1,0 +1,1186 @@
+openapi: 3.0.3
+info:
+  title: Demand Accounts Profiling Helper API
+  description: 'Cint''s demand ordering API is REST oriented. It has predictable resource based URLs, accepts JSON-encoded request bodies, returns JSON-encoded responses, and uses standard HTTP response codes, authentication, and verbs. Error responses are also JSON-encoded and follow a standard format, providing a unique error ID and detailed information about what went wrong.
+
+
+    Authentication is handled via bearer tokens passed in the `Authorization` header. All requests must also include a `Cint-API-Version` header with a date in `YYYY-MM-DD` format to specify the desired API version. Depending on the version you use, endpoint behavior may differ as we improve our API with every version release.
+
+
+    While many operations work on a single object per request, the demand ordering API also provides asynchronous batch endpoints for performing bulk updates efficiently on certain resources. For safety, `POST` requests support an `Idempotency-Key` header to allow for safe retries without accidentally performing the same operation twice.
+
+    '
+  version: '2025-12-18'
+servers:
+- description: Production server
+  url: https://api.cint.com/v1
+security:
+- BearerAuth: []
+tags:
+- name: Profiling Helper
+  description: Helps by generating different profile configurations, including interlocked profiles for draft.
+paths:
+  /demand/accounts/{account_id}/drafts/generate-blended-profile:
+    parameters:
+    - $ref: '#/components/parameters/AccountID'
+    - $ref: '#/components/parameters/CintAPIVersion-2025-12-18'
+    post:
+      operationId: generate_blended_profile
+      summary: Generates a blended profile from regular profiles
+      tags:
+      - Profiling Helper
+      description: 'Generates a single `blended` profile by combining two or three `regular` profiles.
+
+
+        This allows you to experiment with complex, interlocked quota structures without creating a target group.
+
+        The endpoint automatically calculates the supplier distribution for the resulting quotas.
+
+
+        Key behaviors:
+
+
+        * You must provide between two and three regular profiles to be blended.
+
+        * When this profile is later used to create a target group, there is a limit of 350 total quotas.
+
+        '
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GenerateDraftInterlockedProfileRequestV3'
+      responses:
+        '201':
+          description: The blended profile was generated successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CompositeDraftRegularProfileV3'
+        '400':
+          description: The request is malformed or contains syntactically invalid parameters.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestErrorResponseDemographics'
+        '401':
+          $ref: '#/components/responses/Error_Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error_Forbidden'
+        '404':
+          $ref: '#/components/responses/Error_NotFound'
+        '422':
+          description: The request is well-formed, but the profile configuration is invalid (e.g., overlapping quotas, incorrect logic). The response body contains detailed validation errors.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationErrorResponseDemographics'
+        '500':
+          description: An unexpected internal error occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalErrorResponseDemographics'
+  /demand/accounts/{account_id}/profiles/validate:
+    parameters:
+    - $ref: '#/components/parameters/AccountID'
+    - $ref: '#/components/parameters/CintAPIVersion-2025-12-18'
+    post:
+      operationId: validate_profiles
+      summary: Validates a profile
+      description: 'Validates a complete profile and target configuration without creating or modifying any resources.
+
+
+        You can use this stateless endpoint to check your profile logic for business rule violations (e.g., overlapping quotas) before you use it to create or update a target group.
+
+        It provides detailed warnings and errors to help you build a valid configuration.
+
+
+        The API automatically removes duplicate open-ended values in this request before validation, but rejects duplicates in selection or range conditions.
+
+        '
+      tags:
+      - Profiling Helper
+      requestBody:
+        description: The complete profile configuration to be validated.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ValidateProfilesRequestV3'
+      responses:
+        '204':
+          description: The profile configuration is valid and has no errors or warnings.
+        '400':
+          description: The request is malformed or contains syntactically invalid parameters.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestErrorResponseDemographics'
+        '401':
+          $ref: '#/components/responses/Error_Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error_Forbidden'
+        '422':
+          description: The request is well-formed, but the profile configuration is invalid (e.g., overlapping quotas, incorrect logic). The response body contains detailed validation errors.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationErrorResponseDemographics'
+        '500':
+          description: An unexpected internal error occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalErrorResponseDemographics'
+components:
+  schemas:
+    InvalidParamStructure:
+      title: Invalid request structure
+      type: object
+      description: An error related to the structure of the request payload itself.
+      required:
+      - error_type
+      - name
+      - reason
+      properties:
+        error_type:
+          type: string
+          description: The type of validation error.
+          enum:
+          - structural_error
+        name:
+          type: string
+          description: Error name.
+        reason:
+          type: string
+          description: Error reason.
+        detail:
+          type: string
+    CompletesGoal:
+      type: number
+      description: Specifies the target group's required number of survey completions or pre-screen responses.  Formerly referred to as the "filling goal," this value sets the benchmark for the number of valid responses  needed to achieve the desired level of data reliability.
+      format: int
+      minimum: 1
+      example: 1500
+    RequestDraftQuotaPercentageV3:
+      type: object
+      description: Profile target with condition or conditions and percentage value in quota.
+      required:
+      - conditions
+      - quota
+      properties:
+        conditions:
+          type: array
+          description: List of conditions for the target.
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/InterlockProfileConditionsV3'
+        quota:
+          type: object
+          required:
+          - completes_goal_percentage
+          properties:
+            name:
+              type: string
+              description: Name of the quota used for tracking. This will be deprecated, functionally replaced by the `target.name` field one layer up in the contract.
+              deprecated: true
+              example: SF_Quota_12
+            completes_goal_percentage:
+              type: number
+              multipleOf: 0.01
+              minimum: 0
+              maximum: 100
+              description: Percentage of total completes goal quota applied to this condition(s).
+              example: 40
+    InvalidParam:
+      type: object
+      description: Describes a single invalid parameter in a request.
+      properties:
+        name:
+          type: string
+          description: The name of the parameter that failed validation.
+        reason:
+          type: string
+          description: A short explanation of why the parameter was invalid.
+      required:
+      - name
+      - reason
+    QuestionID:
+      type: integer
+      description: The unique identifier for a profiling question.
+      example: 12413
+    CompositeDraftRegularProfileV3:
+      description: The response object for a successfully generated blended profile.
+      type: object
+      required:
+      - object
+      - quotas_enabled
+      - name
+      - description
+      - targets
+      properties:
+        object:
+          type: string
+          description: The type of profile. For this object, the value is always `blended`.
+          enum:
+          - blended
+          example: blended
+        quotas_enabled:
+          type: boolean
+          description: Flag indicating if quotas are enabled.
+          example: true
+        name:
+          type: string
+          description: The name of the profile.
+          example: HISPANIC
+        description:
+          type: string
+          description: A short summary of the profile. Summary language will be based on the target group's locale.
+          example: Are you of Hispanic, Latino, or Spanish origin?
+        description_translated:
+          type: string
+          description: A short summary of the profile by default english language.
+          example: Are you of Hispanic, Latino, or Spanish origin?
+        targets:
+          $ref: '#/components/schemas/DraftQuotaV3'
+      example:
+        object: blended
+        quotas_enabled: true
+        name: GENDER x AGE
+        description: Blended profile for Gender and Age
+        description_translated: Blended profile for Gender and Age
+        targets:
+        - id: 01JQMD8R7F0VW45KPWQ7WYNCFP
+          text: Male and 18-34
+          name: Target-Male-18-34
+          conditions:
+          - object: selection
+            question_id: 43
+            option: '1'
+          - object: range
+            question_id: 42
+            min: 18
+            max: 34
+          quota:
+            name: MALE_18_34
+            completes_goal_percentage: 25
+            quota_nominal: 250
+            completes_goal: 250
+    ValidateProfilesRequestV3:
+      description: The request body for validating a profile configuration.
+      type: object
+      required:
+      - locale
+      - completes_goal
+      - profiling
+      properties:
+        locale:
+          type: string
+          example: eng_us
+        completes_goal:
+          $ref: '#/components/schemas/CompletesGoal'
+        profiling:
+          description: The core profiling configuration to be validated.
+          type: object
+          required:
+          - profile_adjustment_type
+          - profiles
+          properties:
+            profile_adjustment_type:
+              type: string
+              description: Defines how quotas are specified in the `profile` object. Use `percentage` to define quotas as a percentage of the `completes_goal`, or `nominal` to define them as a specific number of completes.
+              enum:
+              - percentage
+              - nominal
+              example: percentage
+            profiles:
+              type: array
+              minItems: 1
+              items:
+                $ref: '#/components/schemas/RequestDraftRegularProfileV3'
+      example:
+        locale: eng_us
+        completes_goal: 1000
+        profiling:
+          profile_adjustment_type: percentage
+          profiles:
+          - object: regular
+            name: GENDER
+            quotas_enabled: true
+            targets:
+            - name: Target-Male
+              conditions:
+              - object: selection
+                question_id: 43
+                option: '1'
+              quota:
+                completes_goal_percentage: 50
+            - name: Target-Female
+              conditions:
+              - object: selection
+                question_id: 43
+                option: '2'
+              quota:
+                completes_goal_percentage: 50
+          - object: regular
+            quotas_enabled: false
+            targets:
+            - conditions:
+              - object: selection
+                question_id: 96
+                option: '1'
+            - conditions:
+              - object: selection
+                question_id: 96
+                option: '10'
+            - conditions:
+              - object: selection
+                question_id: 96
+                option: '11'
+          - object: blended
+            blended_type: control
+            name: Control quota
+            quotas_enabled: true
+            targets:
+            - name: Control quota 1
+              conditions:
+              - object: selection
+                question_id: 43
+                option: '1'
+              - object: range
+                question_id: 42
+                min: 20
+                max: 29
+              - object: selection
+                question_id: 96
+                option: '1'
+              quota:
+                completes_goal_percentage: 0.0
+                completes_goal: 0
+                quota_nominal: 0
+            - name: Control quota 2
+              conditions:
+              - object: selection
+                question_id: 43
+                option: '2'
+              - object: range
+                question_id: 42
+                min: 30
+                max: 39
+              - object: selection
+                question_id: 96
+                option: '1'
+              quota:
+                completes_goal_percentage: 10.0
+                completes_goal: 0
+                quota_nominal: 0
+            - name: Control quota 3
+              conditions:
+              - object: selection
+                question_id: 43
+                option: '1'
+              - object: range
+                question_id: 42
+                min: 30
+                max: 39
+              - object: selection
+                question_id: 96
+                option: '1'
+              quota:
+                completes_goal_percentage: 0.0
+                completes_goal: 0
+                quota_nominal: 0
+    DraftQuotaDetailsV3:
+      description: A polymorphic object representing a single quota target. The shape of the object depends on whether it has a `quota` block defined.
+      oneOf:
+      - title: Targets with conditions and quota
+        type: object
+        description: Profile target with condition or conditions with quota.
+        required:
+        - id
+        - conditions
+        - quota
+        properties:
+          id:
+            type: string
+            description: The unique identifier for the quota.
+            format: ULID
+            example: 01JQMD8R7F0VW45KPWQ7WYNCFP
+          name:
+            type: string
+            description: The name of the target.
+            example: Target-Condition
+          text:
+            type: string
+            description: The display text for the answer option, in the requested `locale`.
+            example: Condition Text
+          text_translated:
+            type: string
+            description: Translated text of the condition used for display purpose.
+            example: Condition Text
+          conditions:
+            type: array
+            description: List of conditions for the quota.
+            minItems: 1
+            items:
+              $ref: '#/components/schemas/InterlockProfileConditionsV3'
+          quota:
+            type: object
+            required:
+            - completes_goal_percentage
+            - quota_nominal
+            - completes_goal
+            properties:
+              name:
+                type: string
+                description: Name of the quota used for tracking. This will be deprecated, functionally replaced by the `target.name` field one layer up in the contract.
+                deprecated: true
+                example: SF_Quota_12
+              completes_goal_percentage:
+                type: number
+                multipleOf: 0.01
+                minimum: 0
+                maximum: 100
+                description: The goal for this quota, expressed as a percentage of the target group's total `completes_goal`.
+                example: 40
+              quota_nominal:
+                type: integer
+                minimum: 0
+                description: The calculated number of completes for this quota, based on its percentage.
+                example: 40
+              completes_goal:
+                type: integer
+                minimum: 0
+                description: The desired number of completes for this quota. This may differ from `quota_nominal` based on balancing and other factors.
+                example: 40
+      - title: Targets with conditions and no quota
+        type: object
+        description: Profile target with condition or conditions with no quota.
+        required:
+        - id
+        - conditions
+        properties:
+          id:
+            type: string
+            description: The unique identifier for the quota.
+            format: ULID
+            example: 01JQMD8R7F0VW45KPWQ7WYNCFP
+          name:
+            type: string
+            description: The name of the target.
+            example: Target-Condition
+          text:
+            type: string
+            description: The display text for the answer option, in the requested `locale`.
+            example: Condition Text
+          text_translated:
+            type: string
+            description: Translated text of the condition used for display purpose.
+            example: Condition Text
+          conditions:
+            type: array
+            description: List of conditions for the quota.
+            minItems: 1
+            items:
+              $ref: '#/components/schemas/InterlockProfileConditionsV3'
+    DraftQuotaV3:
+      description: An array of detailed quota definitions.
+      type: array
+      minItems: 1
+      items:
+        $ref: '#/components/schemas/DraftQuotaDetailsV3'
+    InvalidParamData:
+      title: Invalid request data
+      type: object
+      description: An error related to invalid business logic or data values.
+      required:
+      - error_type
+      - name
+      - reason
+      properties:
+        error_type:
+          type: string
+          description: The type of validation error.
+          enum:
+          - data_validation_error
+        name:
+          type: string
+          description: Error name code.
+          enum:
+          - profile_validation_error_001
+          - profile_validation_error_002
+          - profile_validation_error_003
+          - profile_validation_error_004
+          - profile_validation_error_005
+          - profile_validation_error_006
+          - profile_validation_error_007
+          - profile_validation_error_008
+          - profile_validation_error_009
+          - profile_validation_error_010
+          - profile_validation_error_011
+          - profile_validation_error_012
+          - profile_validation_error_013
+          - profile_validation_error_014
+          - profile_validation_error_015
+          - profile_validation_error_016
+          - profile_validation_error_017
+          - profile_validation_error_018
+          - profile_validation_error_019
+          - profile_validation_error_020
+          - profile_validation_error_021
+          - profile_validation_error_023
+          - profile_validation_error_024
+          - profile_validation_error_025
+          - profile_validation_error_026
+          - profile_validation_error_030
+          - profile_validation_error_032
+          - profile_validation_error_033
+          - profile_validation_error_034
+          - profile_validation_error_035
+          - profile_validation_error_036
+          - profile_validation_error_037
+          - profile_validation_error_038
+          - profile_validation_error_039
+          - profile_validation_error_040
+          - profile_validation_error_041
+          - profile_validation_error_042
+          - profile_validation_error_043
+          - profile_validation_error_044
+          - profile_validation_error_045
+          - profile_validation_error_046
+          - profile_validation_error_047
+          - profile_validation_error_048
+          - profile_validation_error_049
+          - profile_validation_error_050
+          - profile_validation_error_051
+          - profile_validation_error_052
+          - profile_validation_error_053
+          - profile_validation_error_054
+          - profile_validation_error_055
+          - profile_validation_error_056
+          - profile_validation_error_057
+          - profile_validation_error_058
+          - profile_validation_error_059
+          - profile_validation_error_060
+          - profile_validation_error_061
+          - profile_validation_error_062
+          - profile_validation_error_063
+          - profile_validation_error_064
+          - profile_validation_error_065
+          - profile_validation_error_066
+          - profile_validation_error_067
+          - profile_validation_error_068
+          - profile_validation_error_070
+          - profile_validation_error_071
+          - profile_validation_error_072
+          - profile_validation_error_073
+          - profile_validation_error_074
+          - profile_validation_error_075
+          - profile_validation_error_076
+          - profile_validation_error_077
+          - profile_validation_error_078
+        reason:
+          type: string
+          description: Error reason code.
+          enum:
+          - profile_condition_min_greater_than_max_001
+          - profile_condition_max_less_than_min_error_002
+          - profile_condition_not_unique_003
+          - quota_indexes_out_of_bounds_004
+          - group_quota_not_unique_005
+          - profile_not_unique_006
+          - ungroup_quota_not_unique_007
+          - quota_percentage_not_in_sync_with_nominal_008
+          - incorrect_sum_of_percentage_009
+          - incorrect_sum_of_nominal_010
+          - unable_to_add_dependency_011
+          - profile_with_invalid_condition_012
+          - not_supported_profile_type_013
+          - profile_condition_ranges_should_not_overlap_014
+          - invalid_question_id_015
+          - total_completes_goal_cannot_be_less_than_one_016
+          - total_completes_goal_cannot_be_greater_than_max_017
+          - invalid_zip_code_018
+          - not_supported_question_option_020
+          - zip_not_supported_in_blended_021
+          - blended_profiles_cannot_have_more_than_3_questions_023
+          - number_of_quotas_in_blended_cannot_be_greater_than_max_024
+          - quota_will_be_always_enabled_for_blended_profile_025
+          - at_least_one_quota_object_should_be_populated_with_completes_goal_or_completes_goal_percentage_value_026
+          - total_number_of_quotas_cannot_be_greater_than_max_030
+          - invalid_open_ended_option_032
+          - quota_conditions_out_of_bounds_033
+          - blended_profile_cannot_be_more_than_1_034
+          - start_at_and_end_at_cannot_be_same_035
+          - end_at_cannot_be_before_start_at_036
+          - invalid_start_at_or_end_at_date_format_037
+          - zip_values_cannot_be_greater_than_max_038
+          - duplicate_condition_039
+          - template_locale_does_not_match_target_group_locale_040
+          - template_allows_only_percentage_adjustment_041
+          - nominal_adjustment_cannot_have_percentage_042
+          - percentage_adjustment_cannot_have_nominal_043
+          - profile_id_not_found_044
+          - target_id_not_found_for_profile_045
+          - quota_value_less_than_completes_046
+          - quota_value_greater_than_completes_goal_047
+          - regular_profile_cannot_have_more_than_one_question_048
+          - profiles_to_be_blended_cannot_have_only_one_question_049
+          - profiles_and_profile_adjustment_type_must_be_provided_050
+          - at_least_one_profile_must_be_in_profiles_object_051
+          - completes_goal_percentage_must_be_populated_for_quota_enabled_profile_052
+          - completes_goal_must_be_populated_for_quota_enabled_profile_053
+          - allow_all_values_must_be_populated_for_open_ended_condition_054
+          - open_ended_values_must_be_of_same_length_as_option_mask_055
+          - duplicate_quota_name_056
+          - target_name_or_quota_name_must_be_provided_for_multiple_conditions_057
+          - blended_profile_cannot_have_only_one_condition_058
+          - profile_adjustment_type_and_quota_fields_do_not_match_059
+          - completes_goal_and_profiles_must_be_provided_060
+          - disabled_profile_cannot_have_completes_goal_061
+          - profiles_to_be_blended_cannot_be_null_062
+          - at_least_one_quota_should_have_completes_goal_greater_than_zero_063
+          - at_least_one_quota_should_have_completes_goal_percentage_greater_than_zero_064
+          - allow_all_values_target_cannot_have_quota_065
+          - blended_profile_with_control_as_blended_type_cannot_be_more_than_1_066
+          - blended_profile_with_control_as_blended_type_should_match_with_regular_profiles_067
+          - blended_profile_with_control_as_blended_type_cannot_share_questions_with_blended_type_as_interlock_or_null_blended_type_068
+          - blended_profile_with_control_as_blended_type_cannot_have_more_than_max_targets_070
+          - blended_profile_with_control_as_blended_type_cannot_have_less_than_1_target_071
+          - blended_profile_with_control_as_blended_type_must_have_target_or_quota_name_072
+          - blended_profile_with_control_as_blended_type_cannot_have_duplicate_target_or_quota_name_073
+          - control_blended_profiles_associated_with_target_groups_are_not_supported_for_supplier_distribution_074
+          - total_completes_goal_cannot_be_less_than_control_blended_profile_completes_goal_075
+          - total_completes_goal_cannot_be_less_than_collected_076
+          - total_number_of_profiles_cannot_be_greater_than_max_077
+          - total_number_of_conditions_cannot_be_greater_than_max_078
+        detail:
+          type: string
+        metadata:
+          type: object
+          properties:
+            question_id:
+              type: array
+              items:
+                type: integer
+              description: The question id of the question that failed validation.
+            profile_id:
+              type: string
+              format: ulid
+              description: The profile id of the profile that failed validation.
+            interlock_id:
+              type: string
+              format: ulid
+              description: The interlock id of the interlock that failed validation.
+            quota_id:
+              type: string
+              format: ulid
+              description: The quota id of the quota that failed validation.
+            error_level:
+              type: string
+              enum:
+              - warning
+              - error
+              description: The level of the error.
+      example:
+        error_type: data_validation_error
+        name: profile_validation_error_001
+        reason: profile_condition_min_greater_than_max_001
+        detail: The minimum value cannot be greater than the maximum value.
+        metadata:
+          profile_id: 01H8XGJWBWBAQ4J1Z5F4A9C3K8
+          question_id:
+          - 123
+          error_level: error
+    RequestDraftQuotaNominalV3:
+      type: object
+      description: Profile target with condition or conditions and nominal value in quota.
+      required:
+      - conditions
+      - quota
+      properties:
+        conditions:
+          type: array
+          description: List of conditions.
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/InterlockProfileConditionsV3'
+        quota:
+          type: object
+          required:
+          - completes_goal
+          properties:
+            name:
+              type: string
+              description: Name of the quota used for tracking. This will be deprecated, functionally replaced by the `target.name` field one layer up in the contract.
+              deprecated: true
+              example: SF_Quota_12
+            completes_goal:
+              type: number
+              format: int32
+              minimum: 0
+              description: Total completes goal quota applied to this condition(s).
+              example: 40
+    RequestDraftNoQuotaV3:
+      type: object
+      description: No quotas specified. The request will proceed without applying any quotas.
+      required:
+      - object
+      - conditions
+      properties:
+        object:
+          type: string
+          description: Object field to distinguish the operation.
+          enum:
+          - nominal
+          example: nominal
+        conditions:
+          type: array
+          description: List of conditions.
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/InterlockProfileConditionsV3'
+    Error:
+      type: object
+      description: The standard error object returned for all failed API requests.
+      required:
+      - object
+      - detail
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: A unique identifier for this specific error instance.
+        object:
+          type: string
+          description: A short informative string identifying the type of the error
+          pattern: ^([a-z]*_)*([a-z]*)$
+        detail:
+          type: string
+          description: An error message provides a concise overview of the cause of the error.
+        invalid_params:
+          type: array
+          nullable: true
+          description: An optional field containing a list of invalid parameters may be presented in validation errors for additional information.
+          items:
+            $ref: '#/components/schemas/InvalidParam'
+    ProfileTargetsRangeConditionsV3:
+      title: Range condition
+      type: object
+      description: A profiling condition that targets a numeric range (e.g. age).
+      required:
+      - object
+      - question_id
+      - min
+      - max
+      properties:
+        object:
+          type: string
+          description: The type of profiling condition. For this object, the value is always 'range'.
+          enum:
+          - range
+          example: range
+        question_id:
+          $ref: '#/components/schemas/QuestionID'
+        min:
+          type: integer
+          format: int32
+          minimum: 1
+          maximum: 99
+          description: The minimum numeric value (inclusive).
+          example: 18
+        max:
+          type: integer
+          format: int32
+          minimum: 1
+          maximum: 99
+          description: The maximum numeric value (inclusive).
+          example: 24
+    ValidationErrorResponseDemographics:
+      type: object
+      properties:
+        object:
+          type: string
+          default: unprocessable_entity_error
+        title:
+          type: string
+          default: profile request validation
+        detail:
+          type: string
+          pattern: ^Validation error.*?$
+        invalid_params:
+          type: array
+          items:
+            oneOf:
+            - $ref: '#/components/schemas/InvalidParamData'
+            - $ref: '#/components/schemas/InvalidParamStructure'
+            discriminator:
+              propertyName: error_type
+              mapping:
+                data_validation_error: '#/components/schemas/InvalidParamData'
+                structural_error: '#/components/schemas/InvalidParamStructure'
+    BadRequestErrorResponseDemographics:
+      type: object
+      properties:
+        object:
+          type: string
+        detail:
+          type: string
+        invalid_params:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+              reason:
+                type: string
+            required:
+            - name
+            - reason
+      required:
+      - object
+      - detail
+    InternalErrorResponseDemographics:
+      type: object
+      properties:
+        object:
+          type: string
+        detail:
+          type: string
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+              reason:
+                type: string
+            required:
+            - name
+            - reason
+      required:
+      - object
+      - detail
+    InterlockProfileConditionsV3:
+      description: A polymorphic object representing a single profiling condition, which can be a `selection`, `range`, or `open_ended` type.
+      oneOf:
+      - $ref: '#/components/schemas/ProfileTargetsSelectionConditionsV3'
+      - $ref: '#/components/schemas/ProfileTargetsRangeConditionsV3'
+      - $ref: '#/components/schemas/ProfileTargetsOpenEndedConditionsV3'
+    RequestDraftQuotaV3:
+      description: "A request targets block must be one of:\n  • a nominal target based on profile adjustement type (see RequestDraftGroupedQuotaNominalV3)\n  • a percentage target based on profile adjustment type (see RequestDraftGroupedQuotaV3)\n  • no target (empty object) should be in alignment with quota_enabled field as false.\n"
+      oneOf:
+      - title: Targets with nominal value in quota
+        type: array
+        minItems: 1
+        items:
+          $ref: '#/components/schemas/RequestDraftQuotaNominalV3'
+      - title: Targets with percentage value in quota
+        type: array
+        minItems: 1
+        items:
+          $ref: '#/components/schemas/RequestDraftQuotaPercentageV3'
+      - title: Targets with conditions and no quota
+        type: array
+        minItems: 1
+        items:
+          $ref: '#/components/schemas/RequestDraftNoQuotaV3'
+    RequestDraftRegularProfileV3:
+      oneOf:
+      - title: Regular Profile
+        type: object
+        required:
+        - object
+        - quotas_enabled
+        - targets
+        properties:
+          object:
+            type: string
+            description: 'Object field to distinguish the operation.
+
+              '
+            enum:
+            - regular
+            example: regular
+          name:
+            type: string
+            description: "The name of the regular profile. \n"
+            example: SF_YoungAge
+          quotas_enabled:
+            type: boolean
+            description: Flag indicating if quotas are enabled.
+            example: true
+          targets:
+            $ref: '#/components/schemas/RequestDraftQuotaV3'
+      - title: Blended Profile
+        type: object
+        required:
+        - object
+        - name
+        - quotas_enabled
+        - targets
+        properties:
+          object:
+            type: string
+            description: 'Object field to distinguish the operation.
+
+              '
+            enum:
+            - blended
+            example: blended
+          blended_type:
+            type: string
+            description: The blended_type field defines the functional behavior of the blended profile as either interlock or control. If omitted, the system defaults to interlock. This field distinguishes between profiles requiring a full matrix expansion (interlock) and those used for isolating specific demographic segments (control).
+            enum:
+            - interlock
+            - control
+            example: interlock
+          name:
+            type: string
+            description: The name of the profile.
+            example: SF_YoungAge
+          quotas_enabled:
+            type: boolean
+            description: Flag indicating if quotas are enabled.
+            example: true
+          targets:
+            $ref: '#/components/schemas/RequestDraftQuotaV3'
+    ProfileTargetsSelectionConditionsV3:
+      title: Selection condition
+      type: object
+      description: A profiling condition that targets a specific answer option (e.g. gender).
+      required:
+      - object
+      - question_id
+      - option
+      properties:
+        object:
+          type: string
+          description: The type of profiling condition. For this object, the value is always 'selection'.
+          enum:
+          - selection
+          example: selection
+        question_id:
+          $ref: '#/components/schemas/QuestionID'
+        option:
+          type: string
+          description: The unique identifier for the selected answer option.
+          example: '1'
+    AccountID:
+      description: The account's unique identifier.
+      type: integer
+      format: int32
+      example: 101
+    GenerateDraftInterlockedProfileRequestV3:
+      description: The request body for generating a blended (interlocked) profile from two or three regular profiles.
+      type: object
+      required:
+      - locale
+      - completes_goal
+      - start_at
+      - end_at
+      - collects_pii
+      - profiling
+      properties:
+        locale:
+          type: string
+          example: eng_us
+        completes_goal:
+          $ref: '#/components/schemas/CompletesGoal'
+        start_at:
+          type: string
+          example: '2023-10-09T12:00:00.000Z'
+        end_at:
+          type: string
+          example: '2023-10-09T12:00:00.000Z'
+        collects_pii:
+          type: boolean
+          example: false
+        profiling:
+          description: The core profiling configuration containing the profiles to be blended.
+          type: object
+          required:
+          - profile_adjustment_type
+          - profiles
+          properties:
+            profile_adjustment_type:
+              type: string
+              description: 'Defines how quotas are specified in the `profile` object.
+
+                Use `percentage` to define quotas as a percentage of the `completes_goal`, or `nominal` to define them as a specific number of completes.
+
+                '
+              enum:
+              - percentage
+              - nominal
+              example: percentage
+            profiles:
+              type: array
+              minItems: 2
+              maxItems: 3
+              items:
+                $ref: '#/components/schemas/RequestDraftRegularProfileV3'
+      example:
+        locale: eng_us
+        completes_goal: 1000
+        start_at: '2024-10-09T12:00:00.000Z'
+        end_at: '2024-10-23T12:00:00.000Z'
+        collects_pii: false
+        profiling:
+          profile_adjustment_type: percentage
+          profiles:
+          - object: regular
+            name: GENDER
+            quotas_enabled: true
+            targets:
+            - name: Target-Male
+              conditions:
+              - object: selection
+                question_id: 43
+                option: '1'
+              quota:
+                completes_goal_percentage: 50
+          - object: regular
+            name: AGE
+            quotas_enabled: true
+            targets:
+            - name: Target-Age-18-34
+              conditions:
+              - object: range
+                question_id: 42
+                min: 18
+                max: 34
+              quota:
+                completes_goal_percentage: 50
+    ProfileTargetsOpenEndedConditionsV3:
+      title: Open-ended condition
+      description: A profiling condition that targets open-ended text values.
+      oneOf:
+      - title: Allow All Values
+        description: If `allow_all_values` is true, `open_ended_values` must be null.
+        type: object
+        properties:
+          object:
+            type: string
+            description: The type of profiling condition. For this object, the value is always 'open_ended'.
+            enum:
+            - open_ended
+            example: open_ended
+          question_id:
+            $ref: '#/components/schemas/QuestionID'
+          allow_all_values:
+            type: boolean
+            enum:
+            - true
+            description: Flag to allow all values.
+          open_ended_values:
+            type: array
+            minItems: 0
+            maxItems: 0
+            items:
+              type: string
+            nullable: true
+            description: Must be null when `allow_all_values` is true.
+        required:
+        - object
+        - question_id
+        - allow_all_values
+        - open_ended_values
+      - title: Specific Open End Values
+        description: If `allow_all_values` is false, `open_ended_values` must contain at least one open end value.
+        type: object
+        properties:
+          object:
+            type: string
+            description: Object field to distinguish between different types of control selections.  Always is `open_ended`.
+            enum:
+            - open_ended
+            example: open_ended
+          question_id:
+            $ref: '#/components/schemas/QuestionID'
+          allow_all_values:
+            type: boolean
+            enum:
+            - false
+            description: Flag to allow only specific open end values.
+          open_ended_values:
+            type: array
+            items:
+              type: string
+            minItems: 1
+            maxItems: 10000
+            description: List of applicable open end values. Required when `allow_all_values` is false. Note that only 10,000 values may be provided. For more than 10,000, please contact your integration consultant.
+        required:
+        - object
+        - question_id
+        - allow_all_values
+        - open_ended_values
+      example:
+        object: open_ended
+        question_id: 45
+        open_ended_values: []
+        allow_all_values: true
+  responses:
+    Error_NotFound:
+      description: A requested resource isn't found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            id: 7a5972ba-0825-4360-b852-fa2430e47034
+            object: not_found_error
+            detail: resource not found
+    Error_Forbidden:
+      description: A requested is forbidden.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            id: fe68cdd2-ee87-4dbf-8950-63c5cbca94c7
+            object: authorization_error
+            detail: you don't have the right permissions to perform this operation
+    Error_Unauthorized:
+      description: A request is unauthorized.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            id: 1dcf0f40-f0d1-4cf6-8c00-c3d019d32faf
+            object: authorization_error
+            detail: no valid authorization provided for this operation
+  parameters:
+    CintAPIVersion-2025-12-18:
+      name: Cint-API-Version
+      in: header
+      required: true
+      schema:
+        type: string
+        example: 2025-12-18
+      description: 'This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.
+
+        '
+    AccountID:
+      name: account_id
+      description: The account's unique identifier.
+      in: path
+      required: true
+      schema:
+        $ref: '#/components/schemas/AccountID'
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Bearer token used for authentication and authorization. See [Authentication Process](https://developer.cint.com/en/guides#authentication-process) documentation for more information.
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: API Key Authentication

@@ -1,0 +1,899 @@
+openapi: 3.0.3
+info:
+  title: Demand Accounts Profiling Library API
+  description: 'Cint''s demand ordering API is REST oriented. It has predictable resource based URLs, accepts JSON-encoded request bodies, returns JSON-encoded responses, and uses standard HTTP response codes, authentication, and verbs. Error responses are also JSON-encoded and follow a standard format, providing a unique error ID and detailed information about what went wrong.
+
+
+    Authentication is handled via bearer tokens passed in the `Authorization` header. All requests must also include a `Cint-API-Version` header with a date in `YYYY-MM-DD` format to specify the desired API version. Depending on the version you use, endpoint behavior may differ as we improve our API with every version release.
+
+
+    While many operations work on a single object per request, the demand ordering API also provides asynchronous batch endpoints for performing bulk updates efficiently on certain resources. For safety, `POST` requests support an `Idempotency-Key` header to allow for safe retries without accidentally performing the same operation twice.
+
+    '
+  version: '2025-12-18'
+servers:
+- description: Production server
+  url: https://api.cint.com/v1
+security:
+- BearerAuth: []
+tags:
+- name: Profiling Library
+  description: List all profiling questions including account specific questions with translations and categories. Profiling questions allow you to target and filter respondents based on their characteristics.
+paths:
+  /demand/accounts/{account_id}/questions-translation:
+    parameters:
+    - $ref: '#/components/parameters/AccountID'
+    - $ref: '#/components/parameters/QuestionsTranslationIDs'
+    - $ref: '#/components/parameters/QuestionsTranslationLocale'
+    - $ref: '#/components/parameters/QuestionsTranslationTranslationLanguage'
+    - $ref: '#/components/parameters/QuestionsTranslationQuery'
+    - $ref: '#/components/parameters/QuestionsTranslationAllowCustomQuals'
+    - $ref: '#/components/parameters/QuestionsTranslationAllowOnlyCustomQuals'
+    - $ref: '#/components/parameters/EndBefore'
+    - $ref: '#/components/parameters/StartAfter'
+    - $ref: '#/components/parameters/PageSize'
+    - $ref: '#/components/parameters/CintAPIVersion-2025-12-18'
+    get:
+      summary: Lists all available questions, answers, and conditions.
+      description: 'Lists the available standard and account-specific profiling questions you can use to define your target audience. This endpoint provides the `question_id` and `option` IDs required for building the `profiling` object in other API calls, such as when creating a target group or calculating feasibility.
+
+
+        Key behaviors:
+
+
+        * **Filtering:** You can filter the list by providing a comma-separated list of question `id`s, or perform a text search across questions and answers using the `query` parameter. **If no question IDs are provided, all questions and answers/conditions will be returned.**
+
+        * **Custom Qualifications:** By default, only standard Cint questions are returned. Use the `allow_custom_quals` parameter to include your account-specific questions, or `only_custom_quals` to retrieve **only** those questions.
+
+        * **Translation:** The `description` and `text` fields are translated based on the `locale` and `translation_language` parameters. The `..._translated` fields provide a consistent English-language fallback.
+
+        * **Pagination:** The response is paginated. Use the `page_size` parameter to control the number of results per page and the `start_after` or `end_before` cursors to navigate between pages.
+
+        * **Defaults:** If you don''t provide a `locale`, the default is `eng_us`. If `translation_language` is omitted, the default is English.
+
+        '
+      operationId: account_questions_translation
+      responses:
+        '200':
+          description: A list of profiling questions and translations were retrieved successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QuestionsTranslationResponse'
+              example:
+                total: 5
+                profiles:
+                - object: regular
+                  name: AGE
+                  description: Por favor, indique su edad.
+                  description_translated: What is your age?
+                  quotas_enabled: false
+                  targets:
+                  - text: ''
+                    text_translated: ''
+                    conditions:
+                    - object: range
+                      question_id: 42
+                      option: null
+                  option_mask: XX
+                  standard: true
+                  profile_condition_type: Numeric - Open-end
+                  classification_id: 32
+                  classification_code: DEM
+                - object: regular
+                  name: GENDER
+                  description: ¿Es usted…?
+                  description_translated: What is your gender?
+                  quotas_enabled: false
+                  targets:
+                  - text: Hombre
+                    text_translated: Male
+                    conditions:
+                    - object: selection
+                      question_id: 43
+                      option: '1'
+                  - text: Mujer
+                    text_translated: Female
+                    conditions:
+                    - object: selection
+                      question_id: 43
+                      option: '2'
+                  - text: Ninguno de los anteriores
+                    text_translated: None of the above
+                    conditions:
+                    - object: selection
+                      question_id: 43
+                      option: '-3105'
+                  option_mask: TestingJohnnyZ
+                  standard: true
+                  profile_condition_type: Single Punch
+                  classification_id: 32
+                  classification_code: DEM
+                - object: regular
+                  name: ZIP
+                  description: ¿Cuál es su código postal?
+                  description_translated: What is your zip code?
+                  quotas_enabled: false
+                  targets:
+                  - text: ''
+                    text_translated: ''
+                    conditions:
+                    - object: open_ended
+                      question_id: 45
+                      option: null
+                      allow_all_values: true
+                  option_mask: XXXXX
+                  standard: true
+                  profile_condition_type: Numeric - Open-end
+                  classification_id: 32
+                  classification_code: DEM
+                - object: regular
+                  name: HISPANIC
+                  description: ¿Es usted Hispano, Latino o del origen Español?
+                  description_translated: Are you of Hispanic, Latino, or Spanish origin?
+                  quotas_enabled: false
+                  targets:
+                  - text: Argentina
+                    text_translated: Argentina
+                    conditions:
+                    - object: selection
+                      question_id: 47
+                      option: '4'
+                  - text: Colombia
+                    text_translated: Colombia
+                    conditions:
+                    - object: selection
+                      question_id: 47
+                      option: '5'
+                  - text: Ecuador
+                    text_translated: Ecuador
+                    conditions:
+                    - object: selection
+                      question_id: 47
+                      option: '6'
+                  - text: El Salvador
+                    text_translated: El Salvador
+                    conditions:
+                    - object: selection
+                      question_id: 47
+                      option: '7'
+                  - text: España
+                    text_translated: Spain
+                    conditions:
+                    - object: selection
+                      question_id: 47
+                      option: '12'
+                  - text: Guatemala
+                    text_translated: Guatemala
+                    conditions:
+                    - object: selection
+                      question_id: 47
+                      option: '8'
+                  - text: Nicaragua
+                    text_translated: Nicaragua
+                    conditions:
+                    - object: selection
+                      question_id: 47
+                      option: '9'
+                  - text: No, no soy ni Hispano ni Latino ni de Origen Español
+                    text_translated: No , not of Hispanic, Latino, or Spanish origin
+                    conditions:
+                    - object: selection
+                      question_id: 47
+                      option: '1'
+                  - text: Otro
+                    text_translated: Other
+                    conditions:
+                    - object: selection
+                      question_id: 47
+                      option: '14'
+                  - text: Panama
+                    text_translated: Panama
+                    conditions:
+                    - object: selection
+                      question_id: 47
+                      option: '10'
+                  - text: Peru
+                    text_translated: Peru
+                    conditions:
+                    - object: selection
+                      question_id: 47
+                      option: '11'
+                  - text: Prefiero no responder
+                    text_translated: Prefer not to answer
+                    conditions:
+                    - object: selection
+                      question_id: 47
+                      option: '15'
+                  - text: Si, Puerto Rico
+                    text_translated: Yes, Puerto Rican
+                    conditions:
+                    - object: selection
+                      question_id: 47
+                      option: '16'
+                  - text: Si, soy Mexicano, México-Americano o Chicano
+                    text_translated: Yes, Mexican, Mexican American, Chicano
+                    conditions:
+                    - object: selection
+                      question_id: 47
+                      option: '2'
+                  - text: Sí, Cubano
+                    text_translated: Yes, Cuban
+                    conditions:
+                    - object: selection
+                      question_id: 47
+                      option: '3'
+                  - text: Venezuela
+                    text_translated: Venezuela
+                    conditions:
+                    - object: selection
+                      question_id: 47
+                      option: '13'
+                  option_mask: ''
+                  standard: true
+                  profile_condition_type: Single Punch
+                  classification_id: 32
+                  classification_code: DEM
+                - object: regular
+                  name: STORES 1
+                  description: Thinking about grocery shopping for your household, about how often do you shop at each of the following stores for groceries?
+                  description_translated: Thinking about grocery shopping for your household, about how often do you shop at each of the following stores for groceries?
+                  quotas_enabled: false
+                  targets:
+                  - text: Wal- Mart
+                    text_translated: Wal- Mart
+                    conditions:
+                    - object: selection
+                      question_id: 63
+                      option: '1'
+                  - text: Target
+                    text_translated: Target
+                    conditions:
+                    - object: selection
+                      question_id: 63
+                      option: '2'
+                  - text: Whole Foods
+                    text_translated: Whole Foods
+                    conditions:
+                    - object: selection
+                      question_id: 63
+                      option: '3'
+                  - text: Trader Joe's
+                    text_translated: Trader Joe's
+                    conditions:
+                    - object: selection
+                      question_id: 63
+                      option: '4'
+                  - text: 7-11
+                    text_translated: 7-11
+                    conditions:
+                    - object: selection
+                      question_id: 63
+                      option: '5'
+                  - text: Walgreen's
+                    text_translated: Walgreen's
+                    conditions:
+                    - object: selection
+                      question_id: 63
+                      option: '6'
+                  - text: CVS
+                    text_translated: CVS
+                    conditions:
+                    - object: selection
+                      question_id: 63
+                      option: '7'
+                  - text: Kroger
+                    text_translated: Kroger
+                    conditions:
+                    - object: selection
+                      question_id: 63
+                      option: '8'
+                  - text: Randalls
+                    text_translated: Randalls
+                    conditions:
+                    - object: selection
+                      question_id: 63
+                      option: '9'
+                  - text: CostCo
+                    text_translated: CostCo
+                    conditions:
+                    - object: selection
+                      question_id: 63
+                      option: '10'
+                  - text: Sam's Club
+                    text_translated: Sam's Club
+                    conditions:
+                    - object: selection
+                      question_id: 63
+                      option: '11'
+                  - text: None of the above
+                    text_translated: None of the above
+                    conditions:
+                    - object: selection
+                      question_id: 63
+                      option: '-3105'
+                  option_mask: ''
+                  standard: false
+                  profile_condition_type: Multi Punch
+                  classification_id: -1
+                  classification_code: ''
+                has_more: true
+                next_cursor: 00000000-0000-0000-0000-00000000003f
+        '400':
+          $ref: '#/components/responses/Error_BadRequest'
+        '401':
+          $ref: '#/components/responses/Error_Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error_Forbidden'
+        '404':
+          $ref: '#/components/responses/Error_NotFound'
+        '500':
+          $ref: '#/components/responses/Error_Internal'
+      tags:
+      - Profiling Library
+  /demand/questions/categories:
+    parameters:
+    - $ref: '#/components/parameters/CintAPIVersion-2025-12-18'
+    get:
+      operationId: list_all_question_categories
+      summary: Lists all available question categories
+      description: Lists all available categories for profiling questions. You can use these categories to help organize and discover relevant questions when building a target group.
+      tags:
+      - Profiling Library
+      responses:
+        '200':
+          description: A list of question categories was retrieved successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListQuestionCategories'
+              example:
+                categories:
+                - id: 23
+                  code: AIR
+                  name: Airlines/Travel
+                - id: 25
+                  code: AUT
+                  name: Automotive
+                - id: 28
+                  code: B2B
+                  name: Business to Business
+        '400':
+          $ref: '#/components/responses/Error_BadRequest'
+        '401':
+          $ref: '#/components/responses/Error_Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error_Forbidden'
+        '500':
+          $ref: '#/components/responses/Error_Internal'
+components:
+  parameters:
+    QuestionsTranslationAllowOnlyCustomQuals:
+      name: only_custom_quals
+      in: query
+      description: If `true`, the response will only include your account's custom qualifications.
+      schema:
+        type: boolean
+        example: true
+    QuestionsTranslationTranslationLanguage:
+      name: translation_language
+      in: query
+      description: The ISO 639-2 (3-letter) code for the language to use for the `description_translated` and `text_translated` fields.
+      schema:
+        type: string
+        example: spa
+    QuestionsTranslationQuery:
+      name: query
+      in: query
+      description: Text filter on the results set.
+      schema:
+        type: string
+        example: automotive
+    QuestionsTranslationLocale:
+      name: locale
+      in: query
+      description: Locale of target group in <language 1st 3 chars>_<country 2 char abbreviation> format.
+      required: true
+      schema:
+        type: string
+        example: eng_us
+    CintAPIVersion-2025-12-18:
+      name: Cint-API-Version
+      in: header
+      required: true
+      schema:
+        type: string
+        example: 2025-12-18
+      description: 'This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.
+
+        '
+    EndBefore:
+      name: end_before
+      in: query
+      description: Returns a list of objects that come before the provided pagination cursor. This is used for navigating to a previous page.
+      schema:
+        type: string
+      example: 7daa40ad-303b-40a2-89df-a9760400cde7
+    QuestionsTranslationAllowCustomQuals:
+      name: allow_custom_quals
+      in: query
+      description: If `true`, the response will include your account's custom qualifications in addition to the standard ones.
+      schema:
+        type: boolean
+        example: true
+    PageSize:
+      name: page_size
+      in: query
+      description: A limit on the number of objects to be returned, between 1 and 100.
+      schema:
+        type: integer
+        default: 10
+      example: 15
+    StartAfter:
+      name: start_after
+      in: query
+      description: Returns a list of objects after the provided pagination cursor, using the next_cursor from the previous response.
+      schema:
+        type: string
+      example: bff6a669-a469-409d-8c94-dcf92258043a
+    QuestionsTranslationIDs:
+      name: id
+      in: query
+      description: List of comma separated question IDs.
+      schema:
+        type: string
+        example: 42,43,97
+    AccountID:
+      name: account_id
+      description: The account's unique identifier.
+      in: path
+      required: true
+      schema:
+        $ref: '#/components/schemas/AccountID'
+  responses:
+    Error_NotFound:
+      description: A requested resource isn't found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            id: 7a5972ba-0825-4360-b852-fa2430e47034
+            object: not_found_error
+            detail: resource not found
+    Error_Internal:
+      description: A request failed due to an internal error.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            id: d94b8bb2-a540-4a91-9c05-2aa3ae9a5e1e
+            object: unexpected_internal_error
+            detail: an internal error has led to the failure of this operation
+    Error_Forbidden:
+      description: A requested is forbidden.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            id: fe68cdd2-ee87-4dbf-8950-63c5cbca94c7
+            object: authorization_error
+            detail: you don't have the right permissions to perform this operation
+    Error_Unauthorized:
+      description: A request is unauthorized.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            id: 1dcf0f40-f0d1-4cf6-8c00-c3d019d32faf
+            object: authorization_error
+            detail: no valid authorization provided for this operation
+    Error_BadRequest:
+      description: A request is not valid and can't be processed.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            id: 9e278238-d011-4e05-8327-1ce1d5d26254
+            object: bad_request_error
+            detail: Expected field 'foo' is missing.
+  schemas:
+    QuestionCategoryID:
+      type: integer
+      description: The unique identifier for a question category.
+      example: 43
+    InvalidParam:
+      type: object
+      description: Describes a single invalid parameter in a request.
+      properties:
+        name:
+          type: string
+          description: The name of the parameter that failed validation.
+        reason:
+          type: string
+          description: A short explanation of why the parameter was invalid.
+      required:
+      - name
+      - reason
+    QuestionID:
+      type: integer
+      description: The unique identifier for a profiling question.
+      example: 12413
+    QuestionQuotaDetailsV3:
+      type: object
+      description: Quota for conditions.
+      required:
+      - text
+      - conditions
+      properties:
+        name:
+          type: string
+          description: The name of the target.
+          example: Target-Condition
+        text:
+          type: string
+          description: The display text for the answer option, in the requested locale.
+          example: Condition Text
+        text_translated:
+          type: string
+          description: Translated text of the condition used for display purpose.
+          example: Condition Text
+        conditions:
+          type: array
+          description: List of conditions for the quota.
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/InterlockProfileConditionsV3'
+    ListQuestionCategories:
+      type: object
+      description: Lists all available question categories.
+      properties:
+        categories:
+          type: array
+          description: List of question categories.
+          items:
+            $ref: '#/components/schemas/QuestionCategory'
+      example:
+        categories:
+        - id: 23
+          code: AIR
+          name: Airlines/Travel
+    QuestionQuotaV3:
+      description: A polymorphic array containing conditions for a question. For question types like `range` or `open_ended` that do not have predefined conditions, this may be an empty array.
+      oneOf:
+      - title: Targets with conditions
+        type: array
+        minItems: 1
+        items:
+          $ref: '#/components/schemas/QuestionQuotaDetailsV3'
+      - title: No conditions
+        type: array
+        nullable: true
+        minItems: 0
+        items:
+          $ref: '#/components/schemas/RequestDraftNoQuotaV3'
+    QuestionCategory:
+      type: object
+      description: Indicates the question's category.
+      properties:
+        id:
+          $ref: '#/components/schemas/QuestionCategoryID'
+        code:
+          $ref: '#/components/schemas/QuestionCategoryCode'
+        name:
+          type: string
+          description: The name of the question category.
+      example:
+        id: 23
+        code: AIR
+        name: Airlines/Travel
+    RequestDraftNoQuotaV3:
+      type: object
+      description: No quotas specified. The request will proceed without applying any quotas.
+      required:
+      - object
+      - conditions
+      properties:
+        object:
+          type: string
+          description: Object field to distinguish the operation.
+          enum:
+          - nominal
+          example: nominal
+        conditions:
+          type: array
+          description: List of conditions.
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/InterlockProfileConditionsV3'
+    Error:
+      type: object
+      description: The standard error object returned for all failed API requests.
+      required:
+      - object
+      - detail
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: A unique identifier for this specific error instance.
+        object:
+          type: string
+          description: A short informative string identifying the type of the error
+          pattern: ^([a-z]*_)*([a-z]*)$
+        detail:
+          type: string
+          description: An error message provides a concise overview of the cause of the error.
+        invalid_params:
+          type: array
+          nullable: true
+          description: An optional field containing a list of invalid parameters may be presented in validation errors for additional information.
+          items:
+            $ref: '#/components/schemas/InvalidParam'
+    ProfileTargetsRangeConditionsV3:
+      title: Range condition
+      type: object
+      description: A profiling condition that targets a numeric range (e.g. age).
+      required:
+      - object
+      - question_id
+      - min
+      - max
+      properties:
+        object:
+          type: string
+          description: The type of profiling condition. For this object, the value is always 'range'.
+          enum:
+          - range
+          example: range
+        question_id:
+          $ref: '#/components/schemas/QuestionID'
+        min:
+          type: integer
+          format: int32
+          minimum: 1
+          maximum: 99
+          description: The minimum numeric value (inclusive).
+          example: 18
+        max:
+          type: integer
+          format: int32
+          minimum: 1
+          maximum: 99
+          description: The maximum numeric value (inclusive).
+          example: 24
+    QuestionResponseProfileFormat:
+      type: object
+      description: Contains the details for a single profiling question, including its answer options and translations.
+      required:
+      - object
+      - name
+      - description
+      - quotas_enabled
+      - targets
+      - standard
+      - profile_condition_type
+      properties:
+        object:
+          type: string
+          description: Object field to distinguish the operation.
+          enum:
+          - regular
+          example: regular
+        name:
+          type: string
+          description: The name of the profile.
+          example: HISPANIC
+        description:
+          type: string
+          description: A short summary of the profile. Summary language will be based on the target group's locale.
+          example: Are you of Hispanic, Latino, or Spanish origin?
+        description_translated:
+          type: string
+          description: A short summary of the profile by default english language.
+          example: Are you of Hispanic, Latino, or Spanish origin?
+        quotas_enabled:
+          type: boolean
+          description: Flag indicating if quotas are enabled.
+          example: false
+        targets:
+          $ref: '#/components/schemas/QuestionQuotaV3'
+        option_mask:
+          type: string
+          description: The question option mask.
+          example: XX
+        standard:
+          type: boolean
+          description: A flag that indicates if this is a standard Cint question (true) or a custom, account-specific question (false).
+          example: true
+        profile_condition_type:
+          type: string
+          description: The type of the profile.
+          enum:
+          - Single Punch
+          - Multi Punch
+          - Dummy
+          - Text - Open-end
+          - Numeric - Open-end
+          example: Single Punch
+        classification_id:
+          type: integer
+          description: ID associated with the question classification.
+        classification_code:
+          type: string
+          description: The code representing the classification of the question (e.g. AUT = Automotive, BAN = Banking/Finance, AIR = Airlines/Travel).
+          example: BAN
+    QuestionsTranslationResponse:
+      type: object
+      description: The paginated response object for a profiling question query.
+      required:
+      - total
+      - profiles
+      - has_more
+      properties:
+        total:
+          type: integer
+          description: Total number of questions available in the search results (not necessarily the count of records in the immediate response).
+          example: 29
+        profiles:
+          description: Array of questions and question options for the request.
+          type: array
+          nullable: true
+          items:
+            $ref: '#/components/schemas/QuestionResponseProfileFormat'
+        has_more:
+          type: boolean
+          description: A flag that's true if there are more results to retrieve in a subsequent request.
+        next_cursor:
+          $ref: '#/components/schemas/NextCursor'
+    InterlockProfileConditionsV3:
+      description: A polymorphic object representing a single profiling condition, which can be a `selection`, `range`, or `open_ended` type.
+      oneOf:
+      - $ref: '#/components/schemas/ProfileTargetsSelectionConditionsV3'
+      - $ref: '#/components/schemas/ProfileTargetsRangeConditionsV3'
+      - $ref: '#/components/schemas/ProfileTargetsOpenEndedConditionsV3'
+    ProfileTargetsSelectionConditionsV3:
+      title: Selection condition
+      type: object
+      description: A profiling condition that targets a specific answer option (e.g. gender).
+      required:
+      - object
+      - question_id
+      - option
+      properties:
+        object:
+          type: string
+          description: The type of profiling condition. For this object, the value is always 'selection'.
+          enum:
+          - selection
+          example: selection
+        question_id:
+          $ref: '#/components/schemas/QuestionID'
+        option:
+          type: string
+          description: The unique identifier for the selected answer option.
+          example: '1'
+    QuestionCategoryCode:
+      description: Code that uniquely identifies the question category.
+      type: string
+      enum:
+      - AIR
+      - ART
+      - AUT
+      - B2B
+      - BAN
+      - BEA
+      - BEV
+      - DEM
+      - DEV
+      - EDU
+      - ELE
+      - FAS
+      - FOO
+      - HOB
+      - HOM
+      - IT
+      - MED
+      - PER
+      - POL
+      - REC
+      - SUP
+      - TOB
+      - OTH
+    AccountID:
+      description: The account's unique identifier.
+      type: integer
+      format: int32
+      example: 101
+    NextCursor:
+      description: 'An identifier for pagination that indicates there are more items available.
+
+        When present, use this value to retrieve the next page of results.
+
+        '
+      type: string
+      nullable: true
+      example: bff6a669-a469-409d-8c94-dcf92258043a
+    ProfileTargetsOpenEndedConditionsV3:
+      title: Open-ended condition
+      description: A profiling condition that targets open-ended text values.
+      oneOf:
+      - title: Allow All Values
+        description: If `allow_all_values` is true, `open_ended_values` must be null.
+        type: object
+        properties:
+          object:
+            type: string
+            description: The type of profiling condition. For this object, the value is always 'open_ended'.
+            enum:
+            - open_ended
+            example: open_ended
+          question_id:
+            $ref: '#/components/schemas/QuestionID'
+          allow_all_values:
+            type: boolean
+            enum:
+            - true
+            description: Flag to allow all values.
+          open_ended_values:
+            type: array
+            minItems: 0
+            maxItems: 0
+            items:
+              type: string
+            nullable: true
+            description: Must be null when `allow_all_values` is true.
+        required:
+        - object
+        - question_id
+        - allow_all_values
+        - open_ended_values
+      - title: Specific Open End Values
+        description: If `allow_all_values` is false, `open_ended_values` must contain at least one open end value.
+        type: object
+        properties:
+          object:
+            type: string
+            description: Object field to distinguish between different types of control selections.  Always is `open_ended`.
+            enum:
+            - open_ended
+            example: open_ended
+          question_id:
+            $ref: '#/components/schemas/QuestionID'
+          allow_all_values:
+            type: boolean
+            enum:
+            - false
+            description: Flag to allow only specific open end values.
+          open_ended_values:
+            type: array
+            items:
+              type: string
+            minItems: 1
+            maxItems: 10000
+            description: List of applicable open end values. Required when `allow_all_values` is false. Note that only 10,000 values may be provided. For more than 10,000, please contact your integration consultant.
+        required:
+        - object
+        - question_id
+        - allow_all_values
+        - open_ended_values
+      example:
+        object: open_ended
+        question_id: 45
+        open_ended_values: []
+        allow_all_values: true
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Bearer token used for authentication and authorization. See [Authentication Process](https://developer.cint.com/en/guides#authentication-process) documentation for more information.
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: API Key Authentication

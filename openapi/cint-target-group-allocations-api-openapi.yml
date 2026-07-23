@@ -1,0 +1,972 @@
+openapi: 3.0.3
+info:
+  title: Demand Accounts Target Group Allocations API
+  description: 'Cint''s demand ordering API is REST oriented. It has predictable resource based URLs, accepts JSON-encoded request bodies, returns JSON-encoded responses, and uses standard HTTP response codes, authentication, and verbs. Error responses are also JSON-encoded and follow a standard format, providing a unique error ID and detailed information about what went wrong.
+
+
+    Authentication is handled via bearer tokens passed in the `Authorization` header. All requests must also include a `Cint-API-Version` header with a date in `YYYY-MM-DD` format to specify the desired API version. Depending on the version you use, endpoint behavior may differ as we improve our API with every version release.
+
+
+    While many operations work on a single object per request, the demand ordering API also provides asynchronous batch endpoints for performing bulk updates efficiently on certain resources. For safety, `POST` requests support an `Idempotency-Key` header to allow for safe retries without accidentally performing the same operation twice.
+
+    '
+  version: '2025-12-18'
+servers:
+- description: Production server
+  url: https://api.cint.com/v1
+security:
+- BearerAuth: []
+tags:
+- name: Target Group Allocations
+  description: Create, update, list supplier allocations for a target group. Allocations allow filtering and limiting of the available suppliers on the Exchange.
+paths:
+  /demand/accounts/{account_id}/business-units/{business_unit_id}/account-allocation-templates/{template_id}:
+    parameters:
+    - $ref: '#/components/parameters/AccountID'
+    - $ref: '#/components/parameters/BusinessUnitID'
+    - $ref: '#/components/parameters/TemplateID'
+    - $ref: '#/components/parameters/CintAPIVersion-2025-12-18'
+    get:
+      operationId: get_account_allocation_template_for_business_unit_id
+      summary: Retrieves an account allocation template
+      description: 'This endpoint returns a specific account allocation template, which defines supplier rules for a given business unit and locale.
+
+        The template includes rules for `open_exchange_allocations` and lists any `blocked_suppliers` from private exchanges if the business unit has private deals.
+
+        '
+      tags:
+      - Target Group Allocations
+      parameters:
+      - $ref: '#/components/parameters/LocaleCodeFilter'
+      responses:
+        '200':
+          description: Successfully returns the requested account allocation template.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetAccountAllocationTemplateBusinessUnitIdResponse'
+              example:
+                template_id: 01JT5Z59MAKQ82J5K9Y3YGFNHN
+                template_name": Standard Account Template
+                open_exchange_allocations:
+                  exchange_suppliers:
+                  - supplier_id": '13512'
+                    supplier_name: Test Supplier A
+                  blocked_suppliers:
+                  - supplier_id": '13513'
+                    supplier_name: Blocked Supplier B
+                  exchange_min_percentage: 10
+                  exchange_max_percentage: 90
+                  groups:
+                  - group_name: Premium Suppliers
+                    min_percentage: 50
+                    max_percentage: 70
+                    suppliers:
+                    - supplier_id: '13514'
+                      supplier_name: Premium Supplier C
+                private_exchange_allocations:
+                  blocked_suppliers:
+                  - supplier_id": '13515'
+                    supplier_name: Private Blocked Supplier D
+                last_modified_at": '2024-06-18T14:23:45Z'
+                last_modified_by: b551326b-ac9d-4d32-8823-4f025787dab9
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+            traceparent:
+              description: The `traceparent` header carries the trace ID and parent span ID, as defined by the W3C Trace Context specification. It's used to trace a single request as it moves through multiple services.
+              required: false
+              schema:
+                $ref: '#/components/schemas/Traceparent'
+            tracestate:
+              description: The `tracestate` header complements the `traceparent` header by carrying vendor-specific trace information. This allows different services to add their own data to a trace.
+              required: false
+              schema:
+                $ref: '#/components/schemas/Tracestate'
+        '400':
+          $ref: '#/components/responses/Error_BadRequest'
+        '401':
+          $ref: '#/components/responses/Error_Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error_Forbidden'
+        '404':
+          $ref: '#/components/responses/Error_NotFound'
+        '500':
+          $ref: '#/components/responses/Error_Internal'
+  /demand/accounts/{account_id}/business-units/{business_unit_id}/global-allocation-templates/{template_id}:
+    parameters:
+    - $ref: '#/components/parameters/AccountID'
+    - $ref: '#/components/parameters/BusinessUnitID'
+    - $ref: '#/components/parameters/TemplateID'
+    - $ref: '#/components/parameters/CintAPIVersion-2025-12-18'
+    get:
+      operationId: get_global_allocation_template_by_id_for_business_unit_id
+      summary: Fetch a global allocation template for a business unit and locale
+      description: This endpoint will return a global allocation specification template based on a template id, business unit id and locale.  This specification are set for the open exchange suppliers and will also return all the private exchange suppliers within the blocked suppliers group, if the business unit have any private deals.
+      parameters:
+      - $ref: '#/components/parameters/LocaleCodeFilter'
+      tags:
+      - Target Group Allocations
+      responses:
+        '200':
+          description: A successful response returns the global allocation template.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetGlobalAllocationTemplateBusinessUnitIdResponse'
+          headers:
+            traceparent:
+              $ref: '#/components/headers/Traceparent'
+            tracestate:
+              $ref: '#/components/headers/Tracestate'
+        '400':
+          $ref: '#/components/responses/Error_BadRequest'
+        '401':
+          $ref: '#/components/responses/Error_Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error_Forbidden'
+        '500':
+          $ref: '#/components/responses/Error_Internal'
+  /demand/accounts/{account_id}/business-units/{business_unit_id}/system-allocation-template:
+    parameters:
+    - $ref: '#/components/parameters/AccountID'
+    - $ref: '#/components/parameters/BusinessUnitID'
+    - $ref: '#/components/parameters/LocaleCodeFilter'
+    - $ref: '#/components/parameters/CintAPIVersion-2025-12-18'
+    get:
+      operationId: get_system_allocation_template_by_business_unit_id
+      summary: Get the system allocation template
+      description: This endpoint returns the system's default allocation template for a given business unit and locale. This template acts as the ultimate fallback if no specific account or global template is defined. The response includes rules for `open_exchange_allocations` and lists any` blocked_suppliers` from private exchanges.
+      tags:
+      - Target Group Allocations
+      responses:
+        '200':
+          description: Successfully returns the system allocation template.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetSystemAllocationTemplateBusinessUnitIdResponse'
+              example:
+                template_name: System Default Template
+                open_exchange_allocations:
+                  exchange_suppliers:
+                  - supplier_id: '13512'
+                    supplier_name: System Supplier A
+                  exchange_min_percentage: 0
+                  exchange_max_percentage: 100
+                private_exchange_allocations:
+                  blocked_suppliers: []
+          headers:
+            traceparent:
+              $ref: '#/components/headers/Traceparent'
+            tracestate:
+              $ref: '#/components/headers/Tracestate'
+        '400':
+          $ref: '#/components/responses/Error_BadRequest'
+        '401':
+          $ref: '#/components/responses/Error_Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error_Forbidden'
+        '404':
+          $ref: '#/components/responses/Error_NotFound'
+        '500':
+          $ref: '#/components/responses/Error_Internal'
+  /demand/accounts/{account_id}/projects/{project_id}/target-groups/{target_group_id}/allocation-specification:
+    parameters:
+    - $ref: '#/components/parameters/AccountID'
+    - $ref: '#/components/parameters/ProjectID'
+    - $ref: '#/components/parameters/TargetGroupID'
+    - $ref: '#/components/parameters/CintAPIVersion-2025-12-18'
+    get:
+      operationId: get_target_group_allocation_specification
+      summary: Get target group allocations
+      description: This endpoint returns the supply allocation for a target group. You can use it to see which suppliers are blocked, how suppliers are grouped, and their minimum and maximum allocation percentages.
+      tags:
+      - Target Group Allocations
+      responses:
+        '200':
+          description: A successful response returns allocations for a target group.
+          headers:
+            traceparent:
+              $ref: '#/components/headers/Traceparent'
+            tracestate:
+              $ref: '#/components/headers/Tracestate'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetSupplyAllocationResponse'
+              example:
+                open_exchange_allocations:
+                  blocked_suppliers:
+                  - id: 421
+                    name: Blocked Supplier A
+                    completes: 0
+                    pre_screens: 0
+                  exchange_suppliers: []
+                  exchange_min_percentage: 10
+                  exchange_max_percentage: 90
+                  groups:
+                  - group_id: '1'
+                    group_name: Premium Tier
+                    min_percentage: 50
+                    max_percentage: 80
+                    suppliers:
+                    - id: 420
+                      name: Clix Sense
+                      completes: 150
+                      pre_screens: 1200
+                    conversion_rate: 0.08
+                    completes: 150
+                    prescreens: 1200
+                    total_remaining: 500
+                private_exchange_allocations:
+                  blocked_suppliers: []
+                  groups: []
+        '400':
+          $ref: '#/components/responses/Error_BadRequest'
+        '401':
+          $ref: '#/components/responses/Error_Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error_Forbidden'
+        '404':
+          $ref: '#/components/responses/Error_NotFound'
+        '500':
+          $ref: '#/components/responses/Error_Internal'
+    put:
+      operationId: update_target_group_allocation_specification
+      summary: Updates target group allocations
+      description: This endpoint updates the supply allocation for a target group. You can set which suppliers are blocked, define supplier groups, and configure their minimum and maximum allocation percentages.
+      tags:
+      - Target Group Allocations
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SupplyAllocationUpdateRequest'
+            example:
+              open_exchange_allocations:
+                blocked_supplier_ids:
+                - '421'
+                exchange_min_percentage: 10
+                exchange_max_percentage: 90
+                groups:
+                - group_id: '1'
+                  group_name: Premium Tier
+                  min_percentage: 50
+                  max_percentage: 80
+                  supplier_ids:
+                  - '420'
+                  - '422'
+              private_exchange_allocations:
+                blocked_supplier_ids: []
+                groups: []
+      responses:
+        '204':
+          description: Confirms that the allocation specification was updated successfully.
+          headers:
+            TraceParent:
+              $ref: '#/components/headers/Traceparent'
+            TraceState:
+              $ref: '#/components/headers/Tracestate'
+        '400':
+          $ref: '#/components/responses/Error_BadRequest'
+        '401':
+          $ref: '#/components/responses/Error_Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error_Forbidden'
+        '404':
+          $ref: '#/components/responses/Error_NotFound'
+        '500':
+          $ref: '#/components/responses/Error_Internal'
+components:
+  schemas:
+    ETag:
+      type: string
+      description: The `ETag` header provides a unique identifier that represents the current version state of a particular resource.
+      example: W/"1234"
+    InvalidParam:
+      type: object
+      description: Describes a single invalid parameter in a request.
+      properties:
+        name:
+          type: string
+          description: The name of the parameter that failed validation.
+        reason:
+          type: string
+          description: A short explanation of why the parameter was invalid.
+      required:
+      - name
+      - reason
+    SupplierResponseWithCompletes:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: A unique identifier for the supplier.
+          minimum: 0
+          example: 420
+        name:
+          type: string
+          description: The display name of the supplier.
+          minLength: 1
+          example: Clix Sense
+        completes:
+          type: integer
+          nullable: true
+          description: The number of successful survey completes from this supplier.
+          minimum: 0
+          example: 0
+        pre_screens:
+          type: integer
+          nullable: true
+          description: The number of pre-screen qualifications from this supplier.
+          minimum: 0
+          example: 0
+    OpenExchangeAllocations:
+      type: object
+      description: Defines the allocation rules for suppliers sourced from the Cint open exchange.
+      properties:
+        exchange_suppliers:
+          type: array
+          description: A list of all available suppliers on the open exchange.
+          items:
+            $ref: '#/components/schemas/SupplierInfo'
+        blocked_suppliers:
+          type: array
+          description: A list of open exchange suppliers that are explicitly blocked.
+          items:
+            $ref: '#/components/schemas/SupplierInfo'
+        exchange_min_percentage:
+          type: integer
+          description: The minimum percentage of supply that must be sourced from the open exchange.
+          example: 0
+        exchange_max_percentage:
+          type: integer
+          description: The maximum percentage of supply that can be sourced from the open exchange.
+          example: 100
+        groups:
+          type: array
+          description: Defines specific supplier groups within the open exchange allocation.
+          items:
+            $ref: '#/components/schemas/OpenExchangeAllocationGroup'
+    SupplyAllocationUpdateRequest:
+      type: object
+      description: The request body for updating the supply allocation for a target group.
+      required:
+      - open_exchange_allocations
+      - private_exchange_allocations
+      properties:
+        open_exchange_allocations:
+          type: object
+          description: Defines the allocation rules for suppliers from the Cint open exchange.
+          required:
+          - blocked_supplier_ids
+          - exchange_min_percentage
+          - exchange_max_percentage
+          - groups
+          properties:
+            blocked_supplier_ids:
+              description: A list of supplier IDs to block from the open exchange.
+              $ref: '#/components/schemas/SupplierIds'
+            exchange_min_percentage:
+              type: integer
+              description: The minimum percentage of supply to source from the open exchange.
+              example: 0
+              minimum: 0
+              maximum: 100
+            exchange_max_percentage:
+              type: integer
+              description: The maximum percentage of supply to source from the open exchange.
+              example: 100
+              minimum: 0
+              maximum: 100
+            groups:
+              type: array
+              description: A list of specific supplier groups. To create a new group, omit the `group_id`. To update an existing group, include its `group_id`.
+              items:
+                type: object
+                required:
+                - group_name
+                - min_percentage
+                - max_percentage
+                - supplier_ids
+                properties:
+                  group_id:
+                    type: string
+                    description: The unique identifier for an existing group you want to update. Omit this field to create a new group.
+                    example: '1'
+                  group_name:
+                    type: string
+                    description: The display name of the supplier group.
+                    example: Test group
+                  min_percentage:
+                    type: integer
+                    description: The minimum percentage of supply traffic for this group.
+                    example: 0
+                    minimum: 0
+                    maximum: 100
+                  max_percentage:
+                    type: integer
+                    description: The maximum percentage of supply traffic for this group.
+                    example: 100
+                    minimum: 0
+                    maximum: 100
+                  supplier_ids:
+                    description: A list of supplier IDs to include in this group.
+                    $ref: '#/components/schemas/SupplierIds'
+        private_exchange_allocations:
+          type: object
+          description: Defines the allocation rules for suppliers from private exchanges.
+          required:
+          - blocked_supplier_ids
+          - groups
+          properties:
+            blocked_supplier_ids:
+              description: A list of supplier IDs to block from private exchanges.
+              $ref: '#/components/schemas/SupplierIds'
+            groups:
+              type: array
+              description: A list of private exchange groups. Each group contains exactly one supplier.
+              items:
+                type: object
+                required:
+                - group_name
+                - min_percentage
+                - max_percentage
+                - supplier_id
+                properties:
+                  group_id:
+                    type: string
+                    description: The unique identifier for an existing group you want to update. Omit this field to create a new group.
+                    example: '234'
+                  group_name:
+                    type: string
+                    description: The display name of the supplier group.
+                    example: Test group
+                  min_percentage:
+                    type: integer
+                    description: The minimum percentage of supply traffic for this group.
+                    example: 0
+                    minimum: 0
+                    maximum: 100
+                  max_percentage:
+                    type: integer
+                    description: The maximum percentage of supply traffic for this group.
+                    example: 100
+                    minimum: 0
+                    maximum: 100
+                  supplier_id:
+                    type: string
+                    description: The unique identifier of the single supplier for this private exchange group.
+                    example: '43'
+    SupplierIds:
+      type: array
+      description: A list of unique supplier identifiers.
+      items:
+        type: string
+      example:
+      - '123'
+      - '456'
+    LocaleCode:
+      type: string
+      description: Unique text code of the locale.
+      example: eng_us
+    BusinessUnitID:
+      type: string
+      description: The unique ID of the business unit, which determines the currency used for the target group.
+      example: '1234'
+    GetSystemAllocationTemplateBusinessUnitIdResponse:
+      type: object
+      description: The response payload containing the details of the system's default allocation template.
+      required:
+      - template_name
+      - open_exchange_allocations
+      - private_exchange_allocations
+      properties:
+        template_name:
+          type: string
+          description: The name of the system allocation template.
+        open_exchange_allocations:
+          type: object
+          description: Defines the allocation rules for suppliers sourced from the Cint open exchange.
+          properties:
+            exchange_suppliers:
+              type: array
+              description: A list of all available suppliers on the open exchange.
+              items:
+                $ref: '#/components/schemas/SupplierInfo'
+            exchange_min_percentage:
+              type: integer
+              description: The minimum percentage of supply that must be sourced from the open exchange.
+              example: 0
+            exchange_max_percentage:
+              type: integer
+              description: The maximum percentage of supply that can be sourced from the open exchange.
+              example: 100
+        private_exchange_allocations:
+          type: object
+          description: Defines the allocation rules for suppliers sourced from private exchanges.
+          properties:
+            blocked_suppliers:
+              type: array
+              description: A list of suppliers from private exchanges that are explicitly blocked.
+              items:
+                $ref: '#/components/schemas/SupplierInfo'
+    TargetGroupID:
+      description: A unique identifier for the target group, in ULID format.
+      type: string
+      pattern: ^[0-9A-Z]{26}$
+      example: 01BTGNYV6HRNK8K8VKZASZCFP1
+    Traceparent:
+      type: string
+      description: 'The traceparent header carries essential trace context information. This includes the trace ID and parent span ID  as defined by the W3C trace context specification. It is used to pinpoint the position of an incoming request within  the trace graph, facilitating the tracking of distributed operations.
+
+        Note: This field is optional and will be automatically generated by the service if not provided in the request.  The generated value will be included in the response header.'
+      example: 00-0af7651916cd43dd8448eb211c80319c-b7ad6b7169203331-01
+    TemplateID:
+      type: string
+      description: A unique identifier for the template.
+      format: ulid
+      example: 01JT5Z59MAKQ82J5K9Y3YGFNHN
+    GetSupplyAllocationResponse:
+      type: object
+      description: The response payload containing the detailed supply allocation for a target group.
+      required:
+      - open_exchange_allocations
+      - private_exchange_allocations
+      properties:
+        open_exchange_allocations:
+          type: object
+          description: Defines the allocation rules for suppliers sourced from the Cint open exchange.
+          required:
+          - blocked_suppliers
+          - exchange_min_percentage
+          - exchange_max_percentage
+          - groups
+          - exchange_suppliers
+          properties:
+            blocked_suppliers:
+              type: array
+              description: A list of open exchange suppliers that are explicitly blocked.
+              items:
+                $ref: '#/components/schemas/SupplierResponseWithCompletes'
+            exchange_suppliers:
+              type: array
+              description: A list of all available suppliers on the open exchange.
+              items:
+                $ref: '#/components/schemas/SupplierResponseWithCompletes'
+            exchange_min_percentage:
+              type: integer
+              description: The minimum percentage of supply that must be sourced from the open exchange.
+              example: 0
+              minimum: 0
+              maximum: 100
+            exchange_max_percentage:
+              type: integer
+              description: The maximum percentage of supply that can be sourced from the open exchange.
+              example: 100
+              minimum: 0
+              maximum: 100
+            groups:
+              type: array
+              description: A list of specific supplier groups within the open exchange allocation.
+              items:
+                type: object
+                required:
+                - group_name
+                - min_percentage
+                - max_percentage
+                - suppliers
+                properties:
+                  group_id:
+                    type: string
+                    description: A unique identifier for the supplier group.
+                    example: '1'
+                  group_name:
+                    type: string
+                    description: The display name of the supplier group.
+                    example: Test group
+                  min_percentage:
+                    type: integer
+                    description: The minimum percentage of supply traffic allocated to this group.
+                    example: 0
+                    minimum: 0
+                    maximum: 100
+                  max_percentage:
+                    type: integer
+                    description: The maximum percentage of supply traffic allocated to this group.
+                    example: 100
+                    minimum: 0
+                    maximum: 100
+                  suppliers:
+                    type: array
+                    description: The list of suppliers included in this group.
+                    items:
+                      $ref: '#/components/schemas/SupplierResponseWithCompletes'
+                  conversion_rate:
+                    description: The historical conversion rate for this supplier group.
+                    $ref: '#/components/schemas/ConversionRate'
+                  completes:
+                    type: integer
+                    description: The total number of completes achieved by this group.
+                    example: 400
+                  prescreens:
+                    type: integer
+                    description: The total number of prescreens from this group.
+                    example: 4200
+                  total_remaining:
+                    type: integer
+                    description: The number of remaining completes available from this group.
+                    example: 1000
+        private_exchange_allocations:
+          type: object
+          description: Defines the allocation rules for suppliers sourced from private exchanges.
+          required:
+          - blocked_suppliers
+          - groups
+          properties:
+            blocked_suppliers:
+              type: array
+              description: A list of suppliers from private exchanges that are explicitly blocked.
+              items:
+                $ref: '#/components/schemas/SupplierResponseWithCompletes'
+            groups:
+              type: array
+              description: A list of specific supplier groups within the private exchange allocation.
+              items:
+                type: object
+                required:
+                - group_name
+                - min_percentage
+                - max_percentage
+                - supplier
+                properties:
+                  group_id:
+                    type: string
+                    description: A unique identifier for the supplier group.
+                    example: '234'
+                  group_name:
+                    type: string
+                    description: The display name of the supplier group.
+                    example: Test group
+                  min_percentage:
+                    type: integer
+                    description: The minimum percentage of supply traffic allocated to this group.
+                    example: 0
+                    minimum: 0
+                    maximum: 100
+                  max_percentage:
+                    type: integer
+                    description: The maximum percentage of supply traffic allocated to this group.
+                    example: 100
+                    minimum: 0
+                    maximum: 100
+                  supplier:
+                    description: The single supplier included in this private exchange group.
+                    $ref: '#/components/schemas/SupplierResponseWithCompletes'
+                  conversion_rate:
+                    description: The historical conversion rate for this supplier group.
+                    $ref: '#/components/schemas/ConversionRate'
+                  completes:
+                    type: integer
+                    description: The total number of completes achieved by this group.
+                    example: 400
+                  prescreens:
+                    type: integer
+                    description: The total number of prescreens from this group.
+                    example: 4200
+                  total_remaining:
+                    type: integer
+                    description: The number of remaining completes available from this group.
+                    example: 1000
+    SupplierInfo:
+      type: object
+      description: Contains basic information about a supplier.
+      properties:
+        supplier_id:
+          type: string
+          description: A unique identifier for the supplier.
+          example: '13512'
+        supplier_name:
+          type: string
+          description: The display name of the supplier.
+          example: Test supplier
+    Error:
+      type: object
+      description: The standard error object returned for all failed API requests.
+      required:
+      - object
+      - detail
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: A unique identifier for this specific error instance.
+        object:
+          type: string
+          description: A short informative string identifying the type of the error
+          pattern: ^([a-z]*_)*([a-z]*)$
+        detail:
+          type: string
+          description: An error message provides a concise overview of the cause of the error.
+        invalid_params:
+          type: array
+          nullable: true
+          description: An optional field containing a list of invalid parameters may be presented in validation errors for additional information.
+          items:
+            $ref: '#/components/schemas/InvalidParam'
+    GetGlobalAllocationTemplateBusinessUnitIdResponse:
+      type: object
+      required:
+      - template_id
+      - template_name
+      - open_exchange_allocations
+      - private_exchange_allocations
+      - last_modified_at
+      - last_modified_by
+      properties:
+        template_id:
+          description: A unique identifier for the global allocation template.
+          $ref: '#/components/schemas/TemplateID'
+        template_name:
+          type: string
+          description: The name of the global allocation template.
+        open_exchange_allocations:
+          description: An object that defines the allocation rules for suppliers sourced from the Cint open exchange.
+          $ref: '#/components/schemas/OpenExchangeAllocations'
+        private_exchange_allocations:
+          type: object
+          description: An object that defines the allocation rules for suppliers sourced from private exchanges.
+          properties:
+            blocked_suppliers:
+              type: array
+              items:
+                $ref: '#/components/schemas/SupplierInfo'
+        last_modified_at:
+          description: The date and time when the template was last modified, in ISO 8601 format.
+          $ref: '#/components/schemas/LastModifiedAt'
+        last_modified_by:
+          description: The unique identifier of the user who last modified the template.
+          $ref: '#/components/schemas/UserID'
+    ProjectID:
+      description: The character string representing a unique project ID (ULID format).
+      type: string
+      pattern: ^[0-9A-Z]{26}$
+      example: 01BTGNYV6HRNK8K8VKZASZCFP0
+    LastModifiedAt:
+      type: string
+      format: datetime
+      description: The last time the template was modified
+      example: '2024-06-18T14:23:45Z'
+    ConversionRate:
+      type: number
+      format: float
+      description: The current conversion rate of the target group.
+      minimum: 0
+      maximum: 1
+      example: 0.05
+    GetAccountAllocationTemplateBusinessUnitIdResponse:
+      type: object
+      description: The response payload containing the details of an account allocation template.
+      required:
+      - template_id
+      - template_name
+      - open_exchange_allocations
+      - private_exchange_allocations
+      - last_modified_at
+      - last_modified_by
+      properties:
+        template_id:
+          description: A unique identifier for the account allocation template.
+          $ref: '#/components/schemas/TemplateID'
+        template_name:
+          type: string
+          description: The name of the account allocation template.
+        open_exchange_allocations:
+          description: An object that defines the allocation rules for suppliers sourced from the Cint open exchange.
+          $ref: '#/components/schemas/OpenExchangeAllocations'
+        private_exchange_allocations:
+          type: object
+          description: An object that defines the allocation rules for suppliers sourced from private exchanges.
+          properties:
+            blocked_suppliers:
+              type: array
+              description: A list of suppliers from private exchanges that are explicitly blocked for this account.
+              items:
+                $ref: '#/components/schemas/SupplierInfo'
+        last_modified_at:
+          description: The date and time when the template was last modified, in ISO 8601 format.
+          $ref: '#/components/schemas/LastModifiedAt'
+        last_modified_by:
+          description: The unique identifier of the user who last modified the template.
+          $ref: '#/components/schemas/UserID'
+    Tracestate:
+      type: string
+      description: 'The tracestate header provides additional contextual information to the traceparent header.  This enriches the tracing context and offers more fine-grained control
+
+        Note: This field is optional and will be automatically generated by the service if not provided in the request.  The generated value will be included in the response header.'
+      example: ot=foo:bar;k1:13
+    UserID:
+      type: string
+      format: uuid
+      description: A unique identifier for the user.
+      example: b551326b-ac9d-4d32-8823-4f025787dab9
+    AccountID:
+      description: The account's unique identifier.
+      type: integer
+      format: int32
+      example: 101
+    OpenExchangeAllocationGroup:
+      type: object
+      description: An object representing a group of suppliers and their allocation rules within the open exchange.
+      properties:
+        group_name:
+          type: string
+          description: The display name of the supplier group.
+          example: Test group
+        min_percentage:
+          type: integer
+          description: The minimum percentage of supply traffic that must be allocated to this group.
+          example: 0
+        max_percentage:
+          type: integer
+          description: The maximum percentage of supply traffic that can be allocated to this group.
+          example: 100
+        suppliers:
+          type: array
+          description: The list of suppliers included in this group.
+          items:
+            $ref: '#/components/schemas/SupplierInfo'
+  responses:
+    Error_NotFound:
+      description: A requested resource isn't found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            id: 7a5972ba-0825-4360-b852-fa2430e47034
+            object: not_found_error
+            detail: resource not found
+    Error_Internal:
+      description: A request failed due to an internal error.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            id: d94b8bb2-a540-4a91-9c05-2aa3ae9a5e1e
+            object: unexpected_internal_error
+            detail: an internal error has led to the failure of this operation
+    Error_Forbidden:
+      description: A requested is forbidden.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            id: fe68cdd2-ee87-4dbf-8950-63c5cbca94c7
+            object: authorization_error
+            detail: you don't have the right permissions to perform this operation
+    Error_Unauthorized:
+      description: A request is unauthorized.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            id: 1dcf0f40-f0d1-4cf6-8c00-c3d019d32faf
+            object: authorization_error
+            detail: no valid authorization provided for this operation
+    Error_BadRequest:
+      description: A request is not valid and can't be processed.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            id: 9e278238-d011-4e05-8327-1ce1d5d26254
+            object: bad_request_error
+            detail: Expected field 'foo' is missing.
+  parameters:
+    TemplateID:
+      name: template_id
+      in: path
+      schema:
+        $ref: '#/components/schemas/TemplateID'
+      required: true
+      description: The ID of the template.
+    ProjectID:
+      name: project_id
+      description: A unique identifier for the project, in ULID format.
+      in: path
+      required: true
+      schema:
+        $ref: '#/components/schemas/ProjectID'
+    CintAPIVersion-2025-12-18:
+      name: Cint-API-Version
+      in: header
+      required: true
+      schema:
+        type: string
+        example: 2025-12-18
+      description: 'This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.
+
+        '
+    LocaleCodeFilter:
+      name: locale
+      in: query
+      required: true
+      description: Filter results by the specified locale code.
+      schema:
+        $ref: '#/components/schemas/LocaleCode'
+      example: jpn_jp
+    BusinessUnitID:
+      in: path
+      name: business_unit_id
+      schema:
+        $ref: '#/components/schemas/BusinessUnitID'
+      required: true
+      description: The unique identifier for the business unit.
+    TargetGroupID:
+      name: target_group_id
+      description: A unique identifier for the target group, in ULID format.
+      in: path
+      required: true
+      schema:
+        $ref: '#/components/schemas/TargetGroupID'
+    AccountID:
+      name: account_id
+      description: The account's unique identifier.
+      in: path
+      required: true
+      schema:
+        $ref: '#/components/schemas/AccountID'
+  headers:
+    ETag:
+      description: The `ETag` header provides a unique identifier that represents the current version of a resource. It's used for caching and to prevent concurrent modification issues.
+      required: true
+      schema:
+        $ref: '#/components/schemas/ETag'
+    Tracestate:
+      description: The `tracestate` header complements the `traceparent` header by carrying vendor-specific trace information. This allows different services to add their own data to a trace.
+      required: false
+      schema:
+        $ref: '#/components/schemas/Tracestate'
+    Traceparent:
+      description: The `traceparent` header carries the trace ID and parent span ID, as defined by the W3C Trace Context specification. It's used to trace a single request as it moves through multiple services.
+      required: false
+      schema:
+        $ref: '#/components/schemas/Traceparent'
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Bearer token used for authentication and authorization. See [Authentication Process](https://developer.cint.com/en/guides#authentication-process) documentation for more information.
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: API Key Authentication

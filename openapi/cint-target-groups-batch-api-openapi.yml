@@ -1,0 +1,429 @@
+openapi: 3.0.3
+info:
+  title: Demand Accounts Target Groups (Batch) API
+  description: 'Cint''s demand ordering API is REST oriented. It has predictable resource based URLs, accepts JSON-encoded request bodies, returns JSON-encoded responses, and uses standard HTTP response codes, authentication, and verbs. Error responses are also JSON-encoded and follow a standard format, providing a unique error ID and detailed information about what went wrong.
+
+
+    Authentication is handled via bearer tokens passed in the `Authorization` header. All requests must also include a `Cint-API-Version` header with a date in `YYYY-MM-DD` format to specify the desired API version. Depending on the version you use, endpoint behavior may differ as we improve our API with every version release.
+
+
+    While many operations work on a single object per request, the demand ordering API also provides asynchronous batch endpoints for performing bulk updates efficiently on certain resources. For safety, `POST` requests support an `Idempotency-Key` header to allow for safe retries without accidentally performing the same operation twice.
+
+    '
+  version: '2025-12-18'
+servers:
+- description: Production server
+  url: https://api.cint.com/v1
+security:
+- BearerAuth: []
+tags:
+- name: Target Groups (Batch)
+  description: Asynchronously create, update and delete Target Groups in batches.
+paths:
+  /demand/accounts/{account_id}/projects/{project_id}/batch-jobs/update-target-group-project-managers:
+    parameters:
+    - $ref: '#/components/parameters/CintAPIVersion-2025-12-18'
+    post:
+      summary: Create a bulk update target group project managers job
+      description: This endpoint creates an asynchronous job to update the project manager for one or more target groups within a specific project. Because the update is processed in the background, a successful request immediately returns a 201 Created status with a Location header. The header contains the URL to the job, which you can use to track its progress.
+      operationId: create_bulk_update_target_group_project_manager_job
+      parameters:
+      - $ref: '#/components/parameters/AccountID'
+      - $ref: '#/components/parameters/ProjectID'
+      requestBody:
+        description: The request body for creating a bulk update job.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateBulkUpdateTargetGroupProjectManagerJobRequest'
+            example:
+            - project_manager_id: b551326b-ac9d-4d32-8823-4f025787dab9
+            - target_group_ids:
+              - 01BTGNYV6HRNK8K8VKZASZCFP1
+              - 01BTGNYV6HRNK8K8VKZASZCFP2
+      tags:
+      - Target Groups (Batch)
+      responses:
+        '201':
+          description: Returns a 201 Created response with a Location header pointing to the newly created job.
+          headers:
+            traceparent:
+              description: The `traceparent` header carries the trace ID and parent span ID, as defined by the W3C Trace Context specification. It's used to trace a single request as it moves through multiple services.
+              required: false
+              schema:
+                $ref: '#/components/schemas/Traceparent'
+            tracestate:
+              description: The `tracestate` header complements the `traceparent` header by carrying vendor-specific trace information. This allows different services to add their own data to a trace.
+              required: false
+              schema:
+                $ref: '#/components/schemas/Tracestate'
+            location:
+              description: 'Contains the URL where a new resource can be found, often returned with a `201 Created` response. It follows the format defined in RFC 7231.
+
+                '
+              required: true
+              schema:
+                type: string
+                format: uri-reference
+                description: A reference to the resource's location. This can be a full URL, a relative path, or just the resource ID.
+                example:
+                  full-url:
+                    summary: A full URL to the resource
+                    value: https://api.cint.com/demand/business-units
+                  relative-path:
+                    summary: A relative path to the resource
+                    value: /demand/business-units
+                  resource-id:
+                    summary: A resource ID
+                    value: fe666fcd-490c-4cb4-b4e0-2f86e15c27e6
+        '400':
+          $ref: '#/components/responses/Error_BadRequest'
+        '401':
+          $ref: '#/components/responses/Error_Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error_Forbidden'
+        '404':
+          $ref: '#/components/responses/Error_NotFound'
+        '500':
+          $ref: '#/components/responses/Error_Internal'
+  /demand/accounts/{account_id}/projects/{project_id}/batch-jobs/update-target-group-project-managers/{job_id}:
+    parameters:
+    - $ref: '#/components/parameters/CintAPIVersion-2025-12-18'
+    get:
+      summary: Retrieves a bulk update target group project managers job
+      description: After creating a bulk update job, you can use this endpoint to check its status. You'll need to poll this endpoint until the job's status changes from `Processing` to either `Completed` or `Failed` to get the final results.
+      operationId: get_bulk_update_target_group_project_manager_job
+      parameters:
+      - $ref: '#/components/parameters/AccountID'
+      - $ref: '#/components/parameters/ProjectID'
+      - $ref: '#/components/parameters/JobID'
+      tags:
+      - Target Groups (Batch)
+      responses:
+        '200':
+          description: Returns the details of the bulk update job, including its current status (`Processing` ,`Completed`, or `Failed`) and the final results.
+          headers:
+            traceparent:
+              description: The `traceparent` header carries the trace ID and parent span ID, as defined by the W3C Trace Context specification. It's used to trace a single request as it moves through multiple services.
+              required: false
+              schema:
+                $ref: '#/components/schemas/Traceparent'
+            tracestate:
+              description: The `tracestate` header complements the `traceparent` header by carrying vendor-specific trace information. This allows different services to add their own data to a trace.
+              required: false
+              schema:
+                $ref: '#/components/schemas/Tracestate'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetBulkUpdateTargetGroupProjectManagerJobResponse'
+              examples:
+                JobProcessing:
+                  summary: When the job is processing
+                  value:
+                    job_id: 01BTGNYV6HRNK8K8VKZASZCFP1
+                    created_at: '2023-01-01T23:00:00.000Z'
+                    status: Processing
+                    project_manager_id: b551326b-ac9d-4d32-8823-4f025787dab9
+                    updated_target_groups: null
+                    failed_target_groups: null
+                JobCompleted:
+                  summary: When the job is complete
+                  description: An example of a completed job with both successfully updated and failed target groups.
+                  value:
+                    job_id: 01BTGNYV6HRNK8K8VKZASZCFP1
+                    created_at: '2023-01-01T23:00:00.000Z'
+                    status: Completed
+                    project_manager_id: b551326b-ac9d-4d32-8823-4f025787dab9
+                    updated_target_groups:
+                      data:
+                      - target_group_id: 01BTGNYV6HRNK8K8VKZASZCFP1
+                        target_group_name: Test Target Group A
+                      has_more: false
+                    failed_target_groups:
+                      data:
+                      - target_group_id: 01BTGNYV6HRNK8K8VKZASZCFP2
+                        target_group_name: Test Target Group B
+                        failure_reason:
+                          code: TargetGroupNotFound
+                          description: Target group not found.
+                      has_more: false
+        '400':
+          $ref: '#/components/responses/Error_BadRequest'
+        '401':
+          $ref: '#/components/responses/Error_Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error_Forbidden'
+        '404':
+          $ref: '#/components/responses/Error_NotFound'
+        '500':
+          $ref: '#/components/responses/Error_Internal'
+components:
+  schemas:
+    JobID:
+      description: The character string representing a unique job ID.
+      type: string
+      example: 01BTGNYV6HRNK8K8VKZASZCFP1
+    CreateBulkUpdateTargetGroupProjectManagerJobRequest:
+      type: object
+      description: The request body used to create a job that updates the project manager for multiple target groups.
+      properties:
+        project_manager_id:
+          $ref: '#/components/schemas/UserID'
+        target_group_ids:
+          $ref: '#/components/schemas/TargetGroupIds'
+    BulkUpdatedTargetGroups:
+      type: object
+      description: A list of target groups that were successfully processed in the bulk job.
+      properties:
+        data:
+          type: array
+          items:
+            type: object
+            properties:
+              target_group_id:
+                $ref: '#/components/schemas/TargetGroupID'
+            required:
+            - target_group_id
+        has_more:
+          type: boolean
+          description: This field is always `false` as the list of updated or failed target groups is not paginated and will always be returned in full.
+          enum:
+          - false
+      required:
+      - data
+      - has_more
+    BulkJobStatus:
+      type: string
+      description: The status of an asynchronous bulk job. `Processing` indicates the job is still running. `Completed` or `Failed` are terminal states.
+      enum:
+      - Completed
+      - Failed
+      - Processing
+    InvalidParam:
+      type: object
+      description: Describes a single invalid parameter in a request.
+      properties:
+        name:
+          type: string
+          description: The name of the parameter that failed validation.
+        reason:
+          type: string
+          description: A short explanation of why the parameter was invalid.
+      required:
+      - name
+      - reason
+    GetBulkUpdateTargetGroupProjectManagerJobResponse:
+      type: object
+      description: The response payload containing the details of a bulk update job.
+      properties:
+        job_id:
+          $ref: '#/components/schemas/JobID'
+        created_at:
+          type: string
+          format: date-time
+          description: The date and time when the job was created, in ISO 8601 format.
+          example: '2023-01-01T23:00:00.000Z'
+        status:
+          $ref: '#/components/schemas/BulkJobStatus'
+        project_manager_id:
+          description: The unique identifier of the project manager assigned in this job.
+          $ref: '#/components/schemas/UserID'
+        updated_target_groups:
+          description: A list of target groups that were successfully updated by the job. This object is `null` until the job's status is `Completed`.
+          $ref: '#/components/schemas/BulkUpdatedTargetGroups'
+        failed_target_groups:
+          description: A list of target groups that failed to update. This object is `null` until the job's status is `Completed`.
+          $ref: '#/components/schemas/BulkFailedTargetGroups'
+    TargetGroupID:
+      description: A unique identifier for the target group, in ULID format.
+      type: string
+      pattern: ^[0-9A-Z]{26}$
+      example: 01BTGNYV6HRNK8K8VKZASZCFP1
+    Traceparent:
+      type: string
+      description: 'The traceparent header carries essential trace context information. This includes the trace ID and parent span ID  as defined by the W3C trace context specification. It is used to pinpoint the position of an incoming request within  the trace graph, facilitating the tracking of distributed operations.
+
+        Note: This field is optional and will be automatically generated by the service if not provided in the request.  The generated value will be included in the response header.'
+      example: 00-0af7651916cd43dd8448eb211c80319c-b7ad6b7169203331-01
+    BulkFailedTargetGroups:
+      type: object
+      description: A list of target groups that failed to be processed in the bulk job, along with the reason for failure.
+      properties:
+        data:
+          type: array
+          items:
+            type: object
+            properties:
+              target_group_id:
+                $ref: '#/components/schemas/TargetGroupID'
+              failure_reason:
+                $ref: '#/components/schemas/BulkJobFailureReason'
+            required:
+            - target_group_id
+            - failure_reason
+        has_more:
+          type: boolean
+          description: This field is always `false` as the list of updated or failed target groups is not paginated and will always be returned in full.
+          enum:
+          - false
+      required:
+      - data
+      - has_more
+    Error:
+      type: object
+      description: The standard error object returned for all failed API requests.
+      required:
+      - object
+      - detail
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: A unique identifier for this specific error instance.
+        object:
+          type: string
+          description: A short informative string identifying the type of the error
+          pattern: ^([a-z]*_)*([a-z]*)$
+        detail:
+          type: string
+          description: An error message provides a concise overview of the cause of the error.
+        invalid_params:
+          type: array
+          nullable: true
+          description: An optional field containing a list of invalid parameters may be presented in validation errors for additional information.
+          items:
+            $ref: '#/components/schemas/InvalidParam'
+    BulkJobFailureReason:
+      type: object
+      properties:
+        code:
+          type: string
+          description: A machine-readable code for the failure reason.
+          example: TargetGroupNotFound
+        description:
+          type: string
+          description: A human-readable explanation of why the operation failed for this target group.
+          example: Target group not found.
+    TargetGroupIds:
+      type: array
+      description: An array of unique target group identifiers to be processed in a bulk job.
+      minItems: 1
+      items:
+        $ref: '#/components/schemas/TargetGroupID'
+    ProjectID:
+      description: The character string representing a unique project ID (ULID format).
+      type: string
+      pattern: ^[0-9A-Z]{26}$
+      example: 01BTGNYV6HRNK8K8VKZASZCFP0
+    Tracestate:
+      type: string
+      description: 'The tracestate header provides additional contextual information to the traceparent header.  This enriches the tracing context and offers more fine-grained control
+
+        Note: This field is optional and will be automatically generated by the service if not provided in the request.  The generated value will be included in the response header.'
+      example: ot=foo:bar;k1:13
+    UserID:
+      type: string
+      format: uuid
+      description: A unique identifier for the user.
+      example: b551326b-ac9d-4d32-8823-4f025787dab9
+    AccountID:
+      description: The account's unique identifier.
+      type: integer
+      format: int32
+      example: 101
+  responses:
+    Error_NotFound:
+      description: A requested resource isn't found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            id: 7a5972ba-0825-4360-b852-fa2430e47034
+            object: not_found_error
+            detail: resource not found
+    Error_Internal:
+      description: A request failed due to an internal error.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            id: d94b8bb2-a540-4a91-9c05-2aa3ae9a5e1e
+            object: unexpected_internal_error
+            detail: an internal error has led to the failure of this operation
+    Error_Forbidden:
+      description: A requested is forbidden.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            id: fe68cdd2-ee87-4dbf-8950-63c5cbca94c7
+            object: authorization_error
+            detail: you don't have the right permissions to perform this operation
+    Error_Unauthorized:
+      description: A request is unauthorized.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            id: 1dcf0f40-f0d1-4cf6-8c00-c3d019d32faf
+            object: authorization_error
+            detail: no valid authorization provided for this operation
+    Error_BadRequest:
+      description: A request is not valid and can't be processed.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            id: 9e278238-d011-4e05-8327-1ce1d5d26254
+            object: bad_request_error
+            detail: Expected field 'foo' is missing.
+  parameters:
+    ProjectID:
+      name: project_id
+      description: A unique identifier for the project, in ULID format.
+      in: path
+      required: true
+      schema:
+        $ref: '#/components/schemas/ProjectID'
+    CintAPIVersion-2025-12-18:
+      name: Cint-API-Version
+      in: header
+      required: true
+      schema:
+        type: string
+        example: 2025-12-18
+      description: 'This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.
+
+        '
+    JobID:
+      name: job_id
+      description: The character string representing a unique job ID.
+      in: path
+      required: true
+      schema:
+        $ref: '#/components/schemas/JobID'
+    AccountID:
+      name: account_id
+      description: The account's unique identifier.
+      in: path
+      required: true
+      schema:
+        $ref: '#/components/schemas/AccountID'
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Bearer token used for authentication and authorization. See [Authentication Process](https://developer.cint.com/en/guides#authentication-process) documentation for more information.
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: API Key Authentication

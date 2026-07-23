@@ -1,0 +1,567 @@
+openapi: 3.0.3
+info:
+  title: Demand Accounts Exclusive Endpoints API
+  description: 'Cint''s demand ordering API is REST oriented. It has predictable resource based URLs, accepts JSON-encoded request bodies, returns JSON-encoded responses, and uses standard HTTP response codes, authentication, and verbs. Error responses are also JSON-encoded and follow a standard format, providing a unique error ID and detailed information about what went wrong.
+
+
+    Authentication is handled via bearer tokens passed in the `Authorization` header. All requests must also include a `Cint-API-Version` header with a date in `YYYY-MM-DD` format to specify the desired API version. Depending on the version you use, endpoint behavior may differ as we improve our API with every version release.
+
+
+    While many operations work on a single object per request, the demand ordering API also provides asynchronous batch endpoints for performing bulk updates efficiently on certain resources. For safety, `POST` requests support an `Idempotency-Key` header to allow for safe retries without accidentally performing the same operation twice.
+
+    '
+  version: '2025-12-18'
+servers:
+- description: Production server
+  url: https://api.cint.com/v1
+security:
+- BearerAuth: []
+tags:
+- name: Exclusive Endpoints
+  description: For more information, if you need functionality in this section, please contact your account manager
+paths:
+  /demand/accounts/{account_id}/business-units/{business_unit_id}/generate-price-prediction:
+    parameters:
+    - $ref: '#/components/parameters/CintAPIVersion-2025-12-18'
+    post:
+      operationId: generate_price_prediction
+      summary: Generates a price prediction
+      description: 'Predicts the cost per interview (CPI) for a potential target group using either a `rate_card` or `dynamic` pricing model. The model you choose must match the business unit''s pricing configuration.
+
+        Private Exchange required.
+
+        This endpoint is only available for accounts with a Private Exchange. If your account does not have this feature enabled, requests will fail with a 403 Forbiddenerror. Please contact your account manager if you need access to this functionality.'
+      tags:
+      - Exclusive Endpoints
+      parameters:
+      - $ref: '#/components/parameters/AccountID'
+      - $ref: '#/components/parameters/BusinessUnitID'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GetRedactedPricePredictionRequest'
+            examples:
+              rate_card:
+                summary: Rate Card Prediction
+                description: Request a price prediction using the rate card pricing model
+                value:
+                  config:
+                    type: rate_card
+                    country_code: US
+                    expected_incidence_rate: 0.25
+                    expected_length_of_interview_minutes: 15
+                    maximum_cpi:
+                      value: '10.00'
+                      currency_code: USD
+              dynamic:
+                summary: Dynamic Pricing Prediction
+                description: Request a price prediction using the dynamic pricing model
+                value:
+                  config:
+                    type: dynamic
+                    user_requested_cpi:
+                      value: '5.50'
+                      currency_code: USD
+      responses:
+        '200':
+          description: The price prediction was generated successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetRedactedPricePredictionResponse'
+              example:
+                buyer_account_id: 101
+                buyer_business_unit_id: '1234'
+                buyer_business_unit_exchange_rate_from_usd: 1.0
+                open_exchange_price:
+                  pricing_context:
+                    type: rate_card
+                    rate_card_token: some_rate_card_token
+                  cost_per_interview:
+                    value: '4.75'
+                    currency_code: USD
+                    currency_scale: 2
+                private_exchange_prices:
+                - supplier_id: '43'
+                  pricing_context:
+                    type: dynamic
+                  cost_per_interview:
+                    value: '5.50'
+                    currency_code": USD
+                    currency_scale: 2
+        '400':
+          $ref: '#/components/responses/Error_BadRequest'
+        '401':
+          $ref: '#/components/responses/Error_Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error_Forbidden'
+        '404':
+          $ref: '#/components/responses/Error_NotFound'
+        '500':
+          $ref: '#/components/responses/Error_Internal'
+  /demand/accounts/{account_id}/business-units/{business_unit_id}/target-groups/{target_group_id}/price:
+    parameters:
+    - $ref: '#/components/parameters/AccountID'
+    - $ref: '#/components/parameters/BusinessUnitID'
+    - $ref: '#/components/parameters/TargetGroupID'
+    - $ref: '#/components/parameters/CintAPIVersion-2025-12-18'
+    get:
+      operationId: get_target_group_price
+      summary: Retrieves the pricing details for a target group
+      description: 'Retrieves the current pricing details for a specific target group. The response includes the cost per interview (CPI) and the pricing context (`rate_card` or `dynamic`) for both the Open Exchange and any applicable Private Exchange suppliers.
+
+        Private Exchange required.
+
+        This endpoint is only available for accounts with a Private Exchange. If your account does not have this feature enabled, requests will fail with a `403 Forbidden` error. Please contact your account manager if you need access to this functionality.'
+      tags:
+      - Exclusive Endpoints
+      responses:
+        '200':
+          description: The pricing details for the target group were retrieved successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetTargetGroupPriceResponse'
+              example:
+                price_type: specification
+                buyer_account_id: 101
+                buyer_business_unit_id: '1234'
+                target_group_id: 01BTGNYV6HRNK8K8VKZASZCFP1
+                buyer_business_unit_exchange_rate_from_usd: 1.0
+                pricing_config_token: MDFKSE42MDQ1RFg2Tk0wQjlBQ0Q5QVhQQzk7Nw==
+                open_exchange_price:
+                  pricing_context:
+                    type: rate_card
+                    rate_card_token: some_rate_card_token
+                  cost_per_interview:
+                    value: '4.75'
+                    currency_code: USD
+                    currency_scale: 2
+                private_exchange_prices:
+                - supplier_id: '43'
+                  pricing_context:
+                    type: dynamic
+                  cost_per_interview:
+                    value: '5.50'
+                    currency_code: USD
+                    currency_scale: 2
+        '400':
+          $ref: '#/components/responses/Error_BadRequest'
+        '401':
+          $ref: '#/components/responses/Error_Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error_Forbidden'
+        '404':
+          $ref: '#/components/responses/Error_NotFound'
+        '500':
+          $ref: '#/components/responses/Error_Internal'
+components:
+  schemas:
+    RateCardToken:
+      type: string
+      description: An opaque token that uniquely identifies the rate card configuration used in a pricing calculation.
+      example: MDFKSE42MDQ1RFg2Tk0wQjlBQ0Q5QVhQQzk7Nw==
+    GetRedactedPricePredictionRequest:
+      type: object
+      description: The request body for generating a price prediction.
+      required:
+      - config
+      properties:
+        config:
+          description: The pricing configuration. The `type` field within the object determines which model to use (`rate_card` or `dynamic`).
+          oneOf:
+          - $ref: '#/components/schemas/RateCardPredictionConfig'
+          - $ref: '#/components/schemas/DynamicPricingPredictionConfig'
+    PrivateExchangePricePrediction:
+      type: object
+      description: Contains the predicted pricing details for a single Private Exchange supplier.
+      required:
+      - pricing_context
+      - supplier_id
+      - cost_per_interview
+      properties:
+        pricing_context:
+          description: The pricing context used in the calculation. The `type` field within the object indicates the model (`rate_card` or `dynamic`).
+          oneOf:
+          - $ref: '#/components/schemas/DynamicPricingContext'
+          - $ref: '#/components/schemas/RateCardPricingContext'
+        supplier_id:
+          type: string
+          description: The supplier ID of the private exchange supplier.
+          example: '3214'
+        cost_per_interview:
+          $ref: '#/components/schemas/MonetaryAmount'
+    InvalidParam:
+      type: object
+      description: Describes a single invalid parameter in a request.
+      properties:
+        name:
+          type: string
+          description: The name of the parameter that failed validation.
+        reason:
+          type: string
+          description: A short explanation of why the parameter was invalid.
+      required:
+      - name
+      - reason
+    BusinessUnitID:
+      type: string
+      description: The unique ID of the business unit, which determines the currency used for the target group.
+      example: '1234'
+    MonetaryAmountRequestModel:
+      type: object
+      description: Represents a monetary value, including the amount and its currency.
+      properties:
+        value:
+          type: string
+          description: The monetary value, represented as a string to maintain precision.
+          example: '2.7352'
+        currency_code:
+          $ref: '#/components/schemas/CurrencyCode'
+    TargetGroupID:
+      description: A unique identifier for the target group, in ULID format.
+      type: string
+      pattern: ^[0-9A-Z]{26}$
+      example: 01BTGNYV6HRNK8K8VKZASZCFP1
+    GetTargetGroupPriceResponse:
+      type: object
+      description: The pricing details for a target group, including the pricing context (e.g., dynamic or rate card) and cost per interview (CPI).
+      required:
+      - price_type
+      - buyer_account_id
+      - buyer_business_unit_id
+      - target_group_id
+      - buyer_business_unit_exchange_rate_from_usd
+      - open_exchange_price
+      - private_exchange_prices
+      - pricing_config_token
+      properties:
+        price_type:
+          type: string
+          enum:
+          - specification
+          - prediction
+          description: Indicates whether the price is a specification or a prediction.
+        buyer_account_id:
+          $ref: '#/components/schemas/AccountID'
+        buyer_business_unit_id:
+          $ref: '#/components/schemas/BusinessUnitID'
+        target_group_id:
+          $ref: '#/components/schemas/TargetGroupID'
+        buyer_business_unit_exchange_rate_from_usd:
+          type: number
+          format: float
+          description: The exchange rate from the buyer's business unit currency to USD at the time the target group was launched.
+        pricing_config_token:
+          $ref: '#/components/schemas/PricingConfigToken'
+        open_exchange_price:
+          type: object
+          description: The pricing context and cost per interview for the Cint Open Exchange.
+          required:
+          - pricing_context
+          - cost_per_interview
+          properties:
+            pricing_context:
+              oneOf:
+              - $ref: '#/components/schemas/DynamicPricingContext'
+              - $ref: '#/components/schemas/RateCardPricingContext'
+            cost_per_interview:
+              $ref: '#/components/schemas/MonetaryAmount'
+        private_exchange_prices:
+          type: array
+          description: Pricing details for each applicable Private Exchange supplier.
+          items:
+            type: object
+            required:
+            - supplier_id
+            - pricing_context
+            - cost_per_interview
+            properties:
+              pricing_context:
+                oneOf:
+                - $ref: '#/components/schemas/DynamicPricingContext'
+                - $ref: '#/components/schemas/RateCardPricingContext'
+              supplier_id:
+                type: string
+                example: '43'
+              cost_per_interview:
+                $ref: '#/components/schemas/MonetaryAmount'
+    DynamicPricingContext:
+      type: object
+      description: The pricing context when a dynamic model is used.
+      required:
+      - type
+      properties:
+        type:
+          type: string
+          enum:
+          - dynamic
+          description: The pricing model. For this context, the value is always 'dynamic'.
+    Error:
+      type: object
+      description: The standard error object returned for all failed API requests.
+      required:
+      - object
+      - detail
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: A unique identifier for this specific error instance.
+        object:
+          type: string
+          description: A short informative string identifying the type of the error
+          pattern: ^([a-z]*_)*([a-z]*)$
+        detail:
+          type: string
+          description: An error message provides a concise overview of the cause of the error.
+        invalid_params:
+          type: array
+          nullable: true
+          description: An optional field containing a list of invalid parameters may be presented in validation errors for additional information.
+          items:
+            $ref: '#/components/schemas/InvalidParam'
+    MonetaryAmount:
+      type: object
+      description: Represents a monetary value, including the amount and its currency.
+      properties:
+        value:
+          type: string
+          description: A decimal encapsulated in a string representing the value in the denomination indicated by the code.
+          example: '2.7352'
+        currency_code:
+          $ref: '#/components/schemas/CurrencyCode'
+        currency_scale:
+          allOf:
+          - nullable: true
+          - type: integer
+            description: The number of digits after the decimal separator, as defined by ISO 4217.
+            example: 2
+    PricingConfigToken:
+      type: string
+      description: A unique token representing an immutable pricing configuration.
+      example: MDFKSE42MDQ1RFg2Tk0wQjlBQ0Q5QVhQQzk7Nw==
+    RateCardPricingContext:
+      type: object
+      description: The pricing context when a rate card model is used.
+      required:
+      - type
+      - rate_card_token
+      properties:
+        type:
+          type: string
+          enum:
+          - rate_card
+          description: The pricing model. For this context, the value is always 'rate_card'.
+        maximum_cpi:
+          $ref: '#/components/schemas/MonetaryAmount'
+          description: The maximum cost per interview (CPI) allowed for this pricing context.
+        cpi_boost:
+          $ref: '#/components/schemas/MonetaryAmount'
+          description: An additional amount added to the calculated rate card CPI. The final CPI will not exceed the `maximum_cpi`.
+        rate_card_token:
+          $ref: '#/components/schemas/RateCardToken'
+    CurrencyCode:
+      type: string
+      description: The three-letter ISO 4217 currency code, in uppercase. The code must correspond to a currency supported by Cint Exchange.
+      example: USD
+    DynamicPricingPredictionConfig:
+      title: Dynamic pricing configuration
+      type: object
+      description: Configuration used for dynamic pricing, specifying the user-requested cost per interview.
+      required:
+      - type
+      - user_requested_cpi
+      properties:
+        type:
+          type: string
+          enum:
+          - dynamic
+          description: The pricing model. For this configuration, the value is always 'dynamic'. (And 'rate_card' respectively).
+        user_requested_cpi:
+          allOf:
+          - $ref: '#/components/schemas/MonetaryAmountRequestModel'
+          description: The requested CPI chosen by the user.
+    AccountID:
+      description: The account's unique identifier.
+      type: integer
+      format: int32
+      example: 101
+    RateCardPredictionConfig:
+      title: Rate card pricing configuration
+      type: object
+      description: Configuration used for rate card pricing.
+      required:
+      - type
+      - country_code
+      - expected_incidence_rate
+      - expected_length_of_interview_minutes
+      properties:
+        type:
+          type: string
+          enum:
+          - rate_card
+          description: Descriptor of the pricing model type.
+        maximum_cpi:
+          allOf:
+          - $ref: '#/components/schemas/MonetaryAmountRequestModel'
+          description: The maximum cost per interview (CPI) that can be set for the target group.
+        cpi_boost:
+          allOf:
+          - $ref: '#/components/schemas/MonetaryAmountRequestModel'
+          description: An additional amount added on top of the CPI calculated from the rate card. The final CPI will not exceed the `maximum_cpi`.
+        country_code:
+          type: string
+          description: The two-letter country code, adhering to ISO 3166-1 alpha-2.
+          example: US
+        expected_length_of_interview_minutes:
+          type: integer
+          format: int32
+          description: The expected median length of interview, in minutes.
+          minimum: 1
+          maximum: 45
+          example: 1
+        expected_incidence_rate:
+          type: number
+          format: float
+          description: The expected incidence rate (IR) of the target audience, expressed as a decimal (e.g., 0.25 for 25%).
+          minimum: 0
+          maximum: 1
+          multipleOf: 0.01
+          example: 0.05
+    GetRedactedPricePredictionResponse:
+      type: object
+      description: A price prediction containing the estimated cost per interview (CPI) for the Open Exchange and applicable Private Exchanges.
+      required:
+      - buyer_account_id
+      - buyer_business_unit_id
+      - buyer_business_unit_exchange_rate_from_usd
+      - open_exchange_price
+      - private_exchange_prices
+      properties:
+        buyer_account_id:
+          $ref: '#/components/schemas/AccountID'
+        buyer_business_unit_id:
+          $ref: '#/components/schemas/BusinessUnitID'
+        buyer_business_unit_exchange_rate_from_usd:
+          type: number
+          format: float
+          description: The live exchange rate towards USD.
+        open_exchange_price:
+          allOf:
+          - $ref: '#/components/schemas/OpenExchangePricePrediction'
+        private_exchange_prices:
+          type: array
+          items:
+            allOf:
+            - $ref: '#/components/schemas/PrivateExchangePricePrediction'
+    OpenExchangePricePrediction:
+      type: object
+      description: Contains the predicted pricing details for the Cint Exchange.
+      required:
+      - pricing_context
+      - cost_per_interview
+      properties:
+        pricing_context:
+          description: The pricing context used in the calculation. The `type` field within the object indicates the model (`rate_card` or `dynamic`).
+          oneOf:
+          - $ref: '#/components/schemas/DynamicPricingContext'
+          - $ref: '#/components/schemas/RateCardPricingContext'
+        cost_per_interview:
+          $ref: '#/components/schemas/MonetaryAmount'
+  responses:
+    Error_NotFound:
+      description: A requested resource isn't found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            id: 7a5972ba-0825-4360-b852-fa2430e47034
+            object: not_found_error
+            detail: resource not found
+    Error_Internal:
+      description: A request failed due to an internal error.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            id: d94b8bb2-a540-4a91-9c05-2aa3ae9a5e1e
+            object: unexpected_internal_error
+            detail: an internal error has led to the failure of this operation
+    Error_Forbidden:
+      description: A requested is forbidden.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            id: fe68cdd2-ee87-4dbf-8950-63c5cbca94c7
+            object: authorization_error
+            detail: you don't have the right permissions to perform this operation
+    Error_Unauthorized:
+      description: A request is unauthorized.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            id: 1dcf0f40-f0d1-4cf6-8c00-c3d019d32faf
+            object: authorization_error
+            detail: no valid authorization provided for this operation
+    Error_BadRequest:
+      description: A request is not valid and can't be processed.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            id: 9e278238-d011-4e05-8327-1ce1d5d26254
+            object: bad_request_error
+            detail: Expected field 'foo' is missing.
+  parameters:
+    CintAPIVersion-2025-12-18:
+      name: Cint-API-Version
+      in: header
+      required: true
+      schema:
+        type: string
+        example: 2025-12-18
+      description: 'This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.
+
+        '
+    BusinessUnitID:
+      in: path
+      name: business_unit_id
+      schema:
+        $ref: '#/components/schemas/BusinessUnitID'
+      required: true
+      description: The unique identifier for the business unit.
+    TargetGroupID:
+      name: target_group_id
+      description: A unique identifier for the target group, in ULID format.
+      in: path
+      required: true
+      schema:
+        $ref: '#/components/schemas/TargetGroupID'
+    AccountID:
+      name: account_id
+      description: The account's unique identifier.
+      in: path
+      required: true
+      schema:
+        $ref: '#/components/schemas/AccountID'
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Bearer token used for authentication and authorization. See [Authentication Process](https://developer.cint.com/en/guides#authentication-process) documentation for more information.
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: API Key Authentication

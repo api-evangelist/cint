@@ -1,0 +1,1001 @@
+openapi: 3.0.3
+info:
+  title: Demand Accounts Fielding (Batch) API
+  description: 'Cint''s demand ordering API is REST oriented. It has predictable resource based URLs, accepts JSON-encoded request bodies, returns JSON-encoded responses, and uses standard HTTP response codes, authentication, and verbs. Error responses are also JSON-encoded and follow a standard format, providing a unique error ID and detailed information about what went wrong.
+
+
+    Authentication is handled via bearer tokens passed in the `Authorization` header. All requests must also include a `Cint-API-Version` header with a date in `YYYY-MM-DD` format to specify the desired API version. Depending on the version you use, endpoint behavior may differ as we improve our API with every version release.
+
+
+    While many operations work on a single object per request, the demand ordering API also provides asynchronous batch endpoints for performing bulk updates efficiently on certain resources. For safety, `POST` requests support an `Idempotency-Key` header to allow for safe retries without accidentally performing the same operation twice.
+
+    '
+  version: '2025-12-18'
+servers:
+- description: Production server
+  url: https://api.cint.com/v1
+security:
+- BearerAuth: []
+tags:
+- name: Fielding (Batch)
+  description: Asynchronously update Target Group Fielding Runs in batches.
+paths:
+  /demand/accounts/{account_id}/projects/{project_id}/batch-jobs/complete-fielding-runs-by-target-group-id:
+    parameters:
+    - $ref: '#/components/parameters/CintAPIVersion-2025-12-18'
+    post:
+      summary: Creates a job to complete multiple target groups
+      description: "This endpoint creates a bulk job to complete fielding runs for a list of specified target group IDs. This action will immediately complete the \nspecified target groups, regardless of whether their completes goals or end dates have been reached.\nIf a target group is already completed, the system considers the action successful.\n\nTo ensure that the same job is not created multiple times, this endpoint uses an `Idempotency-Key` from the request header. If a job with \nthe same key has already been submitted, the system will not create a new one but will treat the operation as successful and \nreturn the same successful response as for a newly created job.\n\nUpon successful submission, the system creates a new bulk job to start the actual processing asynchronously. This means \nthe endpoint returns a response quickly without waiting for the entire bulk operation to complete. If the job is created successfully or if \nit already existed due to the idempotency key, the endpoint returns a `201 Created` status code with the job ID in the `Location` header.\n\nTo check the status of the job, you can use the job ID returned in the `Location` header with the `Retrieve a bulk job status` endpoint.\nThe processing of the job will continue even if an operation on an individual target group fails. The final job status will list which target groups \nwere updated successfully and which ones failed.\n"
+      operationId: create_bulk_complete_target_groups_job
+      parameters:
+      - $ref: '#/components/parameters/AccountID'
+      - $ref: '#/components/parameters/ProjectID'
+      - $ref: '#/components/parameters/IdempotencyKeyRequired'
+      requestBody:
+        description: A list of target group IDs to be completed.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateBulkCompleteTargetGroupJobRequest'
+            example:
+              target_group_ids:
+              - 01BTGNYV6HRNK8K8VKZASZCFP1
+              - 01BTGNYV6HRNK8K8VKZASZCFP2
+      tags:
+      - Fielding (Batch)
+      responses:
+        '201':
+          description: The job was created successfully. Poll the URL in the `Location` header to track its status.
+          headers:
+            traceparent:
+              $ref: '#/components/headers/Traceparent'
+            tracestate:
+              $ref: '#/components/headers/Tracestate'
+            location:
+              $ref: '#/components/headers/Location'
+              example: /demand/accounts/101/projects/01BTGNYV6HRNK8K8VKZASZCFP0/batch-jobs/complete/01BTGNYV6HRNK8K8VKZASZCFP1
+        '400':
+          $ref: '#/components/responses/Error_BadRequest'
+        '401':
+          $ref: '#/components/responses/Error_Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error_Forbidden'
+        '404':
+          $ref: '#/components/responses/Error_NotFound'
+        '500':
+          $ref: '#/components/responses/Error_Internal'
+  /demand/accounts/{account_id}/projects/{project_id}/batch-jobs/complete-fielding-runs-by-target-group-id/{job_id}:
+    parameters:
+    - $ref: '#/components/parameters/CintAPIVersion-2025-12-18'
+    get:
+      summary: Retrieves a bulk "complete" job status
+      description: 'This endpoint retrieves the status and details of a previously created bulk-complete job using its job ID.
+
+
+        You should poll this endpoint periodically until the `status` field is either `Completed` or `Failed`. If the status is `Processing`, the job is still running.
+
+        Once the job is finished, the `updated_target_groups` and `failed_target_groups` lists will show the outcome for each target group included in the original request.
+
+        If a target group was already in the desired status, it will be included in the `updated_target_groups` list, even though no change was made.
+
+        '
+      operationId: get_bulk_complete_target_groups_job
+      parameters:
+      - $ref: '#/components/parameters/AccountID'
+      - $ref: '#/components/parameters/ProjectID'
+      - $ref: '#/components/parameters/JobID'
+      tags:
+      - Fielding (Batch)
+      responses:
+        '200':
+          description: The bulk "complete" job details were retrieved successfully.
+          headers:
+            traceparent:
+              $ref: '#/components/headers/Traceparent'
+            tracestate:
+              $ref: '#/components/headers/Tracestate'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetBulkCompleteTargetGroupJobResponse'
+              example:
+                job_id: 01BTGNYV6HRNK8K8VKZASZCFP1
+                created_at: '2023-01-01T23:00:00.000Z'
+                created_by: b551326b-ac9d-4d32-8823-4f025787dab9
+                status: Completed
+                updated_target_groups:
+                  data:
+                  - target_group_id: 01BTGNYV6HRNK8K8VKZASZCFP2
+                  has_more: false
+                failed_target_groups:
+                  data:
+                  - target_group_id: 01BTGNYV6HRNK8K8VKZASZCFP3
+                    failure_reason:
+                      code: StatusTransitionNotAllowed
+                      description: Status transition is not allowed.
+                  has_more: false
+        '400':
+          $ref: '#/components/responses/Error_BadRequest'
+        '401':
+          $ref: '#/components/responses/Error_Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error_Forbidden'
+        '404':
+          $ref: '#/components/responses/Error_NotFound'
+        '500':
+          $ref: '#/components/responses/Error_Internal'
+  /demand/accounts/{account_id}/projects/{project_id}/batch-jobs/launch-fielding-runs-by-target-group-id:
+    parameters:
+    - $ref: '#/components/parameters/CintAPIVersion-2025-12-18'
+    post:
+      summary: Creates a job to launch multiple target groups
+      description: "This endpoint creates a bulk job to launch fielding runs for a list of specified target group IDs. This action will start the fielding runs \nfor the specified target groups, updating their fielding start date to the current time. A fielding run can only be launched if it is in a \n'scheduled' state.\nIf a target group is already live, the system considers the action successful.\n\nTo ensure that the same job is not created multiple times, this endpoint uses an `Idempotency-Key` from the request header.\nIf a job with the same key has already been submitted, the system will not create a new one but will treat the operation as successful and \nreturn the same successful response as for a newly created job.\n\nUpon successful submission, the system creates a new bulk job to start the actual processing asynchronously. This means the endpoint returns a \nresponse quickly without waiting for the entire bulk operation to complete. If the job is created successfully or if it already existed \ndue to the idempotency key, the endpoint returns a `201 Created` status code with the job ID in the `Location` header.\n\nTo check the status of the job, you can use the job ID returned in the `Location` header with the `Retrieve a bulk job status` endpoint.\nThe processing of the job will continue even if an operation on an individual target group fails. The final job status will list which target groups \nwere updated successfully and which ones failed.\n"
+      operationId: create_bulk_launch_target_groups_job
+      parameters:
+      - $ref: '#/components/parameters/AccountID'
+      - $ref: '#/components/parameters/ProjectID'
+      - $ref: '#/components/parameters/IdempotencyKeyRequired'
+      requestBody:
+        description: A list of target group IDs to be launched.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateBulkLaunchTargetGroupJobRequest'
+            example:
+              target_group_ids:
+              - 01BTGNYV6HRNK8K8VKZASZCFP1
+              - 01BTGNYV6HRNK8K8VKZASZCFP2
+      tags:
+      - Fielding (Batch)
+      responses:
+        '201':
+          description: The job was created successfully. Poll the URL in the `Location` header to track its status.
+          headers:
+            traceparent:
+              $ref: '#/components/headers/Traceparent'
+            tracestate:
+              $ref: '#/components/headers/Tracestate'
+            location:
+              $ref: '#/components/headers/Location'
+              example: /demand/accounts/101/projects/01BTGNYV6HRNK8K8VKZASZCFP0/batch-jobs/launch/01BTGNYV6HRNK8K8VKZASZCFP1
+        '400':
+          $ref: '#/components/responses/Error_BadRequest'
+        '401':
+          $ref: '#/components/responses/Error_Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error_Forbidden'
+        '404':
+          $ref: '#/components/responses/Error_NotFound'
+        '500':
+          $ref: '#/components/responses/Error_Internal'
+  /demand/accounts/{account_id}/projects/{project_id}/batch-jobs/launch-fielding-runs-by-target-group-id/{job_id}:
+    parameters:
+    - $ref: '#/components/parameters/CintAPIVersion-2025-12-18'
+    get:
+      summary: Retrieves a bulk "launch" job status
+      description: 'This endpoint retrieves the status and details of a previously created bulk-launch job using its job ID.
+
+
+        You should poll this endpoint periodically until the `status` field is either `Completed` or `Failed`. If the status is `Processing`, the job is still running.
+
+        Once the job is finished, the `updated_target_groups` and `failed_target_groups` lists will show the outcome for each target group included in the original request.
+
+        If a target group was already in the desired status, it will be included in the `updated_target_groups` list, even though no change was made.
+
+        '
+      operationId: get_bulk_launch_target_groups_job
+      parameters:
+      - $ref: '#/components/parameters/AccountID'
+      - $ref: '#/components/parameters/ProjectID'
+      - $ref: '#/components/parameters/JobID'
+      tags:
+      - Fielding (Batch)
+      responses:
+        '200':
+          description: The bulk "launch" job details were retrieved successfully.
+          headers:
+            traceparent:
+              $ref: '#/components/headers/Traceparent'
+            tracestate:
+              $ref: '#/components/headers/Tracestate'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetBulkLaunchTargetGroupJobResponse'
+              example:
+                job_id: 01BTGNYV6HRNK8K8VKZASZCFP1
+                created_at: '2023-01-01T23:00:00.000Z'
+                created_by: b551326b-ac9d-4d32-8823-4f025787dab9
+                status: Completed
+                updated_target_groups:
+                  data:
+                  - target_group_id: 01BTGNYV6HRNK8K8VKZASZCFP2
+                  has_more: false
+                failed_target_groups:
+                  data:
+                  - target_group_id: 01BTGNYV6HRNK8K8VKZASZCFP3
+                    failure_reason:
+                      code: StatusTransitionNotAllowed
+                      description: Status transition is not allowed.
+                  has_more: false
+        '400':
+          $ref: '#/components/responses/Error_BadRequest'
+        '401':
+          $ref: '#/components/responses/Error_Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error_Forbidden'
+        '404':
+          $ref: '#/components/responses/Error_NotFound'
+        '500':
+          $ref: '#/components/responses/Error_Internal'
+  /demand/accounts/{account_id}/projects/{project_id}/batch-jobs/pause-fielding-runs-by-target-group-id:
+    parameters:
+    - $ref: '#/components/parameters/CintAPIVersion-2025-12-18'
+    post:
+      summary: Creates a job to pause multiple target groups
+      description: "This endpoint creates a bulk job to pause fielding runs for a list of specified target group IDs. This action will pause the fielding runs for the specified target groups.\nA target group can only be paused if it is currently in a 'live' state.\nIf a target group is already paused, the system considers the action successful.\n\nTo ensure that the same job is not created multiple times, this endpoint uses an `Idempotency-Key` from the request header. If a job with the same key has already been \nsubmitted, the system will not create a new one but will treat the operation as successful and return the same successful response as for a newly created job.\n\nUpon successful submission, the system creates a new bulk job to start the actual processing asynchronously. This means the endpoint returns a response quickly without waiting \nfor the entire bulk operation to complete. If the job is created successfully or if it already existed due to the idempotency key, the endpoint returns a `201 Created` \nstatus code with the job ID in the `Location` header.\n\nTo check the status of the job, you can use the job ID returned in the `Location` header with the `Retrieve a bulk job status` endpoint.\nThe processing of the job will continue even if an operation on an individual target group fails. The final job status will list which target groups \nwere updated successfully and which ones failed.\n"
+      operationId: create_bulk_pause_target_groups_job
+      parameters:
+      - $ref: '#/components/parameters/AccountID'
+      - $ref: '#/components/parameters/ProjectID'
+      - $ref: '#/components/parameters/IdempotencyKeyRequired'
+      requestBody:
+        description: A list of target group IDs to be paused.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateBulkPauseTargetGroupJobRequest'
+            example:
+              target_group_ids:
+              - 01BTGNYV6HRNK8K8VKZASZCFP1
+              - 01BTGNYV6HRNK8K8VKZASZCFP2
+      tags:
+      - Fielding (Batch)
+      responses:
+        '201':
+          description: The job was created successfully. Poll the URL in the `Location` header to track its status.
+          headers:
+            traceparent:
+              $ref: '#/components/headers/Traceparent'
+            tracestate:
+              $ref: '#/components/headers/Tracestate'
+            location:
+              $ref: '#/components/headers/Location'
+              example: /demand/accounts/101/projects/01BTGNYV6HRNK8K8VKZASZCFP0/batch-jobs/pause/01BTGNYV6HRNK8K8VKZASZCFP1
+        '400':
+          $ref: '#/components/responses/Error_BadRequest'
+        '401':
+          $ref: '#/components/responses/Error_Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error_Forbidden'
+        '404':
+          $ref: '#/components/responses/Error_NotFound'
+        '500':
+          $ref: '#/components/responses/Error_Internal'
+  /demand/accounts/{account_id}/projects/{project_id}/batch-jobs/pause-fielding-runs-by-target-group-id/{job_id}:
+    parameters:
+    - $ref: '#/components/parameters/CintAPIVersion-2025-12-18'
+    get:
+      summary: Retrieves a bulk "pause" job status
+      description: 'This endpoint retrieves the status and details of a previously created bulk-pause job using its job ID.
+
+
+        You should poll this endpoint periodically until the `status` field is either `Completed` or `Failed`. If the status is `Processing`, the job is still running.
+
+        Once the job is finished, the `updated_target_groups` and `failed_target_groups` lists will show the outcome for each target group included in the original request.
+
+        If a target group was already in the desired status, it will be included in the `updated_target_groups` list, even though no change was made.
+
+        '
+      operationId: get_bulk_pause_target_groups_job
+      parameters:
+      - $ref: '#/components/parameters/AccountID'
+      - $ref: '#/components/parameters/ProjectID'
+      - $ref: '#/components/parameters/JobID'
+      tags:
+      - Fielding (Batch)
+      responses:
+        '200':
+          description: The bulk "pause" job details were retrieved successfully.
+          headers:
+            traceparent:
+              $ref: '#/components/headers/Traceparent'
+            tracestate:
+              $ref: '#/components/headers/Tracestate'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetBulkPauseTargetGroupJobResponse'
+              example:
+                job_id: 01BTGNYV6HRNK8K8VKZASZCFP1
+                created_at: '2023-01-01T23:00:00.000Z'
+                created_by: b551326b-ac9d-4d32-8823-4f025787dab9
+                status: Completed
+                updated_target_groups:
+                  data:
+                  - target_group_id: 01BTGNYV6HRNK8K8VKZASZCFP2
+                  has_more: false
+                failed_target_groups:
+                  data:
+                  - target_group_id: 01BTGNYV6HRNK8K8VKZASZCFP3
+                    failure_reason:
+                      code: StatusTransitionNotAllowed
+                      description: Status transition is not allowed.
+                  has_more: false
+        '400':
+          $ref: '#/components/responses/Error_BadRequest'
+        '401':
+          $ref: '#/components/responses/Error_Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error_Forbidden'
+        '404':
+          $ref: '#/components/responses/Error_NotFound'
+        '500':
+          $ref: '#/components/responses/Error_Internal'
+  /demand/accounts/{account_id}/projects/{project_id}/batch-jobs/relaunch-fielding-runs-by-target-group-id:
+    parameters:
+    - $ref: '#/components/parameters/CintAPIVersion-2025-12-18'
+    post:
+      summary: Creates a job to relaunch multiple target groups
+      description: "This endpoint creates a bulk job to relaunch fielding runs for a list of specified target group IDs. This action will restart the fielding runs for previously completed \ntarget groups. A target group can only be relaunched if it is in a 'completed' state and its completes goal and end date have not yet been reached.\n\nTo ensure that the same job is not created multiple times, this endpoint uses an `Idempotency-Key` from the request header. If a job with the same key has already been \nsubmitted, the system will not create a new one but will treat the operation as successful and return the same successful response as for a newly created job.\nIf a target group is already live, the system considers the action successful.\n\nUpon successful submission, the system creates a new bulk job to start the actual processing asynchronously. This means the endpoint returns a response quickly without waiting \nfor the entire bulk operation to complete. If the job is created successfully or if it already existed due to the idempotency key, the endpoint returns a `201 Created` \nstatus code with the job ID in the `Location` header.\n\nTo check the status of the job, you can use the job ID returned in the `Location` header with the `Retrieve a bulk job status` endpoint.\nThe processing of the job will continue even if an operation on an individual target group fails. The final job status will list which target groups \nwere updated successfully and which ones failed.\n"
+      operationId: create_bulk_relaunch_target_groups_job
+      parameters:
+      - $ref: '#/components/parameters/AccountID'
+      - $ref: '#/components/parameters/ProjectID'
+      - $ref: '#/components/parameters/IdempotencyKeyRequired'
+      requestBody:
+        description: A list of target group IDs to be relaunched.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateBulkRelaunchTargetGroupJobRequest'
+            example:
+              target_group_ids:
+              - 01BTGNYV6HRNK8K8VKZASZCFP1
+              - 01BTGNYV6HRNK8K8VKZASZCFP2
+      tags:
+      - Fielding (Batch)
+      responses:
+        '201':
+          description: The job was created successfully. Poll the URL in the `Location` header to track its status.
+          headers:
+            traceparent:
+              $ref: '#/components/headers/Traceparent'
+            tracestate:
+              $ref: '#/components/headers/Tracestate'
+            location:
+              $ref: '#/components/headers/Location'
+              example: /demand/accounts/101/projects/01BTGNYV6HRNK8K8VKZASZCFP0/batch-jobs/relaunch/01BTGNYV6HRNK8K8VKZASZCFP1
+        '400':
+          $ref: '#/components/responses/Error_BadRequest'
+        '401':
+          $ref: '#/components/responses/Error_Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error_Forbidden'
+        '404':
+          $ref: '#/components/responses/Error_NotFound'
+        '500':
+          $ref: '#/components/responses/Error_Internal'
+  /demand/accounts/{account_id}/projects/{project_id}/batch-jobs/relaunch-fielding-runs-by-target-group-id/{job_id}:
+    parameters:
+    - $ref: '#/components/parameters/CintAPIVersion-2025-12-18'
+    get:
+      summary: Retrieves a bulk "relaunch" job status
+      description: 'This endpoint retrieves the status and details of a previously created bulk-relaunch job using its job ID.
+
+
+        You should poll this endpoint periodically until the `status` field is either `Completed` or `Failed`. If the status is `Processing`, the job is still running.
+
+        Once the job is finished, the `updated_target_groups` and `failed_target_groups` lists will show the outcome for each target group included in the original request.
+
+        If a target group was already in the desired status, it will be included in the `updated_target_groups` list, even though no change was made.
+
+        '
+      operationId: get_bulk_relaunch_target_groups_job
+      parameters:
+      - $ref: '#/components/parameters/AccountID'
+      - $ref: '#/components/parameters/ProjectID'
+      - $ref: '#/components/parameters/JobID'
+      tags:
+      - Fielding (Batch)
+      responses:
+        '200':
+          description: The bulk "relaunch" job details were retrieved successfully.
+          headers:
+            traceparent:
+              $ref: '#/components/headers/Traceparent'
+            tracestate:
+              $ref: '#/components/headers/Tracestate'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetBulkRelaunchTargetGroupJobResponse'
+              example:
+                job_id: 01BTGNYV6HRNK8K8VKZASZCFP1
+                created_at: '2023-01-01T23:00:00.000Z'
+                created_by: b551326b-ac9d-4d32-8823-4f025787dab9
+                status: Completed
+                updated_target_groups:
+                  data:
+                  - target_group_id: 01BTGNYV6HRNK8K8VKZASZCFP2
+                  has_more: false
+                failed_target_groups:
+                  data:
+                  - target_group_id: 01BTGNYV6HRNK8K8VKZASZCFP3
+                    failure_reason:
+                      code: StatusTransitionNotAllowed
+                      description: Status transition is not allowed.
+                  has_more: false
+        '400':
+          $ref: '#/components/responses/Error_BadRequest'
+        '401':
+          $ref: '#/components/responses/Error_Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error_Forbidden'
+        '404':
+          $ref: '#/components/responses/Error_NotFound'
+        '500':
+          $ref: '#/components/responses/Error_Internal'
+  /demand/accounts/{account_id}/projects/{project_id}/batch-jobs/resume-fielding-runs-by-target-group-id:
+    parameters:
+    - $ref: '#/components/parameters/CintAPIVersion-2025-12-18'
+    post:
+      summary: Creates a job to resume multiple target groups
+      description: "This endpoint creates a bulk job to resume fielding runs for a list of specified target group IDs. This action will resume the fielding \nruns for previously paused target groups. A target group can only be resumed if its completes goal and end date have not yet been reached.\nIf a target group is already live, the system considers the action successful.\n\nTo ensure that the same job is not created multiple times, this endpoint uses an `Idempotency-Key` from the request header. If a job \nwith the same key has already been submitted, the system will not create a new one but will treat the operation as successful and \nreturn the same successful response as for a newly created job.\n\nUpon successful submission, the system creates a new bulk job to start the actual processing asynchronously. This means the endpoint returns a \nresponse quickly without waiting for the entire bulk operation to complete. If the job is created successfully or if it already existed \ndue to the idempotency key, the endpoint returns a `201 Created` status code with the job ID in the `Location` header.\n\nTo check the status of the job, you can use the job ID returned in the `Location` header with the `Retrieve a bulk job status` endpoint.\nThe processing of the job will continue even if an operation on an individual target group fails. The final job status will list which target groups \nwere updated successfully and which ones failed.\n"
+      operationId: create_bulk_resume_target_groups_job
+      parameters:
+      - $ref: '#/components/parameters/AccountID'
+      - $ref: '#/components/parameters/ProjectID'
+      - $ref: '#/components/parameters/IdempotencyKeyRequired'
+      requestBody:
+        description: A list of target group IDs to be resumed.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateBulkResumeTargetGroupJobRequest'
+            example:
+              target_group_ids:
+              - 01BTGNYV6HRNK8K8VKZASZCFP1
+              - 01BTGNYV6HRNK8K8VKZASZCFP2
+      tags:
+      - Fielding (Batch)
+      responses:
+        '201':
+          description: The job was created successfully. Poll the URL in the `Location` header to track its status.
+          headers:
+            traceparent:
+              $ref: '#/components/headers/Traceparent'
+            tracestate:
+              $ref: '#/components/headers/Tracestate'
+            location:
+              $ref: '#/components/headers/Location'
+              example: /demand/accounts/101/projects/01BTGNYV6HRNK8K8VKZASZCFP0/batch-jobs/resume/01BTGNYV6HRNK8K8VKZASZCFP1
+        '400':
+          $ref: '#/components/responses/Error_BadRequest'
+        '401':
+          $ref: '#/components/responses/Error_Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error_Forbidden'
+        '404':
+          $ref: '#/components/responses/Error_NotFound'
+        '500':
+          $ref: '#/components/responses/Error_Internal'
+  /demand/accounts/{account_id}/projects/{project_id}/batch-jobs/resume-fielding-runs-by-target-group-id/{job_id}:
+    parameters:
+    - $ref: '#/components/parameters/CintAPIVersion-2025-12-18'
+    get:
+      summary: Retrieves a bulk "resume" job status
+      description: 'This endpoint retrieves the status and details of a previously created bulk-resume job using its job ID.
+
+
+        You should poll this endpoint periodically until the `status` field is either `Completed` or `Failed`. If the status is `Processing`, the job is still running.
+
+        Once the job is finished, the `updated_target_groups` and `failed_target_groups` lists will show the outcome for each target group included in the original request.
+
+        If a target group was already in the desired status, it will be included in the `updated_target_groups` list, even though no change was made.
+
+        '
+      operationId: get_bulk_resume_target_groups_job
+      parameters:
+      - $ref: '#/components/parameters/AccountID'
+      - $ref: '#/components/parameters/ProjectID'
+      - $ref: '#/components/parameters/JobID'
+      tags:
+      - Fielding (Batch)
+      responses:
+        '200':
+          description: The bulk "resume" job details were retrieved successfully.
+          headers:
+            traceparent:
+              $ref: '#/components/headers/Traceparent'
+            tracestate:
+              $ref: '#/components/headers/Tracestate'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetBulkResumeTargetGroupJobResponse'
+              example:
+                job_id: 01BTGNYV6HRNK8K8VKZASZCFP1
+                created_at: '2023-01-01T23:00:00.000Z'
+                created_by: b551326b-ac9d-4d32-8823-4f025787dab9
+                status: Completed
+                updated_target_groups:
+                  data:
+                  - target_group_id: 01BTGNYV6HRNK8K8VKZASZCFP2
+                  has_more: false
+                failed_target_groups:
+                  data:
+                  - target_group_id: 01BTGNYV6HRNK8K8VKZASZCFP3
+                    failure_reason:
+                      code: StatusTransitionNotAllowed
+                      description: Status transition is not allowed.
+                  has_more: false
+        '400':
+          $ref: '#/components/responses/Error_BadRequest'
+        '401':
+          $ref: '#/components/responses/Error_Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error_Forbidden'
+        '404':
+          $ref: '#/components/responses/Error_NotFound'
+        '500':
+          $ref: '#/components/responses/Error_Internal'
+components:
+  schemas:
+    JobID:
+      description: The character string representing a unique job ID.
+      type: string
+      example: 01BTGNYV6HRNK8K8VKZASZCFP1
+    BulkUpdatedTargetGroups:
+      type: object
+      description: A list of target groups that were successfully processed in the bulk job.
+      properties:
+        data:
+          type: array
+          items:
+            type: object
+            properties:
+              target_group_id:
+                $ref: '#/components/schemas/TargetGroupID'
+            required:
+            - target_group_id
+        has_more:
+          type: boolean
+          description: This field is always `false` as the list of updated or failed target groups is not paginated and will always be returned in full.
+          enum:
+          - false
+      required:
+      - data
+      - has_more
+    CreateBulkLaunchTargetGroupJobRequest:
+      type: object
+      description: Request body for creating a bulk launch target groups job.
+      properties:
+        target_group_ids:
+          $ref: '#/components/schemas/TargetGroupIds'
+      required:
+      - target_group_ids
+    GetBulkLaunchTargetGroupJobResponse:
+      type: object
+      description: Bulk launch target groups job details.
+      properties:
+        job_id:
+          $ref: '#/components/schemas/JobID'
+        created_at:
+          type: string
+          format: date-time
+          example: '2023-01-01T23:00:00.000Z'
+        created_by:
+          $ref: '#/components/schemas/UserID'
+        status:
+          $ref: '#/components/schemas/BulkJobStatus'
+        updated_target_groups:
+          $ref: '#/components/schemas/BulkUpdatedTargetGroups'
+        failed_target_groups:
+          $ref: '#/components/schemas/BulkFailedTargetGroups'
+      required:
+      - job_id
+      - created_at
+      - created_by
+      - status
+      - updated_target_groups
+      - failed_target_groups
+    BulkJobStatus:
+      type: string
+      description: The status of an asynchronous bulk job. `Processing` indicates the job is still running. `Completed` or `Failed` are terminal states.
+      enum:
+      - Completed
+      - Failed
+      - Processing
+    InvalidParam:
+      type: object
+      description: Describes a single invalid parameter in a request.
+      properties:
+        name:
+          type: string
+          description: The name of the parameter that failed validation.
+        reason:
+          type: string
+          description: A short explanation of why the parameter was invalid.
+      required:
+      - name
+      - reason
+    GetBulkResumeTargetGroupJobResponse:
+      type: object
+      description: Bulk resume target groups job details.
+      properties:
+        job_id:
+          $ref: '#/components/schemas/JobID'
+        created_at:
+          type: string
+          format: date-time
+          description: The date and time when the job was created.
+          example: '2023-01-01T23:00:00.000Z'
+        created_by:
+          $ref: '#/components/schemas/UserID'
+        status:
+          $ref: '#/components/schemas/BulkJobStatus'
+          description: The current status of the bulk job.
+        updated_target_groups:
+          $ref: '#/components/schemas/BulkUpdatedTargetGroups'
+        failed_target_groups:
+          $ref: '#/components/schemas/BulkFailedTargetGroups'
+      required:
+      - job_id
+      - created_at
+      - created_by
+      - status
+      - updated_target_groups
+      - failed_target_groups
+    TargetGroupID:
+      description: A unique identifier for the target group, in ULID format.
+      type: string
+      pattern: ^[0-9A-Z]{26}$
+      example: 01BTGNYV6HRNK8K8VKZASZCFP1
+    Traceparent:
+      type: string
+      description: 'The traceparent header carries essential trace context information. This includes the trace ID and parent span ID  as defined by the W3C trace context specification. It is used to pinpoint the position of an incoming request within  the trace graph, facilitating the tracking of distributed operations.
+
+        Note: This field is optional and will be automatically generated by the service if not provided in the request.  The generated value will be included in the response header.'
+      example: 00-0af7651916cd43dd8448eb211c80319c-b7ad6b7169203331-01
+    CreateBulkPauseTargetGroupJobRequest:
+      type: object
+      description: Request body for creating a bulk pause target groups job.
+      properties:
+        target_group_ids:
+          $ref: '#/components/schemas/TargetGroupIds'
+      required:
+      - target_group_ids
+    BulkFailedTargetGroups:
+      type: object
+      description: A list of target groups that failed to be processed in the bulk job, along with the reason for failure.
+      properties:
+        data:
+          type: array
+          items:
+            type: object
+            properties:
+              target_group_id:
+                $ref: '#/components/schemas/TargetGroupID'
+              failure_reason:
+                $ref: '#/components/schemas/BulkJobFailureReason'
+            required:
+            - target_group_id
+            - failure_reason
+        has_more:
+          type: boolean
+          description: This field is always `false` as the list of updated or failed target groups is not paginated and will always be returned in full.
+          enum:
+          - false
+      required:
+      - data
+      - has_more
+    Error:
+      type: object
+      description: The standard error object returned for all failed API requests.
+      required:
+      - object
+      - detail
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: A unique identifier for this specific error instance.
+        object:
+          type: string
+          description: A short informative string identifying the type of the error
+          pattern: ^([a-z]*_)*([a-z]*)$
+        detail:
+          type: string
+          description: An error message provides a concise overview of the cause of the error.
+        invalid_params:
+          type: array
+          nullable: true
+          description: An optional field containing a list of invalid parameters may be presented in validation errors for additional information.
+          items:
+            $ref: '#/components/schemas/InvalidParam'
+    BulkJobFailureReason:
+      type: object
+      properties:
+        code:
+          type: string
+          description: A machine-readable code for the failure reason.
+          example: TargetGroupNotFound
+        description:
+          type: string
+          description: A human-readable explanation of why the operation failed for this target group.
+          example: Target group not found.
+    TargetGroupIds:
+      type: array
+      description: An array of unique target group identifiers to be processed in a bulk job.
+      minItems: 1
+      items:
+        $ref: '#/components/schemas/TargetGroupID'
+    ProjectID:
+      description: The character string representing a unique project ID (ULID format).
+      type: string
+      pattern: ^[0-9A-Z]{26}$
+      example: 01BTGNYV6HRNK8K8VKZASZCFP0
+    GetBulkRelaunchTargetGroupJobResponse:
+      type: object
+      description: Contains the status and results for a bulk "relaunch" job.
+      properties:
+        job_id:
+          $ref: '#/components/schemas/JobID'
+          description: The unique ID of the job.
+        created_at:
+          type: string
+          format: date-time
+          description: The date and time when the job was created.
+          example: '2023-01-01T23:00:00.000Z'
+        created_by:
+          $ref: '#/components/schemas/UserID'
+        status:
+          $ref: '#/components/schemas/BulkJobStatus'
+          description: The current status of the job. Poll this endpoint until the status is `Completed` or `Failed`.
+        updated_target_groups:
+          $ref: '#/components/schemas/BulkUpdatedTargetGroups'
+          description: A list of target groups that were successfully relaunched.
+        failed_target_groups:
+          $ref: '#/components/schemas/BulkFailedTargetGroups'
+          description: A list of target groups that could not be relaunched, along with the reason for failure.
+      required:
+      - job_id
+      - created_at
+      - created_by
+      - status
+      - updated_target_groups
+      - failed_target_groups
+    Tracestate:
+      type: string
+      description: 'The tracestate header provides additional contextual information to the traceparent header.  This enriches the tracing context and offers more fine-grained control
+
+        Note: This field is optional and will be automatically generated by the service if not provided in the request.  The generated value will be included in the response header.'
+      example: ot=foo:bar;k1:13
+    CreateBulkRelaunchTargetGroupJobRequest:
+      type: object
+      description: Request body for creating a bulk relaunch target groups job.
+      properties:
+        target_group_ids:
+          $ref: '#/components/schemas/TargetGroupIds'
+      required:
+      - target_group_ids
+    UserID:
+      type: string
+      format: uuid
+      description: A unique identifier for the user.
+      example: b551326b-ac9d-4d32-8823-4f025787dab9
+    GetBulkCompleteTargetGroupJobResponse:
+      type: object
+      description: Bulk complete target groups job details.
+      properties:
+        job_id:
+          $ref: '#/components/schemas/JobID'
+        created_at:
+          type: string
+          format: date-time
+          example: '2023-01-01T23:00:00.000Z'
+        created_by:
+          $ref: '#/components/schemas/UserID'
+        status:
+          $ref: '#/components/schemas/BulkJobStatus'
+        updated_target_groups:
+          $ref: '#/components/schemas/BulkUpdatedTargetGroups'
+        failed_target_groups:
+          $ref: '#/components/schemas/BulkFailedTargetGroups'
+      required:
+      - job_id
+      - created_at
+      - created_by
+      - status
+      - updated_target_groups
+      - failed_target_groups
+    CreateBulkCompleteTargetGroupJobRequest:
+      type: object
+      description: Request body for creating a bulk complete target groups job.
+      properties:
+        target_group_ids:
+          $ref: '#/components/schemas/TargetGroupIds'
+      required:
+      - target_group_ids
+    IdempotencyKey:
+      type: string
+      description: 'A shallow unique ID used as part of the deduplication mechanism for mutable operations.
+
+        We suggest using UUIDv4 or another random string with sufficient entropy to avoid collisions.'
+      maxLength: 255
+      example: 01BTGNYV6HRNK8K8VKZASZCFP0
+    AccountID:
+      description: The account's unique identifier.
+      type: integer
+      format: int32
+      example: 101
+    GetBulkPauseTargetGroupJobResponse:
+      type: object
+      description: Bulk pause target groups job details.
+      properties:
+        job_id:
+          $ref: '#/components/schemas/JobID'
+        created_at:
+          type: string
+          format: date-time
+          example: '2023-01-01T23:00:00.000Z'
+        created_by:
+          $ref: '#/components/schemas/UserID'
+        status:
+          $ref: '#/components/schemas/BulkJobStatus'
+        updated_target_groups:
+          $ref: '#/components/schemas/BulkUpdatedTargetGroups'
+        failed_target_groups:
+          $ref: '#/components/schemas/BulkFailedTargetGroups'
+      required:
+      - job_id
+      - created_at
+      - created_by
+      - status
+      - updated_target_groups
+      - failed_target_groups
+    CreateBulkResumeTargetGroupJobRequest:
+      type: object
+      description: Request body for creating a bulk resume target groups job.
+      properties:
+        target_group_ids:
+          $ref: '#/components/schemas/TargetGroupIds'
+      required:
+      - target_group_ids
+  responses:
+    Error_NotFound:
+      description: A requested resource isn't found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            id: 7a5972ba-0825-4360-b852-fa2430e47034
+            object: not_found_error
+            detail: resource not found
+    Error_Internal:
+      description: A request failed due to an internal error.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            id: d94b8bb2-a540-4a91-9c05-2aa3ae9a5e1e
+            object: unexpected_internal_error
+            detail: an internal error has led to the failure of this operation
+    Error_Forbidden:
+      description: A requested is forbidden.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            id: fe68cdd2-ee87-4dbf-8950-63c5cbca94c7
+            object: authorization_error
+            detail: you don't have the right permissions to perform this operation
+    Error_Unauthorized:
+      description: A request is unauthorized.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            id: 1dcf0f40-f0d1-4cf6-8c00-c3d019d32faf
+            object: authorization_error
+            detail: no valid authorization provided for this operation
+    Error_BadRequest:
+      description: A request is not valid and can't be processed.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            id: 9e278238-d011-4e05-8327-1ce1d5d26254
+            object: bad_request_error
+            detail: Expected field 'foo' is missing.
+  headers:
+    Location:
+      description: 'Contains the URL where a new resource can be found, often returned with a `201 Created` response. It follows the format defined in RFC 7231.
+
+        '
+      required: true
+      schema:
+        type: string
+        format: uri-reference
+        description: A reference to the resource's location. This can be a full URL, a relative path, or just the resource ID.
+        example:
+          full-url:
+            summary: A full URL to the resource
+            value: https://api.cint.com/demand/business-units
+          relative-path:
+            summary: A relative path to the resource
+            value: /demand/business-units
+          resource-id:
+            summary: A resource ID
+            value: fe666fcd-490c-4cb4-b4e0-2f86e15c27e6
+    Tracestate:
+      description: The `tracestate` header complements the `traceparent` header by carrying vendor-specific trace information. This allows different services to add their own data to a trace.
+      required: false
+      schema:
+        $ref: '#/components/schemas/Tracestate'
+    Traceparent:
+      description: The `traceparent` header carries the trace ID and parent span ID, as defined by the W3C Trace Context specification. It's used to trace a single request as it moves through multiple services.
+      required: false
+      schema:
+        $ref: '#/components/schemas/Traceparent'
+  parameters:
+    ProjectID:
+      name: project_id
+      description: A unique identifier for the project, in ULID format.
+      in: path
+      required: true
+      schema:
+        $ref: '#/components/schemas/ProjectID'
+    CintAPIVersion-2025-12-18:
+      name: Cint-API-Version
+      in: header
+      required: true
+      schema:
+        type: string
+        example: 2025-12-18
+      description: 'This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.
+
+        '
+    IdempotencyKeyRequired:
+      name: idempotency-key
+      in: header
+      required: true
+      description: A shallow unique ID used as part of the deduplication mechanism for mutable operations,  this header is required.
+      schema:
+        $ref: '#/components/schemas/IdempotencyKey'
+    JobID:
+      name: job_id
+      description: The character string representing a unique job ID.
+      in: path
+      required: true
+      schema:
+        $ref: '#/components/schemas/JobID'
+    AccountID:
+      name: account_id
+      description: The account's unique identifier.
+      in: path
+      required: true
+      schema:
+        $ref: '#/components/schemas/AccountID'
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Bearer token used for authentication and authorization. See [Authentication Process](https://developer.cint.com/en/guides#authentication-process) documentation for more information.
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: API Key Authentication

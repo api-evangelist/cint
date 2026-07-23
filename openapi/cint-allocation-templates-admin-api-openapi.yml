@@ -1,0 +1,1086 @@
+openapi: 3.0.3
+info:
+  title: Demand Accounts Allocation Templates Admin API
+  description: 'Cint''s demand ordering API is REST oriented. It has predictable resource based URLs, accepts JSON-encoded request bodies, returns JSON-encoded responses, and uses standard HTTP response codes, authentication, and verbs. Error responses are also JSON-encoded and follow a standard format, providing a unique error ID and detailed information about what went wrong.
+
+
+    Authentication is handled via bearer tokens passed in the `Authorization` header. All requests must also include a `Cint-API-Version` header with a date in `YYYY-MM-DD` format to specify the desired API version. Depending on the version you use, endpoint behavior may differ as we improve our API with every version release.
+
+
+    While many operations work on a single object per request, the demand ordering API also provides asynchronous batch endpoints for performing bulk updates efficiently on certain resources. For safety, `POST` requests support an `Idempotency-Key` header to allow for safe retries without accidentally performing the same operation twice.
+
+    '
+  version: '2025-12-18'
+servers:
+- description: Production server
+  url: https://api.cint.com/v1
+security:
+- BearerAuth: []
+tags:
+- name: Allocation Templates Admin
+  description: Create, update, delete and list global and account Allocation templates. Templates allow you to store and automate your policy towards suppliers on the Exchange.
+paths:
+  /demand/accounts/{account_id}/allocation-template-association:
+    parameters:
+    - $ref: '#/components/parameters/AccountID'
+    - $ref: '#/components/parameters/CintAPIVersion-2025-12-18'
+    get:
+      operationId: get_account_allocation_template_association
+      summary: Retrieves the default allocation template for an account
+      tags:
+      - Allocation Templates Admin
+      responses:
+        '200':
+          description: The default allocation template associated with the account was retrieved successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetAccountAllocationTemplateAssociation'
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+        '400':
+          $ref: '#/components/responses/Error_BadRequest'
+        '401':
+          $ref: '#/components/responses/Error_Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error_Forbidden'
+        '404':
+          $ref: '#/components/responses/Error_NotFound'
+        '500':
+          $ref: '#/components/responses/Error_Internal'
+    put:
+      operationId: set_account_allocation_template_association
+      summary: Assigns a default allocation template to an account
+      description: Assigns a default allocation template to an account. This endpoint uses the If-Match header for optimistic locking. To get the required ETag value, first make a request to the [GET endpoint](./get-account-allocation-template-association) for this resource.
+      tags:
+      - Allocation Templates Admin
+      parameters:
+      - $ref: '#/components/parameters/IfMatchRequired'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateAccountAllocationTemplateAssociation'
+            example:
+              templateId: fe666fcd-490c-4cb4-b4e0-2f86e15c27e6
+      responses:
+        '204':
+          description: The allocation template was associated successfully.
+        '400':
+          $ref: '#/components/responses/Error_BadRequest'
+        '401':
+          $ref: '#/components/responses/Error_Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error_Forbidden'
+        '404':
+          $ref: '#/components/responses/Error_NotFound'
+        '412':
+          $ref: '#/components/responses/Precondition_Failed'
+        '500':
+          $ref: '#/components/responses/Error_Internal'
+  /demand/accounts/{account_id}/allocation-templates:
+    parameters:
+    - $ref: '#/components/parameters/AccountID'
+    - $ref: '#/components/parameters/CintAPIVersion-2025-12-18'
+    get:
+      operationId: list_account_allocation_templates
+      summary: Lists allocation templates for an account
+      description: Lists a paginated set of allocation templates for an account. The response includes each template's ID, name, and last update details. Use the `page_size` parameter to control the number of results per page, and use the `start_after` and `end_before` parameters to navigate between pages.
+      tags:
+      - Allocation Templates Admin
+      parameters:
+      - $ref: '#/components/parameters/PageSize'
+      - $ref: '#/components/parameters/StartAfter'
+      - $ref: '#/components/parameters/EndBefore'
+      responses:
+        '200':
+          description: The list of allocation templates was retrieved successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListAccountAllocationTemplatesResponse'
+              example:
+                templates:
+                - template_id: 01JT5Z59MAKQ82J5K9Y3YGFNHN
+                  name: US General Population
+                  last_modified_by: b551326b-ac9d-4d32-8823-4f025787dab9
+                  last_modified_at: '2024-06-18T14:23:45Z'
+                - template_id: 01JT5Z59MAKQ82J5K9Y3YGFNJM
+                  name: UK Gamers
+                  last_modified_by: b551326b-ac9d-4d32-8823-4f025787dab9
+                  last_modified_at: '2024-06-17T11:00:00Z'
+                has_more: true
+                next_cursor: WzAsIjAxSlA3RTgyM0czSFRGOTdZRThBNjc0RU5EIl0=
+        '400':
+          $ref: '#/components/responses/Error_BadRequest'
+        '401':
+          $ref: '#/components/responses/Error_Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error_Forbidden'
+        '500':
+          $ref: '#/components/responses/Error_Internal'
+    post:
+      operationId: create_account_allocation_template
+      summary: Create an allocation template
+      description: Creates a new allocation template for an account. You'll need to provide a template name and the allocation specifications, which define supplier blocks, distribution groups, and their respective percentages.
+      tags:
+      - Allocation Templates Admin
+      parameters:
+      - $ref: '#/components/parameters/IdempotencyKeyULIDRequired'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AllocationTemplateCreateRequest'
+            example:
+              name: Q1 Marketing Campaign Template
+              supply_allocations:
+              - type: blocked
+                suppliers:
+                - supplier_id: 101
+                - supplier_id: 202
+              - type: group
+                name: Group A (Premium)
+                percentage_min: 50
+                percentage_max: 70
+                suppliers:
+                - supplier_id: 301
+                - supplier_id: 405
+              - type: group
+                name: Group B (Standard)
+                percentage_min: 30
+                percentage_max: 50
+                suppliers:
+                - supplier_id: 510
+                - supplier_id: 620
+      responses:
+        '201':
+          description: The allocation template was created successfully. The Location header contains the URL for the new resource.
+          headers:
+            location:
+              $ref: '#/components/headers/Location'
+        '400':
+          $ref: '#/components/responses/Error_BadRequest'
+        '401':
+          $ref: '#/components/responses/Error_Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error_Forbidden'
+        '404':
+          $ref: '#/components/responses/Error_NotFound'
+        '500':
+          $ref: '#/components/responses/Error_Internal'
+  /demand/accounts/{account_id}/allocation-templates/{template_id}:
+    parameters:
+    - $ref: '#/components/parameters/AccountID'
+    - $ref: '#/components/parameters/TemplateID'
+    - $ref: '#/components/parameters/CintAPIVersion-2025-12-18'
+    get:
+      operationId: get_account_allocation_template_by_template_id
+      summary: Retrieve an allocation template by ID
+      description: 'Retrieves the details of a specific allocation template by its ID.
+
+        NOTE: The response currently includes only Cint Exchange suppliers. Support for private exchange suppliers is not yet available.'
+      tags:
+      - Allocation Templates Admin
+      parameters:
+      - $ref: '#/components/parameters/OptionalLocaleCodeFilter'
+      responses:
+        '200':
+          description: The allocation template was retrieved successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetAccountAllocationTemplateByTemplateIdResponse'
+              example:
+                template_id: 01JT5Z59MAKQ82J5K9Y3YGFNHN
+                name: Q1 Marketing Campaign Template
+                last_modified_at: '2024-06-18T14:23:45Z'
+                last_modified_by: b551326b-ac9d-4d32-8823-4f025787dab9
+                supply_allocations:
+                - type: blocked
+                  suppliers:
+                  - supplier_id: 101
+                    name: Blocked Supplier A
+                    type: survey_panels
+                - type: group
+                  name: Group A (Premium)
+                  percentage_min: 50
+                  percentage_max: 70
+                  suppliers:
+                  - supplier_id: 301
+                    name: Premium Supplier B
+                    type: loyalty_panels
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+        '400':
+          $ref: '#/components/responses/Error_BadRequest'
+        '401':
+          $ref: '#/components/responses/Error_Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error_Forbidden'
+        '404':
+          $ref: '#/components/responses/Error_NotFound'
+        '500':
+          $ref: '#/components/responses/Error_Internal'
+    put:
+      operationId: update_account_allocation_template
+      summary: Update an allocation template
+      description: Updates the name and allocation specifications for a template. This endpoint uses the If-Match header for optimistic locking. To get the required ETag value, first make a GET request for this resource.
+      tags:
+      - Allocation Templates Admin
+      parameters:
+      - $ref: '#/components/parameters/IfMatch'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AllocationTemplateUpdateRequest'
+            example:
+              name: Updated Q1 Marketing Campaign Template
+              supply_allocations:
+              - type: blocked
+                suppliers:
+                - supplier_id: 101
+              - type: group
+                name: Updated Group A
+                percentage_min: 60
+                percentage_max: 80
+                suppliers:
+                - supplier_id: 301
+                - supplier_id: 405
+      responses:
+        '204':
+          description: The allocation template was updated successfully.
+        '400':
+          $ref: '#/components/responses/Error_BadRequest'
+        '401':
+          $ref: '#/components/responses/Error_Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error_Forbidden'
+        '404':
+          $ref: '#/components/responses/Error_NotFound'
+        '412':
+          $ref: '#/components/responses/Precondition_Failed'
+        '500':
+          $ref: '#/components/responses/Error_Internal'
+    delete:
+      operationId: delete_account_allocation_template
+      summary: Delete an allocation template
+      tags:
+      - Allocation Templates Admin
+      responses:
+        '204':
+          description: The allocation template was deleted successfully.
+        '400':
+          $ref: '#/components/responses/Error_BadRequest'
+        '401':
+          $ref: '#/components/responses/Error_Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error_Forbidden'
+        '404':
+          $ref: '#/components/responses/Error_NotFound'
+        '500':
+          $ref: '#/components/responses/Error_Internal'
+  /demand/allocation-templates:
+    parameters:
+    - $ref: '#/components/parameters/CintAPIVersion-2025-12-18'
+    get:
+      operationId: list_global_allocation_templates
+      summary: Lists global allocation templates
+      description: Lists a paginated set of global allocation templates. The response includes each template's ID, name, and last update details. Use the `page_size` parameter to control the number of results per page, and use the `start_after` and `end_before` parameters to navigate between pages.
+      tags:
+      - Allocation Templates Admin
+      parameters:
+      - $ref: '#/components/parameters/PageSize'
+      - $ref: '#/components/parameters/StartAfter'
+      - $ref: '#/components/parameters/EndBefore'
+      responses:
+        '200':
+          description: The list of global allocation templates was retrieved successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListGlobalAllocationTemplatesResponse'
+              example:
+                templates:
+                - template_id: 01JT5Z59MAKQ82J5K9Y3YGFNHN
+                  name: Global Template A
+                  last_modified_at: '2024-06-18T14:23:45Z'
+                  last_modified_by: b551326b-ac9d-4d32-8823-4f025787dab9
+                - template_id: 01JT5Z59MAKQ82J5K9Y3YGFNJM
+                  name: Global Template B
+                  last_modified_at: '2024-06-17T11:00:00Z'
+                  last_modified_by: b551326b-ac9d-4d32-8823-4f025787dab9
+                has_more: true
+                next_cursor: WzAsIjAxSlA3RTgyM0czSFRGOTdZRThBNjc0RU5EIl0=
+        '400':
+          $ref: '#/components/responses/Error_BadRequest'
+        '401':
+          $ref: '#/components/responses/Error_Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error_Forbidden'
+        '500':
+          $ref: '#/components/responses/Error_Internal'
+  /demand/allocation-templates/{template_id}:
+    parameters:
+    - $ref: '#/components/parameters/TemplateID'
+    - $ref: '#/components/parameters/CintAPIVersion-2025-12-18'
+    get:
+      operationId: get_global_allocation_template_by_template_id
+      summary: Retrieves a global allocation template by ID
+      description: 'Retrieves the details of a specific global allocation template by its ID.
+
+        NOTE: The response currently includes only Cint Exchange suppliers. Support for private exchange suppliers is not yet available.'
+      tags:
+      - Allocation Templates Admin
+      parameters:
+      - $ref: '#/components/parameters/OptionalLocaleCodeFilter'
+      responses:
+        '200':
+          description: The global allocation template was retrieved successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetGlobalAllocationTemplateByTemplateIdResponse'
+              example:
+                template_id: 01JT5Z59MAKQ82J5K9Y3YGFNHN
+                name: Global Technology Sector Template
+                supply_allocations:
+                - type: exchange
+                  percentage_min: 80
+                  percentage_max: 100
+                  suppliers:
+                  - supplier_id: 420
+                    name: Tech Insights Panel
+                    type: survey_panels
+                - type: blocked
+                  suppliers:
+                  - supplier_id: 101
+                    name: General Consumer Panel
+                    type: loyalty_panels
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+        '400':
+          $ref: '#/components/responses/Error_BadRequest'
+        '401':
+          $ref: '#/components/responses/Error_Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error_Forbidden'
+        '404':
+          $ref: '#/components/responses/Error_NotFound'
+        '500':
+          $ref: '#/components/responses/Error_Internal'
+  /demand/system-allocation-template:
+    parameters:
+    - $ref: '#/components/parameters/LocaleCodeFilter'
+    - $ref: '#/components/parameters/CintAPIVersion-2025-12-18'
+    get:
+      operationId: get_system_allocation_template
+      summary: Retrieves the system allocation template
+      description: Retrieves the system's default allocation template for a specific locale. This template contains a dynamic list of all suppliers currently available in that market. You can use this data as a baseline to ensure your custom allocation templates only include suppliers that are valid for a specific country or region.
+      tags:
+      - Allocation Templates Admin
+      responses:
+        '200':
+          description: The system allocation template was retrieved successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetSystemAllocationTemplateResponse'
+              example:
+                name: System Default for eng_us
+                supply_allocations:
+                - type: exchange
+                  percentage_min: 100
+                  percentage_max: 100
+                  suppliers:
+                  - supplier_id: 420
+                    name: Clix Sense
+                    type: loyalty_panels
+                  - supplier_id: 515
+                    name: US Research Panel
+                    type: survey_panels
+                  - supplier_id: 630
+                    name: Affiliate Network One
+                    type: non_panel_or_affiliate
+        '400':
+          $ref: '#/components/responses/Error_BadRequest'
+        '401':
+          $ref: '#/components/responses/Error_Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error_Forbidden'
+        '404':
+          $ref: '#/components/responses/Error_NotFound'
+        '500':
+          $ref: '#/components/responses/Error_Internal'
+components:
+  schemas:
+    AllocationTemplateUpdateRequest:
+      type: object
+      required:
+      - name
+      - supply_allocations
+      properties:
+        name:
+          type: string
+          description: A descriptive name for the allocation template.
+          minLength: 3
+          maxLength: 128
+        supply_allocations:
+          type: array
+          description: A list of allocation objects. You must include a `type` field in each object (`blocked`, `group`, or `exchange`) to define its structure and purpose.
+          items:
+            oneOf:
+            - $ref: '#/components/schemas/AllocationTemplateExchangeSupplier'
+            - $ref: '#/components/schemas/AllocationTemplateGroupSupplier'
+            - $ref: '#/components/schemas/AllocationTemplateBlockedSupplier'
+    ListGlobalAllocationTemplatesResponse:
+      type: object
+      required:
+      - has_more
+      - templates
+      - next_cursor
+      properties:
+        templates:
+          type: array
+          items:
+            $ref: '#/components/schemas/GlobalAllocationTemplateListItem'
+        has_more:
+          type: boolean
+          description: If there are further results to be shown using the returned next cursor or previous cursor, this will be true, otherwise false.
+        next_cursor:
+          type: string
+          description: Provides the string to use as the "start_after" value of the next request. Empty value if no further results.
+          example: WzAsIjAxSlA3RTgyM0czSFRGOTdZRThBNjc0RU5EIl0=
+    ETag:
+      type: string
+      description: The `ETag` header provides a unique identifier that represents the current version state of a particular resource.
+      example: W/"1234"
+    AllocationTemplateBlockedSupplier:
+      type: object
+      title: Blocked
+      required:
+      - type
+      - suppliers
+      properties:
+        type:
+          type: string
+          description: The type of supply allocation. For this object, the value is always `blocked`.
+          enum:
+          - blocked
+        suppliers:
+          type: array
+          items:
+            $ref: '#/components/schemas/AllocationTemplateSupplier'
+    AllocationTemplateExchangeSupplier:
+      type: object
+      title: Exchange supplier allocation
+      required:
+      - type
+      - percentage_max
+      - percentage_min
+      properties:
+        type:
+          type: string
+          description: The type of supply allocation. For this object, the value is always `exchange`.
+          enum:
+          - exchange
+        percentage_max:
+          type: integer
+          nullable: false
+          minimum: 0
+          maximum: 100
+          description: The inclusive maximum percentage of survey completes that can come from this allocation.
+          example: 100
+        percentage_min:
+          type: integer
+          nullable: true
+          description: The inclusive minimum percentage of survey completes that can come from this allocation.
+          minimum: 0
+          maximum: 100
+          example: 0
+    AllocationTemplateGroupSupplierResponse:
+      type: object
+      title: Group supplier allocation
+      required:
+      - type
+      - name
+      - percentage_min
+      - percentage_max
+      - suppliers
+      properties:
+        type:
+          type: string
+          description: The type of supply allocation. For this object, the value is always `group`.
+          enum:
+          - group
+        name:
+          type: string
+          example: My happy allocation group
+        percentage_max:
+          type: integer
+          nullable: false
+          minimum: 0
+          maximum: 100
+          description: The inclusive maximum percentage of survey completes that can come from this allocation.
+          example: 44
+        percentage_min:
+          type: integer
+          nullable: true
+          minimum: 0
+          maximum: 100
+          description: The inclusive minimum percentage of survey completes that can come from this allocation.
+          example: 78
+        suppliers:
+          type: array
+          items:
+            $ref: '#/components/schemas/TemplateSupplierResponse'
+    InvalidParam:
+      type: object
+      description: Describes a single invalid parameter in a request.
+      properties:
+        name:
+          type: string
+          description: The name of the parameter that failed validation.
+        reason:
+          type: string
+          description: A short explanation of why the parameter was invalid.
+      required:
+      - name
+      - reason
+    AllocationTemplateBlockedSupplierResponse:
+      type: object
+      title: Blocked supplier allocation
+      required:
+      - type
+      - suppliers
+      properties:
+        type:
+          type: string
+          description: The type of supply allocation. For this object, the value is always `blocked`.
+          enum:
+          - blocked
+        suppliers:
+          type: array
+          items:
+            $ref: '#/components/schemas/TemplateSupplierResponse'
+    AllocationTemplateCreateRequest:
+      type: object
+      required:
+      - name
+      - supply_allocations
+      properties:
+        name:
+          type: string
+          description: A descriptive name for the allocation template.
+          minLength: 3
+          maxLength: 128
+        supply_allocations:
+          type: array
+          description: A list of allocation objects. You must include a `type` field in each object (`blocked`, `group`, or `exchange`) to define its structure and purpose.
+          items:
+            oneOf:
+            - $ref: '#/components/schemas/AllocationTemplateExchangeSupplier'
+            - $ref: '#/components/schemas/AllocationTemplateGroupSupplier'
+            - $ref: '#/components/schemas/AllocationTemplateBlockedSupplier'
+    IdempotencyKeyULID:
+      description: A unique ID that you can provide to safely retry requests without accidentally performing the same operation twice.
+      type: string
+      format: ulid
+      example: 01JCDRR74NW2SSGN567A766VAN
+    UpdateAccountAllocationTemplateAssociation:
+      type: object
+      title: Set account allocation template association request
+      required:
+      - template_id
+      properties:
+        template_id:
+          $ref: '#/components/schemas/TemplateID'
+    LocaleCode:
+      type: string
+      description: Unique text code of the locale.
+      example: eng_us
+    Traceparent:
+      type: string
+      description: 'The traceparent header carries essential trace context information. This includes the trace ID and parent span ID  as defined by the W3C trace context specification. It is used to pinpoint the position of an incoming request within  the trace graph, facilitating the tracking of distributed operations.
+
+        Note: This field is optional and will be automatically generated by the service if not provided in the request.  The generated value will be included in the response header.'
+      example: 00-0af7651916cd43dd8448eb211c80319c-b7ad6b7169203331-01
+    AllocationTemplateSupplier:
+      type: object
+      required:
+      - supplier_id
+      properties:
+        supplier_id:
+          type: integer
+          description: The ID of the supplier
+          minimum: 0
+          example: 420
+    TemplateID:
+      type: string
+      description: A unique identifier for the template.
+      format: ulid
+      example: 01JT5Z59MAKQ82J5K9Y3YGFNHN
+    Error:
+      type: object
+      description: The standard error object returned for all failed API requests.
+      required:
+      - object
+      - detail
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: A unique identifier for this specific error instance.
+        object:
+          type: string
+          description: A short informative string identifying the type of the error
+          pattern: ^([a-z]*_)*([a-z]*)$
+        detail:
+          type: string
+          description: An error message provides a concise overview of the cause of the error.
+        invalid_params:
+          type: array
+          nullable: true
+          description: An optional field containing a list of invalid parameters may be presented in validation errors for additional information.
+          items:
+            $ref: '#/components/schemas/InvalidParam'
+    GetAccountAllocationTemplateByTemplateIdResponse:
+      type: object
+      required:
+      - template_id
+      - name
+      - supply_allocations
+      - last_modified_at
+      - last_modified_by
+      properties:
+        template_id:
+          $ref: '#/components/schemas/TemplateID'
+        name:
+          type: string
+          description: The name of the account allocation template.
+        supply_allocations:
+          type: array
+          items:
+            oneOf:
+            - $ref: '#/components/schemas/AllocationTemplateExchangeSupplierResponse'
+            - $ref: '#/components/schemas/AllocationTemplateGroupSupplierResponse'
+            - $ref: '#/components/schemas/AllocationTemplateBlockedSupplierResponse'
+        last_modified_at:
+          $ref: '#/components/schemas/LastModifiedAt'
+        last_modified_by:
+          $ref: '#/components/schemas/UserID'
+    LastModifiedAt:
+      type: string
+      format: datetime
+      description: The last time the template was modified
+      example: '2024-06-18T14:23:45Z'
+    AllocationTemplateExchangeSupplierResponse:
+      type: object
+      title: Exchange supplier allocation
+      required:
+      - type
+      - percentage_max
+      - percentage_min
+      - suppliers
+      properties:
+        type:
+          type: string
+          description: The type of supply allocation. For this object, the value is always `exchange`.
+          enum:
+          - exchange
+        percentage_max:
+          type: integer
+          nullable: false
+          minimum: 0
+          maximum: 100
+          description: Controls the maximum amount of fills from this supply allocation group. The value is `inclusive`.
+          example: 100
+        percentage_min:
+          type: integer
+          nullable: true
+          description: Controls the minimum amount of fills from this supply allocation group. The value is `inclusive`
+          minimum: 0
+          maximum: 100
+          example: 0
+        suppliers:
+          type: array
+          items:
+            $ref: '#/components/schemas/TemplateSupplierResponse'
+    GetGlobalAllocationTemplateByTemplateIdResponse:
+      type: object
+      required:
+      - template_id
+      - name
+      - supply_allocations
+      properties:
+        template_id:
+          $ref: '#/components/schemas/TemplateID'
+        name:
+          type: string
+          description: The name of the global allocation template.
+        supply_allocations:
+          type: array
+          description: A list of allocation objects. The `type` field in each object determines its structure and purpose.
+          items:
+            oneOf:
+            - $ref: '#/components/schemas/AllocationTemplateExchangeSupplierResponse'
+            - $ref: '#/components/schemas/AllocationTemplateGroupSupplierResponse'
+            - $ref: '#/components/schemas/AllocationTemplateBlockedSupplierResponse'
+    Tracestate:
+      type: string
+      description: 'The tracestate header provides additional contextual information to the traceparent header.  This enriches the tracing context and offers more fine-grained control
+
+        Note: This field is optional and will be automatically generated by the service if not provided in the request.  The generated value will be included in the response header.'
+      example: ot=foo:bar;k1:13
+    AllocationTemplateGroupSupplier:
+      type: object
+      title: Group supplier allocation
+      required:
+      - type
+      - name
+      - percentage_min
+      - percentage_max
+      - suppliers
+      properties:
+        type:
+          type: string
+          description: The type of supply allocation. For this object, the value is always `group`.
+          enum:
+          - group
+        name:
+          type: string
+          example: My happy allocation group
+          description: The name of the allocation group.
+        percentage_max:
+          type: integer
+          nullable: false
+          minimum: 0
+          maximum: 100
+          description: The inclusive maximum percentage of completes that can come from this allocation.
+          example: 90
+        percentage_min:
+          type: integer
+          nullable: true
+          minimum: 0
+          maximum: 100
+          description: The inclusive minimum percentage of completes that can come from this allocation.
+          example: 0
+        suppliers:
+          type: array
+          items:
+            $ref: '#/components/schemas/AllocationTemplateSupplier'
+    UserID:
+      type: string
+      format: uuid
+      description: A unique identifier for the user.
+      example: b551326b-ac9d-4d32-8823-4f025787dab9
+    AccountID:
+      description: The account's unique identifier.
+      type: integer
+      format: int32
+      example: 101
+    GetAccountAllocationTemplateAssociation:
+      type: object
+      title: Account allocation template association
+      required:
+      - template_id
+      properties:
+        template_id:
+          $ref: '#/components/schemas/TemplateID'
+    TemplateSupplierResponse:
+      type: object
+      properties:
+        supplier_id:
+          type: integer
+          description: The ID of the supplier
+          minimum: 0
+          example: 420
+        name:
+          type: string
+          description: The name of the supplier.
+          minLength: 1
+          example: Clix Sense
+        type:
+          type: string
+          description: The type of the supplier.
+          example: loyalty_panels
+          enum:
+          - loyalty_panels
+          - non_panel_or_affiliate
+          - survey_panels
+    ListAccountAllocationTemplatesResponse:
+      type: object
+      required:
+      - has_more
+      - templates
+      - next_cursor
+      properties:
+        templates:
+          type: array
+          items:
+            $ref: '#/components/schemas/AccountAllocationTemplateListItem'
+        has_more:
+          type: boolean
+          description: A boolean that's true if there are more results available.
+        next_cursor:
+          type: string
+          description: The cursor to use in the start_after parameter to fetch the next page of results.
+          example: WzAsIjAxSlA3RTgyM0czSFRGOTdZRThBNjc0RU5EIl0=
+    AccountAllocationTemplateListItem:
+      type: object
+      title: Account allocation template list item
+      required:
+      - template_id
+      - name
+      - last_modified_at
+      - last_modified_by
+      properties:
+        template_id:
+          $ref: '#/components/schemas/TemplateID'
+        name:
+          type: string
+          description: The name of the account allocation template.
+        last_modified_at:
+          $ref: '#/components/schemas/LastModifiedAt'
+        last_modified_by:
+          $ref: '#/components/schemas/UserID'
+    GlobalAllocationTemplateListItem:
+      type: object
+      title: Global allocation template list item
+      required:
+      - template_id
+      - name
+      - last_modified_at
+      - last_modified_by
+      properties:
+        template_id:
+          $ref: '#/components/schemas/TemplateID'
+        name:
+          type: string
+          description: The name of the global allocation template.
+        last_modified_at:
+          $ref: '#/components/schemas/LastModifiedAt'
+        last_modified_by:
+          $ref: '#/components/schemas/UserID'
+    GetSystemAllocationTemplateResponse:
+      type: object
+      required:
+      - name
+      - supply_allocations
+      properties:
+        name:
+          type: string
+          example: My happy system template
+        supply_allocations:
+          type: array
+          items:
+            $ref: '#/components/schemas/AllocationTemplateExchangeSupplierResponse'
+  responses:
+    Error_NotFound:
+      description: A requested resource isn't found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            id: 7a5972ba-0825-4360-b852-fa2430e47034
+            object: not_found_error
+            detail: resource not found
+    Error_Internal:
+      description: A request failed due to an internal error.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            id: d94b8bb2-a540-4a91-9c05-2aa3ae9a5e1e
+            object: unexpected_internal_error
+            detail: an internal error has led to the failure of this operation
+    Error_Forbidden:
+      description: A requested is forbidden.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            id: fe68cdd2-ee87-4dbf-8950-63c5cbca94c7
+            object: authorization_error
+            detail: you don't have the right permissions to perform this operation
+    Precondition_Failed:
+      description: The resource could not be modified because the ETag in the If-Match header does not match the current version. This means the resource was updated by another request after you retrieved it.
+      headers:
+        traceparent:
+          description: The `traceparent` header carries the trace ID and parent span ID, as defined by the W3C Trace Context specification. It's used to trace a single request as it moves through multiple services.
+          required: false
+          schema:
+            $ref: '#/components/schemas/Traceparent'
+        tracestate:
+          description: The `tracestate` header complements the `traceparent` header by carrying vendor-specific trace information. This allows different services to add their own data to a trace.
+          required: false
+          schema:
+            $ref: '#/components/schemas/Tracestate'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            id: 3d61d9c3-68ee-4026-b436-6e76a2b33932
+            object: precondition_failed_error
+            detail: The resource has been modified since you last retrieved it. Please fetch the latest version and try your request again.
+    Error_Unauthorized:
+      description: A request is unauthorized.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            id: 1dcf0f40-f0d1-4cf6-8c00-c3d019d32faf
+            object: authorization_error
+            detail: no valid authorization provided for this operation
+    Error_BadRequest:
+      description: A request is not valid and can't be processed.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            id: 9e278238-d011-4e05-8327-1ce1d5d26254
+            object: bad_request_error
+            detail: Expected field 'foo' is missing.
+  headers:
+    Location:
+      description: 'Contains the URL where a new resource can be found, often returned with a `201 Created` response. It follows the format defined in RFC 7231.
+
+        '
+      required: true
+      schema:
+        type: string
+        format: uri-reference
+        description: A reference to the resource's location. This can be a full URL, a relative path, or just the resource ID.
+        example:
+          full-url:
+            summary: A full URL to the resource
+            value: https://api.cint.com/demand/business-units
+          relative-path:
+            summary: A relative path to the resource
+            value: /demand/business-units
+          resource-id:
+            summary: A resource ID
+            value: fe666fcd-490c-4cb4-b4e0-2f86e15c27e6
+    ETag:
+      description: The `ETag` header provides a unique identifier that represents the current version of a resource. It's used for caching and to prevent concurrent modification issues.
+      required: true
+      schema:
+        $ref: '#/components/schemas/ETag'
+  parameters:
+    OptionalLocaleCodeFilter:
+      name: locale
+      in: query
+      required: false
+      description: Filter results by the specified locale code.
+      schema:
+        $ref: '#/components/schemas/LocaleCode'
+      example: jpn_jp
+    TemplateID:
+      name: template_id
+      in: path
+      schema:
+        $ref: '#/components/schemas/TemplateID'
+      required: true
+      description: The ID of the template.
+    EndBefore:
+      name: end_before
+      in: query
+      description: Returns a list of objects that come before the provided pagination cursor. This is used for navigating to a previous page.
+      schema:
+        type: string
+      example: 7daa40ad-303b-40a2-89df-a9760400cde7
+    CintAPIVersion-2025-12-18:
+      name: Cint-API-Version
+      in: header
+      required: true
+      schema:
+        type: string
+        example: 2025-12-18
+      description: 'This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.
+
+        '
+    LocaleCodeFilter:
+      name: locale
+      in: query
+      required: true
+      description: Filter results by the specified locale code.
+      schema:
+        $ref: '#/components/schemas/LocaleCode'
+      example: jpn_jp
+    PageSize:
+      name: page_size
+      in: query
+      description: A limit on the number of objects to be returned, between 1 and 100.
+      schema:
+        type: integer
+        default: 10
+      example: 15
+    StartAfter:
+      name: start_after
+      in: query
+      description: Returns a list of objects after the provided pagination cursor, using the next_cursor from the previous response.
+      schema:
+        type: string
+      example: bff6a669-a469-409d-8c94-dcf92258043a
+    IdempotencyKeyULIDRequired:
+      name: idempotency-key
+      in: header
+      required: true
+      description: A unique key that you must provide to prevent accidental duplicate requests. If a network error occurs, you can safely retry the request with the same key.
+      schema:
+        $ref: '#/components/schemas/IdempotencyKeyULID'
+    IfMatchRequired:
+      name: If-Match
+      required: true
+      description: 'The `ETag` value of the resource, used for optimistic locking.
+
+
+        Providing the ETag ensures you don''t accidentally overwrite changes made by another request.
+
+        You can get this value from the `ETag` header of a `GET` request for the resource.
+
+        '
+      in: header
+      schema:
+        type: string
+        format: etag
+        example: W/"1234"
+    IfMatch:
+      name: If-Match
+      description: The ETag value of the resource you intend to update. This is used for optimistic locking to prevent you from accidentally overwriting changes made by someone else. You can get the ETag from a GET request for the resource. The `ETag` value should always be wrapped in double quotes, whether it is part of a weak `ETag` or standalone.
+      in: header
+      schema:
+        type: string
+        format: etag
+        example: W/"1234"
+    AccountID:
+      name: account_id
+      description: The account's unique identifier.
+      in: path
+      required: true
+      schema:
+        $ref: '#/components/schemas/AccountID'
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Bearer token used for authentication and authorization. See [Authentication Process](https://developer.cint.com/en/guides#authentication-process) documentation for more information.
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: API Key Authentication
