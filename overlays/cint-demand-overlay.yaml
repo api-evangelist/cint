@@ -1,0 +1,27 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for Cint Demand API
+  version: 1.0.0
+extends: openapi/cint-demand-openapi.yml
+actions:
+- target: $.info
+  update:
+    x-apievangelist-enriched: '2026-07-18'
+    x-apievangelist-artifacts:
+    - authentication/cint-authentication.yml
+    - conventions/cint-conventions.yml
+    - errors/cint-problem-types.yml
+    - lifecycle/cint-lifecycle.yml
+    - asyncapi/cint-webhooks.yml
+    - conformance/cint-conformance.yml
+    - data-model/cint-data-model.yml
+    - agentic-access/cint-agentic-access.yml
+- target: $.info
+  update:
+    x-apievangelist-conventions:
+      idempotency: Idempotency-Key header on POST (ULID/UUID)
+      versioning: Cint-API-Version date header
+      conditional_requests: If-Match / If-None-Match (ETag)
+      pagination: [offset, cursor, keyset]
+      rate_limit_signal: Retry-After on 429
+      webhooks: target-group-updated, quota-fill-registered, session-updated

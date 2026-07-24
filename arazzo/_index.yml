@@ -1,0 +1,8 @@
+generated: '2026-07-18'
+method: derived
+source: openapi/cint-demand-openapi.yml
+workflows:
+- file: cint-launch-target-group.yml
+  workflowId: launchTargetGroup
+  title: Launch a Cint Exchange Target Group
+  summary: Create project -> create target group -> feasibility -> launch fielding run.

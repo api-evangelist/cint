@@ -1,0 +1,21 @@
+generated: '2026-07-18'
+method: searched
+note: >-
+  Probed the /.well-known/ discovery surface on the Cint API host and root
+  domain. No documents were served (developer.cint.com is a Next.js SPA that
+  returns HTML for unknown paths; api.cint.com and cint.com return 404/403).
+  Absence recorded is valid data.
+hosts:
+- host: https://api.cint.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+- host: https://cint.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 403
+documents: []

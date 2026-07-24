@@ -1,0 +1,799 @@
+generated: '2026-07-18'
+method: derived
+status: candidate
+source: openapi/cint-demand-openapi.yml
+note: Candidate MCP tool surface derived one-per-operation from the Cint Demand OpenAPI. No official Cint MCP server found.
+server:
+  name: cint-demand
+  transport: http
+tools:
+- name: get_user_accounts
+  description: List all accounts
+  source_operation: openapi/cint-demand-openapi.yml#get_user_accounts
+  method: GET
+  path: /accounts
+- name: get_account_users
+  description: List all users for an account
+  source_operation: openapi/cint-demand-openapi.yml#get_account_users
+  method: GET
+  path: /accounts/{account_id}/users
+- name: get_account_service_clients
+  description: List all service clients for an account
+  source_operation: openapi/cint-demand-openapi.yml#get_account_service_clients
+  method: GET
+  path: /accounts/{account_id}/service-clients
+- name: get_user_account_business_unit_id
+  description: Get default business unit assigned to user
+  source_operation: openapi/cint-demand-openapi.yml#get_user_account_business_unit_id
+  method: GET
+  path: /accounts/{account_id}/users/{user_id}/business-units
+- name: get_account_allocation_template_association
+  description: Retrieves the default allocation template for an account
+  source_operation: openapi/cint-demand-openapi.yml#get_account_allocation_template_association
+  method: GET
+  path: /demand/accounts/{account_id}/allocation-template-association
+- name: set_account_allocation_template_association
+  description: Assigns a default allocation template to an account
+  source_operation: openapi/cint-demand-openapi.yml#set_account_allocation_template_association
+  method: PUT
+  path: /demand/accounts/{account_id}/allocation-template-association
+- name: list_account_allocation_templates
+  description: Lists allocation templates for an account
+  source_operation: openapi/cint-demand-openapi.yml#list_account_allocation_templates
+  method: GET
+  path: /demand/accounts/{account_id}/allocation-templates
+- name: create_account_allocation_template
+  description: Create an allocation template
+  source_operation: openapi/cint-demand-openapi.yml#create_account_allocation_template
+  method: POST
+  path: /demand/accounts/{account_id}/allocation-templates
+- name: get_account_allocation_template_by_template_id
+  description: Retrieve an allocation template by ID
+  source_operation: openapi/cint-demand-openapi.yml#get_account_allocation_template_by_template_id
+  method: GET
+  path: /demand/accounts/{account_id}/allocation-templates/{template_id}
+- name: update_account_allocation_template
+  description: Update an allocation template
+  source_operation: openapi/cint-demand-openapi.yml#update_account_allocation_template
+  method: PUT
+  path: /demand/accounts/{account_id}/allocation-templates/{template_id}
+- name: delete_account_allocation_template
+  description: Delete an allocation template
+  source_operation: openapi/cint-demand-openapi.yml#delete_account_allocation_template
+  method: DELETE
+  path: /demand/accounts/{account_id}/allocation-templates/{template_id}
+- name: list_global_allocation_templates
+  description: Lists global allocation templates
+  source_operation: openapi/cint-demand-openapi.yml#list_global_allocation_templates
+  method: GET
+  path: /demand/allocation-templates
+- name: get_global_allocation_template_by_template_id
+  description: Retrieves a global allocation template by ID
+  source_operation: openapi/cint-demand-openapi.yml#get_global_allocation_template_by_template_id
+  method: GET
+  path: /demand/allocation-templates/{template_id}
+- name: get_system_allocation_template
+  description: Retrieves the system allocation template
+  source_operation: openapi/cint-demand-openapi.yml#get_system_allocation_template
+  method: GET
+  path: /demand/system-allocation-template
+- name: get_business_units
+  description: Lists business units for an account
+  source_operation: openapi/cint-demand-openapi.yml#get_business_units
+  method: GET
+  path: /accounts/{account_id}/business-units
+- name: get_clients
+  description: Lists clients for an account
+  source_operation: openapi/cint-demand-openapi.yml#get_clients
+  method: GET
+  path: /accounts/{account_id}/clients
+- name: get_countries
+  description: Lists all countries
+  source_operation: openapi/cint-demand-openapi.yml#get_countries
+  method: GET
+  path: /countries
+- name: get_industries
+  description: Lists all industries
+  source_operation: openapi/cint-demand-openapi.yml#get_industries
+  method: GET
+  path: /industries
+- name: get_industry_lockouts
+  description: Lists all industry lockouts
+  source_operation: openapi/cint-demand-openapi.yml#get_industry_lockouts
+  method: GET
+  path: /industry-lockouts
+- name: get_integration_use_cases
+  description: List all supported integration cases
+  source_operation: openapi/cint-demand-openapi.yml#get_integration_use_cases
+  method: GET
+  path: /integration-use-cases
+- name: get_locales
+  description: Lists all locales
+  source_operation: openapi/cint-demand-openapi.yml#get_locales
+  method: GET
+  path: /locales
+- name: get_study_types
+  description: Lists study types
+  source_operation: openapi/cint-demand-openapi.yml#get_study_types
+  method: GET
+  path: /study-types
+- name: get_suppliers
+  description: Lists suppliers
+  source_operation: openapi/cint-demand-openapi.yml#get_suppliers
+  method: GET
+  path: /suppliers
+- name: get_exclusion_groups_by_account_id
+  description: Lists exclusion groups for an account
+  source_operation: openapi/cint-demand-openapi.yml#get_exclusion_groups_by_account_id
+  method: GET
+  path: /demand/accounts/{account_id}/exclusion-groups
+- name: create_exclusion_group
+  description: Creates an exclusion group
+  source_operation: openapi/cint-demand-openapi.yml#create_exclusion_group
+  method: POST
+  path: /demand/accounts/{account_id}/exclusion-groups
+- name: get_exclusion_group_by_id
+  description: Retrieves exclusion group by ID
+  source_operation: openapi/cint-demand-openapi.yml#get_exclusion_group_by_id
+  method: GET
+  path: /demand/accounts/{account_id}/exclusion-groups/{exclusion_group_id}
+- name: update_exclusion_group_by_id
+  description: Updates exclusion group by ID
+  source_operation: openapi/cint-demand-openapi.yml#update_exclusion_group_by_id
+  method: PUT
+  path: /demand/accounts/{account_id}/exclusion-groups/{exclusion_group_id}
+- name: delete_exclusion_group_by_id
+  description: Delete an Exclusion Group by its ID if it has no associated Target Groups
+  source_operation: openapi/cint-demand-openapi.yml#delete_exclusion_group_by_id
+  method: DELETE
+  path: /demand/accounts/{account_id}/exclusion-groups/{exclusion_group_id}
+- name: get_exclusion_group_target_group_exclusions
+  description: Lists target groups in an exclusion group
+  source_operation: openapi/cint-demand-openapi.yml#get_exclusion_group_target_group_exclusions
+  method: GET
+  path: /demand/accounts/{account_id}/exclusion-groups/{exclusion_group_id}/target-groups
+- name: add_target_groups_to_exclusion_group
+  description: Add Target Groups to an Exclusion Group
+  source_operation: openapi/cint-demand-openapi.yml#add_target_groups_to_exclusion_group
+  method: POST
+  path: /demand/accounts/{account_id}/exclusion-groups/{exclusion_group_id}/target-groups/add
+- name: remove_target_groups_from_exclusion_group
+  description: Remove Target Groups from an Exclusion Group
+  source_operation: openapi/cint-demand-openapi.yml#remove_target_groups_from_exclusion_group
+  method: POST
+  path: /demand/accounts/{account_id}/exclusion-groups/{exclusion_group_id}/target-groups/remove
+- name: update_bulk_target_group_exclusions_api
+  description: Update Target Group Project Exclusion Status
+  source_operation: openapi/cint-demand-openapi.yml#update_bulk_target_group_exclusions_api
+  method: PUT
+  path: /demand/accounts/{account_id}/projects/{project_id}/exclusion-policies
+- name: get_exclusion_by_project_api
+  description: Lists project exclusion statuses for target groups
+  source_operation: openapi/cint-demand-openapi.yml#get_exclusion_by_project_api
+  method: GET
+  path: /demand/accounts/{account_id}/projects/{project_id}/exclusions
+- name: get_target_group_exclusion_policy_api
+  description: Retrieves the project exclusion status for a target group
+  source_operation: openapi/cint-demand-openapi.yml#get_target_group_exclusion_policy_api
+  method: GET
+  path: /demand/accounts/{account_id}/projects/{project_id}/target-groups/{target_group_id}/exclusion-policy
+- name: get_target_group_access_respondent_guid_exclusion_list_api_paginated
+  description: Lists excluded Access Respondent GUIDs for a target group
+  source_operation: openapi/cint-demand-openapi.yml#get_target_group_access_respondent_guid_exclusion_list_api_paginated
+  method: GET
+  path: /demand/accounts/{account_id}/projects/{project_id}/target-groups/{target_group_id}/exclusions/access-respondent-guid/paginated
+- name: exclusion_create_remove_all_respondents_job
+  description: Creates a job to remove all respondent exclusions by type
+  source_operation: openapi/cint-demand-openapi.yml#exclusion_create_remove_all_respondents_job
+  method: POST
+  path: /demand/accounts/{account_id}/projects/{project_id}/target-groups/{target_group_id}/exclusions/jobs/remove-all-respondents
+- name: get_all_respondent_exclusions_removal_job
+  description: Retrieve remove all respondent exclusions job status
+  source_operation: openapi/cint-demand-openapi.yml#get_all_respondent_exclusions_removal_job
+  method: GET
+  path: /demand/accounts/{account_id}/projects/{project_id}/target-groups/{target_group_id}/exclusions/jobs/remove-all-respondents/{job_id}
+- name: exclusion_create_upload_rids_by_file_job
+  description: Creates a job to upload a file of respondent exclusions
+  source_operation: openapi/cint-demand-openapi.yml#exclusion_create_upload_rids_by_file_job
+  method: POST
+  path: /demand/accounts/{account_id}/projects/{project_id}/target-groups/{target_group_id}/exclusions/jobs/upload-respondents-by-file
+- name: get_respondent_exclusions_upload_by_file_job
+  description: Retrieve RID upload job status
+  source_operation: openapi/cint-demand-openapi.yml#get_respondent_exclusions_upload_by_file_job
+  method: GET
+  path: /demand/accounts/{account_id}/projects/{project_id}/target-groups/{target_group_id}/exclusions/jobs/upload-respondents-by-file/{job_id}
+- name: get_exclusions_overview
+  description: Retrieves the number of currently excluded response IDs (RSID) on a target group.
+  source_operation: openapi/cint-demand-openapi.yml#get_exclusions_overview
+  method: GET
+  path: /demand/accounts/{account_id}/projects/{project_id}/target-groups/{target_group_id}/exclusions/overview
+- name: get_target_group_rsid_exclusion_list_api_paginated
+  description: Lists excluded Respondent IDs (RSIDs) for a target group
+  source_operation: openapi/cint-demand-openapi.yml#get_target_group_rsid_exclusion_list_api_paginated
+  method: GET
+  path: /demand/accounts/{account_id}/projects/{project_id}/target-groups/{target_group_id}/exclusions/rsid/paginated
+- name: get_exclusion_groups_for_target_group
+  description: Lists the exclusion groups of a specific target group
+  source_operation: openapi/cint-demand-openapi.yml#get_exclusion_groups_for_target_group
+  method: GET
+  path: /demand/accounts/{account_id}/target-groups/{target_group_id}/exclusion-groups
+- name: get_target_group_respondent_activity_exclusions
+  description: Retrieves respondent activity exclusions for a target group
+  source_operation: openapi/cint-demand-openapi.yml#get_target_group_respondent_activity_exclusions
+  method: GET
+  path: /demand/accounts/{account_id}/projects/{project_id}/target-groups/{target_group_id}/respondent-activity-exclusions
+- name: set_target_group_respondent_activity_exclusions
+  description: Set the respondent activity exclusions for a target group
+  source_operation: openapi/cint-demand-openapi.yml#set_target_group_respondent_activity_exclusions
+  method: PUT
+  path: /demand/accounts/{account_id}/projects/{project_id}/target-groups/{target_group_id}/respondent-activity-exclusions
+- name: generate_price_prediction
+  description: Generates a price prediction
+  source_operation: openapi/cint-demand-openapi.yml#generate_price_prediction
+  method: POST
+  path: /demand/accounts/{account_id}/business-units/{business_unit_id}/generate-price-prediction
+- name: get_target_group_price
+  description: Retrieves the pricing details for a target group
+  source_operation: openapi/cint-demand-openapi.yml#get_target_group_price
+  method: GET
+  path: /demand/accounts/{account_id}/business-units/{business_unit_id}/target-groups/{target_group_id}/price
+- name: calculate_target_group_feasibility
+  description: Calculates feasibility for a draft target group
+  source_operation: openapi/cint-demand-openapi.yml#calculate_target_group_feasibility
+  method: POST
+  path: /demand/accounts/{account_id}/target-groups/calculate-feasibility
+- name: calculate_target_group_feasibility_by_id
+  description: Calculates feasibility for a non-draft target group
+  source_operation: openapi/cint-demand-openapi.yml#calculate_target_group_feasibility_by_id
+  method: POST
+  path: /demand/accounts/{account_id}/projects/{project_id}/target-groups/{target_group_id}/calculate-feasibility
+- name: get_fielding_assistant_assignment
+  description: Retrieves the Fielding Assistant assignment for a target group
+  source_operation: openapi/cint-demand-openapi.yml#get_fielding_assistant_assignment
+  method: GET
+  path: /demand/accounts/{account_id}/projects/{project_id}/target-groups/{target_group_id}/fielding-assistant-assignment
+- name: create_or_update_fielding_assistant_assignment
+  description: Create or update the Fielding Assistant assignment
+  source_operation: openapi/cint-demand-openapi.yml#create_or_update_fielding_assistant_assignment
+  method: PUT
+  path: /demand/accounts/{account_id}/projects/{project_id}/target-groups/{target_group_id}/fielding-assistant-assignment
+- name: create_bulk_complete_target_groups_job
+  description: Creates a job to complete multiple target groups
+  source_operation: openapi/cint-demand-openapi.yml#create_bulk_complete_target_groups_job
+  method: POST
+  path: /demand/accounts/{account_id}/projects/{project_id}/batch-jobs/complete-fielding-runs-by-target-group-id
+- name: get_bulk_complete_target_groups_job
+  description: Retrieves a bulk "complete" job status
+  source_operation: openapi/cint-demand-openapi.yml#get_bulk_complete_target_groups_job
+  method: GET
+  path: /demand/accounts/{account_id}/projects/{project_id}/batch-jobs/complete-fielding-runs-by-target-group-id/{job_id}
+- name: create_bulk_launch_target_groups_job
+  description: Creates a job to launch multiple target groups
+  source_operation: openapi/cint-demand-openapi.yml#create_bulk_launch_target_groups_job
+  method: POST
+  path: /demand/accounts/{account_id}/projects/{project_id}/batch-jobs/launch-fielding-runs-by-target-group-id
+- name: get_bulk_launch_target_groups_job
+  description: Retrieves a bulk "launch" job status
+  source_operation: openapi/cint-demand-openapi.yml#get_bulk_launch_target_groups_job
+  method: GET
+  path: /demand/accounts/{account_id}/projects/{project_id}/batch-jobs/launch-fielding-runs-by-target-group-id/{job_id}
+- name: create_bulk_pause_target_groups_job
+  description: Creates a job to pause multiple target groups
+  source_operation: openapi/cint-demand-openapi.yml#create_bulk_pause_target_groups_job
+  method: POST
+  path: /demand/accounts/{account_id}/projects/{project_id}/batch-jobs/pause-fielding-runs-by-target-group-id
+- name: get_bulk_pause_target_groups_job
+  description: Retrieves a bulk "pause" job status
+  source_operation: openapi/cint-demand-openapi.yml#get_bulk_pause_target_groups_job
+  method: GET
+  path: /demand/accounts/{account_id}/projects/{project_id}/batch-jobs/pause-fielding-runs-by-target-group-id/{job_id}
+- name: create_bulk_relaunch_target_groups_job
+  description: Creates a job to relaunch multiple target groups
+  source_operation: openapi/cint-demand-openapi.yml#create_bulk_relaunch_target_groups_job
+  method: POST
+  path: /demand/accounts/{account_id}/projects/{project_id}/batch-jobs/relaunch-fielding-runs-by-target-group-id
+- name: get_bulk_relaunch_target_groups_job
+  description: Retrieves a bulk "relaunch" job status
+  source_operation: openapi/cint-demand-openapi.yml#get_bulk_relaunch_target_groups_job
+  method: GET
+  path: /demand/accounts/{account_id}/projects/{project_id}/batch-jobs/relaunch-fielding-runs-by-target-group-id/{job_id}
+- name: create_bulk_resume_target_groups_job
+  description: Creates a job to resume multiple target groups
+  source_operation: openapi/cint-demand-openapi.yml#create_bulk_resume_target_groups_job
+  method: POST
+  path: /demand/accounts/{account_id}/projects/{project_id}/batch-jobs/resume-fielding-runs-by-target-group-id
+- name: get_bulk_resume_target_groups_job
+  description: Retrieves a bulk "resume" job status
+  source_operation: openapi/cint-demand-openapi.yml#get_bulk_resume_target_groups_job
+  method: GET
+  path: /demand/accounts/{account_id}/projects/{project_id}/batch-jobs/resume-fielding-runs-by-target-group-id/{job_id}
+- name: create_launch_fielding_run_from_draft_job
+  description: Job to launch a draft target group
+  source_operation: openapi/cint-demand-openapi.yml#create_launch_fielding_run_from_draft_job
+  method: POST
+  path: /demand/accounts/{account_id}/projects/{project_id}/target-groups/{target_group_id}/fielding-run-jobs/launch-from-draft
+- name: get_launch_fielding_run_from_draft_job
+  description: Retrieves a "launch from draft" job status
+  source_operation: openapi/cint-demand-openapi.yml#get_launch_fielding_run_from_draft_job
+  method: GET
+  path: /demand/accounts/{account_id}/projects/{project_id}/target-groups/{target_group_id}/fielding-run-jobs/launch-from-draft/{job_id}
+- name: create_schedule_fielding_run_from_draft_job
+  description: Schedules a draft target group to go live
+  source_operation: openapi/cint-demand-openapi.yml#create_schedule_fielding_run_from_draft_job
+  method: POST
+  path: /demand/accounts/{account_id}/projects/{project_id}/target-groups/{target_group_id}/fielding-run-jobs/schedule-from-draft
+- name: get_schedule_fielding_run_from_draft_job
+  description: Retrieves a "schedule from draft" job status
+  source_operation: openapi/cint-demand-openapi.yml#get_schedule_fielding_run_from_draft_job
+  method: GET
+  path: /demand/accounts/{account_id}/projects/{project_id}/target-groups/{target_group_id}/fielding-run-jobs/schedule-from-draft/{job_id}
+- name: get_fielding_runs_by_target_group_id
+  description: Lists the fielding runs for a target group
+  source_operation: openapi/cint-demand-openapi.yml#get_fielding_runs_by_target_group_id
+  method: GET
+  path: /demand/accounts/{account_id}/projects/{project_id}/target-groups/{target_group_id}/fielding-runs
+- name: get_fielding_run
+  description: Retrieves a fielding run
+  source_operation: openapi/cint-demand-openapi.yml#get_fielding_run
+  method: GET
+  path: /demand/accounts/{account_id}/projects/{project_id}/target-groups/{target_group_id}/fielding-runs/{fielding_run_id}
+- name: update_fielding_run
+  description: Updates a fielding run
+  source_operation: openapi/cint-demand-openapi.yml#update_fielding_run
+  method: PUT
+  path: /demand/accounts/{account_id}/projects/{project_id}/target-groups/{target_group_id}/fielding-runs/{fielding_run_id}
+- name: complete_fielding_run
+  description: Completes a fielding run
+  source_operation: openapi/cint-demand-openapi.yml#complete_fielding_run
+  method: POST
+  path: /demand/accounts/{account_id}/projects/{project_id}/target-groups/{target_group_id}/fielding-runs/{fielding_run_id}/complete
+- name: launch_now_fielding_run
+  description: Launches fielding run immediately
+  source_operation: openapi/cint-demand-openapi.yml#launch_now_fielding_run
+  method: POST
+  path: /demand/accounts/{account_id}/projects/{project_id}/target-groups/{target_group_id}/fielding-runs/{fielding_run_id}/launch-now
+- name: pause_fielding_run
+  description: Pauses a fielding run
+  source_operation: openapi/cint-demand-openapi.yml#pause_fielding_run
+  method: POST
+  path: /demand/accounts/{account_id}/projects/{project_id}/target-groups/{target_group_id}/fielding-runs/{fielding_run_id}/pause
+- name: relaunch_fielding_run
+  description: Relaunches a fielding run
+  source_operation: openapi/cint-demand-openapi.yml#relaunch_fielding_run
+  method: POST
+  path: /demand/accounts/{account_id}/projects/{project_id}/target-groups/{target_group_id}/fielding-runs/{fielding_run_id}/relaunch
+- name: resume_fielding_run
+  description: Resumes a fielding run
+  source_operation: openapi/cint-demand-openapi.yml#resume_fielding_run
+  method: POST
+  path: /demand/accounts/{account_id}/projects/{project_id}/target-groups/{target_group_id}/fielding-runs/{fielding_run_id}/resume
+- name: suggest_days
+  description: Suggest the required fielding time for a target group
+  source_operation: openapi/cint-demand-openapi.yml#suggest_days
+  method: POST
+  path: /demand/intelligent-calendar/suggest-days
+- name: suggest_time_range
+  description: Suggests an optimal fielding time range for a locale
+  source_operation: openapi/cint-demand-openapi.yml#suggest_time_range
+  method: GET
+  path: /demand/intelligent-calendar/suggest-time-range
+- name: list_profiles
+  description: List profiles for a target group
+  source_operation: openapi/cint-demand-openapi.yml#list_profiles
+  method: GET
+  path: /demand/accounts/{account_id}/projects/{project_id}/target-groups/{target_group_id}/profiles
+- name: get_profile
+  description: Retrieve a profile
+  source_operation: openapi/cint-demand-openapi.yml#get_profile
+  method: GET
+  path: /demand/accounts/{account_id}/projects/{project_id}/target-groups/{target_group_id}/profiles/{profile_id}
+- name: update_profile_filling_goal
+  description: Update completes goal on a target group and its profiles
+  source_operation: openapi/cint-demand-openapi.yml#update_profile_filling_goal
+  method: PUT
+  path: /demand/accounts/{account_id}/projects/{project_id}/target-groups/{target_group_id}/profiles/completes-goal
+- name: batch_delete_profiles
+  description: Delete profiles
+  source_operation: openapi/cint-demand-openapi.yml#batch_delete_profiles
+  method: POST
+  path: /demand/accounts/{account_id}/projects/{project_id}/target-groups/{target_group_id}/profiles/delete-profiles
+- name: manage_target_group_profiles
+  description: Manage a target group's profiles
+  source_operation: openapi/cint-demand-openapi.yml#manage_target_group_profiles
+  method: POST
+  path: /demand/accounts/{account_id}/projects/{project_id}/target-groups/{target_group_id}/profiles/manage-profiles
+- name: get_webhooks
+  description: Lists all webhooks for an account
+  source_operation: openapi/cint-demand-openapi.yml#get_webhooks
+  method: GET
+  path: /accounts/{account_id}/webhooks
+- name: create_webhook
+  description: Creates a new webhook for an account
+  source_operation: openapi/cint-demand-openapi.yml#create_webhook
+  method: POST
+  path: /accounts/{account_id}/webhooks
+- name: get_webhook
+  description: Retrieves a webhook for an account
+  source_operation: openapi/cint-demand-openapi.yml#get_webhook
+  method: GET
+  path: /accounts/{account_id}/webhooks/{webhook_id}
+- name: update_webhook
+  description: Updates a webhook for an account
+  source_operation: openapi/cint-demand-openapi.yml#update_webhook
+  method: PUT
+  path: /accounts/{account_id}/webhooks/{webhook_id}
+- name: delete_webhook
+  description: Deletes a webhook for an account
+  source_operation: openapi/cint-demand-openapi.yml#delete_webhook
+  method: DELETE
+  path: /accounts/{account_id}/webhooks/{webhook_id}
+- name: list_webhook_events_history
+  description: Returns webhook events history for replay and debugging purposes
+  source_operation: openapi/cint-demand-openapi.yml#list_webhook_events_history
+  method: GET
+  path: /accounts/{account_id}/webhooks/{webhook_id}/events-history
+- name: regenerate_webhook_secret
+  description: Regenerates the secret for a webhook
+  source_operation: openapi/cint-demand-openapi.yml#regenerate_webhook_secret
+  method: POST
+  path: /accounts/{account_id}/webhooks/{webhook_id}/regenerate-secret
+- name: get_webhook_events
+  description: List all available webhook event types
+  source_operation: openapi/cint-demand-openapi.yml#get_webhook_events
+  method: GET
+  path: /accounts/{account_id}/webhooks-events
+- name: generate_blended_profile
+  description: Generates a blended profile from regular profiles
+  source_operation: openapi/cint-demand-openapi.yml#generate_blended_profile
+  method: POST
+  path: /demand/accounts/{account_id}/drafts/generate-blended-profile
+- name: validate_profiles
+  description: Validates a profile
+  source_operation: openapi/cint-demand-openapi.yml#validate_profiles
+  method: POST
+  path: /demand/accounts/{account_id}/profiles/validate
+- name: account_questions_translation
+  description: Lists all available questions, answers, and conditions.
+  source_operation: openapi/cint-demand-openapi.yml#account_questions_translation
+  method: GET
+  path: /demand/accounts/{account_id}/questions-translation
+- name: list_all_question_categories
+  description: Lists all available question categories
+  source_operation: openapi/cint-demand-openapi.yml#list_all_question_categories
+  method: GET
+  path: /demand/questions/categories
+- name: get_panel_distribution_by_profile
+  description: Retrieves the supplier distribution for a profile
+  source_operation: openapi/cint-demand-openapi.yml#get_panel_distribution_by_profile
+  method: GET
+  path: /demand/accounts/{account_id}/projects/{project_id}/target-groups/{target_group_id}/profiles/{profile_id}/supplier-quota-distribution
+- name: get_panel_distribution_draft
+  description: Calculates the supplier distribution for a new target group
+  source_operation: openapi/cint-demand-openapi.yml#get_panel_distribution_draft
+  method: POST
+  path: /demand/accounts/{account_id}/supplier-quota-distribution/draft
+- name: list_profile_templates
+  description: List profile templates
+  source_operation: openapi/cint-demand-openapi.yml#list_profile_templates
+  method: GET
+  path: /demand/accounts/{account_id}/profiling-templates
+- name: create_profile_template
+  description: Create a profile template
+  source_operation: openapi/cint-demand-openapi.yml#create_profile_template
+  method: POST
+  path: /demand/accounts/{account_id}/profiling-templates
+- name: get_profile_template
+  description: Get a profile template
+  source_operation: openapi/cint-demand-openapi.yml#get_profile_template
+  method: GET
+  path: /demand/accounts/{account_id}/profiling-templates/{profile_template_id}
+- name: edit_profile_template
+  description: Edit a profile template
+  source_operation: openapi/cint-demand-openapi.yml#edit_profile_template
+  method: PUT
+  path: /demand/accounts/{account_id}/profiling-templates/{profile_template_id}
+- name: delete_profile_template
+  description: Delete a profile template
+  source_operation: openapi/cint-demand-openapi.yml#delete_profile_template
+  method: DELETE
+  path: /demand/accounts/{account_id}/profiling-templates/{profile_template_id}
+- name: list_account_projects
+  description: List projects for an account
+  source_operation: openapi/cint-demand-openapi.yml#list_account_projects
+  method: GET
+  path: /demand/accounts/{account_id}/projects
+- name: create_project
+  description: Create a new project
+  source_operation: openapi/cint-demand-openapi.yml#create_project
+  method: POST
+  path: /demand/accounts/{account_id}/projects
+- name: get_project_by_id
+  description: Retrieve a project
+  source_operation: openapi/cint-demand-openapi.yml#get_project_by_id
+  method: GET
+  path: /demand/accounts/{account_id}/projects/{project_id}
+- name: update_project
+  description: Update a project
+  source_operation: openapi/cint-demand-openapi.yml#update_project
+  method: PUT
+  path: /demand/accounts/{account_id}/projects/{project_id}
+- name: project_overview
+  description: Retrieve a project summary
+  source_operation: openapi/cint-demand-openapi.yml#project_overview
+  method: GET
+  path: /demand/accounts/{account_id}/projects/{project_id}/overview
+- name: get_reconciliations_by_account_id
+  description: List submitted reconciliations by account ID
+  source_operation: openapi/cint-demand-openapi.yml#get_reconciliations_by_account_id
+  method: GET
+  path: /demand/accounts/{account_id}/reconciliations
+- name: post_reconciliations
+  description: Submit a list of RIDs for positive or negative reconciliation
+  source_operation: openapi/cint-demand-openapi.yml#post_reconciliations
+  method: POST
+  path: /demand/accounts/{account_id}/reconciliations
+- name: get_reconciliation_by_request_id
+  description: Retrieve a reconciliation request by ID
+  source_operation: openapi/cint-demand-openapi.yml#get_reconciliation_by_request_id
+  method: GET
+  path: /demand/accounts/{account_id}/reconciliations/{request_id}
+- name: get_target_groups_by_request_id
+  description: List target groups for a reconciliation submission
+  source_operation: openapi/cint-demand-openapi.yml#get_target_groups_by_request_id
+  method: GET
+  path: /demand/accounts/{account_id}/reconciliations/{request_id}/target-groups
+- name: get_target_group_by_request_id_and_target_group_id
+  description: Retrieve a target group's reconciliation details from a submission
+  source_operation: openapi/cint-demand-openapi.yml#get_target_group_by_request_id_and_target_group_id
+  method: GET
+  path: /demand/accounts/{account_id}/reconciliations/{request_id}/target-groups/{target_group_id}
+- name: get_recon_downloads
+  description: Download a reconciliation result file
+  source_operation: openapi/cint-demand-openapi.yml#get_recon_downloads
+  method: GET
+  path: /demand/accounts/{account_id}/reconciliations/{request_id}/downloads/{download_type}
+- name: get_eligible_target_groups
+  description: List target groups eligible for reconciliation
+  source_operation: openapi/cint-demand-openapi.yml#get_eligible_target_groups
+  method: GET
+  path: /demand/accounts/{account_id}/reconciliations/eligible-target-groups
+- name: post_reconciliations_completes
+  description: Submit a list of RIDs for positive reconciliation
+  source_operation: openapi/cint-demand-openapi.yml#post_reconciliations_completes
+  method: POST
+  path: /demand/accounts/{account_id}/projects/{project_id}/reconciliations/completes
+- name: request_reconciliation_reason_codes
+  description: List reconciliation reason codes and details
+  source_operation: openapi/cint-demand-openapi.yml#request_reconciliation_reason_codes
+  method: GET
+  path: /demand/accounts/{account_id}/reconciliations/reason-codes
+- name: create_all_recontact_rsids_removal_job
+  description: Create a job to remove all recontact respondent IDs
+  source_operation: openapi/cint-demand-openapi.yml#create_all_recontact_rsids_removal_job
+  method: POST
+  path: /demand/accounts/{account_id}/projects/{project_id}/target-groups/{target_group_id}/recontacts/jobs/remove-all-rsids
+- name: recontacts_remove_all_rsids_job_status
+  description: Get information on a remove all Recontact opportunities job
+  source_operation: openapi/cint-demand-openapi.yml#recontacts_remove_all_rsids_job_status
+  method: GET
+  path: /demand/accounts/{account_id}/projects/{project_id}/target-groups/{target_group_id}/recontacts/jobs/remove-all-rsids/{job_id}
+- name: recontact_create_upload_rsids_by_file_job
+  description: Create a job to upload respondent IDs by file
+  source_operation: openapi/cint-demand-openapi.yml#recontact_create_upload_rsids_by_file_job
+  method: POST
+  path: /demand/accounts/{account_id}/projects/{project_id}/target-groups/{target_group_id}/recontacts/jobs/upload-rsids-by-file
+- name: get_recontacts_rsids_upload_file_job_status
+  description: Get an upload-by-file job status
+  source_operation: openapi/cint-demand-openapi.yml#get_recontacts_rsids_upload_file_job_status
+  method: GET
+  path: /demand/accounts/{account_id}/projects/{project_id}/target-groups/{target_group_id}/recontacts/jobs/upload-rsids-by-file/{job_id}
+- name: recontact_create_upload_respondents_by_file_job
+  description: Create a job to upload Recontact opportunities by file
+  source_operation: openapi/cint-demand-openapi.yml#recontact_create_upload_respondents_by_file_job
+  method: POST
+  path: /demand/accounts/{account_id}/projects/{project_id}/target-groups/{target_group_id}/recontacts/jobs/upload-respondents-by-file
+- name: recontact_list_upload_respondents_by_file_jobs
+  description: List Recontact upload-by-file jobs
+  source_operation: openapi/cint-demand-openapi.yml#recontact_list_upload_respondents_by_file_jobs
+  method: GET
+  path: /demand/accounts/{account_id}/projects/{project_id}/target-groups/{target_group_id}/recontacts/jobs/upload-respondents-by-file
+- name: get_recontact_upload_respondents_by_file_job
+  description: Retrieve the status of a Recontact upload-by-file job
+  source_operation: openapi/cint-demand-openapi.yml#get_recontact_upload_respondents_by_file_job
+  method: GET
+  path: /demand/accounts/{account_id}/projects/{project_id}/target-groups/{target_group_id}/recontacts/jobs/upload-respondents-by-file/{job_id}
+- name: recontact_download_job_file
+  description: Download the file associated with a Recontact upload job
+  source_operation: openapi/cint-demand-openapi.yml#recontact_download_job_file
+  method: GET
+  path: /demand/accounts/{account_id}/projects/{project_id}/target-groups/{target_group_id}/recontacts/jobs/upload-respondents-by-file/{job_id}/download
+- name: get_recontacts_overview
+  description: Get recontact overview for a target group
+  source_operation: openapi/cint-demand-openapi.yml#get_recontacts_overview
+  method: GET
+  path: /demand/accounts/{account_id}/projects/{project_id}/target-groups/{target_group_id}/recontacts/overview
+- name: get_target_group_rsid_recontact_list
+  description: List recontact respondent IDs
+  source_operation: openapi/cint-demand-openapi.yml#get_target_group_rsid_recontact_list
+  method: GET
+  path: /demand/accounts/{account_id}/projects/{project_id}/target-groups/{target_group_id}/recontacts/rsids
+- name: report_requests
+  description: List report requests
+  source_operation: openapi/cint-demand-openapi.yml#report_requests
+  method: GET
+  path: /demand/accounts/{account_id}/reports
+- name: download_report_v2
+  description: Download a report
+  source_operation: openapi/cint-demand-openapi.yml#download_report_v2
+  method: GET
+  path: /demand/accounts/{account_id}/reports/{report_id}/download
+- name: share_report
+  description: Get a shareable report link
+  source_operation: openapi/cint-demand-openapi.yml#share_report
+  method: GET
+  path: /demand/accounts/{account_id}/reports/{report_id}/share
+- name: report_status
+  description: Report Request Status
+  source_operation: openapi/cint-demand-openapi.yml#report_status
+  method: GET
+  path: /demand/accounts/{account_id}/reports/{report_id}/status
+- name: generate_report
+  description: Generate a report
+  source_operation: openapi/cint-demand-openapi.yml#generate_report
+  method: POST
+  path: /demand/accounts/{account_id}/reports/{report_type}
+- name: upload_live_respondent_unique_codes
+  description: Upload live respondent unique codes
+  source_operation: openapi/cint-demand-openapi.yml#upload_live_respondent_unique_codes
+  method: POST
+  path: /demand/accounts/{account_id}/target-groups/{target_group_id}/respondent-unique-codes/live
+- name: get_live_respondent_unique_codes_stats
+  description: Get live respondent unique code stats
+  source_operation: openapi/cint-demand-openapi.yml#get_live_respondent_unique_codes_stats
+  method: GET
+  path: /demand/accounts/{account_id}/target-groups/{target_group_id}/respondent-unique-codes/live/stats
+- name: delete_unconsumed_live_respondent_unique_codes
+  description: Delete all unconsumed live respondent unique codes
+  source_operation: openapi/cint-demand-openapi.yml#delete_unconsumed_live_respondent_unique_codes
+  method: DELETE
+  path: /demand/accounts/{account_id}/target-groups/{target_group_id}/respondent-unique-codes/live/unconsumed
+- name: upload_test_respondent_unique_codes
+  description: Upload test respondent unique codes
+  source_operation: openapi/cint-demand-openapi.yml#upload_test_respondent_unique_codes
+  method: POST
+  path: /demand/accounts/{account_id}/target-groups/{target_group_id}/respondent-unique-codes/test
+- name: get_test_respondent_unique_codes_stats
+  description: Get test respondent unique code stats
+  source_operation: openapi/cint-demand-openapi.yml#get_test_respondent_unique_codes_stats
+  method: GET
+  path: /demand/accounts/{account_id}/target-groups/{target_group_id}/respondent-unique-codes/test/stats
+- name: delete_unconsumed_test_respondent_unique_codes
+  description: Delete all unconsumed test respondent unique codes
+  source_operation: openapi/cint-demand-openapi.yml#delete_unconsumed_test_respondent_unique_codes
+  method: DELETE
+  path: /demand/accounts/{account_id}/target-groups/{target_group_id}/respondent-unique-codes/test/unconsumed
+- name: get_respondent_status
+  description: Retrieve a respondent's session status
+  source_operation: openapi/cint-demand-openapi.yml#get_respondent_status
+  method: GET
+  path: /fulfillment/respondents/{RID}
+- name: update_respondent_status
+  description: Update a respondent's status
+  source_operation: openapi/cint-demand-openapi.yml#update_respondent_status
+  method: POST
+  path: /fulfillment/respondents/transition
+- name: get_account_allocation_template_for_business_unit_id
+  description: Retrieves an account allocation template
+  source_operation: openapi/cint-demand-openapi.yml#get_account_allocation_template_for_business_unit_id
+  method: GET
+  path: /demand/accounts/{account_id}/business-units/{business_unit_id}/account-allocation-templates/{template_id}
+- name: get_global_allocation_template_by_id_for_business_unit_id
+  description: Fetch a global allocation template for a business unit and locale
+  source_operation: openapi/cint-demand-openapi.yml#get_global_allocation_template_by_id_for_business_unit_id
+  method: GET
+  path: /demand/accounts/{account_id}/business-units/{business_unit_id}/global-allocation-templates/{template_id}
+- name: get_system_allocation_template_by_business_unit_id
+  description: Get the system allocation template
+  source_operation: openapi/cint-demand-openapi.yml#get_system_allocation_template_by_business_unit_id
+  method: GET
+  path: /demand/accounts/{account_id}/business-units/{business_unit_id}/system-allocation-template
+- name: get_target_group_allocation_specification
+  description: Get target group allocations
+  source_operation: openapi/cint-demand-openapi.yml#get_target_group_allocation_specification
+  method: GET
+  path: /demand/accounts/{account_id}/projects/{project_id}/target-groups/{target_group_id}/allocation-specification
+- name: update_target_group_allocation_specification
+  description: Updates target group allocations
+  source_operation: openapi/cint-demand-openapi.yml#update_target_group_allocation_specification
+  method: PUT
+  path: /demand/accounts/{account_id}/projects/{project_id}/target-groups/{target_group_id}/allocation-specification
+- name: create_bulk_update_target_group_project_manager_job
+  description: Create a bulk update target group project managers job
+  source_operation: openapi/cint-demand-openapi.yml#create_bulk_update_target_group_project_manager_job
+  method: POST
+  path: /demand/accounts/{account_id}/projects/{project_id}/batch-jobs/update-target-group-project-managers
+- name: get_bulk_update_target_group_project_manager_job
+  description: Retrieves a bulk update target group project managers job
+  source_operation: openapi/cint-demand-openapi.yml#get_bulk_update_target_group_project_manager_job
+  method: GET
+  path: /demand/accounts/{account_id}/projects/{project_id}/batch-jobs/update-target-group-project-managers/{job_id}
+- name: get_list_target_groups
+  description: List target groups for a project
+  source_operation: openapi/cint-demand-openapi.yml#get_list_target_groups
+  method: GET
+  path: /demand/accounts/{account_id}/projects/{project_id}/target-groups
+- name: create_target_group
+  description: Create a target group in draft status
+  source_operation: openapi/cint-demand-openapi.yml#create_target_group
+  method: POST
+  path: /demand/accounts/{account_id}/projects/{project_id}/target-groups
+- name: get_target_group
+  description: Retrieve a draft target group
+  source_operation: openapi/cint-demand-openapi.yml#get_target_group
+  method: GET
+  path: /demand/accounts/{account_id}/projects/{project_id}/target-groups/{target_group_id}
+- name: update_target_group
+  description: Update a target group in draft status
+  source_operation: openapi/cint-demand-openapi.yml#update_target_group
+  method: PUT
+  path: /demand/accounts/{account_id}/projects/{project_id}/target-groups/{target_group_id}
+- name: get_target_group_details
+  description: Retrieve target group details
+  source_operation: openapi/cint-demand-openapi.yml#get_target_group_details
+  method: GET
+  path: /demand/accounts/{account_id}/projects/{project_id}/target-groups/{target_group_id}/details
+- name: update_launched_target_group_details
+  description: Update launched target group details
+  source_operation: openapi/cint-demand-openapi.yml#update_launched_target_group_details
+  method: PUT
+  path: /demand/accounts/{account_id}/projects/{project_id}/target-groups/{target_group_id}/details
+- name: get_rate_card
+  description: Retrieve a rate card
+  source_operation: openapi/cint-demand-openapi.yml#get_rate_card
+  method: GET
+  path: /demand/accounts/{account_id}/business-units/{business_unit_id}/rate-card
+- name: get_target_group_rate_card
+  description: Retrieve a target group's rate card
+  source_operation: openapi/cint-demand-openapi.yml#get_target_group_rate_card
+  method: GET
+  path: /demand/accounts/{account_id}/projects/{project_id}/target-groups/{target_group_id}/rate-card
+- name: update_cost_per_interview
+  description: Update target group cost per interview
+  source_operation: openapi/cint-demand-openapi.yml#update_cost_per_interview
+  method: PUT
+  path: /demand/accounts/{account_id}/projects/{project_id}/target-groups/{target_group_id}/cost-per-interview
+- name: update_filling_strategy
+  description: Update target group filling strategy
+  source_operation: openapi/cint-demand-openapi.yml#update_filling_strategy
+  method: PUT
+  path: /demand/accounts/{account_id}/projects/{project_id}/target-groups/{target_group_id}/filling-strategy
+- name: compute_target_group_transitions
+  description: Compute available target group transitions
+  source_operation: openapi/cint-demand-openapi.yml#compute_target_group_transitions
+  method: POST
+  path: /demand/accounts/{account_id}/projects/{project_id}/compute-target-group-transitions
+- name: get_target_group_overview
+  description: Retrieve basic attributes and stats for a target group
+  source_operation: openapi/cint-demand-openapi.yml#get_target_group_overview
+  method: GET
+  path: /demand/accounts/{account_id}/projects/{project_id}/target-groups/{target_group_id}/overview
+- name: get_target_group_overview_by_target_group_id
+  description: Retrieve basic attributes and stats for a target group by ID
+  source_operation: openapi/cint-demand-openapi.yml#get_target_group_overview_by_target_group_id
+  method: GET
+  path: /demand/target-groups/{target_group_id}/overview
+- name: get_target_group_performance
+  description: Retrieve a target group's performance metrics
+  source_operation: openapi/cint-demand-openapi.yml#get_target_group_performance
+  method: GET
+  path: /demand/accounts/{account_id}/projects/{project_id}/target-groups/{target_group_id}/performance
+- name: get_target_group_completes_aggregated_by_interval
+  description: Retrieve a target group's collected completes
+  source_operation: openapi/cint-demand-openapi.yml#get_target_group_completes_aggregated_by_interval
+  method: GET
+  path: /demand/accounts/{account_id}/projects/{project_id}/target-groups/{target_group_id}/completes-aggregated-by-interval
+- name: get_target_group_changelog
+  description: Retrieve a target group's Changelog
+  source_operation: openapi/cint-demand-openapi.yml#get_target_group_changelog
+  method: GET
+  path: /demand/accounts/{account_id}/projects/{project_id}/target-groups/{target_group_id}/changelog

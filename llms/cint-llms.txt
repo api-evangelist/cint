@@ -1,0 +1,38 @@
+# Cint
+
+> Cint is the world's largest global research marketplace, connecting researchers, brands, and agencies with millions of survey respondents across 130+ countries. The Cint Exchange Demand API provides programmatic access to buy market-research sample: create projects and target groups, run feasibility, launch and manage fielding, handle respondent exclusions and recontacts, reconcile completes, and receive event notifications via webhooks.
+
+## APIs
+
+- [Cint Exchange Demand API](https://developer.cint.com/demand/): REST API for the global programmatic research marketplace. Base URL https://api.cint.com/v1. Bearer JWT auth; date-based versioning via the Cint-API-Version header.
+
+## Specs
+
+- [OpenAPI 3.0.3 (2025-12-18)](https://developer.cint.com/demand/specs/demand_openapi_v1_2025-12-18.yaml): 134 paths, 158 operations, 448 schemas.
+
+## Docs
+
+- [Getting Started](https://developer.cint.com/demand/docs/2025-12-18/getting-started)
+- [API Reference](https://developer.cint.com/demand/docs/2025-12-18/reference/demand-api)
+- [Developer Portal](https://developer.cint.com/demand/)
+- [Start Integration](https://www.cint.com/start-integration/)
+
+## Conventions
+
+- Authentication: Bearer JWT in the Authorization header (credentials issued via onboarding Starter Kit); API Key auth also supported.
+- Versioning: required Cint-API-Version header, YYYY-MM-DD (current 2025-12-18).
+- Idempotency: Idempotency-Key header on POST (ULID/UUID) for safe retries.
+- Conditional requests: If-Match / If-None-Match (ETag).
+- Pagination: offset (page_size/page_number), cursor (next_cursor), keyset (start_after/end_before).
+- Rate limiting: 429 with Retry-After.
+- Webhooks: target-group-updated, quota-fill-registered, session-updated.
+
+## Company
+
+- [Website](https://www.cint.com)
+- [Blog](https://www.cint.com/blog/)
+- [Status](https://status.cint.com)
+- [Trust Center](https://trust.cint.com) — ISO 20252:2019, Cyber Essentials
+- [Support / Help Center](https://help.cint.com/)
+- [Privacy Policy](https://www.cint.com/privacy-policy/)
+- [Legal Center](https://legal.cint.com/)

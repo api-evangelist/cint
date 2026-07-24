@@ -1,0 +1,16 @@
+generated: '2026-07-18'
+method: generated
+source: openapi/cint-demand-openapi.yml
+skills:
+- file: cint-launch-target-group.md
+  name: Launch a survey Target Group on the Cint Exchange
+  api: openapi/cint-demand-openapi.yml
+  operations: [create_project, create_target_group, calculate_target_group_feasibility_by_id, get_target_group_rate_card, create_launch_fielding_run_from_draft_job, launch_now_fielding_run, get_fielding_run]
+- file: cint-manage-webhooks.md
+  name: Subscribe to Cint webhook event notifications
+  api: openapi/cint-demand-openapi.yml
+  operations: [create_webhook, get_webhooks, get_webhook, update_webhook, regenerate_webhook_secret, list_webhook_events_history, get_webhook_events, delete_webhook]
+- file: cint-reconcile-completes.md
+  name: Reconcile completes on the Cint Exchange
+  api: openapi/cint-demand-openapi.yml
+  operations: [get_eligible_target_groups, request_reconciliation_reason_codes, post_reconciliations, post_reconciliations_completes, get_reconciliation_by_request_id, get_target_groups_by_request_id, get_recon_downloads]

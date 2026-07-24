@@ -1,23 +1,603 @@
 aid: cint
 name: Cint
-description: 'Cint is a company surfaced as a portfolio company of creandum and added to the API Evangelist
-  network as a stub for enrichment. Sector: other. This profile is a lead awaiting the enrichment pipeline.'
+description: >-
+  Cint is the world's largest global research marketplace, connecting researchers,
+  brands, and agencies with millions of survey respondents across 130+ countries.
+  The Cint Exchange Demand API is a REST API for buying market-research sample
+  programmatically: create projects and target groups, run feasibility, launch and
+  manage fielding runs, handle respondent exclusions and recontacts, reconcile
+  completed interviews, and receive event notifications via webhooks. Cint also
+  operates Lucid Measurement (ad-campaign brand lift) and Cint Engage (audience
+  monetization). Surfaced as a Creandum portfolio company and enriched from Cint's
+  public developer portal.
 url: https://raw.githubusercontent.com/api-evangelist/cint/refs/heads/main/apis.yml
 x-type: company
 x-source: vc-portfolio
 x-backed-by:
 - creandum
-x-tier: stub
-x-tier-reason: portfolio-lead
+x-tier: enriched
+x-tier-reason: real-openapi-and-developer-portal
+accessModel:
+  pricing: unknown
+  onboarding: self-serve
+  trial: false
+  try_now: false
+  public: false
+  label: Self-serve signup
+  confidence: medium
+  source:
+  - authentication
+  generated: '2026-07-22'
+  method: derived
 specificationVersion: '0.20'
+image: https://www.cint.com/favicon.ico
 created: '2026-07-17'
-modified: '2026-07-17'
+modified: '2026-07-18'
 tags:
 - Company
-- Other
-apis: []
+- Market Research
+- Survey Sample
+- Consumer Insights
+- Data Collection
+- Ad Measurement
+- Marketplace
+- Panel
+apis:
+- aid: cint:cint-accounts-api
+  name: Cint Accounts API
+  description: Endpoints for managing Accounts-related resources, such as users.
+  humanURL: https://developer.cint.com/demand/
+  baseURL: https://api.cint.com/v1
+  tags:
+  - Accounts
+  properties:
+  - type: OpenAPI
+    url: openapi/cint-accounts-api-openapi.yml
+  - type: Documentation
+    url: https://developer.cint.com/demand/docs/2025-12-18/getting-started
+  - type: APIReference
+    url: https://developer.cint.com/demand/docs/2025-12-18/reference/demand-api
+  - type: GettingStarted
+    url: https://developer.cint.com/demand/docs/2025-12-18/getting-started
+  - type: DeveloperPortal
+    url: https://developer.cint.com/demand/
+- aid: cint:cint-allocation-templates-admin-api
+  name: Cint Allocation Templates Admin API
+  description: >-
+    Create, update, delete and list global and account Allocation templates. Templates allow you to store
+    and automate your policy towards suppliers on the Exchange.
+  humanURL: https://developer.cint.com/demand/
+  baseURL: https://api.cint.com/v1
+  tags:
+  - Allocation Templates Admin
+  properties:
+  - type: OpenAPI
+    url: openapi/cint-allocation-templates-admin-api-openapi.yml
+  - type: Documentation
+    url: https://developer.cint.com/demand/docs/2025-12-18/getting-started
+  - type: APIReference
+    url: https://developer.cint.com/demand/docs/2025-12-18/reference/demand-api
+  - type: GettingStarted
+    url: https://developer.cint.com/demand/docs/2025-12-18/getting-started
+  - type: DeveloperPortal
+    url: https://developer.cint.com/demand/
+- aid: cint:cint-definitions-api
+  name: Cint Definitions API
+  description: Platform-wide definitions endpoints.
+  humanURL: https://developer.cint.com/demand/
+  baseURL: https://api.cint.com/v1
+  tags:
+  - Definitions
+  properties:
+  - type: OpenAPI
+    url: openapi/cint-definitions-api-openapi.yml
+  - type: Documentation
+    url: https://developer.cint.com/demand/docs/2025-12-18/getting-started
+  - type: APIReference
+    url: https://developer.cint.com/demand/docs/2025-12-18/reference/demand-api
+  - type: GettingStarted
+    url: https://developer.cint.com/demand/docs/2025-12-18/getting-started
+  - type: DeveloperPortal
+    url: https://developer.cint.com/demand/
+- aid: cint:cint-exclusive-endpoints-api
+  name: Cint Exclusive Endpoints API
+  description: >-
+    For more information, if you need functionality in this section, please contact your account manager
+  humanURL: https://developer.cint.com/demand/
+  baseURL: https://api.cint.com/v1
+  tags:
+  - Exclusive Endpoints
+  properties:
+  - type: OpenAPI
+    url: openapi/cint-exclusive-endpoints-api-openapi.yml
+  - type: Documentation
+    url: https://developer.cint.com/demand/docs/2025-12-18/getting-started
+  - type: APIReference
+    url: https://developer.cint.com/demand/docs/2025-12-18/reference/demand-api
+  - type: GettingStarted
+    url: https://developer.cint.com/demand/docs/2025-12-18/getting-started
+  - type: DeveloperPortal
+    url: https://developer.cint.com/demand/
+- aid: cint:cint-feasibility-api
+  name: Cint Feasibility API
+  description: >-
+    Understand the success of the Target Groups you want to run, have already saved or are in field by
+    providing a Target Group ID or details.
+  humanURL: https://developer.cint.com/demand/
+  baseURL: https://api.cint.com/v1
+  tags:
+  - Feasibility
+  properties:
+  - type: OpenAPI
+    url: openapi/cint-feasibility-api-openapi.yml
+  - type: Documentation
+    url: https://developer.cint.com/demand/docs/2025-12-18/getting-started
+  - type: APIReference
+    url: https://developer.cint.com/demand/docs/2025-12-18/reference/demand-api
+  - type: GettingStarted
+    url: https://developer.cint.com/demand/docs/2025-12-18/getting-started
+  - type: DeveloperPortal
+    url: https://developer.cint.com/demand/
+- aid: cint:cint-fielding-api
+  name: Cint Fielding API
+  description: >-
+    Create, update and obtain Target Group Fielding runs and Fielding Assistant assignments. This is critical
+    for launching, scheduling and completing Target Groups.
+  humanURL: https://developer.cint.com/demand/
+  baseURL: https://api.cint.com/v1
+  tags:
+  - Fielding
+  properties:
+  - type: OpenAPI
+    url: openapi/cint-fielding-api-openapi.yml
+  - type: Documentation
+    url: https://developer.cint.com/demand/docs/2025-12-18/getting-started
+  - type: APIReference
+    url: https://developer.cint.com/demand/docs/2025-12-18/reference/demand-api
+  - type: GettingStarted
+    url: https://developer.cint.com/demand/docs/2025-12-18/getting-started
+  - type: DeveloperPortal
+    url: https://developer.cint.com/demand/
+- aid: cint:cint-fielding-assistant-api
+  name: Cint Fielding Assistant API
+  description: >-
+    Get, update Target Group Fielding Assistant assignments. Fielding Assistant provides optional modules
+    to automate common workflows and optimise your Target Group.
+  humanURL: https://developer.cint.com/demand/
+  baseURL: https://api.cint.com/v1
+  tags:
+  - Fielding Assistant
+  properties:
+  - type: OpenAPI
+    url: openapi/cint-fielding-assistant-api-openapi.yml
+  - type: Documentation
+    url: https://developer.cint.com/demand/docs/2025-12-18/getting-started
+  - type: APIReference
+    url: https://developer.cint.com/demand/docs/2025-12-18/reference/demand-api
+  - type: GettingStarted
+    url: https://developer.cint.com/demand/docs/2025-12-18/getting-started
+  - type: DeveloperPortal
+    url: https://developer.cint.com/demand/
+- aid: cint:cint-fielding-batch-api
+  name: Cint Fielding (Batch) API
+  description: Asynchronously update Target Group Fielding Runs in batches.
+  humanURL: https://developer.cint.com/demand/
+  baseURL: https://api.cint.com/v1
+  tags:
+  - Fielding (Batch)
+  properties:
+  - type: OpenAPI
+    url: openapi/cint-fielding-batch-api-openapi.yml
+  - type: Documentation
+    url: https://developer.cint.com/demand/docs/2025-12-18/getting-started
+  - type: APIReference
+    url: https://developer.cint.com/demand/docs/2025-12-18/reference/demand-api
+  - type: GettingStarted
+    url: https://developer.cint.com/demand/docs/2025-12-18/getting-started
+  - type: DeveloperPortal
+    url: https://developer.cint.com/demand/
+- aid: cint:cint-fulfillment-api
+  name: Cint Fulfillment API
+  description: >-
+    :::info
+
+    Fulfillment endpoints are for S2S enabled clients only.
+
+    :::
+
+    Endpoints for managing respondent statuses while a target group is fielding.
+  humanURL: https://developer.cint.com/demand/
+  baseURL: https://api.cint.com/v1
+  tags:
+  - Fulfillment
+  properties:
+  - type: OpenAPI
+    url: openapi/cint-fulfillment-api-openapi.yml
+  - type: Documentation
+    url: https://developer.cint.com/demand/docs/2025-12-18/getting-started
+  - type: APIReference
+    url: https://developer.cint.com/demand/docs/2025-12-18/reference/demand-api
+  - type: GettingStarted
+    url: https://developer.cint.com/demand/docs/2025-12-18/getting-started
+  - type: DeveloperPortal
+    url: https://developer.cint.com/demand/
+- aid: cint:cint-intelligent-calendar-api
+  name: Cint Intelligent Calendar API
+  description: >-
+    Select the best times for launching your Target Groups. Use before feasibility to optimise fill and
+    time in field.
+  humanURL: https://developer.cint.com/demand/
+  baseURL: https://api.cint.com/v1
+  tags:
+  - Intelligent Calendar
+  properties:
+  - type: OpenAPI
+    url: openapi/cint-intelligent-calendar-api-openapi.yml
+  - type: Documentation
+    url: https://developer.cint.com/demand/docs/2025-12-18/getting-started
+  - type: APIReference
+    url: https://developer.cint.com/demand/docs/2025-12-18/reference/demand-api
+  - type: GettingStarted
+    url: https://developer.cint.com/demand/docs/2025-12-18/getting-started
+  - type: DeveloperPortal
+    url: https://developer.cint.com/demand/
+- aid: cint:cint-manage-profiles-for-launched-target-groups-api
+  name: Cint Manage Profiles for Launched Target Groups API
+  description: >-
+    Management of Target Group profiles after launch—including creating, updating, retrieving, and deleting
+    profile configurations, along with their conditions, quotas, and interlock settings.
+  humanURL: https://developer.cint.com/demand/
+  baseURL: https://api.cint.com/v1
+  tags:
+  - Manage Profiles for Launched Target Groups
+  properties:
+  - type: OpenAPI
+    url: openapi/cint-manage-profiles-for-launched-target-groups-api-openapi.yml
+  - type: Documentation
+    url: https://developer.cint.com/demand/docs/2025-12-18/getting-started
+  - type: APIReference
+    url: https://developer.cint.com/demand/docs/2025-12-18/reference/demand-api
+  - type: GettingStarted
+    url: https://developer.cint.com/demand/docs/2025-12-18/getting-started
+  - type: DeveloperPortal
+    url: https://developer.cint.com/demand/
+- aid: cint:cint-notifications-webhooks-api
+  name: Cint Notifications Webhooks API
+  description: Endpoints for managing your Notifications Webhooks.
+  humanURL: https://developer.cint.com/demand/
+  baseURL: https://api.cint.com/v1
+  tags:
+  - Notifications Webhooks
+  properties:
+  - type: OpenAPI
+    url: openapi/cint-notifications-webhooks-api-openapi.yml
+  - type: Documentation
+    url: https://developer.cint.com/demand/docs/2025-12-18/getting-started
+  - type: APIReference
+    url: https://developer.cint.com/demand/docs/2025-12-18/reference/demand-api
+  - type: GettingStarted
+    url: https://developer.cint.com/demand/docs/2025-12-18/getting-started
+  - type: DeveloperPortal
+    url: https://developer.cint.com/demand/
+- aid: cint:cint-profiling-helper-api
+  name: Cint Profiling Helper API
+  description: >-
+    Helps by generating different profile configurations, including interlocked profiles for draft.
+  humanURL: https://developer.cint.com/demand/
+  baseURL: https://api.cint.com/v1
+  tags:
+  - Profiling Helper
+  properties:
+  - type: OpenAPI
+    url: openapi/cint-profiling-helper-api-openapi.yml
+  - type: Documentation
+    url: https://developer.cint.com/demand/docs/2025-12-18/getting-started
+  - type: APIReference
+    url: https://developer.cint.com/demand/docs/2025-12-18/reference/demand-api
+  - type: GettingStarted
+    url: https://developer.cint.com/demand/docs/2025-12-18/getting-started
+  - type: DeveloperPortal
+    url: https://developer.cint.com/demand/
+- aid: cint:cint-profiling-library-api
+  name: Cint Profiling Library API
+  description: >-
+    List all profiling questions including account specific questions with translations and categories.
+    Profiling questions allow you to target and filter respondents based on their characteristics.
+  humanURL: https://developer.cint.com/demand/
+  baseURL: https://api.cint.com/v1
+  tags:
+  - Profiling Library
+  properties:
+  - type: OpenAPI
+    url: openapi/cint-profiling-library-api-openapi.yml
+  - type: Documentation
+    url: https://developer.cint.com/demand/docs/2025-12-18/getting-started
+  - type: APIReference
+    url: https://developer.cint.com/demand/docs/2025-12-18/reference/demand-api
+  - type: GettingStarted
+    url: https://developer.cint.com/demand/docs/2025-12-18/getting-started
+  - type: DeveloperPortal
+    url: https://developer.cint.com/demand/
+- aid: cint:cint-profiling-quotas-by-supplier-api
+  name: Cint Profiling Quotas By Supplier API
+  description: >-
+    Get the distribution of available respondents for Target Group profiles, including retrieving supplier
+    distribution per quota.
+  humanURL: https://developer.cint.com/demand/
+  baseURL: https://api.cint.com/v1
+  tags:
+  - Profiling Quotas By Supplier
+  properties:
+  - type: OpenAPI
+    url: openapi/cint-profiling-quotas-by-supplier-api-openapi.yml
+  - type: Documentation
+    url: https://developer.cint.com/demand/docs/2025-12-18/getting-started
+  - type: APIReference
+    url: https://developer.cint.com/demand/docs/2025-12-18/reference/demand-api
+  - type: GettingStarted
+    url: https://developer.cint.com/demand/docs/2025-12-18/getting-started
+  - type: DeveloperPortal
+    url: https://developer.cint.com/demand/
+- aid: cint:cint-profiling-templates-api
+  name: Cint Profiling Templates API
+  description: >-
+    Create, manage and reuse audience descriptions and templates to allow for efficient and automated
+    targeting workflows on the Cint Exchange.
+  humanURL: https://developer.cint.com/demand/
+  baseURL: https://api.cint.com/v1
+  tags:
+  - Profiling Templates
+  properties:
+  - type: OpenAPI
+    url: openapi/cint-profiling-templates-api-openapi.yml
+  - type: Documentation
+    url: https://developer.cint.com/demand/docs/2025-12-18/getting-started
+  - type: APIReference
+    url: https://developer.cint.com/demand/docs/2025-12-18/reference/demand-api
+  - type: GettingStarted
+    url: https://developer.cint.com/demand/docs/2025-12-18/getting-started
+  - type: DeveloperPortal
+    url: https://developer.cint.com/demand/
+- aid: cint:cint-projects-api
+  name: Cint Projects API
+  description: >-
+    Create, list and update projects. Projects are a flexible container for Target Groups and enable basic
+    aggregation and automation.
+  humanURL: https://developer.cint.com/demand/
+  baseURL: https://api.cint.com/v1
+  tags:
+  - Projects
+  properties:
+  - type: OpenAPI
+    url: openapi/cint-projects-api-openapi.yml
+  - type: Documentation
+    url: https://developer.cint.com/demand/docs/2025-12-18/getting-started
+  - type: APIReference
+    url: https://developer.cint.com/demand/docs/2025-12-18/reference/demand-api
+  - type: GettingStarted
+    url: https://developer.cint.com/demand/docs/2025-12-18/getting-started
+  - type: DeveloperPortal
+    url: https://developer.cint.com/demand/
+- aid: cint:cint-reconciliations-api
+  name: Cint Reconciliations API
+  description: Validate, Submit and check reconciliations for one or more target groups.
+  humanURL: https://developer.cint.com/demand/
+  baseURL: https://api.cint.com/v1
+  tags:
+  - Reconciliations
+  properties:
+  - type: OpenAPI
+    url: openapi/cint-reconciliations-api-openapi.yml
+  - type: Documentation
+    url: https://developer.cint.com/demand/docs/2025-12-18/getting-started
+  - type: APIReference
+    url: https://developer.cint.com/demand/docs/2025-12-18/reference/demand-api
+  - type: GettingStarted
+    url: https://developer.cint.com/demand/docs/2025-12-18/getting-started
+  - type: DeveloperPortal
+    url: https://developer.cint.com/demand/
+- aid: cint:cint-recontacts-api
+  name: Cint Recontacts API
+  description: >-
+    Create, update, list and delete recontacts for a target group. Recontacts allow only specific respondents
+    to enter your survey and are part of a larger workflow that needs specific configurations across other
+    endpoints.
+  humanURL: https://developer.cint.com/demand/
+  baseURL: https://api.cint.com/v1
+  tags:
+  - Recontacts
+  properties:
+  - type: OpenAPI
+    url: openapi/cint-recontacts-api-openapi.yml
+  - type: Documentation
+    url: https://developer.cint.com/demand/docs/2025-12-18/getting-started
+  - type: APIReference
+    url: https://developer.cint.com/demand/docs/2025-12-18/reference/demand-api
+  - type: GettingStarted
+    url: https://developer.cint.com/demand/docs/2025-12-18/getting-started
+  - type: DeveloperPortal
+    url: https://developer.cint.com/demand/
+- aid: cint:cint-reports-api
+  name: Cint Reports API
+  description: >-
+    Aggregate reports that roll statistics up on an _Account_, _Business Unit_, _Project_ and _Target
+    Group_ level.
+  humanURL: https://developer.cint.com/demand/
+  baseURL: https://api.cint.com/v1
+  tags:
+  - Reports
+  properties:
+  - type: OpenAPI
+    url: openapi/cint-reports-api-openapi.yml
+  - type: Documentation
+    url: https://developer.cint.com/demand/docs/2025-12-18/getting-started
+  - type: APIReference
+    url: https://developer.cint.com/demand/docs/2025-12-18/reference/demand-api
+  - type: GettingStarted
+    url: https://developer.cint.com/demand/docs/2025-12-18/getting-started
+  - type: DeveloperPortal
+    url: https://developer.cint.com/demand/
+- aid: cint:cint-respondent-exclusions-api
+  name: Cint Respondent Exclusions API
+  description: The Respondent Exclusions API from Cint — 17 operation(s) for respondent exclusions.
+  humanURL: https://developer.cint.com/demand/
+  baseURL: https://api.cint.com/v1
+  tags:
+  - Respondent Exclusions
+  properties:
+  - type: OpenAPI
+    url: openapi/cint-respondent-exclusions-api-openapi.yml
+  - type: Documentation
+    url: https://developer.cint.com/demand/docs/2025-12-18/getting-started
+  - type: APIReference
+    url: https://developer.cint.com/demand/docs/2025-12-18/reference/demand-api
+  - type: GettingStarted
+    url: https://developer.cint.com/demand/docs/2025-12-18/getting-started
+  - type: DeveloperPortal
+    url: https://developer.cint.com/demand/
+- aid: cint:cint-respondent-unique-codes-api
+  name: Cint Respondent Unique Codes API
+  description: >-
+    Allows you to insert respondent unique code(s) into the survey URL for each respondent entering the
+    session.
+  humanURL: https://developer.cint.com/demand/
+  baseURL: https://api.cint.com/v1
+  tags:
+  - Respondent Unique Codes
+  properties:
+  - type: OpenAPI
+    url: openapi/cint-respondent-unique-codes-api-openapi.yml
+  - type: Documentation
+    url: https://developer.cint.com/demand/docs/2025-12-18/getting-started
+  - type: APIReference
+    url: https://developer.cint.com/demand/docs/2025-12-18/reference/demand-api
+  - type: GettingStarted
+    url: https://developer.cint.com/demand/docs/2025-12-18/getting-started
+  - type: DeveloperPortal
+    url: https://developer.cint.com/demand/
+- aid: cint:cint-target-group-allocations-api
+  name: Cint Target Group Allocations API
+  description: >-
+    Create, update, list supplier allocations for a target group. Allocations allow filtering and limiting
+    of the available suppliers on the Exchange.
+  humanURL: https://developer.cint.com/demand/
+  baseURL: https://api.cint.com/v1
+  tags:
+  - Target Group Allocations
+  properties:
+  - type: OpenAPI
+    url: openapi/cint-target-group-allocations-api-openapi.yml
+  - type: Documentation
+    url: https://developer.cint.com/demand/docs/2025-12-18/getting-started
+  - type: APIReference
+    url: https://developer.cint.com/demand/docs/2025-12-18/reference/demand-api
+  - type: GettingStarted
+    url: https://developer.cint.com/demand/docs/2025-12-18/getting-started
+  - type: DeveloperPortal
+    url: https://developer.cint.com/demand/
+- aid: cint:cint-target-groups-api
+  name: Cint Target Groups API
+  description: >-
+    Create, update, list and other operations on Target Groups. A Target Group is the main unit of work
+    in the Exchange.
+  humanURL: https://developer.cint.com/demand/
+  baseURL: https://api.cint.com/v1
+  tags:
+  - Target Groups
+  properties:
+  - type: OpenAPI
+    url: openapi/cint-target-groups-api-openapi.yml
+  - type: Documentation
+    url: https://developer.cint.com/demand/docs/2025-12-18/getting-started
+  - type: APIReference
+    url: https://developer.cint.com/demand/docs/2025-12-18/reference/demand-api
+  - type: GettingStarted
+    url: https://developer.cint.com/demand/docs/2025-12-18/getting-started
+  - type: DeveloperPortal
+    url: https://developer.cint.com/demand/
+- aid: cint:cint-target-groups-batch-api
+  name: Cint Target Groups (Batch) API
+  description: Asynchronously create, update and delete Target Groups in batches.
+  humanURL: https://developer.cint.com/demand/
+  baseURL: https://api.cint.com/v1
+  tags:
+  - Target Groups (Batch)
+  properties:
+  - type: OpenAPI
+    url: openapi/cint-target-groups-batch-api-openapi.yml
+  - type: Documentation
+    url: https://developer.cint.com/demand/docs/2025-12-18/getting-started
+  - type: APIReference
+    url: https://developer.cint.com/demand/docs/2025-12-18/reference/demand-api
+  - type: GettingStarted
+    url: https://developer.cint.com/demand/docs/2025-12-18/getting-started
+  - type: DeveloperPortal
+    url: https://developer.cint.com/demand/
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
+common:
+- type: DeveloperPortal
+  url: https://developer.cint.com/demand/
+- type: Documentation
+  url: https://developer.cint.com/demand/docs/2025-12-18/getting-started
+- type: APIReference
+  url: https://developer.cint.com/demand/docs/2025-12-18/reference/demand-api
+- type: GettingStarted
+  url: https://developer.cint.com/demand/docs/2025-12-18/getting-started
+- type: SignUp
+  url: https://www.cint.com/start-integration/
+- type: Support
+  url: https://help.cint.com/
+- type: Blog
+  url: https://www.cint.com/blog/
+- type: PrivacyPolicy
+  url: https://www.cint.com/privacy-policy/
+- type: TermsOfService
+  url: https://legal.cint.com/
+- type: StatusPage
+  url: https://status.cint.com
+- type: TrustCenter
+  url: https://trust.cint.com/
+- type: Compliance
+  url: security/cint-trust-center.yml
+- type: DomainSecurity
+  url: security/cint-domain-security.yml
+- type: AgenticAccess
+  url: agentic-access/cint-agentic-access.yml
+- type: Authentication
+  url: authentication/cint-authentication.yml
+- type: Conventions
+  url: conventions/cint-conventions.yml
+- type: Idempotency
+  url: conventions/cint-conventions.yml
+- type: ErrorCatalog
+  url: errors/cint-problem-types.yml
+- type: Lifecycle
+  url: lifecycle/cint-lifecycle.yml
+- type: ChangeLog
+  url: changelog/cint-changelog.yml
+- type: Conformance
+  url: conformance/cint-conformance.yml
+- type: Webhooks
+  url: asyncapi/cint-webhooks.yml
+- type: DataModel
+  url: data-model/cint-data-model.yml
+- type: MCPServer
+  url: mcp/cint-mcp.yml
+- type: AgentSkill
+  url: skills/_index.yml
+- type: LLMsTxt
+  url: llms/cint-llms.txt
+- type: Overlay
+  url: overlays/cint-demand-overlay.yaml
+- type: Arazzo
+  name: Launch a Cint Exchange Target Group
+  url: arazzo/cint-launch-target-group.yml
+x-enrichment:
+  date: '2026-07-19'
+  status: backfilled
+  pass: local-v1
+  note: backfilled from .gitignore signal + verified work evidence

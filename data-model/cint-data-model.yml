@@ -1,0 +1,484 @@
+generated: '2026-07-18'
+method: derived
+source: openapi/cint-demand-openapi.yml
+note: Entity graph derived from Demand API resource path structure and OpenAPI schemas (448 schemas).
+entities:
+- accounts
+- countries
+- demand
+- fulfillment
+- industries
+- industry-lockouts
+- integration-use-cases
+- locales
+- study-types
+- suppliers
+relationships:
+- from: access-respondent-guid
+  to: paginated
+  type: has_many
+  via: path nesting
+- from: accounts
+  to: allocation-template-association
+  type: has_many
+  via: path nesting
+- from: accounts
+  to: allocation-templates
+  type: has_many
+  via: path nesting
+- from: accounts
+  to: business-units
+  type: has_many
+  via: path nesting
+- from: accounts
+  to: clients
+  type: has_many
+  via: path nesting
+- from: accounts
+  to: drafts
+  type: has_many
+  via: path nesting
+- from: accounts
+  to: exclusion-groups
+  type: has_many
+  via: path nesting
+- from: accounts
+  to: profiles
+  type: has_many
+  via: path nesting
+- from: accounts
+  to: profiling-templates
+  type: has_many
+  via: path nesting
+- from: accounts
+  to: projects
+  type: has_many
+  via: path nesting
+- from: accounts
+  to: questions-translation
+  type: has_many
+  via: path nesting
+- from: accounts
+  to: reconciliations
+  type: has_many
+  via: path nesting
+- from: accounts
+  to: reports
+  type: has_many
+  via: path nesting
+- from: accounts
+  to: service-clients
+  type: has_many
+  via: path nesting
+- from: accounts
+  to: supplier-quota-distribution
+  type: has_many
+  via: path nesting
+- from: accounts
+  to: target-groups
+  type: has_many
+  via: path nesting
+- from: accounts
+  to: users
+  type: has_many
+  via: path nesting
+- from: accounts
+  to: webhooks
+  type: has_many
+  via: path nesting
+- from: accounts
+  to: webhooks-events
+  type: has_many
+  via: path nesting
+- from: batch-jobs
+  to: complete-fielding-runs-by-target-group-id
+  type: has_many
+  via: path nesting
+- from: batch-jobs
+  to: launch-fielding-runs-by-target-group-id
+  type: has_many
+  via: path nesting
+- from: batch-jobs
+  to: pause-fielding-runs-by-target-group-id
+  type: has_many
+  via: path nesting
+- from: batch-jobs
+  to: relaunch-fielding-runs-by-target-group-id
+  type: has_many
+  via: path nesting
+- from: batch-jobs
+  to: resume-fielding-runs-by-target-group-id
+  type: has_many
+  via: path nesting
+- from: batch-jobs
+  to: update-target-group-project-managers
+  type: has_many
+  via: path nesting
+- from: business-units
+  to: account-allocation-templates
+  type: has_many
+  via: path nesting
+- from: business-units
+  to: generate-price-prediction
+  type: has_many
+  via: path nesting
+- from: business-units
+  to: global-allocation-templates
+  type: has_many
+  via: path nesting
+- from: business-units
+  to: rate-card
+  type: has_many
+  via: path nesting
+- from: business-units
+  to: system-allocation-template
+  type: has_many
+  via: path nesting
+- from: business-units
+  to: target-groups
+  type: has_many
+  via: path nesting
+- from: demand
+  to: accounts
+  type: has_many
+  via: path nesting
+- from: demand
+  to: allocation-templates
+  type: has_many
+  via: path nesting
+- from: demand
+  to: intelligent-calendar
+  type: has_many
+  via: path nesting
+- from: demand
+  to: questions
+  type: has_many
+  via: path nesting
+- from: demand
+  to: system-allocation-template
+  type: has_many
+  via: path nesting
+- from: demand
+  to: target-groups
+  type: has_many
+  via: path nesting
+- from: drafts
+  to: generate-blended-profile
+  type: has_many
+  via: path nesting
+- from: exclusion-groups
+  to: target-groups
+  type: has_many
+  via: path nesting
+- from: exclusions
+  to: access-respondent-guid
+  type: has_many
+  via: path nesting
+- from: exclusions
+  to: jobs
+  type: has_many
+  via: path nesting
+- from: exclusions
+  to: overview
+  type: has_many
+  via: path nesting
+- from: exclusions
+  to: rsid
+  type: has_many
+  via: path nesting
+- from: fielding-run-jobs
+  to: launch-from-draft
+  type: has_many
+  via: path nesting
+- from: fielding-run-jobs
+  to: schedule-from-draft
+  type: has_many
+  via: path nesting
+- from: fielding-runs
+  to: complete
+  type: has_many
+  via: path nesting
+- from: fielding-runs
+  to: launch-now
+  type: has_many
+  via: path nesting
+- from: fielding-runs
+  to: pause
+  type: has_many
+  via: path nesting
+- from: fielding-runs
+  to: relaunch
+  type: has_many
+  via: path nesting
+- from: fielding-runs
+  to: resume
+  type: has_many
+  via: path nesting
+- from: fulfillment
+  to: respondents
+  type: has_many
+  via: path nesting
+- from: intelligent-calendar
+  to: suggest-days
+  type: has_many
+  via: path nesting
+- from: intelligent-calendar
+  to: suggest-time-range
+  type: has_many
+  via: path nesting
+- from: jobs
+  to: remove-all-respondents
+  type: has_many
+  via: path nesting
+- from: jobs
+  to: remove-all-rsids
+  type: has_many
+  via: path nesting
+- from: jobs
+  to: upload-respondents-by-file
+  type: has_many
+  via: path nesting
+- from: jobs
+  to: upload-rsids-by-file
+  type: has_many
+  via: path nesting
+- from: live
+  to: stats
+  type: has_many
+  via: path nesting
+- from: live
+  to: unconsumed
+  type: has_many
+  via: path nesting
+- from: profiles
+  to: completes-goal
+  type: has_many
+  via: path nesting
+- from: profiles
+  to: delete-profiles
+  type: has_many
+  via: path nesting
+- from: profiles
+  to: manage-profiles
+  type: has_many
+  via: path nesting
+- from: profiles
+  to: supplier-quota-distribution
+  type: has_many
+  via: path nesting
+- from: profiles
+  to: validate
+  type: has_many
+  via: path nesting
+- from: projects
+  to: batch-jobs
+  type: has_many
+  via: path nesting
+- from: projects
+  to: compute-target-group-transitions
+  type: has_many
+  via: path nesting
+- from: projects
+  to: exclusion-policies
+  type: has_many
+  via: path nesting
+- from: projects
+  to: exclusions
+  type: has_many
+  via: path nesting
+- from: projects
+  to: overview
+  type: has_many
+  via: path nesting
+- from: projects
+  to: reconciliations
+  type: has_many
+  via: path nesting
+- from: projects
+  to: target-groups
+  type: has_many
+  via: path nesting
+- from: questions
+  to: categories
+  type: has_many
+  via: path nesting
+- from: reconciliations
+  to: completes
+  type: has_many
+  via: path nesting
+- from: reconciliations
+  to: downloads
+  type: has_many
+  via: path nesting
+- from: reconciliations
+  to: eligible-target-groups
+  type: has_many
+  via: path nesting
+- from: reconciliations
+  to: reason-codes
+  type: has_many
+  via: path nesting
+- from: reconciliations
+  to: target-groups
+  type: has_many
+  via: path nesting
+- from: recontacts
+  to: jobs
+  type: has_many
+  via: path nesting
+- from: recontacts
+  to: overview
+  type: has_many
+  via: path nesting
+- from: recontacts
+  to: rsids
+  type: has_many
+  via: path nesting
+- from: reports
+  to: download
+  type: has_many
+  via: path nesting
+- from: reports
+  to: share
+  type: has_many
+  via: path nesting
+- from: reports
+  to: status
+  type: has_many
+  via: path nesting
+- from: respondent-unique-codes
+  to: live
+  type: has_many
+  via: path nesting
+- from: respondent-unique-codes
+  to: test
+  type: has_many
+  via: path nesting
+- from: respondents
+  to: transition
+  type: has_many
+  via: path nesting
+- from: rsid
+  to: paginated
+  type: has_many
+  via: path nesting
+- from: supplier-quota-distribution
+  to: draft
+  type: has_many
+  via: path nesting
+- from: target-groups
+  to: add
+  type: has_many
+  via: path nesting
+- from: target-groups
+  to: allocation-specification
+  type: has_many
+  via: path nesting
+- from: target-groups
+  to: calculate-feasibility
+  type: has_many
+  via: path nesting
+- from: target-groups
+  to: changelog
+  type: has_many
+  via: path nesting
+- from: target-groups
+  to: completes-aggregated-by-interval
+  type: has_many
+  via: path nesting
+- from: target-groups
+  to: cost-per-interview
+  type: has_many
+  via: path nesting
+- from: target-groups
+  to: details
+  type: has_many
+  via: path nesting
+- from: target-groups
+  to: exclusion-groups
+  type: has_many
+  via: path nesting
+- from: target-groups
+  to: exclusion-policy
+  type: has_many
+  via: path nesting
+- from: target-groups
+  to: exclusions
+  type: has_many
+  via: path nesting
+- from: target-groups
+  to: fielding-assistant-assignment
+  type: has_many
+  via: path nesting
+- from: target-groups
+  to: fielding-run-jobs
+  type: has_many
+  via: path nesting
+- from: target-groups
+  to: fielding-runs
+  type: has_many
+  via: path nesting
+- from: target-groups
+  to: filling-strategy
+  type: has_many
+  via: path nesting
+- from: target-groups
+  to: overview
+  type: has_many
+  via: path nesting
+- from: target-groups
+  to: performance
+  type: has_many
+  via: path nesting
+- from: target-groups
+  to: price
+  type: has_many
+  via: path nesting
+- from: target-groups
+  to: profiles
+  type: has_many
+  via: path nesting
+- from: target-groups
+  to: rate-card
+  type: has_many
+  via: path nesting
+- from: target-groups
+  to: recontacts
+  type: has_many
+  via: path nesting
+- from: target-groups
+  to: remove
+  type: has_many
+  via: path nesting
+- from: target-groups
+  to: respondent-activity-exclusions
+  type: has_many
+  via: path nesting
+- from: target-groups
+  to: respondent-unique-codes
+  type: has_many
+  via: path nesting
+- from: test
+  to: stats
+  type: has_many
+  via: path nesting
+- from: test
+  to: unconsumed
+  type: has_many
+  via: path nesting
+- from: upload-respondents-by-file
+  to: download
+  type: has_many
+  via: path nesting
+- from: users
+  to: business-units
+  type: has_many
+  via: path nesting
+- from: webhooks
+  to: events-history
+  type: has_many
+  via: path nesting
+- from: webhooks
+  to: regenerate-secret
+  type: has_many
+  via: path nesting

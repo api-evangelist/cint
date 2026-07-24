@@ -1,0 +1,34 @@
+generated: '2026-07-18'
+method: derived
+source: openapi/cint-demand-openapi.yml
+standards:
+- id: bearer-jwt
+  conforms: true
+  evidence: BearerAuth http bearer, bearerFormat JWT
+- id: oauth2
+  conforms: false
+  evidence: no oauth2 securityScheme; uses http bearer JWT + apiKey
+- id: rfc9457-problem-details
+  conforms: false
+  evidence: errors use application/json envelope, not application/problem+json
+- id: idempotency-key
+  conforms: true
+  evidence: POST endpoints accept Idempotency-Key header (ULID/UUID variants)
+- id: http-conditional-requests
+  conforms: true
+  evidence: If-Match / If-None-Match (ETag) parameters (RFC 7232)
+- id: pagination
+  conforms: true
+  evidence: offset (page_size/page_number), cursor (next_cursor), keyset (start_after/end_before)
+- id: rate-limit-retry-after
+  conforms: true
+  evidence: 429 responses with Retry-After
+- id: webhooks
+  conforms: true
+  evidence: Notifications Webhooks endpoints + signed delivery secret + events-history
+- id: iso-20252
+  conforms: true
+  evidence: trust.cint.com lists ISO 20252:2019 (market research)
+- id: cyber-essentials
+  conforms: true
+  evidence: trust.cint.com lists Cyber Essentials

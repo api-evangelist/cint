@@ -1,0 +1,62 @@
+arazzo: 1.0.1
+info:
+  title: Launch a Cint Exchange Target Group
+  version: 1.0.0
+  summary: Create a project and target group, check feasibility, then launch a fielding run.
+sourceDescriptions:
+- name: cintDemand
+  url: ../openapi/cint-demand-openapi.yml
+  type: openapi
+workflows:
+- workflowId: launchTargetGroup
+  summary: Create project -> create target group -> feasibility -> launch fielding run
+  inputs:
+    type: object
+    properties:
+      account_id: { type: string }
+  steps:
+  - stepId: createProject
+    operationId: create_project
+    parameters:
+    - name: account_id
+      in: path
+      value: $inputs.account_id
+    outputs:
+      project_id: $response.body#/id
+  - stepId: createTargetGroup
+    operationId: create_target_group
+    parameters:
+    - name: account_id
+      in: path
+      value: $inputs.account_id
+    - name: project_id
+      in: path
+      value: $steps.createProject.outputs.project_id
+    outputs:
+      target_group_id: $response.body#/id
+  - stepId: checkFeasibility
+    operationId: calculate_target_group_feasibility_by_id
+    parameters:
+    - name: account_id
+      in: path
+      value: $inputs.account_id
+    - name: project_id
+      in: path
+      value: $steps.createProject.outputs.project_id
+    - name: target_group_id
+      in: path
+      value: $steps.createTargetGroup.outputs.target_group_id
+  - stepId: launchFielding
+    operationId: create_launch_fielding_run_from_draft_job
+    parameters:
+    - name: account_id
+      in: path
+      value: $inputs.account_id
+    - name: project_id
+      in: path
+      value: $steps.createProject.outputs.project_id
+    - name: target_group_id
+      in: path
+      value: $steps.createTargetGroup.outputs.target_group_id
+    outputs:
+      job_id: $response.body#/id

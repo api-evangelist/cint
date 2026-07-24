@@ -1,0 +1,17 @@
+generated: '2026-07-18'
+method: searched
+source: https://trust.cint.com/
+url: https://trust.cint.com/
+note: >-
+  Cint operates a public Trust Center. Detailed reports (Technical and
+  Organisational Measures, security questionnaires) are shared with prospective
+  clients on request. Named compliance items listed publicly:
+certifications:
+- ISO 20252:2019
+- Cyber Essentials
+programs:
+- name: Technical and Organisational Measures
+  available: on-request
+evidence:
+- source: https://trust.cint.com/
+  keywords: [iso 20252, cyber essentials, trust center, technical and organisational measures]

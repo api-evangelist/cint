@@ -1,0 +1,48 @@
+generated: '2026-07-18'
+method: searched
+source: openapi/cint-demand-openapi.yml
+spec_type: Webhooks
+note: >-
+  Cint Exchange Demand API publishes an outbound webhook (event notification)
+  surface under the "Notifications Webhooks" tag. Webhooks are managed per
+  account with a signing secret (regenerate-secret) and an events-history/events
+  query API for delivery inspection. No standalone AsyncAPI document is published;
+  this catalog is derived from the OpenAPI webhook management operations and the
+  WebhookEventType enum.
+delivery:
+  transport: http-post
+  signed: true
+  secret_management: regenerate_webhook_secret
+  history: list_webhook_events_history / get_webhook_events
+event_types:
+- name: target-group-updated
+  description: A Target Group changed state (e.g. status, fielding progress).
+- name: quota-fill-registered
+  description: A quota fill was registered against a Target Group.
+- name: session-updated
+  description: A respondent session was updated.
+operations:
+- id: get_webhooks
+  method: GET
+  path: /accounts/{account_id}/webhooks
+- id: create_webhook
+  method: POST
+  path: /accounts/{account_id}/webhooks
+- id: get_webhook
+  method: GET
+  path: /accounts/{account_id}/webhooks/{webhook_id}
+- id: update_webhook
+  method: PUT
+  path: /accounts/{account_id}/webhooks/{webhook_id}
+- id: delete_webhook
+  method: DELETE
+  path: /accounts/{account_id}/webhooks/{webhook_id}
+- id: list_webhook_events_history
+  method: GET
+  path: /accounts/{account_id}/webhooks/{webhook_id}/events-history
+- id: regenerate_webhook_secret
+  method: POST
+  path: /accounts/{account_id}/webhooks/{webhook_id}/regenerate-secret
+- id: get_webhook_events
+  method: GET
+  path: /accounts/{account_id}/webhooks-events

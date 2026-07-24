@@ -1,0 +1,51 @@
+generated: '2026-07-18'
+method: searched
+source: openapi/cint-demand-openapi.yml
+docs: https://developer.cint.com/demand/docs/2025-12-18/getting-started
+summary: >-
+  Cross-cutting request/response semantics for the Cint Exchange Demand API,
+  derived from the OpenAPI and the developer portal. REST, JSON, standard HTTP
+  verbs and status codes.
+authentication:
+  style: bearer-jwt
+  header: Authorization
+  formats: [Bearer JWT, API Key]
+  ref: authentication/cint-authentication.yml
+versioning:
+  style: date-header
+  header: Cint-API-Version
+  ref: lifecycle/cint-lifecycle.yml
+idempotency:
+  supported: true
+  header: Idempotency-Key
+  applies_to: POST endpoints (single and asynchronous batch operations)
+  key_formats: [ULID, UUID]
+  purpose: safe retries without performing the same operation twice
+  source: OpenAPI parameters IdempotencyKeyULIDRequired / IdempotencyKeyRequired / IdempotencyKeyUUID; described in info.description
+conditional_requests:
+  supported: true
+  headers: [If-Match, If-None-Match]
+  mechanism: ETag optimistic concurrency (RFC 7232)
+pagination:
+  styles:
+  - style: offset
+    params: [page_size, page_number]
+  - style: cursor
+    params: [next_cursor]
+  - style: keyset
+    params: [start_after, end_before]
+  note: Pagination style varies by endpoint family.
+error_envelope:
+  media_type: application/json
+  fields: [object, detail, invalid_params, title]
+  format: json (not RFC9457 problem+json)
+  ref: errors/cint-problem-types.yml
+rate_limiting:
+  signal: Retry-After header on 429 Too Many Requests
+  ref: null
+batch:
+  supported: true
+  note: Asynchronous batch endpoints for bulk updates on Fielding and Target Groups (Fielding (Batch), Target Groups (Batch) tags).
+webhooks:
+  supported: true
+  ref: asyncapi/cint-webhooks.yml

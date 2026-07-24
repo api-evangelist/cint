@@ -1,0 +1,124 @@
+# Cint Demand API error catalog (derived from OpenAPI 4xx/5xx)
+generated: '2026-07-18'
+method: derived
+source: openapi/cint-demand-openapi.yml
+format: json
+envelope:
+  media_type: application/json
+  fields:
+    object: error type token e.g. unprocessable_entity_error
+    detail: human-readable message
+    invalid_params: 'array of {name, reason} (typed: data_validation_error / structural_error)'
+    title: short error title
+note: Cint returns JSON-encoded errors with a unique error ID and standard HTTP status codes; not RFC9457
+  problem+json.
+problems:
+- status: 400
+  title: Bad request
+  description: ''
+  source_operations:
+  - get_user_accounts
+  - get_account_users
+  - get_account_service_clients
+  - get_user_account_business_unit_id
+  - get_account_allocation_template_association
+  - set_account_allocation_template_association
+- status: 401
+  title: Unauthorized
+  description: ''
+  source_operations:
+  - get_user_accounts
+  - get_account_users
+  - get_account_service_clients
+  - get_user_account_business_unit_id
+  - get_account_allocation_template_association
+  - set_account_allocation_template_association
+- status: 403
+  title: Forbidden
+  description: ''
+  source_operations:
+  - get_user_accounts
+  - get_account_users
+  - get_account_service_clients
+  - get_user_account_business_unit_id
+  - get_account_allocation_template_association
+  - set_account_allocation_template_association
+- status: 404
+  title: Not found
+  description: ''
+  source_operations:
+  - get_account_users
+  - get_account_service_clients
+  - get_user_account_business_unit_id
+  - get_account_allocation_template_association
+  - set_account_allocation_template_association
+  - create_account_allocation_template
+- status: 405
+  title: Method not allowed
+  description: ''
+  source_operations:
+  - update_filling_strategy
+- status: 409
+  title: Conflict
+  description: ''
+  source_operations:
+  - delete_exclusion_group_by_id
+  - exclusion_create_remove_all_respondents_job
+  - exclusion_create_upload_rids_by_file_job
+  - create_all_recontact_rsids_removal_job
+  - recontact_create_upload_rsids_by_file_job
+  - recontact_create_upload_respondents_by_file_job
+- status: 412
+  title: Precondition failed
+  description: ''
+  source_operations:
+  - set_account_allocation_template_association
+  - update_account_allocation_template
+  - create_or_update_fielding_assistant_assignment
+  - update_fielding_run
+  - complete_fielding_run
+  - launch_now_fielding_run
+- status: 413
+  title: Payload too large
+  description: ''
+  source_operations:
+  - exclusion_create_upload_rids_by_file_job
+  - recontact_create_upload_rsids_by_file_job
+  - recontact_create_upload_respondents_by_file_job
+- status: 415
+  title: Unsupported media type
+  description: ''
+  source_operations:
+  - exclusion_create_upload_rids_by_file_job
+  - recontact_create_upload_rsids_by_file_job
+  - recontact_create_upload_respondents_by_file_job
+- status: 422
+  title: Unprocessable entity
+  description: ''
+  source_operations:
+  - calculate_target_group_feasibility
+  - calculate_target_group_feasibility_by_id
+  - update_fielding_run
+  - complete_fielding_run
+  - launch_now_fielding_run
+  - pause_fielding_run
+- status: 429
+  title: Too many requests
+  description: ''
+  source_operations:
+  - create_launch_fielding_run_from_draft_job
+  - get_launch_fielding_run_from_draft_job
+  - create_schedule_fielding_run_from_draft_job
+  - get_schedule_fielding_run_from_draft_job
+  - get_fielding_runs_by_target_group_id
+  - get_fielding_run
+- status: 500
+  title: Internal server error
+  description: ''
+  source_operations:
+  - get_user_accounts
+  - get_account_users
+  - get_account_service_clients
+  - get_user_account_business_unit_id
+  - get_account_allocation_template_association
+  - set_account_allocation_template_association

@@ -1,0 +1,26 @@
+generated: '2026-07-18'
+method: searched
+source: https://developer.cint.com/demand/
+versioning:
+  scheme: date-header
+  header: Cint-API-Version
+  format: 'YYYY-MM-DD'
+  current: '2025-12-18'
+  known_versions:
+  - '2025-12-18'
+  - '2025-05-27'
+  - upcoming-release
+  docs: https://developer.cint.com/demand/docs/2025-12-18/getting-started
+  note: >-
+    Every request must send a Cint-API-Version header with a date. Endpoint
+    behavior may differ between versions as the API evolves; clients pin a date.
+deprecation:
+  policy_url: null
+  sunset_header: false
+  note: No RFC 8594 Sunset/Deprecation header support found; version pinning via date header is the migration mechanism.
+sla:
+  url: null
+status_page: https://status.cint.com
+status_page_provider: atlassian-statuspage
+status_page_api: https://status.cint.com/api/v2/status.json
+deprecated_operations: []

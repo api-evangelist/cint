@@ -1,0 +1,20 @@
+generated: '2026-07-18'
+method: searched
+source: https://developer.cint.com/demand/
+scheme: date-version
+current: '2025-12-18'
+note: >-
+  The Cint Demand API versions by date via the required Cint-API-Version header.
+  Each dated version is a published snapshot documented on the developer portal;
+  the developer portal is a SPA so a structured dated entry list could not be
+  scraped, but the released versions are enumerable.
+versions:
+- version: '2025-12-18'
+  status: current
+  docs: https://developer.cint.com/demand/docs/2025-12-18/getting-started
+- version: '2025-05-27'
+  status: previous
+  docs: https://developer.cint.com/demand/docs/2025-05-27/getting-started
+- version: upcoming-release
+  status: preview
+entries: []
