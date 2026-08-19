@@ -1,0 +1,1194 @@
+{
+  "item": [
+    {
+      "id": "fceeb81b-9a08-4adb-ab4d-dabea4d9c28b",
+      "name": "Profiling Quotas By Supplier",
+      "description": {
+        "content": "Get the distribution of available respondents for Target Group profiles, including retrieving supplier distribution per quota.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "0c00987d-9451-4a02-bb16-4eb544117456",
+          "name": "Retrieves the supplier distribution for a profile",
+          "request": {
+            "name": "Retrieves the supplier distribution for a profile",
+            "description": {
+              "content": "Retrieves a profile's quota structure, including the projected distribution of completes across different suppliers based on historical data. You can use this data to understand how your quotas are likely to be filled.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "demand",
+                "accounts",
+                ":account_id",
+                "projects",
+                ":project_id",
+                "target-groups",
+                ":target_group_id",
+                "profiles",
+                ":profile_id",
+                "supplier-quota-distribution"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "account_id",
+                  "description": "(Required) The account's unique identifier."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "project_id",
+                  "description": "(Required) A unique identifier for the project, in ULID format."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "target_group_id",
+                  "description": "(Required) A unique identifier for the target group, in ULID format."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<ULID>",
+                  "key": "profile_id",
+                  "description": "(Required) The character string representing a unique profile ID (ULID format)."
+                }
+              ]
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                "key": "Cint-API-Version",
+                "value": "<string>"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "9b94aff1-255d-4aaa-affa-c781962c99e4",
+              "name": "The supplier distribution prediction was retrieved successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "demand",
+                    "accounts",
+                    ":account_id",
+                    "projects",
+                    ":project_id",
+                    "target-groups",
+                    ":target_group_id",
+                    "profiles",
+                    ":profile_id",
+                    "supplier-quota-distribution"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "project_id",
+                      "description": "(Required) A unique identifier for the project, in ULID format."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "target_group_id",
+                      "description": "(Required) A unique identifier for the target group, in ULID format."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<ULID>",
+                      "key": "profile_id",
+                      "description": "(Required) The character string representing a unique profile ID (ULID format)."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"object\": \"regular\",\n  \"id\": \"01JQM2QN1FDN1WZA3JZX639MAR\",\n  \"quotas_enabled\": true,\n  \"name\": \"HISPANIC\",\n  \"description\": \"Are you of Hispanic, Latino, or Spanish origin?\",\n  \"targets\": [\n    {\n      \"id\": \"01JQMD8R7F0VW45KPWQ7WYNCFP\",\n      \"conditions\": [\n        {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      ],\n      \"quota\": {\n        \"completes_goal_percentage\": 40,\n        \"quota_nominal\": 40,\n        \"completes_goal\": 40,\n        \"name\": \"SF_Quota_12\",\n        \"completes\": 40,\n        \"prescreens\": 40\n      },\n      \"name\": \"Target-Male\",\n      \"text\": \"Condition Text\",\n      \"text_translated\": \"Condition Text\"\n    }\n  ],\n  \"description_translated\": \"Are you of Hispanic, Latino, or Spanish origin?\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b5286e61-cd8a-4e69-98b5-a3ebba6f0595",
+              "name": "A request is not valid and can't be processed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "demand",
+                    "accounts",
+                    ":account_id",
+                    "projects",
+                    ":project_id",
+                    "target-groups",
+                    ":target_group_id",
+                    "profiles",
+                    ":profile_id",
+                    "supplier-quota-distribution"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "project_id",
+                      "description": "(Required) A unique identifier for the project, in ULID format."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "target_group_id",
+                      "description": "(Required) A unique identifier for the target group, in ULID format."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<ULID>",
+                      "key": "profile_id",
+                      "description": "(Required) The character string representing a unique profile ID (ULID format)."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "The `traceparent` header carries the trace ID and parent span ID, as defined by the W3C Trace Context specification. It's used to trace a single request as it moves through multiple services.",
+                  "key": "traceparent",
+                  "value": "00-0af7651916cd43dd8448eb211c80319c-b7ad6b7169203331-01"
+                },
+                {
+                  "disabled": false,
+                  "description": "The `tracestate` header complements the `traceparent` header by carrying vendor-specific trace information. This allows different services to add their own data to a trace.",
+                  "key": "tracestate",
+                  "value": "ot=foo:bar;k1:13"
+                },
+                {
+                  "disabled": false,
+                  "description": "Boolean value representing whether request is the product of synthetic traffic. By default, set to false. ",
+                  "key": "is-synthetic-traffic",
+                  "value": "false"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"object\": \"string\",\n  \"detail\": \"string\",\n  \"title\": \"string\",\n  \"invalid_params\": [\n    {\n      \"name\": \"string\",\n      \"reason\": \"string\"\n    },\n    {\n      \"name\": \"string\",\n      \"reason\": \"string\"\n    }\n  ],\n  \"instance\": \"string\",\n  \"type\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5622b3a7-e424-43ef-b28c-20875a8dddb0",
+              "name": "A request is unauthorized.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "demand",
+                    "accounts",
+                    ":account_id",
+                    "projects",
+                    ":project_id",
+                    "target-groups",
+                    ":target_group_id",
+                    "profiles",
+                    ":profile_id",
+                    "supplier-quota-distribution"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "project_id",
+                      "description": "(Required) A unique identifier for the project, in ULID format."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "target_group_id",
+                      "description": "(Required) A unique identifier for the target group, in ULID format."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<ULID>",
+                      "key": "profile_id",
+                      "description": "(Required) The character string representing a unique profile ID (ULID format)."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"1dcf0f40-f0d1-4cf6-8c00-c3d019d32faf\",\n  \"object\": \"authorization_error\",\n  \"detail\": \"no valid authorization provided for this operation\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7ed94da4-1864-4324-86ac-b9345dc993dc",
+              "name": "A requested is forbidden.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "demand",
+                    "accounts",
+                    ":account_id",
+                    "projects",
+                    ":project_id",
+                    "target-groups",
+                    ":target_group_id",
+                    "profiles",
+                    ":profile_id",
+                    "supplier-quota-distribution"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "project_id",
+                      "description": "(Required) A unique identifier for the project, in ULID format."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "target_group_id",
+                      "description": "(Required) A unique identifier for the target group, in ULID format."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<ULID>",
+                      "key": "profile_id",
+                      "description": "(Required) The character string representing a unique profile ID (ULID format)."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"fe68cdd2-ee87-4dbf-8950-63c5cbca94c7\",\n  \"object\": \"authorization_error\",\n  \"detail\": \"you don't have the right permissions to perform this operation\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "52ec753c-60bb-46f5-9a6d-038645fbb467",
+              "name": "A requested resource isn't found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "demand",
+                    "accounts",
+                    ":account_id",
+                    "projects",
+                    ":project_id",
+                    "target-groups",
+                    ":target_group_id",
+                    "profiles",
+                    ":profile_id",
+                    "supplier-quota-distribution"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "project_id",
+                      "description": "(Required) A unique identifier for the project, in ULID format."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "target_group_id",
+                      "description": "(Required) A unique identifier for the target group, in ULID format."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<ULID>",
+                      "key": "profile_id",
+                      "description": "(Required) The character string representing a unique profile ID (ULID format)."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"7a5972ba-0825-4360-b852-fa2430e47034\",\n  \"object\": \"not_found_error\",\n  \"detail\": \"resource not found\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "05755f06-ee6b-4032-99ae-e0624e9816bd",
+              "name": "A request failed due to an internal error.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "demand",
+                    "accounts",
+                    ":account_id",
+                    "projects",
+                    ":project_id",
+                    "target-groups",
+                    ":target_group_id",
+                    "profiles",
+                    ":profile_id",
+                    "supplier-quota-distribution"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "project_id",
+                      "description": "(Required) A unique identifier for the project, in ULID format."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "target_group_id",
+                      "description": "(Required) A unique identifier for the target group, in ULID format."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<ULID>",
+                      "key": "profile_id",
+                      "description": "(Required) The character string representing a unique profile ID (ULID format)."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "The `traceparent` header carries the trace ID and parent span ID, as defined by the W3C Trace Context specification. It's used to trace a single request as it moves through multiple services.",
+                  "key": "traceparent",
+                  "value": "00-0af7651916cd43dd8448eb211c80319c-b7ad6b7169203331-01"
+                },
+                {
+                  "disabled": false,
+                  "description": "The `tracestate` header complements the `traceparent` header by carrying vendor-specific trace information. This allows different services to add their own data to a trace.",
+                  "key": "tracestate",
+                  "value": "ot=foo:bar;k1:13"
+                },
+                {
+                  "disabled": false,
+                  "description": "Boolean value representing whether request is the product of synthetic traffic. By default, set to false. ",
+                  "key": "is-synthetic-traffic",
+                  "value": "false"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"object\": \"string\",\n  \"detail\": \"string\",\n  \"errors\": [\n    {\n      \"name\": \"string\",\n      \"reason\": \"string\"\n    },\n    {\n      \"name\": \"string\",\n      \"reason\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "dbfa7a64-1319-4524-978a-74e4fd332e0c",
+          "name": "Calculates the supplier distribution for a new target group",
+          "request": {
+            "name": "Calculates the supplier distribution for a new target group",
+            "description": {
+              "content": "Calculates the projected distribution of completes across different suppliers for a new, unsaved target group configuration.\n\nYou can use this endpoint to understand how your proposed quotas are likely to be filled by different panel sources.\n\n**Note:** Providing supplier allocation details in the request is not yet supported but is planned for a future release.\n\nThe API automatically removes duplicate open-ended values in this request before calculating the distribution, but rejects duplicates in selection or range conditions.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "demand",
+                "accounts",
+                ":account_id",
+                "supplier-quota-distribution",
+                "draft"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "account_id",
+                  "description": "(Required) The account's unique identifier."
+                }
+              ]
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                "key": "Cint-API-Version",
+                "value": "<string>"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"locale\": \"<string>\",\n  \"completes_goal\": \"<int>\",\n  \"profile_adjustment_type\": \"<string>\",\n  \"start_at\": \"<string>\",\n  \"end_at\": \"<string>\",\n  \"profile\": {\n    \"object\": \"<string>\",\n    \"quotas_enabled\": \"<boolean>\",\n    \"targets\": [\n      {\n        \"conditions\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"quota\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      }\n    ],\n    \"name\": \"<string>\"\n  },\n  \"collects_pii\": \"<boolean>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "620e2900-085e-404e-a1e6-6dedf9a74a4d",
+              "name": "The supplier distribution prediction was calculated successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "demand",
+                    "accounts",
+                    ":account_id",
+                    "supplier-quota-distribution",
+                    "draft"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"locale\": \"eng_us\",\n  \"completes_goal\": 1500,\n  \"profile_adjustment_type\": \"percentage\",\n  \"start_at\": \"2023-10-09 12:00:00+00:00\",\n  \"end_at\": \"2023-10-23 12:00:00+00:00\",\n  \"profile\": {\n    \"object\": \"regular\",\n    \"quotas_enabled\": true,\n    \"targets\": [\n      {\n        \"conditions\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"quota\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      }\n    ],\n    \"name\": \"SF_YoungAge\"\n  },\n  \"collects_pii\": false\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"object\": \"regular\",\n  \"quotas_enabled\": true,\n  \"targets\": [\n    {\n      \"conditions\": [\n        {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      ],\n      \"quota\": {\n        \"completes_goal\": 40,\n        \"name\": \"SF_Quota_12\"\n      }\n    }\n  ],\n  \"name\": \"SF_YoungAge\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b35bed33-99aa-4069-9f41-9f5ff8161f31",
+              "name": "A request is not valid and can't be processed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "demand",
+                    "accounts",
+                    ":account_id",
+                    "supplier-quota-distribution",
+                    "draft"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"locale\": \"eng_us\",\n  \"completes_goal\": 1500,\n  \"profile_adjustment_type\": \"percentage\",\n  \"start_at\": \"2023-10-09 12:00:00+00:00\",\n  \"end_at\": \"2023-10-23 12:00:00+00:00\",\n  \"profile\": {\n    \"object\": \"regular\",\n    \"quotas_enabled\": true,\n    \"targets\": [\n      {\n        \"conditions\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"quota\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      }\n    ],\n    \"name\": \"SF_YoungAge\"\n  },\n  \"collects_pii\": false\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "The `traceparent` header carries the trace ID and parent span ID, as defined by the W3C Trace Context specification. It's used to trace a single request as it moves through multiple services.",
+                  "key": "traceparent",
+                  "value": "00-0af7651916cd43dd8448eb211c80319c-b7ad6b7169203331-01"
+                },
+                {
+                  "disabled": false,
+                  "description": "The `tracestate` header complements the `traceparent` header by carrying vendor-specific trace information. This allows different services to add their own data to a trace.",
+                  "key": "tracestate",
+                  "value": "ot=foo:bar;k1:13"
+                },
+                {
+                  "disabled": false,
+                  "description": "Boolean value representing whether request is the product of synthetic traffic. By default, set to false. ",
+                  "key": "is-synthetic-traffic",
+                  "value": "false"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"object\": \"string\",\n  \"detail\": \"string\",\n  \"title\": \"string\",\n  \"invalid_params\": [\n    {\n      \"name\": \"string\",\n      \"reason\": \"string\"\n    },\n    {\n      \"name\": \"string\",\n      \"reason\": \"string\"\n    }\n  ],\n  \"instance\": \"string\",\n  \"type\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "08562691-7d66-4f79-98d0-bc2b49b47a20",
+              "name": "A request is unauthorized.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "demand",
+                    "accounts",
+                    ":account_id",
+                    "supplier-quota-distribution",
+                    "draft"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"locale\": \"eng_us\",\n  \"completes_goal\": 1500,\n  \"profile_adjustment_type\": \"percentage\",\n  \"start_at\": \"2023-10-09 12:00:00+00:00\",\n  \"end_at\": \"2023-10-23 12:00:00+00:00\",\n  \"profile\": {\n    \"object\": \"regular\",\n    \"quotas_enabled\": true,\n    \"targets\": [\n      {\n        \"conditions\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"quota\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      }\n    ],\n    \"name\": \"SF_YoungAge\"\n  },\n  \"collects_pii\": false\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"1dcf0f40-f0d1-4cf6-8c00-c3d019d32faf\",\n  \"object\": \"authorization_error\",\n  \"detail\": \"no valid authorization provided for this operation\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "26d3d88e-aed7-435d-b2a0-f865d17d8f5a",
+              "name": "A requested is forbidden.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "demand",
+                    "accounts",
+                    ":account_id",
+                    "supplier-quota-distribution",
+                    "draft"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"locale\": \"eng_us\",\n  \"completes_goal\": 1500,\n  \"profile_adjustment_type\": \"percentage\",\n  \"start_at\": \"2023-10-09 12:00:00+00:00\",\n  \"end_at\": \"2023-10-23 12:00:00+00:00\",\n  \"profile\": {\n    \"object\": \"regular\",\n    \"quotas_enabled\": true,\n    \"targets\": [\n      {\n        \"conditions\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"quota\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      }\n    ],\n    \"name\": \"SF_YoungAge\"\n  },\n  \"collects_pii\": false\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"fe68cdd2-ee87-4dbf-8950-63c5cbca94c7\",\n  \"object\": \"authorization_error\",\n  \"detail\": \"you don't have the right permissions to perform this operation\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d44df559-6fd9-43d3-9169-eb1a0b976224",
+              "name": "A requested resource isn't found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "demand",
+                    "accounts",
+                    ":account_id",
+                    "supplier-quota-distribution",
+                    "draft"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"locale\": \"eng_us\",\n  \"completes_goal\": 1500,\n  \"profile_adjustment_type\": \"percentage\",\n  \"start_at\": \"2023-10-09 12:00:00+00:00\",\n  \"end_at\": \"2023-10-23 12:00:00+00:00\",\n  \"profile\": {\n    \"object\": \"regular\",\n    \"quotas_enabled\": true,\n    \"targets\": [\n      {\n        \"conditions\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"quota\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      }\n    ],\n    \"name\": \"SF_YoungAge\"\n  },\n  \"collects_pii\": false\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"7a5972ba-0825-4360-b852-fa2430e47034\",\n  \"object\": \"not_found_error\",\n  \"detail\": \"resource not found\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5c4b14e9-c221-4d88-8630-009659c5b63c",
+              "name": "A request failed due to an internal error.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "demand",
+                    "accounts",
+                    ":account_id",
+                    "supplier-quota-distribution",
+                    "draft"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"locale\": \"eng_us\",\n  \"completes_goal\": 1500,\n  \"profile_adjustment_type\": \"percentage\",\n  \"start_at\": \"2023-10-09 12:00:00+00:00\",\n  \"end_at\": \"2023-10-23 12:00:00+00:00\",\n  \"profile\": {\n    \"object\": \"regular\",\n    \"quotas_enabled\": true,\n    \"targets\": [\n      {\n        \"conditions\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"quota\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      }\n    ],\n    \"name\": \"SF_YoungAge\"\n  },\n  \"collects_pii\": false\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "The `traceparent` header carries the trace ID and parent span ID, as defined by the W3C Trace Context specification. It's used to trace a single request as it moves through multiple services.",
+                  "key": "traceparent",
+                  "value": "00-0af7651916cd43dd8448eb211c80319c-b7ad6b7169203331-01"
+                },
+                {
+                  "disabled": false,
+                  "description": "The `tracestate` header complements the `traceparent` header by carrying vendor-specific trace information. This allows different services to add their own data to a trace.",
+                  "key": "tracestate",
+                  "value": "ot=foo:bar;k1:13"
+                },
+                {
+                  "disabled": false,
+                  "description": "Boolean value representing whether request is the product of synthetic traffic. By default, set to false. ",
+                  "key": "is-synthetic-traffic",
+                  "value": "false"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"object\": \"string\",\n  \"detail\": \"string\",\n  \"errors\": [\n    {\n      \"name\": \"string\",\n      \"reason\": \"string\"\n    },\n    {\n      \"name\": \"string\",\n      \"reason\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.cint.com/v1",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "1aa5916f-6709-479a-9f45-2e18b8a02507",
+    "name": "Demand Accounts Profiling Quotas By Supplier API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Cint's demand ordering API is REST oriented. It has predictable resource based URLs, accepts JSON-encoded request bodies, returns JSON-encoded responses, and uses standard HTTP response codes, authentication, and verbs. Error responses are also JSON-encoded and follow a standard format, providing a unique error ID and detailed information about what went wrong.\n\nAuthentication is handled via bearer tokens passed in the `Authorization` header. All requests must also include a `Cint-API-Version` header with a date in `YYYY-MM-DD` format to specify the desired API version. Depending on the version you use, endpoint behavior may differ as we improve our API with every version release.\n\nWhile many operations work on a single object per request, the demand ordering API also provides asynchronous batch endpoints for performing bulk updates efficiently on certain resources. For safety, `POST` requests support an `Idempotency-Key` header to allow for safe retries without accidentally performing the same operation twice.\n",
+      "type": "text/plain"
+    }
+  }
+}

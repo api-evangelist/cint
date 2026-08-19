@@ -1,0 +1,218 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Demand Accounts Respondent Unique Codes API",
+    "version": "2025-12-18"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Respondent Unique Codes",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Upload live respondent unique codes",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.cint.com/v1/demand/accounts/:account_id/target-groups/:target_group_id/respondent-unique-codes/live",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The account's unique identifier."
+              },
+              {
+                "name": "target_group_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the target group, in ULID format."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Uploads a batch of respondent unique codes for a target group. These codes are inserted into the **live URL** for each respondent who enters a survey session.\n\n:::note URL Setup Required\nBefore using this endpoint, you must set up your target group's live URL to include the `[%RESPONDENT_UNIQUE_CODE%]` placeholder.\n\n*Example live URL setup:*\n`https://example_live_url.com?id=[%RESPONDENT_UNIQUE_CODE%]`\n:::\n\n### Processing Rules\n\n*   **Batch Size**: You can submit a minimum of 1 and a maximum of 2"
+        },
+        {
+          "info": {
+            "name": "Get live respondent unique code stats",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cint.com/v1/demand/accounts/:account_id/target-groups/:target_group_id/respondent-unique-codes/live/stats",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The account's unique identifier."
+              },
+              {
+                "name": "target_group_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the target group, in ULID format."
+              }
+            ]
+          },
+          "docs": "This endpoint returns a summary of the usage for live respondent unique codes for a specific target group. The response includes the total number of codes stored and the count of those that remain unconsumed.\n\n:::caution Feature Access\nThis feature must be enabled for your account. If it's not enabled, this endpoint will return a `403 Forbidden` error. Please contact your account manager for more information.\n:::\n"
+        },
+        {
+          "info": {
+            "name": "Delete all unconsumed live respondent unique codes",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.cint.com/v1/demand/accounts/:account_id/target-groups/:target_group_id/respondent-unique-codes/live/unconsumed",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The account's unique identifier."
+              },
+              {
+                "name": "target_group_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the target group, in ULID format."
+              }
+            ]
+          },
+          "docs": "This endpoint permanently deletes all unconsumed **live** respondent unique codes for a specific target group.\n\n:::danger Destructive Action\nThis action can potentially pause the target group if it's currently live and runs out of codes. This operation cannot be undone.\n:::\n\n:::caution Feature Access\nThis feature must be enabled for your account. If it's not enabled, this endpoint will return a `403 Forbidden` error. Please contact your account manager for more information.\n:::\n"
+        },
+        {
+          "info": {
+            "name": "Upload test respondent unique codes",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.cint.com/v1/demand/accounts/:account_id/target-groups/:target_group_id/respondent-unique-codes/test",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The account's unique identifier."
+              },
+              {
+                "name": "target_group_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the target group, in ULID format."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Uploads a batch of respondent unique codes for a target group. These codes are inserted into the **test URL** for each respondent who enters a survey session for testing purposes.\n\n:::note URL Setup Required\nBefore using this endpoint, you must set up your target group's test URL to include the `[%RESPONDENT_UNIQUE_CODE%]` placeholder.\n\n*Example test URL setup:*\n`https://example_test_url.com?id=[%RESPONDENT_UNIQUE_CODE%]`\n:::\n\n### Processing Rules\n\n*   **Batch Size**: You can submit a minimum of"
+        },
+        {
+          "info": {
+            "name": "Get test respondent unique code stats",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cint.com/v1/demand/accounts/:account_id/target-groups/:target_group_id/respondent-unique-codes/test/stats",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The account's unique identifier."
+              },
+              {
+                "name": "target_group_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the target group, in ULID format."
+              }
+            ]
+          },
+          "docs": "This endpoint returns a summary of the usage for **test** respondent unique codes for a specific target group. The response includes the total number of codes stored and the count of those that remain unconsumed.\n\n:::caution Feature Access\nThis feature must be enabled for your account. If it's not enabled, this endpoint will return a `403 Forbidden` error. Please contact your account manager for more information.\n:::\n"
+        },
+        {
+          "info": {
+            "name": "Delete all unconsumed test respondent unique codes",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.cint.com/v1/demand/accounts/:account_id/target-groups/:target_group_id/respondent-unique-codes/test/unconsumed",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The account's unique identifier."
+              },
+              {
+                "name": "target_group_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the target group, in ULID format."
+              }
+            ]
+          },
+          "docs": "This endpoint permanently deletes all unconsumed **test** respondent unique codes for a specific target group. These are the codes associated with the test URL that were previously added via the upload endpoint.\n\n:::caution Feature Access\nThis feature must be enabled for your account. If it's not enabled, this endpoint will return a `403 Forbidden` error. Please contact your account manager for more information.\n:::\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

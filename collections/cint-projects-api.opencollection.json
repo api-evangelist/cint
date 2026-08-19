@@ -1,0 +1,229 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Demand Accounts Projects API",
+    "version": "2025-12-18"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Projects",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List projects for an account",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cint.com/v1/demand/accounts/:account_id/projects",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The account's unique identifier."
+              },
+              {
+                "name": "project_manager_id",
+                "value": "",
+                "type": "query",
+                "description": "Filters the list of projects by the assigned project manager's ID."
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "Filters the list of projects by their status."
+              },
+              {
+                "name": "name",
+                "value": "",
+                "type": "query",
+                "description": "**Deprecated:** Use the `search_string` parameter instead.\n\nFilters by the project name. If only `name` is supplied, it is treated as a `search_string`. If both `name` and `search_string` are supplied, `name` is ignored.\n"
+              },
+              {
+                "name": "search_string",
+                "value": "",
+                "type": "query",
+                "description": "Searches for projects based on a string match in any of the following fields.\n* Project name\n* Project's human-readable ID\n* Human-readable IDs of any target groups within the project\n"
+              },
+              {
+                "name": "end_before",
+                "value": "7daa40ad-303b-40a2-89df-a9760400cde7",
+                "type": "query",
+                "description": "Returns a list of objects that come before the provided pagination cursor. This is used for navigating to a previous page."
+              },
+              {
+                "name": "start_after",
+                "value": "bff6a669-a469-409d-8c94-dcf92258043a",
+                "type": "query",
+                "description": "Returns a list of objects after the provided pagination cursor, using the next_cursor from the previous response."
+              },
+              {
+                "name": "page_size",
+                "value": "15",
+                "type": "query",
+                "description": "A limit on the number of objects to be returned, between 1 and 100."
+              }
+            ]
+          },
+          "docs": "This endpoint returns a paginated list of projects for a specific account.\nThe response includes summary details for each project, such as its name, last activity, and key statistics.\n"
+        },
+        {
+          "info": {
+            "name": "Create a new project",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.cint.com/v1/demand/accounts/:account_id/projects",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              },
+              {
+                "name": "idempotency-key",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The account's unique identifier."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "This endpoint creates a new project. Project creation is an asynchronous process.\n\nA successful request is accepted for processing and immediately returns a `202 Accepted` response with the new project's unique `id`.\n\nTo prevent duplicate projects from being created due to network issues, this endpoint requires an `Idempotency-Key` header.\n"
+        },
+        {
+          "info": {
+            "name": "Retrieve a project",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cint.com/v1/demand/accounts/:account_id/projects/:project_id",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The account's unique identifier."
+              },
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the project, in ULID format."
+              }
+            ]
+          },
+          "docs": "This endpoint retrieves the full details for a single project, specified by its unique `id`."
+        },
+        {
+          "info": {
+            "name": "Update a project",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.cint.com/v1/demand/accounts/:account_id/projects/:project_id",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              },
+              {
+                "name": "If-Match",
+                "value": ""
+              },
+              {
+                "name": "idempotency-key",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The account's unique identifier."
+              },
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the project, in ULID format."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "This endpoint updates the details of an existing project.\n\nTo prevent race conditions, this endpoint uses optimistic locking. You must provide the `If-Match` header with the `ETag` value of the resource you intend to update.\n\nYou can get the latest `ETag` by performing a `GET` request on the project first.\n"
+        },
+        {
+          "info": {
+            "name": "Retrieve a project summary",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cint.com/v1/demand/accounts/:account_id/projects/:project_id/overview",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The account's unique identifier."
+              },
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the project, in ULID format."
+              }
+            ]
+          },
+          "docs": "This endpoint retrieves a summary overview of a single project, including its status and key performance statistics."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

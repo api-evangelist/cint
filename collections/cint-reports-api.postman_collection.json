@@ -1,0 +1,2651 @@
+{
+  "item": [
+    {
+      "id": "1e93a140-d9ad-42cc-86fb-108f5c54c03d",
+      "name": "Reports",
+      "description": {
+        "content": "Aggregate reports that roll statistics up on an _Account_, _Business Unit_, _Project_ and _Target Group_ level.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "ec5cae26-9dbc-42b0-b774-f525eccc9b96",
+          "name": "List report requests",
+          "request": {
+            "name": "List report requests",
+            "description": {
+              "content": "Retrieves a paginated list of report requests. This endpoint is the starting point for managing report workflows.\n\n:::note Data and Timeframe Limitations\n*   A single report request can cover a maximum duration of six months.\n*   Data is available for the last 12 months.\n*   Reporting data is near-real-time but should not be used for live management of target groups, as latency cannot be guaranteed.\n:::\n\nYou will need one of the following roles to access this endpoint:\n*   Buyer Admin (`buy_admin`)\n*   Buyer Manager (`buy_mgr`)\n*   Buy Analyst (`buy_anlyst`)\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "demand",
+                "accounts",
+                ":account_id",
+                "reports"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "report_type",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "end_before",
+                  "value": "<string>",
+                  "description": "Returns a list of objects that come before the provided pagination cursor. This is used for navigating to a previous page."
+                },
+                {
+                  "disabled": false,
+                  "key": "start_after",
+                  "value": "<string>",
+                  "description": "Returns a list of objects after the provided pagination cursor, using the next_cursor from the previous response."
+                },
+                {
+                  "disabled": false,
+                  "key": "page_size",
+                  "value": "10",
+                  "description": "A limit on the number of objects to be returned, between 1 and 100."
+                },
+                {
+                  "disabled": false,
+                  "key": "level",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "Status",
+                  "value": "<string>"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "account_id",
+                  "description": "(Required) The account's unique identifier."
+                }
+              ]
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                "key": "Cint-API-Version",
+                "value": "<string>"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "224bae4c-b199-4c37-8456-ccced1a511e3",
+              "name": "Returns a paginated list of report requests.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "demand",
+                    "accounts",
+                    ":account_id",
+                    "reports"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "report_type",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "end_before",
+                      "value": "7daa40ad-303b-40a2-89df-a9760400cde7"
+                    },
+                    {
+                      "key": "start_after",
+                      "value": "bff6a669-a469-409d-8c94-dcf92258043a"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "15"
+                    },
+                    {
+                      "key": "level",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "Status",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"next_cursor\": \"bff6a669-a469-409d-8c94-dcf92258043a\",\n  \"reports_requests\": [\n    {\n      \"report_id\": \"8b60d37e-af52-45f1-ad5e-e92acc38e01d\",\n      \"report_type\": \"sample-bought\",\n      \"status\": \"completed\",\n      \"level\": \"Account\",\n      \"account_name\": \"Lucid Marketplace Services\",\n      \"create_date\": \"2023-01-01T23:00:00.000Z\",\n      \"report_url\": \"https://exchange.cint.com/download?file=1_sample-bought_2024_02_29_22_26_03.csv\",\n      \"create_params\": {\n        \"start_date\": \"2023-08-01\",\n        \"end_date\": \"2023-08-30\",\n        \"filter\": \"account\",\n        \"filter_ids\": [\n          \"101\"\n        ],\n        \"report_options\": null\n      },\n      \"requestor\": {\n        \"id\": \"96C65204-90C2-4DCB-9393-B8226DD50C76\",\n        \"name\": \"John Doe\",\n        \"email\": \"JohnDoe@cint.com\"\n      }\n    },\n    {\n      \"report_id\": \"9c71e48f-bf63-46f2-bde7-f93bdf49f12e\",\n      \"report_type\": \"completes\",\n      \"status\": \"pending\",\n      \"level\": \"Project\",\n      \"account_name\": \"Lucid Marketplace Services\",\n      \"create_date\": \"2023-01-02T11:00:00.000Z\",\n      \"report_url\": null,\n      \"create_params\": {\n        \"start_date\": \"2023-09-01\",\n        \"end_date\": \"2023-09-30\",\n        \"filter\": \"project\",\n        \"filter_ids\": [\n          \"01BTGNYV6HRNK8K8VKZASZCFP0\"\n        ],\n        \"report_options\": null\n      },\n      \"requestor\": {\n        \"id\": \"96C65204-90C2-4DCB-9393-B8226DD50C76\",\n        \"name\": \"John Doe\",\n        \"email\": \"JohnDoe@cint.com\"\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "fe5e9edf-4f80-49a9-af81-cf437a0c45cd",
+              "name": "A request is not valid and can't be processed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "demand",
+                    "accounts",
+                    ":account_id",
+                    "reports"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "report_type",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "end_before",
+                      "value": "7daa40ad-303b-40a2-89df-a9760400cde7"
+                    },
+                    {
+                      "key": "start_after",
+                      "value": "bff6a669-a469-409d-8c94-dcf92258043a"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "15"
+                    },
+                    {
+                      "key": "level",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "Status",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"9e278238-d011-4e05-8327-1ce1d5d26254\",\n  \"object\": \"bad_request_error\",\n  \"detail\": \"Expected field 'foo' is missing.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ca34561c-3a47-4714-a6f4-d8292cf06514",
+              "name": "A request is unauthorized.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "demand",
+                    "accounts",
+                    ":account_id",
+                    "reports"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "report_type",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "end_before",
+                      "value": "7daa40ad-303b-40a2-89df-a9760400cde7"
+                    },
+                    {
+                      "key": "start_after",
+                      "value": "bff6a669-a469-409d-8c94-dcf92258043a"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "15"
+                    },
+                    {
+                      "key": "level",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "Status",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"1dcf0f40-f0d1-4cf6-8c00-c3d019d32faf\",\n  \"object\": \"authorization_error\",\n  \"detail\": \"no valid authorization provided for this operation\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "935ec580-8e12-4adc-82c2-e1cd8798ff82",
+              "name": "A requested is forbidden.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "demand",
+                    "accounts",
+                    ":account_id",
+                    "reports"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "report_type",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "end_before",
+                      "value": "7daa40ad-303b-40a2-89df-a9760400cde7"
+                    },
+                    {
+                      "key": "start_after",
+                      "value": "bff6a669-a469-409d-8c94-dcf92258043a"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "15"
+                    },
+                    {
+                      "key": "level",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "Status",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"fe68cdd2-ee87-4dbf-8950-63c5cbca94c7\",\n  \"object\": \"authorization_error\",\n  \"detail\": \"you don't have the right permissions to perform this operation\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "214071e9-2e8b-404b-8d75-6e5f3586ec03",
+              "name": "A requested resource isn't found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "demand",
+                    "accounts",
+                    ":account_id",
+                    "reports"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "report_type",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "end_before",
+                      "value": "7daa40ad-303b-40a2-89df-a9760400cde7"
+                    },
+                    {
+                      "key": "start_after",
+                      "value": "bff6a669-a469-409d-8c94-dcf92258043a"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "15"
+                    },
+                    {
+                      "key": "level",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "Status",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"7a5972ba-0825-4360-b852-fa2430e47034\",\n  \"object\": \"not_found_error\",\n  \"detail\": \"resource not found\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "48347451-53fd-4b3d-a8ce-fa5f405caec3",
+              "name": "A request failed due to an internal error.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "demand",
+                    "accounts",
+                    ":account_id",
+                    "reports"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "report_type",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "end_before",
+                      "value": "7daa40ad-303b-40a2-89df-a9760400cde7"
+                    },
+                    {
+                      "key": "start_after",
+                      "value": "bff6a669-a469-409d-8c94-dcf92258043a"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "15"
+                    },
+                    {
+                      "key": "level",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "Status",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"d94b8bb2-a540-4a91-9c05-2aa3ae9a5e1e\",\n  \"object\": \"unexpected_internal_error\",\n  \"detail\": \"an internal error has led to the failure of this operation\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "931e8e85-ae5e-44f0-b226-6c9d196ae720",
+          "name": "Download a report",
+          "request": {
+            "name": "Download a report",
+            "description": {
+              "content": "This endpoint retrieves a generated report file. The format of the file, either CSV or XLSX, depends on the original report type.\n\n:::info Handling the Response\nThe body of a successful response contains the raw data of the report file, not a JSON object. You'll need to configure your HTTP client to save the raw response body to a file with the appropriate extension (e.g., `.csv` or `.xlsx`).\n:::\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "demand",
+                "accounts",
+                ":account_id",
+                "reports",
+                ":report_id",
+                "download"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "account_id",
+                  "description": "(Required) The account's unique identifier."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "report_id",
+                  "description": "(Required) A unique identifier for the report."
+                }
+              ]
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                "key": "Cint-API-Version",
+                "value": "<string>"
+              },
+              {
+                "key": "Accept",
+                "value": "text/csv"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "12ce8b3e-f0bd-4376-8b87-9f6bcdb05171",
+              "name": "Returns the report file in either CSV or XLSX format.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "demand",
+                    "accounts",
+                    ":account_id",
+                    "reports",
+                    ":report_id",
+                    "download"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "report_id",
+                      "description": "(Required) A unique identifier for the report."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "text/csv"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "The `traceparent` header carries the trace ID and parent span ID, as defined by the W3C Trace Context specification. It's used to trace a single request as it moves through multiple services.",
+                  "key": "traceparent",
+                  "value": "00-0af7651916cd43dd8448eb211c80319c-b7ad6b7169203331-01"
+                },
+                {
+                  "disabled": false,
+                  "description": "The `tracestate` header complements the `traceparent` header by carrying vendor-specific trace information. This allows different services to add their own data to a trace.",
+                  "key": "tracestate",
+                  "value": "ot=foo:bar;k1:13"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "text/csv"
+                }
+              ],
+              "body": "string",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "820a64b5-715d-4a8e-aaf3-b4dcc3a68649",
+              "name": "A request is not valid and can't be processed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "demand",
+                    "accounts",
+                    ":account_id",
+                    "reports",
+                    ":report_id",
+                    "download"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "report_id",
+                      "description": "(Required) A unique identifier for the report."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"9e278238-d011-4e05-8327-1ce1d5d26254\",\n  \"object\": \"bad_request_error\",\n  \"detail\": \"Expected field 'foo' is missing.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "bc2f503d-5892-4a19-9d2e-d802f1ca0742",
+              "name": "A request is unauthorized.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "demand",
+                    "accounts",
+                    ":account_id",
+                    "reports",
+                    ":report_id",
+                    "download"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "report_id",
+                      "description": "(Required) A unique identifier for the report."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"1dcf0f40-f0d1-4cf6-8c00-c3d019d32faf\",\n  \"object\": \"authorization_error\",\n  \"detail\": \"no valid authorization provided for this operation\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b16fa20a-37ee-44b8-a321-3ebdcf30d11d",
+              "name": "A requested is forbidden.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "demand",
+                    "accounts",
+                    ":account_id",
+                    "reports",
+                    ":report_id",
+                    "download"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "report_id",
+                      "description": "(Required) A unique identifier for the report."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"fe68cdd2-ee87-4dbf-8950-63c5cbca94c7\",\n  \"object\": \"authorization_error\",\n  \"detail\": \"you don't have the right permissions to perform this operation\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7ed2be8e-3e10-4f28-91da-d082145ea8ef",
+              "name": "A requested resource isn't found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "demand",
+                    "accounts",
+                    ":account_id",
+                    "reports",
+                    ":report_id",
+                    "download"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "report_id",
+                      "description": "(Required) A unique identifier for the report."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"7a5972ba-0825-4360-b852-fa2430e47034\",\n  \"object\": \"not_found_error\",\n  \"detail\": \"resource not found\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "534befbf-454c-4b7a-b5b3-0eed86ffe19c",
+              "name": "A request failed due to an internal error.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "demand",
+                    "accounts",
+                    ":account_id",
+                    "reports",
+                    ":report_id",
+                    "download"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "report_id",
+                      "description": "(Required) A unique identifier for the report."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"d94b8bb2-a540-4a91-9c05-2aa3ae9a5e1e\",\n  \"object\": \"unexpected_internal_error\",\n  \"detail\": \"an internal error has led to the failure of this operation\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "2eb08375-e8a6-4c3c-b337-c37f03a817b8",
+          "name": "Get a shareable report link",
+          "request": {
+            "name": "Get a shareable report link",
+            "description": {
+              "content": "This endpoint generates a temporary, shareable link (a pre-signed URL) for a specific report.\n\n:::info URL Expiration\nThe pre-signed URL is temporary and will expire after a set period of time. You should not store this URL for long-term use. Instead, call this endpoint to generate a new URL each time you need to provide access.\n:::\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "demand",
+                "accounts",
+                ":account_id",
+                "reports",
+                ":report_id",
+                "share"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "report_type",
+                  "value": "<string>"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "account_id",
+                  "description": "(Required) The account's unique identifier."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "report_id",
+                  "description": "(Required) A unique identifier for the report."
+                }
+              ]
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                "key": "Cint-API-Version",
+                "value": "<string>"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "445b19a0-c748-481c-8d12-2b6a47cb75e0",
+              "name": "Returns a shareable, pre-signed URL for the report.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "demand",
+                    "accounts",
+                    ":account_id",
+                    "reports",
+                    ":report_id",
+                    "share"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "report_type",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "report_id",
+                      "description": "(Required) A unique identifier for the report."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"report_pre_signed_url\": \"https://cint-reports.s3.amazonaws.com/some-report-file.csv?AWSAccessKeyId=AKIAIOSFODNN7EXAMPLE&Expires=1678886400&Signature=vjXoG...\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "fbfb9a33-9910-4edf-b8d6-af18989c5a81",
+              "name": "A request is not valid and can't be processed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "demand",
+                    "accounts",
+                    ":account_id",
+                    "reports",
+                    ":report_id",
+                    "share"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "report_type",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "report_id",
+                      "description": "(Required) A unique identifier for the report."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"9e278238-d011-4e05-8327-1ce1d5d26254\",\n  \"object\": \"bad_request_error\",\n  \"detail\": \"Expected field 'foo' is missing.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "0da07f81-e729-4421-93af-06ac83cee375",
+              "name": "A request is unauthorized.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "demand",
+                    "accounts",
+                    ":account_id",
+                    "reports",
+                    ":report_id",
+                    "share"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "report_type",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "report_id",
+                      "description": "(Required) A unique identifier for the report."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"1dcf0f40-f0d1-4cf6-8c00-c3d019d32faf\",\n  \"object\": \"authorization_error\",\n  \"detail\": \"no valid authorization provided for this operation\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ba1c0b38-6d76-4a02-93e3-ec046145fcd2",
+              "name": "A requested is forbidden.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "demand",
+                    "accounts",
+                    ":account_id",
+                    "reports",
+                    ":report_id",
+                    "share"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "report_type",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "report_id",
+                      "description": "(Required) A unique identifier for the report."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"fe68cdd2-ee87-4dbf-8950-63c5cbca94c7\",\n  \"object\": \"authorization_error\",\n  \"detail\": \"you don't have the right permissions to perform this operation\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a5685df8-3381-40d4-9997-bd4b66e9c10e",
+              "name": "A requested resource isn't found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "demand",
+                    "accounts",
+                    ":account_id",
+                    "reports",
+                    ":report_id",
+                    "share"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "report_type",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "report_id",
+                      "description": "(Required) A unique identifier for the report."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"7a5972ba-0825-4360-b852-fa2430e47034\",\n  \"object\": \"not_found_error\",\n  \"detail\": \"resource not found\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "04de776b-59b6-4326-ae1f-4476b3010204",
+              "name": "A request failed due to an internal error.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "demand",
+                    "accounts",
+                    ":account_id",
+                    "reports",
+                    ":report_id",
+                    "share"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "report_type",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "report_id",
+                      "description": "(Required) A unique identifier for the report."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"d94b8bb2-a540-4a91-9c05-2aa3ae9a5e1e\",\n  \"object\": \"unexpected_internal_error\",\n  \"detail\": \"an internal error has led to the failure of this operation\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "21fc01eb-d06c-4c90-b39c-92c020fbd2d3",
+          "name": "Report Request Status",
+          "request": {
+            "name": "Report Request Status",
+            "description": {
+              "content": "Get status for a report job",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "demand",
+                "accounts",
+                ":account_id",
+                "reports",
+                ":report_id",
+                "status"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "account_id",
+                  "description": "(Required) The account's unique identifier."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "report_id",
+                  "description": "(Required) A unique identifier for the report."
+                }
+              ]
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                "key": "Cint-API-Version",
+                "value": "<string>"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "5da14c5a-f167-48e6-ae91-573d4eb352f8",
+              "name": "Successfully returns status information for a report job.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "demand",
+                    "accounts",
+                    ":account_id",
+                    "reports",
+                    ":report_id",
+                    "status"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "report_id",
+                      "description": "(Required) A unique identifier for the report."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"report_id\": \"01HY3NF37B6J2ABPA3H49C92YZ\",\n  \"status\": \"IN PROGRESS\",\n  \"message\": \"Report generation is in progress.\",\n  \"start_date\": \"2023-01-01T23:00:00.000Z\",\n  \"end_date\": \"2023-01-11T23:00:00.000Z\",\n  \"report_url\": null,\n  \"data_analysis\": false,\n  \"survey_id\": \"1341234\",\n  \"respondent_answer\": false\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c365727c-6223-45bc-8d78-3d94889bf925",
+              "name": "A request is not valid and can't be processed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "demand",
+                    "accounts",
+                    ":account_id",
+                    "reports",
+                    ":report_id",
+                    "status"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "report_id",
+                      "description": "(Required) A unique identifier for the report."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"9e278238-d011-4e05-8327-1ce1d5d26254\",\n  \"object\": \"bad_request_error\",\n  \"detail\": \"Expected field 'foo' is missing.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e4af84de-1663-4b32-b388-51d8953ed9b0",
+              "name": "A request is unauthorized.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "demand",
+                    "accounts",
+                    ":account_id",
+                    "reports",
+                    ":report_id",
+                    "status"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "report_id",
+                      "description": "(Required) A unique identifier for the report."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"1dcf0f40-f0d1-4cf6-8c00-c3d019d32faf\",\n  \"object\": \"authorization_error\",\n  \"detail\": \"no valid authorization provided for this operation\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b05e2204-46b1-4531-9d71-9e566721f68f",
+              "name": "A requested is forbidden.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "demand",
+                    "accounts",
+                    ":account_id",
+                    "reports",
+                    ":report_id",
+                    "status"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "report_id",
+                      "description": "(Required) A unique identifier for the report."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"fe68cdd2-ee87-4dbf-8950-63c5cbca94c7\",\n  \"object\": \"authorization_error\",\n  \"detail\": \"you don't have the right permissions to perform this operation\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "54295db7-2930-4d4d-ae7e-40d63b28aeb9",
+              "name": "A requested resource isn't found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "demand",
+                    "accounts",
+                    ":account_id",
+                    "reports",
+                    ":report_id",
+                    "status"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "report_id",
+                      "description": "(Required) A unique identifier for the report."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"7a5972ba-0825-4360-b852-fa2430e47034\",\n  \"object\": \"not_found_error\",\n  \"detail\": \"resource not found\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "91e83b15-05cc-415f-b47b-71df6c1fe521",
+              "name": "A request failed due to an internal error.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "demand",
+                    "accounts",
+                    ":account_id",
+                    "reports",
+                    ":report_id",
+                    "status"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "report_id",
+                      "description": "(Required) A unique identifier for the report."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"d94b8bb2-a540-4a91-9c05-2aa3ae9a5e1e\",\n  \"object\": \"unexpected_internal_error\",\n  \"detail\": \"an internal error has led to the failure of this operation\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "6c9b8a02-4501-42f2-8c2f-70d402150bc2",
+          "name": "Generate a report",
+          "request": {
+            "name": "Generate a report",
+            "description": {
+              "content": "This endpoint initiates an asynchronous job to generate a report. A successful request immediately returns a `202 Accepted` response containing a `report_id`, which you can use to track the job's progress with the `/status` endpoint.\n\n### Report Types and Rules\n\nThe following table outlines the rules for each `report_type`:\n\n| Report Type | Supported Levels (`filter`) | Multi-select Rules |\n| :--- | :--- | :--- |\n| `completes` | `account`, `business_unit`, `project`, `target_group` | Multiple IDs can be provided for all levels except `account`. |\n| `reconciliation-eligible-rids` | `project`, `target_group` | `target_group`: Yes. `project`: No (only one ID allowed). |\n| `reconciliations-status` | `account`, `project`, `target_group` | Multiple IDs can be provided for all levels except `account`. |\n| `respondent-analysis` | `project`, `target_group` | `target_group`: Yes. `project`: No (only one ID allowed). |\n| `sample-bought` | `account`, `business_unit`, `project`, `target_group` | Multiple IDs can be provided for all levels except `account`. |\n| `term-details` | `target_group` | No (only one ID allowed). |\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "demand",
+                "accounts",
+                ":account_id",
+                "reports",
+                ":report_type"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "account_id",
+                  "description": "(Required) The account's unique identifier."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "report_type",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                "key": "Cint-API-Version",
+                "value": "<string>"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"filter\": \"<string>\",\n  \"start_date\": \"<string>\",\n  \"end_date\": \"<string>\",\n  \"filter_ids\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"report_options\": {\n    \"include_respondent_answers\": \"<boolean>\",\n    \"link_type\": \"<int>\"\n  },\n  \"email_recipients\": [\n    \"<string>\"\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "e44e2f84-e1b1-4e14-ace6-48b32c6636fe",
+              "name": "Accepted report generation request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "demand",
+                    "accounts",
+                    ":account_id",
+                    "reports",
+                    ":report_type"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "report_type",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"filter\": \"project\",\n  \"start_date\": \"2023-08-01\",\n  \"end_date\": \"2023-08-30\",\n  \"filter_ids\": [\n    \"01BTGNYV6HRNK8K8VKZASZCFP0\",\n    \"01BTGNYV6HRNK8K8VKZASZCFP1\"\n  ],\n  \"report_options\": {\n    \"include_respondent_answers\": true\n  },\n  \"email_recipients\": [\n    \"y78d0r90-e174-4b05-5y67-8iof00018t17\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Accepted",
+              "code": 202,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "The `traceparent` header carries the trace ID and parent span ID, as defined by the W3C Trace Context specification. It's used to trace a single request as it moves through multiple services.",
+                  "key": "traceparent",
+                  "value": "00-0af7651916cd43dd8448eb211c80319c-b7ad6b7169203331-01"
+                },
+                {
+                  "disabled": false,
+                  "description": "The `tracestate` header complements the `traceparent` header by carrying vendor-specific trace information. This allows different services to add their own data to a trace.",
+                  "key": "tracestate",
+                  "value": "ot=foo:bar;k1:13"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Report Created\",\n  \"report_id\": \"8b60d37e-af52-45f1-ad5e-e92acc38e01d\",\n  \"report_url\": null,\n  \"create_date\": \"2025-07-11T14:02:14Z\",\n  \"status\": \"pending\",\n  \"report_type\": \"completes\",\n  \"level\": \"project\",\n  \"create_params\": {\n    \"start_date\": \"2023-08-01\",\n    \"end_date\": \"2023-08-30\",\n    \"filter\": \"project\",\n    \"filter_ids\": [\n      \"01BTGNYV6HRNK8K8VKZASZCFP0\",\n      \"01BTGNYV6HRNK8K8VKZASZCFP1\"\n    ],\n    \"report_options\": {\n      \"include_respondent_answers\": true\n    }\n  },\n  \"requestor\": {\n    \"id\": \"96C65204-90C2-4DCB-9393-B8226DD50C76\",\n    \"name\": \"John Doe\",\n    \"email\": \"John.Doe@cint.com\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "aaba5946-79bb-4941-91ba-0be403dafa4f",
+              "name": "A request is not valid and can't be processed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "demand",
+                    "accounts",
+                    ":account_id",
+                    "reports",
+                    ":report_type"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "report_type",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"filter\": \"project\",\n  \"start_date\": \"2023-08-01\",\n  \"end_date\": \"2023-08-30\",\n  \"filter_ids\": [\n    \"01BTGNYV6HRNK8K8VKZASZCFP0\",\n    \"01BTGNYV6HRNK8K8VKZASZCFP1\"\n  ],\n  \"report_options\": {\n    \"include_respondent_answers\": true\n  },\n  \"email_recipients\": [\n    \"y78d0r90-e174-4b05-5y67-8iof00018t17\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"9e278238-d011-4e05-8327-1ce1d5d26254\",\n  \"object\": \"bad_request_error\",\n  \"detail\": \"Expected field 'foo' is missing.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "0d4fb74c-5f6e-4174-8f6a-9fc09e7a931a",
+              "name": "A request is unauthorized.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "demand",
+                    "accounts",
+                    ":account_id",
+                    "reports",
+                    ":report_type"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "report_type",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"filter\": \"project\",\n  \"start_date\": \"2023-08-01\",\n  \"end_date\": \"2023-08-30\",\n  \"filter_ids\": [\n    \"01BTGNYV6HRNK8K8VKZASZCFP0\",\n    \"01BTGNYV6HRNK8K8VKZASZCFP1\"\n  ],\n  \"report_options\": {\n    \"include_respondent_answers\": true\n  },\n  \"email_recipients\": [\n    \"y78d0r90-e174-4b05-5y67-8iof00018t17\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"1dcf0f40-f0d1-4cf6-8c00-c3d019d32faf\",\n  \"object\": \"authorization_error\",\n  \"detail\": \"no valid authorization provided for this operation\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "81551c96-58fa-48e0-9b47-ea71c70b24ad",
+              "name": "A requested is forbidden.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "demand",
+                    "accounts",
+                    ":account_id",
+                    "reports",
+                    ":report_type"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "report_type",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"filter\": \"project\",\n  \"start_date\": \"2023-08-01\",\n  \"end_date\": \"2023-08-30\",\n  \"filter_ids\": [\n    \"01BTGNYV6HRNK8K8VKZASZCFP0\",\n    \"01BTGNYV6HRNK8K8VKZASZCFP1\"\n  ],\n  \"report_options\": {\n    \"include_respondent_answers\": true\n  },\n  \"email_recipients\": [\n    \"y78d0r90-e174-4b05-5y67-8iof00018t17\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"fe68cdd2-ee87-4dbf-8950-63c5cbca94c7\",\n  \"object\": \"authorization_error\",\n  \"detail\": \"you don't have the right permissions to perform this operation\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "1321e803-86c3-48c3-9c26-284ad742b745",
+              "name": "A requested resource isn't found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "demand",
+                    "accounts",
+                    ":account_id",
+                    "reports",
+                    ":report_type"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "report_type",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"filter\": \"project\",\n  \"start_date\": \"2023-08-01\",\n  \"end_date\": \"2023-08-30\",\n  \"filter_ids\": [\n    \"01BTGNYV6HRNK8K8VKZASZCFP0\",\n    \"01BTGNYV6HRNK8K8VKZASZCFP1\"\n  ],\n  \"report_options\": {\n    \"include_respondent_answers\": true\n  },\n  \"email_recipients\": [\n    \"y78d0r90-e174-4b05-5y67-8iof00018t17\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"7a5972ba-0825-4360-b852-fa2430e47034\",\n  \"object\": \"not_found_error\",\n  \"detail\": \"resource not found\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "14679d82-a90e-4b1d-a111-d8918fcd965a",
+              "name": "A request failed due to an internal error.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "demand",
+                    "accounts",
+                    ":account_id",
+                    "reports",
+                    ":report_type"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "report_type",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"filter\": \"project\",\n  \"start_date\": \"2023-08-01\",\n  \"end_date\": \"2023-08-30\",\n  \"filter_ids\": [\n    \"01BTGNYV6HRNK8K8VKZASZCFP0\",\n    \"01BTGNYV6HRNK8K8VKZASZCFP1\"\n  ],\n  \"report_options\": {\n    \"include_respondent_answers\": true\n  },\n  \"email_recipients\": [\n    \"y78d0r90-e174-4b05-5y67-8iof00018t17\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"d94b8bb2-a540-4a91-9c05-2aa3ae9a5e1e\",\n  \"object\": \"unexpected_internal_error\",\n  \"detail\": \"an internal error has led to the failure of this operation\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.cint.com/v1",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "8a089d7d-b36d-4590-b176-f6e95b98317f",
+    "name": "Demand Accounts Reports API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Cint's demand ordering API is REST oriented. It has predictable resource based URLs, accepts JSON-encoded request bodies, returns JSON-encoded responses, and uses standard HTTP response codes, authentication, and verbs. Error responses are also JSON-encoded and follow a standard format, providing a unique error ID and detailed information about what went wrong.\n\nAuthentication is handled via bearer tokens passed in the `Authorization` header. All requests must also include a `Cint-API-Version` header with a date in `YYYY-MM-DD` format to specify the desired API version. Depending on the version you use, endpoint behavior may differ as we improve our API with every version release.\n\nWhile many operations work on a single object per request, the demand ordering API also provides asynchronous batch endpoints for performing bulk updates efficiently on certain resources. For safety, `POST` requests support an `Idempotency-Key` header to allow for safe retries without accidentally performing the same operation twice.\n",
+      "type": "text/plain"
+    }
+  }
+}

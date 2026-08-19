@@ -1,0 +1,413 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Demand Accounts Reconciliations API",
+    "version": "2025-12-18"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Reconciliations",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List submitted reconciliations by account ID",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cint.com/v1/demand/accounts/:account_id/reconciliations",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The account's unique identifier."
+              },
+              {
+                "name": "name",
+                "value": "recon_file_name.csv",
+                "type": "query",
+                "description": "The name of the file containing requests to reconcile."
+              },
+              {
+                "name": "page_size",
+                "value": "15",
+                "type": "query",
+                "description": "A limit on the number of objects to be returned, between 1 and 100."
+              },
+              {
+                "name": "start_after",
+                "value": "bff6a669-a469-409d-8c94-dcf92258043a",
+                "type": "query",
+                "description": "Returns a list of objects after the provided pagination cursor, using the next_cursor from the previous response."
+              },
+              {
+                "name": "end_before",
+                "value": "7daa40ad-303b-40a2-89df-a9760400cde7",
+                "type": "query",
+                "description": "Returns a list of objects that come before the provided pagination cursor. This is used for navigating to a previous page."
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "The character string representing search based on reversal file status."
+              },
+              {
+                "name": "submitted_by_user_id",
+                "value": "",
+                "type": "query",
+                "description": "Uniquely identifies a user."
+              },
+              {
+                "name": "next_cursor",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "List submitted reconciliations by account ID"
+        },
+        {
+          "info": {
+            "name": "Submit a list of RIDs for positive or negative reconciliation",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.cint.com/v1/demand/accounts/:account_id/reconciliations",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              },
+              {
+                "name": "Idempotency-Key",
+                "value": ""
+              },
+              {
+                "name": "Content-Type",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The account's unique identifier."
+              },
+              {
+                "name": "name",
+                "value": "recon_file_name.csv",
+                "type": "query",
+                "description": "The name of the file containing requests to reconcile."
+              }
+            ]
+          },
+          "docs": "Submits a CSV file of respondent IDs and reason codes to be reconciled. This file can contain a mixture of positive and negative reconciliations. Reconciliation can be submitted when target group is in `Live` or `Paused` or `Complete` status.\n\nThis action creates an asynchronous job to process the file. A `202 Accepted` response indicates that the file has been successfully queued for processing. You can use the `request_id` returned in the response body to track the status of the job.\n\nKey beha"
+        },
+        {
+          "info": {
+            "name": "Retrieve a reconciliation request by ID",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cint.com/v1/demand/accounts/:account_id/reconciliations/:request_id",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The account's unique identifier."
+              },
+              {
+                "name": "request_id",
+                "value": "",
+                "type": "path",
+                "description": "Request ID path parameter that uniquely identifies a reconciliation record."
+              }
+            ]
+          },
+          "docs": "Retrieve a reconciliation request by ID"
+        },
+        {
+          "info": {
+            "name": "List target groups for a reconciliation submission",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cint.com/v1/demand/accounts/:account_id/reconciliations/:request_id/target-groups",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The account's unique identifier."
+              },
+              {
+                "name": "request_id",
+                "value": "",
+                "type": "path",
+                "description": "Request ID path parameter that uniquely identifies a reconciliation record."
+              },
+              {
+                "name": "page_size",
+                "value": "15",
+                "type": "query",
+                "description": "A limit on the number of objects to be returned, between 1 and 100."
+              },
+              {
+                "name": "start_after",
+                "value": "bff6a669-a469-409d-8c94-dcf92258043a",
+                "type": "query",
+                "description": "Returns a list of objects after the provided pagination cursor, using the next_cursor from the previous response."
+              }
+            ]
+          },
+          "docs": "List target groups for a reconciliation submission"
+        },
+        {
+          "info": {
+            "name": "Retrieve a target group's reconciliation details from a submission",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cint.com/v1/demand/accounts/:account_id/reconciliations/:request_id/target-groups/:target_group_id",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The account's unique identifier."
+              },
+              {
+                "name": "request_id",
+                "value": "",
+                "type": "path",
+                "description": "Request ID path parameter that uniquely identifies a reconciliation record."
+              },
+              {
+                "name": "target_group_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the target group, in ULID format."
+              }
+            ]
+          },
+          "docs": "Retrieve a target group's reconciliation details from a submission"
+        },
+        {
+          "info": {
+            "name": "Download a reconciliation result file",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cint.com/v1/demand/accounts/:account_id/reconciliations/:request_id/downloads/:download_type",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The account's unique identifier."
+              },
+              {
+                "name": "request_id",
+                "value": "",
+                "type": "path",
+                "description": "Request ID path parameter that uniquely identifies a reconciliation record."
+              },
+              {
+                "name": "download_type",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Download CSV files related to reconciliation submissions.\n\n| download type | generated for | Description |\n|---|---|---|\n| `submitted-rids` | All submission types | The original file submitted by the client. Available once the submission is successfully submitted. |\n| `expired-rids` | All submission types | A file containing all expired RIDs for a given submission. Available once the submission has completed processing. |\n| `invalid-rids` | All submission types | A file containing all invalid RI"
+        },
+        {
+          "info": {
+            "name": "List target groups eligible for reconciliation",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cint.com/v1/demand/accounts/:account_id/reconciliations/eligible-target-groups",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "page_size",
+                "value": "15",
+                "type": "query",
+                "description": "A limit on the number of objects to be returned, between 1 and 100."
+              },
+              {
+                "name": "start_after",
+                "value": "bff6a669-a469-409d-8c94-dcf92258043a",
+                "type": "query",
+                "description": "Returns a list of objects after the provided pagination cursor, using the next_cursor from the previous response."
+              },
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The account's unique identifier."
+              },
+              {
+                "name": "due_month",
+                "value": "",
+                "type": "query",
+                "description": "Due month. Can be either 'current_month' or 'next_month'. Defaults to 'current_month' if not provided."
+              },
+              {
+                "name": "name",
+                "value": "",
+                "type": "query",
+                "description": "Filter by target group name"
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "Filter by target group status"
+              },
+              {
+                "name": "project_name",
+                "value": "",
+                "type": "query",
+                "description": "Filter by project name"
+              },
+              {
+                "name": "project_manager_id",
+                "value": "",
+                "type": "query",
+                "description": "Filter by project manager ID"
+              }
+            ]
+          },
+          "docs": "List all target groups within the account that have sessions eligible for reconciliation within the current month by default. The API can return a list of target groups with sessions expiring next month by including 'next_month' in the query parameter."
+        },
+        {
+          "info": {
+            "name": "Submit a list of RIDs for positive reconciliation",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.cint.com/v1/demand/accounts/:account_id/projects/:project_id/reconciliations/completes",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              },
+              {
+                "name": "Idempotency-Key",
+                "value": ""
+              },
+              {
+                "name": "Content-Type",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The account's unique identifier."
+              },
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the project, in ULID format."
+              },
+              {
+                "name": "name",
+                "value": "recon_file_name.csv",
+                "type": "query",
+                "description": "The name of the file containing requests to reconcile."
+              }
+            ]
+          },
+          "docs": "Submits a CSV file of respondent IDs to be reconciled as completes for a specific project.\n\nThis action creates an asynchronous job to process the file. A `202 Accepted` response indicates that the file has been successfully queued for processing. You can use the `request_id` returned in the response body to track the status of the job.\n\nKey behaviors:\n\n* **File Format:** The file must be a CSV with no header row. Each line must contain a respondent ID (UUID).\n* **File Size:** The file can conta"
+        },
+        {
+          "info": {
+            "name": "List reconciliation reason codes and details",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cint.com/v1/demand/accounts/:account_id/reconciliations/reason-codes",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The account's unique identifier."
+              }
+            ]
+          },
+          "docs": "Lists all available reason codes and their descriptions. You can use the codes from this endpoint when preparing your reconciliation CSV file."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

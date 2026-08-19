@@ -1,0 +1,223 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Demand Accounts Profiling Templates API",
+    "version": "2025-12-18"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Profiling Templates",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List profile templates",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cint.com/v1/demand/accounts/:account_id/profiling-templates",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The account's unique identifier."
+              },
+              {
+                "name": "page_size",
+                "value": "15",
+                "type": "query",
+                "description": "A limit on the number of objects to be returned, between 1 and 100."
+              },
+              {
+                "name": "start_after",
+                "value": "bff6a669-a469-409d-8c94-dcf92258043a",
+                "type": "query",
+                "description": "Returns a list of objects after the provided pagination cursor, using the next_cursor from the previous response."
+              },
+              {
+                "name": "end_before",
+                "value": "7daa40ad-303b-40a2-89df-a9760400cde7",
+                "type": "query",
+                "description": "Returns a list of objects that come before the provided pagination cursor. This is used for navigating to a previous page."
+              },
+              {
+                "name": "order",
+                "value": "",
+                "type": "query",
+                "description": "The order in which to return the list objects.\nDefault is `desc`, which returns objects in descending created_at order.\n"
+              },
+              {
+                "name": "scope",
+                "value": "",
+                "type": "query",
+                "description": "Filter templates by scope. If scope is not provided, both global and account templates will be returned."
+              },
+              {
+                "name": "locales",
+                "value": "",
+                "type": "query",
+                "description": "Comma-separated list of locales to filter templates by. If multiple locales are provided,\ntemplates that match any of the locales will be returned (OR logic).\n\nExamples:\n- eng_us\n- eng_us,jpn_jp\n"
+              }
+            ]
+          },
+          "docs": "This endpoint returns a paginated list of your available profile templates. You can filter the list by scope and locale."
+        },
+        {
+          "info": {
+            "name": "Create a profile template",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.cint.com/v1/demand/accounts/:account_id/profiling-templates",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The account's unique identifier."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "This endpoint creates a new profile template with a specified name, scope, and set of questions."
+        },
+        {
+          "info": {
+            "name": "Get a profile template",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cint.com/v1/demand/accounts/:account_id/profiling-templates/:profile_template_id",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The account's unique identifier."
+              },
+              {
+                "name": "profile_template_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the profile template."
+              },
+              {
+                "name": "locales",
+                "value": "",
+                "type": "query",
+                "description": "Comma-separated list of locales to filter templates by. If multiple locales are provided,\ntemplates that match any of the locales will be returned (OR logic).\n\nExamples:\n- eng_us\n- eng_us,jpn_jp\n"
+              }
+            ]
+          },
+          "docs": "This endpoint returns a single profile template, specified by its unique `id`."
+        },
+        {
+          "info": {
+            "name": "Edit a profile template",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.cint.com/v1/demand/accounts/:account_id/profiling-templates/:profile_template_id",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The account's unique identifier."
+              },
+              {
+                "name": "profile_template_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the profile template."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "This endpoint updates an existing profile template. You can modify its name, scope, locales, and questions."
+        },
+        {
+          "info": {
+            "name": "Delete a profile template",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.cint.com/v1/demand/accounts/:account_id/profiling-templates/:profile_template_id",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The account's unique identifier."
+              },
+              {
+                "name": "profile_template_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the profile template."
+              },
+              {
+                "name": "locales",
+                "value": "",
+                "type": "query",
+                "description": "Comma-separated list of locales to filter templates by. If multiple locales are provided,\ntemplates that match any of the locales will be returned (OR logic).\n\nExamples:\n- eng_us\n- eng_us,jpn_jp\n"
+              }
+            ]
+          },
+          "docs": "This endpoint permanently deletes a profile template.\n\n:::danger Destructive Action\nThis operation cannot be undone.\n:::\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

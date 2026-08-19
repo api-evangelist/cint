@@ -1,0 +1,120 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Demand Accounts Profiling Library API",
+    "version": "2025-12-18"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Profiling Library",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Lists all available questions, answers, and conditions.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cint.com/v1/demand/accounts/:account_id/questions-translation",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The account's unique identifier."
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "query",
+                "description": "List of comma separated question IDs."
+              },
+              {
+                "name": "locale",
+                "value": "",
+                "type": "query",
+                "description": "Locale of target group in <language 1st 3 chars>_<country 2 char abbreviation> format."
+              },
+              {
+                "name": "translation_language",
+                "value": "",
+                "type": "query",
+                "description": "The ISO 639-2 (3-letter) code for the language to use for the `description_translated` and `text_translated` fields."
+              },
+              {
+                "name": "query",
+                "value": "",
+                "type": "query",
+                "description": "Text filter on the results set."
+              },
+              {
+                "name": "allow_custom_quals",
+                "value": "",
+                "type": "query",
+                "description": "If `true`, the response will include your account's custom qualifications in addition to the standard ones."
+              },
+              {
+                "name": "only_custom_quals",
+                "value": "",
+                "type": "query",
+                "description": "If `true`, the response will only include your account's custom qualifications."
+              },
+              {
+                "name": "end_before",
+                "value": "7daa40ad-303b-40a2-89df-a9760400cde7",
+                "type": "query",
+                "description": "Returns a list of objects that come before the provided pagination cursor. This is used for navigating to a previous page."
+              },
+              {
+                "name": "start_after",
+                "value": "bff6a669-a469-409d-8c94-dcf92258043a",
+                "type": "query",
+                "description": "Returns a list of objects after the provided pagination cursor, using the next_cursor from the previous response."
+              },
+              {
+                "name": "page_size",
+                "value": "15",
+                "type": "query",
+                "description": "A limit on the number of objects to be returned, between 1 and 100."
+              }
+            ]
+          },
+          "docs": "Lists the available standard and account-specific profiling questions you can use to define your target audience. This endpoint provides the `question_id` and `option` IDs required for building the `profiling` object in other API calls, such as when creating a target group or calculating feasibility.\n\nKey behaviors:\n\n* **Filtering:** You can filter the list by providing a comma-separated list of question `id`s, or perform a text search across questions and answers using the `query` parameter. **"
+        },
+        {
+          "info": {
+            "name": "Lists all available question categories",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cint.com/v1/demand/questions/categories",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              }
+            ]
+          },
+          "docs": "Lists all available categories for profiling questions. You can use these categories to help organize and discover relevant questions when building a target group."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,875 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Demand Accounts Respondent Exclusions API",
+    "version": "2025-12-18"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Respondent Exclusions",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Lists exclusion groups for an account",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cint.com/v1/demand/accounts/:account_id/exclusion-groups",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The account's unique identifier."
+              },
+              {
+                "name": "page_size",
+                "value": "100",
+                "type": "query",
+                "description": "A limit on the number of objects to be returned, between 1 and 1000."
+              },
+              {
+                "name": "start_after",
+                "value": "bff6a669-a469-409d-8c94-dcf92258043a",
+                "type": "query",
+                "description": "Returns a list of objects after the provided pagination cursor, using the next_cursor from the previous response."
+              },
+              {
+                "name": "end_before",
+                "value": "7daa40ad-303b-40a2-89df-a9760400cde7",
+                "type": "query",
+                "description": "Returns a list of objects that come before the provided pagination cursor. This is used for navigating to a previous page."
+              }
+            ]
+          },
+          "docs": "Lists the exclusion groups for your account, ordered by creation date. Use exclusion groups to prevent respondents from participating in multiple target groups, even across different projects."
+        },
+        {
+          "info": {
+            "name": "Creates an exclusion group",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.cint.com/v1/demand/accounts/:account_id/exclusion-groups",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The account's unique identifier."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a new exclusion group for your account and returns its unique ID.\nKey behaviors:\n* You can create multiple exclusion groups with the same tag. * A target group can belong to multiple exclusion groups. * An exclusion group can contain a maximum of 100 target groups."
+        },
+        {
+          "info": {
+            "name": "Retrieves exclusion group by ID",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cint.com/v1/demand/accounts/:account_id/exclusion-groups/:exclusion_group_id",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The account's unique identifier."
+              },
+              {
+                "name": "exclusion_group_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the exclusion group, in ULID format."
+              }
+            ]
+          },
+          "docs": "Retrieves the details of a specific exclusion group, including its tag, description, and creation date."
+        },
+        {
+          "info": {
+            "name": "Updates exclusion group by ID",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.cint.com/v1/demand/accounts/:account_id/exclusion-groups/:exclusion_group_id",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The account's unique identifier."
+              },
+              {
+                "name": "exclusion_group_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the exclusion group, in ULID format."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates the tag or description for a specific exclusion group."
+        },
+        {
+          "info": {
+            "name": "Delete an Exclusion Group by its ID if it has no associated Target Groups",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.cint.com/v1/demand/accounts/:account_id/exclusion-groups/:exclusion_group_id",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The account's unique identifier."
+              },
+              {
+                "name": "exclusion_group_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the exclusion group, in ULID format."
+              }
+            ]
+          },
+          "docs": "Deletes a specific exclusion group. **Prerequisite:** You must remove all target groups from an exclusion group before you can delete it. Attempting to delete a group that still contains target groups will result in a failed request with a conflict error."
+        },
+        {
+          "info": {
+            "name": "Lists target groups in an exclusion group",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cint.com/v1/demand/accounts/:account_id/exclusion-groups/:exclusion_group_id/target-groups",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The account's unique identifier."
+              },
+              {
+                "name": "exclusion_group_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the exclusion group, in ULID format."
+              },
+              {
+                "name": "page_size",
+                "value": "100",
+                "type": "query",
+                "description": "A limit on the number of objects to be returned, between 1 and 1000."
+              },
+              {
+                "name": "start_after",
+                "value": "bff6a669-a469-409d-8c94-dcf92258043a",
+                "type": "query",
+                "description": "Returns a list of objects after the provided pagination cursor, using the next_cursor from the previous response."
+              },
+              {
+                "name": "end_before",
+                "value": "7daa40ad-303b-40a2-89df-a9760400cde7",
+                "type": "query",
+                "description": "Returns a list of objects that come before the provided pagination cursor. This is used for navigating to a previous page."
+              }
+            ]
+          },
+          "docs": "Lists the target groups that belong to a specific exclusion group. Respondents who complete one target group in this list will be excluded from participating in any of the others. **An exclusion group can contain a maximum of 100 target groups.**"
+        },
+        {
+          "info": {
+            "name": "Add Target Groups to an Exclusion Group",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.cint.com/v1/demand/accounts/:account_id/exclusion-groups/:exclusion_group_id/target-groups/add",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The account's unique identifier."
+              },
+              {
+                "name": "exclusion_group_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the exclusion group, in ULID format."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Adds one or more target groups to an exclusion group. Target groups can be from any project within your account. **Key behaviors** * An exclusion group can contain a maximum of 100 target groups. * Adding a target group to this list only affects the exclusion status for **future** respondents; it does not apply retroactively. "
+        },
+        {
+          "info": {
+            "name": "Remove Target Groups from an Exclusion Group",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.cint.com/v1/demand/accounts/:account_id/exclusion-groups/:exclusion_group_id/target-groups/remove",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The account's unique identifier."
+              },
+              {
+                "name": "exclusion_group_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the exclusion group, in ULID format."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Removes one or more target groups from an exclusion group. **Important behavior:** Removing a target group from this list only affects the exclusion status for **future** respondents; it does not apply retroactively."
+        },
+        {
+          "info": {
+            "name": "Update Target Group Project Exclusion Status",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.cint.com/v1/demand/accounts/:account_id/projects/:project_id/exclusion-policies",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The account's unique identifier."
+              },
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the project, in ULID format."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates the project-level exclusion status for multiple target groups in a single request. When you enable project exclusion for a target group, respondents who complete it will be prevented from entering any other target group within the same project that also has this setting enabled."
+        },
+        {
+          "info": {
+            "name": "Lists project exclusion statuses for target groups",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cint.com/v1/demand/accounts/:account_id/projects/:project_id/exclusions",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The account's unique identifier."
+              },
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the project, in ULID format."
+              }
+            ]
+          },
+          "docs": "Lists the project-level exclusion status for all target groups within a project. This allows you to see which target groups will exclude respondents from one another at the project level."
+        },
+        {
+          "info": {
+            "name": "Retrieves the project exclusion status for a target group",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cint.com/v1/demand/accounts/:account_id/projects/:project_id/target-groups/:target_group_id/exclusion-policy",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The account's unique identifier."
+              },
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the project, in ULID format."
+              },
+              {
+                "name": "target_group_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the target group, in ULID format."
+              }
+            ]
+          },
+          "docs": "Retrieves the project-level exclusion status for a single target group. If the `project_exclusion_enabled` field is `true`, respondents who complete any other target group in the same project (that also has this setting enabled) will be excluded from this one."
+        },
+        {
+          "info": {
+            "name": "Lists excluded Access Respondent GUIDs for a target group",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cint.com/v1/demand/accounts/:account_id/projects/:project_id/target-groups/:target_group_id/exclusions/access-respondent-guid/paginated",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The account's unique identifier."
+              },
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the project, in ULID format."
+              },
+              {
+                "name": "target_group_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the target group, in ULID format."
+              },
+              {
+                "name": "page_size",
+                "value": "100",
+                "type": "query",
+                "description": "A limit on the number of objects to be returned, between 1 and 1000."
+              },
+              {
+                "name": "start_after",
+                "value": "bff6a669-a469-409d-8c94-dcf92258043a",
+                "type": "query",
+                "description": "Returns a list of objects after the provided pagination cursor, using the next_cursor from the previous response."
+              },
+              {
+                "name": "end_before",
+                "value": "7daa40ad-303b-40a2-89df-a9760400cde7",
+                "type": "query",
+                "description": "Returns a list of objects that come before the provided pagination cursor. This is used for navigating to a previous page."
+              }
+            ]
+          },
+          "docs": "Lists the Access Respondent GUIDs of all respondents who are excluded from this target group. This exclusion can be due to their participation in another target group within the same project or within a shared exclusion group."
+        },
+        {
+          "info": {
+            "name": "Creates a job to remove all respondent exclusions by type",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.cint.com/v1/demand/accounts/:account_id/projects/:project_id/target-groups/:target_group_id/exclusions/jobs/remove-all-respondents",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The account's unique identifier."
+              },
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the project, in ULID format."
+              },
+              {
+                "name": "target_group_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the target group, in ULID format."
+              },
+              {
+                "name": "entity_type",
+                "value": "",
+                "type": "query",
+                "description": "The entity type of the identifiers included in the file."
+              }
+            ]
+          },
+          "docs": "Creates a job to remove all the specified exclusion respondents for the specified Target Group ID. This returns an identifier that can retrieve the job execution information, including the status.\nOnly one job can run at a time for a Target Group. If another job is already running before the endpoint is called for the same Target Group, a conflict response will be returned.\nWhile execution time may vary, removing 10,000 respondents typically takes between 3 and 5 minutes."
+        },
+        {
+          "info": {
+            "name": "Retrieve remove all respondent exclusions job status",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cint.com/v1/demand/accounts/:account_id/projects/:project_id/target-groups/:target_group_id/exclusions/jobs/remove-all-respondents/:job_id",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The account's unique identifier."
+              },
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the project, in ULID format."
+              },
+              {
+                "name": "target_group_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the target group, in ULID format."
+              },
+              {
+                "name": "job_id",
+                "value": "",
+                "type": "path",
+                "description": "The character string representing a unique job ID."
+              }
+            ]
+          },
+          "docs": "Gets the status of a job within the target group to remove all the respondent ID based exclusions on a target group. Each job will only remove one type of ID. You should be checking this endpoint regularly to see the status of your work. While execution time may vary, removing 10,000 respondents typically takes between 3 and 5 minutes. You should be wary while performing this action whilst the target group is live as the order of operations will mean that there will be a time with no active Resp"
+        },
+        {
+          "info": {
+            "name": "Creates a job to upload a file of respondent exclusions",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.cint.com/v1/demand/accounts/:account_id/projects/:project_id/target-groups/:target_group_id/exclusions/jobs/upload-respondents-by-file",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              },
+              {
+                "name": "Content-Type",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The account's unique identifier."
+              },
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the project, in ULID format."
+              },
+              {
+                "name": "target_group_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the target group, in ULID format."
+              },
+              {
+                "name": "entity_type",
+                "value": "",
+                "type": "query",
+                "description": "The entity type of the identifiers included in the file."
+              }
+            ],
+            "body": {
+              "type": "multipart-form",
+              "data": [
+                {
+                  "name": "file",
+                  "type": "text",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "docs": "Creates a job to upload new respondent exclusions by file for the specified Target Group ID. The new IDs will be added to the existing ones. The total number of IDs, both existing and new, must not exceed 100,000 IDs. This will return an identifier that can be used to retrieve the job execution information, including the status. Only one job can run at a time for a Target Group. If another job is already running before the endpoint is called for the same Target Group, a conflict response will be"
+        },
+        {
+          "info": {
+            "name": "Retrieve RID upload job status",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cint.com/v1/demand/accounts/:account_id/projects/:project_id/target-groups/:target_group_id/exclusions/jobs/upload-respondents-by-file/:job_id",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The account's unique identifier."
+              },
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the project, in ULID format."
+              },
+              {
+                "name": "target_group_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the target group, in ULID format."
+              },
+              {
+                "name": "job_id",
+                "value": "",
+                "type": "path",
+                "description": "The character string representing a unique job ID."
+              }
+            ]
+          },
+          "docs": "Gets the status of a job within the target group to update respondent ID based exclusions, of any type of ID. You should be checking this endpoint regularly to see the status of your work. While execution time may vary, adding 10,000 respondents typically takes between 3 and 5 minutes."
+        },
+        {
+          "info": {
+            "name": "Retrieves the number of currently excluded response IDs (RSID) on a target group.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cint.com/v1/demand/accounts/:account_id/projects/:project_id/target-groups/:target_group_id/exclusions/overview",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The account's unique identifier."
+              },
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the project, in ULID format."
+              },
+              {
+                "name": "target_group_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the target group, in ULID format."
+              }
+            ]
+          },
+          "docs": "Retrieves the number of currently excluded response IDs (RSID) on a target group - both response ID and GUID. This is useful to understand how close you are to any limits or the effect of deduplication or other asynchronous operations."
+        },
+        {
+          "info": {
+            "name": "Lists excluded Respondent IDs (RSIDs) for a target group",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cint.com/v1/demand/accounts/:account_id/projects/:project_id/target-groups/:target_group_id/exclusions/rsid/paginated",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The account's unique identifier."
+              },
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the project, in ULID format."
+              },
+              {
+                "name": "target_group_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the target group, in ULID format."
+              },
+              {
+                "name": "page_size",
+                "value": "100",
+                "type": "query",
+                "description": "A limit on the number of objects to be returned, between 1 and 1000."
+              },
+              {
+                "name": "start_after",
+                "value": "bff6a669-a469-409d-8c94-dcf92258043a",
+                "type": "query",
+                "description": "Returns a list of objects after the provided pagination cursor, using the next_cursor from the previous response."
+              },
+              {
+                "name": "end_before",
+                "value": "7daa40ad-303b-40a2-89df-a9760400cde7",
+                "type": "query",
+                "description": "Returns a list of objects that come before the provided pagination cursor. This is used for navigating to a previous page."
+              }
+            ]
+          },
+          "docs": "Lists the Respondent IDs (RSIDs) of all respondents who are excluded from this target group. This exclusion can be due to their participation in another target group within the same project, a shared exclusion group, or a direct file upload."
+        },
+        {
+          "info": {
+            "name": "Lists the exclusion groups of a specific target group",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cint.com/v1/demand/accounts/:account_id/target-groups/:target_group_id/exclusion-groups",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The account's unique identifier."
+              },
+              {
+                "name": "target_group_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the target group, in ULID format."
+              },
+              {
+                "name": "page_size",
+                "value": "15",
+                "type": "query",
+                "description": "A limit on the number of objects to be returned, between 1 and 100."
+              },
+              {
+                "name": "start_after",
+                "value": "bff6a669-a469-409d-8c94-dcf92258043a",
+                "type": "query",
+                "description": "Returns a list of objects after the provided pagination cursor, using the next_cursor from the previous response."
+              },
+              {
+                "name": "end_before",
+                "value": "7daa40ad-303b-40a2-89df-a9760400cde7",
+                "type": "query",
+                "description": "Returns a list of objects that come before the provided pagination cursor. This is used for navigating to a previous page."
+              }
+            ]
+          },
+          "docs": "Lists all exclusion groups that a specific target group is a member of, ordered by creation date. When a respondent attempts to enter this target group, they will be checked against all other target groups in all of the exclusion groups listed here."
+        },
+        {
+          "info": {
+            "name": "Retrieves respondent activity exclusions for a target group",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cint.com/v1/demand/accounts/:account_id/projects/:project_id/target-groups/:target_group_id/respondent-activity-exclusions",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The account's unique identifier."
+              },
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the project, in ULID format."
+              },
+              {
+                "name": "target_group_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the target group, in ULID format."
+              }
+            ]
+          },
+          "docs": "Retrieves the list of target groups and/or projects whose respondents are to be excluded from taking the survey associated with the specified `target_group_id`.\n"
+        },
+        {
+          "info": {
+            "name": "Set the respondent activity exclusions for a target group",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.cint.com/v1/demand/accounts/:account_id/projects/:project_id/target-groups/:target_group_id/respondent-activity-exclusions",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The account's unique identifier."
+              },
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the project, in ULID format."
+              },
+              {
+                "name": "target_group_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the target group, in ULID format."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Set the list of target groups and/or projects whose respondents you want to exclude from the specified `target_group_id`. \n\nThe request body specifies the projects and target groups whose respondent activity should be excluded from the target group identified in the path.\nEach exclusion item can optionally specify a `duration` (ISO-8601 period format, date-based only, e.g. `P90D` for 90 days) controlling how far back to look for respondent activity. Must be between 1 and 396 days. A `duration` c"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

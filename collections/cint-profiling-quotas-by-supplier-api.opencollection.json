@@ -1,0 +1,96 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Demand Accounts Profiling Quotas By Supplier API",
+    "version": "2025-12-18"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Profiling Quotas By Supplier",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Retrieves the supplier distribution for a profile",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cint.com/v1/demand/accounts/:account_id/projects/:project_id/target-groups/:target_group_id/profiles/:profile_id/supplier-quota-distribution",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The account's unique identifier."
+              },
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the project, in ULID format."
+              },
+              {
+                "name": "target_group_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the target group, in ULID format."
+              },
+              {
+                "name": "profile_id",
+                "value": "",
+                "type": "path",
+                "description": "The character string representing a unique profile ID (ULID format)."
+              }
+            ]
+          },
+          "docs": "Retrieves a profile's quota structure, including the projected distribution of completes across different suppliers based on historical data. You can use this data to understand how your quotas are likely to be filled."
+        },
+        {
+          "info": {
+            "name": "Calculates the supplier distribution for a new target group",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.cint.com/v1/demand/accounts/:account_id/supplier-quota-distribution/draft",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The account's unique identifier."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Calculates the projected distribution of completes across different suppliers for a new, unsaved target group configuration.\n\nYou can use this endpoint to understand how your proposed quotas are likely to be filled by different panel sources.\n\n**Note:** Providing supplier allocation details in the request is not yet supported but is planned for a future release.\n\nThe API automatically removes duplicate open-ended values in this request before calculating the distribution, but rejects duplicates "
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

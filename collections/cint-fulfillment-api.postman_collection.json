@@ -1,0 +1,492 @@
+{
+  "item": [
+    {
+      "id": "f5c3c711-7002-4560-bcb9-12e7bc5f20c2",
+      "name": "Fulfillment",
+      "description": {
+        "content": ":::info\nFulfillment endpoints are for S2S enabled clients only.\n:::\nEndpoints for managing respondent statuses while a target group is fielding.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "e1a3d91a-bb58-4860-9bf5-2065a600d3fb",
+          "name": "Retrieve a respondent's session status",
+          "request": {
+            "name": "Retrieve a respondent's session status",
+            "description": {
+              "content": "Retrieves the current status of a session that has taken a survey for your target group.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "fulfillment",
+                "respondents",
+                ":RID"
+              ],
+              "host": [
+                "{{fulfillment-respondents-RID-Url}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "RID",
+                  "description": "(Required) The session ID of the respondent routed to your survey. \nThe ID is passed in the URL path as a parameter and is of type UUID4.\n"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "75bbe5e7-ad84-448c-a0eb-6943f90ffb10",
+              "name": "Retrieving the respondent status was successful.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "fulfillment",
+                    "respondents",
+                    ":RID"
+                  ],
+                  "host": [
+                    "{{fulfillment-respondents-RID-Url}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "RID",
+                      "description": "(Required) The session ID of the respondent routed to your survey. \nThe ID is passed in the URL path as a parameter and is of type UUID4.\n"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) API Key for authentication.",
+                    "key": "Authorization",
+                    "value": "<api_key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"6780395e-94fa-1eb7-612c-d2e19af42758\",\n  \"status\": 1,\n  \"links\": [\n    {\n      \"href\": \"https://goo.gl/forms/yukKhXoZOxzw8p2w2?&fedResponseID=6780395e-94fa-1eb7-612c-d2e19af42758\"\n    },\n    {\n      \"href\": \"https://goo.gl/forms/yukKhXoZOxzw8p2w2?&fedResponseID=6780395e-94fa-1eb7-612c-d2e19af42758\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "09360f8e-5583-45c7-818c-6a7653ab1834",
+              "name": "respondent status could not be found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "fulfillment",
+                    "respondents",
+                    ":RID"
+                  ],
+                  "host": [
+                    "{{fulfillment-respondents-RID-Url}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "RID",
+                      "description": "(Required) The session ID of the respondent routed to your survey. \nThe ID is passed in the URL path as a parameter and is of type UUID4.\n"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) API Key for authentication.",
+                    "key": "Authorization",
+                    "value": "<api_key>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "326aa984-208a-46bb-8ebb-262f51c2d73d",
+              "name": "An error occurred while processing the request.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "fulfillment",
+                    "respondents",
+                    ":RID"
+                  ],
+                  "host": [
+                    "{{fulfillment-respondents-RID-Url}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "RID",
+                      "description": "(Required) The session ID of the respondent routed to your survey. \nThe ID is passed in the URL path as a parameter and is of type UUID4.\n"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) API Key for authentication.",
+                    "key": "Authorization",
+                    "value": "<api_key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"6780395e-94fa-1eb7-612c-d2e19af42758\",\n  \"status\": 5\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "0b27c22f-618e-4010-a9d6-5e52ffcafa52",
+          "name": "Update a respondent's status",
+          "request": {
+            "name": "Update a respondent's status",
+            "description": {
+              "content": "Updates the respondent's status defined by the status code in the body of the request.\n\nThe following table contains the possible codes that can be supplied in the body's `status` field: \n\n| Cint Status Definition | S2S Code |\n| :---- | :---- |\n| Complete | **5** |\n| Screenout | **2** |\n| Quality Terminate | **4** |\n| Quota Full | **3** |\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "fulfillment",
+                "respondents",
+                "transition"
+              ],
+              "host": [
+                "{{fulfillment-respondents-transition-Url}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": \"<string>\",\n  \"status\": \"<integer>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "b9119002-afe7-4d71-a2b7-4e972d1960c0",
+              "name": "The respondent's status was successfully updated.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "fulfillment",
+                    "respondents",
+                    "transition"
+                  ],
+                  "host": [
+                    "{{fulfillment-respondents-transition-Url}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) API Key for authentication.",
+                    "key": "Authorization",
+                    "value": "<api_key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"id\": \"6780395e-94fa-1eb7-612c-d2e19af42758\",\n  \"status\": 5\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"6780395e-94fa-1eb7-612c-d2e19af42758\",\n  \"status\": 5\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f28d5ed0-8154-4339-bedf-14c68425daa3",
+              "name": "The respondent status could not be found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "fulfillment",
+                    "respondents",
+                    "transition"
+                  ],
+                  "host": [
+                    "{{fulfillment-respondents-transition-Url}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) API Key for authentication.",
+                    "key": "Authorization",
+                    "value": "<api_key>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"id\": \"6780395e-94fa-1eb7-612c-d2e19af42758\",\n  \"status\": 5\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "4ddf3a0b-8dfc-4e2f-a745-0b5e7668cb81",
+              "name": "An error occurred while processing the request.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "fulfillment",
+                    "respondents",
+                    "transition"
+                  ],
+                  "host": [
+                    "{{fulfillment-respondents-transition-Url}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) API Key for authentication.",
+                    "key": "Authorization",
+                    "value": "<api_key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"id\": \"6780395e-94fa-1eb7-612c-d2e19af42758\",\n  \"status\": 5\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"6780395e-94fa-1eb7-612c-d2e19af42758\",\n  \"status\": 5\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.cint.com/v1",
+      "key": "baseUrl"
+    },
+    {
+      "type": "string",
+      "value": "https://s2s.cint.com",
+      "key": "fulfillment-respondents-RID-Url"
+    },
+    {
+      "type": "string",
+      "value": "https://s2s.cint.com",
+      "key": "fulfillment-respondents-transition-Url"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "1995e888-defc-4b7e-ab89-d3da0a31aef0",
+    "name": "Demand Accounts Fulfillment API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Cint's demand ordering API is REST oriented. It has predictable resource based URLs, accepts JSON-encoded request bodies, returns JSON-encoded responses, and uses standard HTTP response codes, authentication, and verbs. Error responses are also JSON-encoded and follow a standard format, providing a unique error ID and detailed information about what went wrong.\n\nAuthentication is handled via bearer tokens passed in the `Authorization` header. All requests must also include a `Cint-API-Version` header with a date in `YYYY-MM-DD` format to specify the desired API version. Depending on the version you use, endpoint behavior may differ as we improve our API with every version release.\n\nWhile many operations work on a single object per request, the demand ordering API also provides asynchronous batch endpoints for performing bulk updates efficiently on certain resources. For safety, `POST` requests support an `Idempotency-Key` header to allow for safe retries without accidentally performing the same operation twice.\n",
+      "type": "text/plain"
+    }
+  }
+}

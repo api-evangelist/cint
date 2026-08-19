@@ -1,0 +1,225 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Demand Accounts Target Group Allocations API",
+    "version": "2025-12-18"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Target Group Allocations",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Retrieves an account allocation template",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cint.com/v1/demand/accounts/:account_id/business-units/:business_unit_id/account-allocation-templates/:template_id",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The account's unique identifier."
+              },
+              {
+                "name": "business_unit_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier for the business unit."
+              },
+              {
+                "name": "template_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the template."
+              },
+              {
+                "name": "locale",
+                "value": "jpn_jp",
+                "type": "query",
+                "description": "Filter results by the specified locale code."
+              }
+            ]
+          },
+          "docs": "This endpoint returns a specific account allocation template, which defines supplier rules for a given business unit and locale.\nThe template includes rules for `open_exchange_allocations` and lists any `blocked_suppliers` from private exchanges if the business unit has private deals.\n"
+        },
+        {
+          "info": {
+            "name": "Fetch a global allocation template for a business unit and locale",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cint.com/v1/demand/accounts/:account_id/business-units/:business_unit_id/global-allocation-templates/:template_id",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The account's unique identifier."
+              },
+              {
+                "name": "business_unit_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier for the business unit."
+              },
+              {
+                "name": "template_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the template."
+              },
+              {
+                "name": "locale",
+                "value": "jpn_jp",
+                "type": "query",
+                "description": "Filter results by the specified locale code."
+              }
+            ]
+          },
+          "docs": "This endpoint will return a global allocation specification template based on a template id, business unit id and locale.  This specification are set for the open exchange suppliers and will also return all the private exchange suppliers within the blocked suppliers group, if the business unit have any private deals."
+        },
+        {
+          "info": {
+            "name": "Get the system allocation template",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cint.com/v1/demand/accounts/:account_id/business-units/:business_unit_id/system-allocation-template",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The account's unique identifier."
+              },
+              {
+                "name": "business_unit_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier for the business unit."
+              },
+              {
+                "name": "locale",
+                "value": "jpn_jp",
+                "type": "query",
+                "description": "Filter results by the specified locale code."
+              }
+            ]
+          },
+          "docs": "This endpoint returns the system's default allocation template for a given business unit and locale. This template acts as the ultimate fallback if no specific account or global template is defined. The response includes rules for `open_exchange_allocations` and lists any` blocked_suppliers` from private exchanges."
+        },
+        {
+          "info": {
+            "name": "Get target group allocations",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cint.com/v1/demand/accounts/:account_id/projects/:project_id/target-groups/:target_group_id/allocation-specification",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The account's unique identifier."
+              },
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the project, in ULID format."
+              },
+              {
+                "name": "target_group_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the target group, in ULID format."
+              }
+            ]
+          },
+          "docs": "This endpoint returns the supply allocation for a target group. You can use it to see which suppliers are blocked, how suppliers are grouped, and their minimum and maximum allocation percentages."
+        },
+        {
+          "info": {
+            "name": "Updates target group allocations",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.cint.com/v1/demand/accounts/:account_id/projects/:project_id/target-groups/:target_group_id/allocation-specification",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The account's unique identifier."
+              },
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the project, in ULID format."
+              },
+              {
+                "name": "target_group_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the target group, in ULID format."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "This endpoint updates the supply allocation for a target group. You can set which suppliers are blocked, define supplier groups, and configure their minimum and maximum allocation percentages."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

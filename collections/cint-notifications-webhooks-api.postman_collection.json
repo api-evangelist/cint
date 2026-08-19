@@ -1,0 +1,3649 @@
+{
+  "item": [
+    {
+      "id": "caa227f2-5612-4a74-b3bf-00a427e1190b",
+      "name": "Notifications Webhooks",
+      "description": {
+        "content": "Endpoints for managing your Notifications Webhooks.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "9edd9bb6-01d5-40c7-8826-1f33b96d0278",
+          "name": "Lists all webhooks for an account",
+          "request": {
+            "name": "Lists all webhooks for an account",
+            "description": {
+              "content": "Lists all of the webhook subscriptions that have been configured for your account.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "accounts",
+                ":account_id",
+                "webhooks"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "page_size",
+                  "value": "10",
+                  "description": "A limit on the number of objects to be returned, between 1 and 100."
+                },
+                {
+                  "disabled": false,
+                  "key": "start_after",
+                  "value": "<string>",
+                  "description": "Returns a list of objects after the provided pagination cursor, using the next_cursor from the previous response."
+                },
+                {
+                  "disabled": false,
+                  "key": "end_before",
+                  "value": "<string>",
+                  "description": "Returns a list of objects that come before the provided pagination cursor. This is used for navigating to a previous page."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "account_id",
+                  "description": "(Required) The account's unique identifier."
+                }
+              ]
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                "key": "Cint-API-Version",
+                "value": "<string>"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "a92bd122-0c8f-4fd3-91b4-d413d1b3d6eb",
+              "name": "A list of webhooks was retrieved successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":account_id",
+                    "webhooks"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page_size",
+                      "value": "15"
+                    },
+                    {
+                      "key": "start_after",
+                      "value": "bff6a669-a469-409d-8c94-dcf92258043a"
+                    },
+                    {
+                      "key": "end_before",
+                      "value": "7daa40ad-303b-40a2-89df-a9760400cde7"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"webhooks\": [\n    {\n      \"id\": \"e8e705b9-ef5a-437c-873a-4f49a679f802\",\n      \"url\": \"https://example.com/target-group-updated-webhook\",\n      \"events\": [\n        \"target-group-updated\"\n      ],\n      \"created_at\": \"2023-01-01T23:00:00.000Z\",\n      \"updated_at\": \"2023-01-01T23:00:00.000Z\"\n    },\n    {\n      \"id\": \"3fda1b8d-bf76-4f38-bddb-8734cbec553f\",\n      \"url\": \"https://example.com/quota-fill-registered-webhook\",\n      \"events\": [\n        \"quota-fill-registered\"\n      ],\n      \"created_at\": \"2023-01-01T23:00:00.000Z\",\n      \"updated_at\": \"2023-01-01T23:00:00.000Z\"\n    }\n  ],\n  \"has_more\": true\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "51451d44-0010-4026-9270-1bb19c90d0c0",
+              "name": "A request is not valid and can't be processed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":account_id",
+                    "webhooks"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page_size",
+                      "value": "15"
+                    },
+                    {
+                      "key": "start_after",
+                      "value": "bff6a669-a469-409d-8c94-dcf92258043a"
+                    },
+                    {
+                      "key": "end_before",
+                      "value": "7daa40ad-303b-40a2-89df-a9760400cde7"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"9e278238-d011-4e05-8327-1ce1d5d26254\",\n  \"object\": \"bad_request_error\",\n  \"detail\": \"Expected field 'foo' is missing.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "1c8f5b01-feb3-4418-8c62-e136047e6b02",
+              "name": "A request is unauthorized.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":account_id",
+                    "webhooks"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page_size",
+                      "value": "15"
+                    },
+                    {
+                      "key": "start_after",
+                      "value": "bff6a669-a469-409d-8c94-dcf92258043a"
+                    },
+                    {
+                      "key": "end_before",
+                      "value": "7daa40ad-303b-40a2-89df-a9760400cde7"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"1dcf0f40-f0d1-4cf6-8c00-c3d019d32faf\",\n  \"object\": \"authorization_error\",\n  \"detail\": \"no valid authorization provided for this operation\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "404dd754-2e0c-41c1-a313-77dab36ee754",
+              "name": "A requested is forbidden.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":account_id",
+                    "webhooks"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page_size",
+                      "value": "15"
+                    },
+                    {
+                      "key": "start_after",
+                      "value": "bff6a669-a469-409d-8c94-dcf92258043a"
+                    },
+                    {
+                      "key": "end_before",
+                      "value": "7daa40ad-303b-40a2-89df-a9760400cde7"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"fe68cdd2-ee87-4dbf-8950-63c5cbca94c7\",\n  \"object\": \"authorization_error\",\n  \"detail\": \"you don't have the right permissions to perform this operation\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "921b1318-9165-43a8-8a5a-9f69fb825b0c",
+              "name": "A request failed due to an internal error.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":account_id",
+                    "webhooks"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page_size",
+                      "value": "15"
+                    },
+                    {
+                      "key": "start_after",
+                      "value": "bff6a669-a469-409d-8c94-dcf92258043a"
+                    },
+                    {
+                      "key": "end_before",
+                      "value": "7daa40ad-303b-40a2-89df-a9760400cde7"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"d94b8bb2-a540-4a91-9c05-2aa3ae9a5e1e\",\n  \"object\": \"unexpected_internal_error\",\n  \"detail\": \"an internal error has led to the failure of this operation\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "3c25f60a-af92-43dd-8c49-a7b42232de04",
+          "name": "Creates a new webhook for an account",
+          "request": {
+            "name": "Creates a new webhook for an account",
+            "description": {
+              "content": "Creates a new webhook subscription for an account. This allows your application to receive real-time notifications for specific events.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "accounts",
+                ":account_id",
+                "webhooks"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "account_id",
+                  "description": "(Required) The account's unique identifier."
+                }
+              ]
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                "key": "Cint-API-Version",
+                "value": "<string>"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"url\": \"<url>\",\n  \"events\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "ac282b7e-2841-46d4-acab-eb908080601f",
+              "name": "The webhook was created successfully.\n\n**Important:** The `secret` is only returned on creation. You must store it securely, as you will need it to verify the signature of incoming webhook requests.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":account_id",
+                    "webhooks"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"01JPVZD75DW4KRP7MPFMF6KGZX\",\n  \"url\": \"https://example.com/webhook\",\n  \"events\": [\n    \"target-group-updated\"\n  ],\n  \"secret\": \"FP7UPZpATKBcYJj4va95PYud+a3gCidRERiLO+9MoFE=\",\n  \"created_at\": \"2023-01-01T23:00:00.000Z\",\n  \"updated_at\": \"2023-01-01T23:00:00.000Z\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "0b0efe40-da8f-409c-9d25-bce1922ae705",
+              "name": "A request is not valid and can't be processed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":account_id",
+                    "webhooks"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"9e278238-d011-4e05-8327-1ce1d5d26254\",\n  \"object\": \"bad_request_error\",\n  \"detail\": \"Expected field 'foo' is missing.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a3936541-e995-41ca-a9dc-48ce29b72423",
+              "name": "A request is unauthorized.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":account_id",
+                    "webhooks"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"1dcf0f40-f0d1-4cf6-8c00-c3d019d32faf\",\n  \"object\": \"authorization_error\",\n  \"detail\": \"no valid authorization provided for this operation\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "9c97f403-c352-457a-9a34-438c76fb6648",
+              "name": "A requested is forbidden.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":account_id",
+                    "webhooks"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"fe68cdd2-ee87-4dbf-8950-63c5cbca94c7\",\n  \"object\": \"authorization_error\",\n  \"detail\": \"you don't have the right permissions to perform this operation\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "2a605640-903a-4178-98c5-0050931f62c2",
+              "name": "A request failed due to an internal error.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":account_id",
+                    "webhooks"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"d94b8bb2-a540-4a91-9c05-2aa3ae9a5e1e\",\n  \"object\": \"unexpected_internal_error\",\n  \"detail\": \"an internal error has led to the failure of this operation\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "18367c66-07b2-415f-9a2c-c7f9f542df4e",
+          "name": "Retrieves a webhook for an account",
+          "request": {
+            "name": "Retrieves a webhook for an account",
+            "description": {
+              "content": "Retrieves the details of a specific webhook subscription. Note the `ETag` header in the response, which is required for making updates or deletions.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "accounts",
+                ":account_id",
+                "webhooks",
+                ":webhook_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "account_id",
+                  "description": "(Required) The account's unique identifier."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<ulid>",
+                  "key": "webhook_id",
+                  "description": "(Required) The ID of the webhook."
+                }
+              ]
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                "key": "Cint-API-Version",
+                "value": "<string>"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "d51013b4-eac3-4d54-a912-ac5a610682da",
+              "name": "The webhook was retrieved successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":account_id",
+                    "webhooks",
+                    ":webhook_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<ulid>",
+                      "key": "webhook_id",
+                      "description": "(Required) The ID of the webhook."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "(Required) The `ETag` header provides a unique identifier that represents the current version of a resource. It's used for caching and to prevent concurrent modification issues.",
+                  "key": "ETag",
+                  "value": "W/\"1234\""
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"01JPVZD75DW4KRP7MPFMF6KGZX\",\n  \"url\": \"https://example.com/webhook\",\n  \"events\": [\n    \"quota-fill-registered\"\n  ],\n  \"created_at\": \"2023-01-01T23:00:00.000Z\",\n  \"updated_at\": \"2023-01-01T23:00:00.000Z\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "2fa96aac-adc5-4393-beea-4ba1603c64a7",
+              "name": "A request is unauthorized.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":account_id",
+                    "webhooks",
+                    ":webhook_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<ulid>",
+                      "key": "webhook_id",
+                      "description": "(Required) The ID of the webhook."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"1dcf0f40-f0d1-4cf6-8c00-c3d019d32faf\",\n  \"object\": \"authorization_error\",\n  \"detail\": \"no valid authorization provided for this operation\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "424ab391-30b5-4dcb-a213-87b3337076d0",
+              "name": "A requested is forbidden.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":account_id",
+                    "webhooks",
+                    ":webhook_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<ulid>",
+                      "key": "webhook_id",
+                      "description": "(Required) The ID of the webhook."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"fe68cdd2-ee87-4dbf-8950-63c5cbca94c7\",\n  \"object\": \"authorization_error\",\n  \"detail\": \"you don't have the right permissions to perform this operation\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "22190a99-c6df-4cc3-9c37-c7131eb3a3da",
+              "name": "A requested resource isn't found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":account_id",
+                    "webhooks",
+                    ":webhook_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<ulid>",
+                      "key": "webhook_id",
+                      "description": "(Required) The ID of the webhook."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"7a5972ba-0825-4360-b852-fa2430e47034\",\n  \"object\": \"not_found_error\",\n  \"detail\": \"resource not found\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "21a44c9f-af80-416a-9111-290da23c777b",
+              "name": "A request failed due to an internal error.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":account_id",
+                    "webhooks",
+                    ":webhook_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<ulid>",
+                      "key": "webhook_id",
+                      "description": "(Required) The ID of the webhook."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"d94b8bb2-a540-4a91-9c05-2aa3ae9a5e1e\",\n  \"object\": \"unexpected_internal_error\",\n  \"detail\": \"an internal error has led to the failure of this operation\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "1b937952-fbe6-492e-865d-38f3f78e70b5",
+          "name": "Updates a webhook for an account",
+          "request": {
+            "name": "Updates a webhook for an account",
+            "description": {
+              "content": "Updates the URL or the list of subscribed events for a webhook.\n\nThis endpoint uses optimistic locking. You must provide the webhook's current version in the `If-Match` header.\nYou can get this value from the `ETag` header of a `GET` request for this resource.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "accounts",
+                ":account_id",
+                "webhooks",
+                ":webhook_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "account_id",
+                  "description": "(Required) The account's unique identifier."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<ulid>",
+                  "key": "webhook_id",
+                  "description": "(Required) The ID of the webhook."
+                }
+              ]
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "The ETag value of the resource you intend to update. This is used for optimistic locking to prevent you from accidentally overwriting changes made by someone else. You can get the ETag from a GET request for the resource. The `ETag` value should always be wrapped in double quotes, whether it is part of a weak `ETag` or standalone.",
+                "key": "If-Match",
+                "value": "<etag>"
+              },
+              {
+                "disabled": false,
+                "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                "key": "Cint-API-Version",
+                "value": "<string>"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"url\": \"<url>\",\n  \"events\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "39090fb9-2450-461b-a80b-45f6ef8abc5c",
+              "name": "The webhook was updated successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":account_id",
+                    "webhooks",
+                    ":webhook_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<ulid>",
+                      "key": "webhook_id",
+                      "description": "(Required) The ID of the webhook."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "The ETag value of the resource you intend to update. This is used for optimistic locking to prevent you from accidentally overwriting changes made by someone else. You can get the ETag from a GET request for the resource. The `ETag` value should always be wrapped in double quotes, whether it is part of a weak `ETag` or standalone.",
+                    "key": "If-Match",
+                    "value": "W/\"1234\""
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "A unique key that you can provide to safely retry requests without accidentally performing the same operation twice.\n\nWe suggest using a UUID v4 or another random string with sufficient entropy to avoid collisions.\n\nExamples:\n- 96C65204-90C2-4DCB-9393-B8226DD50C76\n- 01BTGNYV6HRNK8K8VKZASZCFP0\n",
+                  "key": "idempotency-key",
+                  "value": "01BTGNYV6HRNK8K8VKZASZCFP0"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"01JPVZD75DW4KRP7MPFMF6KGZX\",\n  \"url\": \"https://example.com/webhook\",\n  \"events\": [\n    \"quota-fill-registered\"\n  ],\n  \"created_at\": \"2023-01-01T23:00:00.000Z\",\n  \"updated_at\": \"2023-01-01T23:00:00.000Z\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b9b467c0-7fea-4e35-a3cd-62de57a89c1a",
+              "name": "A request is not valid and can't be processed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":account_id",
+                    "webhooks",
+                    ":webhook_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<ulid>",
+                      "key": "webhook_id",
+                      "description": "(Required) The ID of the webhook."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "The ETag value of the resource you intend to update. This is used for optimistic locking to prevent you from accidentally overwriting changes made by someone else. You can get the ETag from a GET request for the resource. The `ETag` value should always be wrapped in double quotes, whether it is part of a weak `ETag` or standalone.",
+                    "key": "If-Match",
+                    "value": "W/\"1234\""
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"9e278238-d011-4e05-8327-1ce1d5d26254\",\n  \"object\": \"bad_request_error\",\n  \"detail\": \"Expected field 'foo' is missing.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "2eeb7bdf-6c05-4754-933a-f487ed60b73e",
+              "name": "A request is unauthorized.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":account_id",
+                    "webhooks",
+                    ":webhook_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<ulid>",
+                      "key": "webhook_id",
+                      "description": "(Required) The ID of the webhook."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "The ETag value of the resource you intend to update. This is used for optimistic locking to prevent you from accidentally overwriting changes made by someone else. You can get the ETag from a GET request for the resource. The `ETag` value should always be wrapped in double quotes, whether it is part of a weak `ETag` or standalone.",
+                    "key": "If-Match",
+                    "value": "W/\"1234\""
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"1dcf0f40-f0d1-4cf6-8c00-c3d019d32faf\",\n  \"object\": \"authorization_error\",\n  \"detail\": \"no valid authorization provided for this operation\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5b4a8477-09ec-4f60-8471-ce8846c6ecd6",
+              "name": "A requested is forbidden.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":account_id",
+                    "webhooks",
+                    ":webhook_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<ulid>",
+                      "key": "webhook_id",
+                      "description": "(Required) The ID of the webhook."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "The ETag value of the resource you intend to update. This is used for optimistic locking to prevent you from accidentally overwriting changes made by someone else. You can get the ETag from a GET request for the resource. The `ETag` value should always be wrapped in double quotes, whether it is part of a weak `ETag` or standalone.",
+                    "key": "If-Match",
+                    "value": "W/\"1234\""
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"fe68cdd2-ee87-4dbf-8950-63c5cbca94c7\",\n  \"object\": \"authorization_error\",\n  \"detail\": \"you don't have the right permissions to perform this operation\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "0a68a918-f5a2-440f-b443-6ef04ccda876",
+              "name": "A request failed due to an internal error.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":account_id",
+                    "webhooks",
+                    ":webhook_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<ulid>",
+                      "key": "webhook_id",
+                      "description": "(Required) The ID of the webhook."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "The ETag value of the resource you intend to update. This is used for optimistic locking to prevent you from accidentally overwriting changes made by someone else. You can get the ETag from a GET request for the resource. The `ETag` value should always be wrapped in double quotes, whether it is part of a weak `ETag` or standalone.",
+                    "key": "If-Match",
+                    "value": "W/\"1234\""
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"d94b8bb2-a540-4a91-9c05-2aa3ae9a5e1e\",\n  \"object\": \"unexpected_internal_error\",\n  \"detail\": \"an internal error has led to the failure of this operation\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "87abf02d-4075-4270-a4dd-f8d7546c1549",
+          "name": "Deletes a webhook for an account",
+          "request": {
+            "name": "Deletes a webhook for an account",
+            "description": {
+              "content": "Permanently deletes a webhook subscription.\n\nThis endpoint uses optimistic locking. You must provide the webhook's current version in the `If-Match` header to confirm the deletion.\nYou can get this value from the `ETag` header of a `GET` request for this resource.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "accounts",
+                ":account_id",
+                "webhooks",
+                ":webhook_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "account_id",
+                  "description": "(Required) The account's unique identifier."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<ulid>",
+                  "key": "webhook_id",
+                  "description": "(Required) The ID of the webhook."
+                }
+              ]
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "The ETag value of the resource you intend to update. This is used for optimistic locking to prevent you from accidentally overwriting changes made by someone else. You can get the ETag from a GET request for the resource. The `ETag` value should always be wrapped in double quotes, whether it is part of a weak `ETag` or standalone.",
+                "key": "If-Match",
+                "value": "<etag>"
+              },
+              {
+                "disabled": false,
+                "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                "key": "Cint-API-Version",
+                "value": "<string>"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "a16d3202-b640-4ff1-b3e2-becfbb27549d",
+              "name": "The webhook was deleted successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":account_id",
+                    "webhooks",
+                    ":webhook_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<ulid>",
+                      "key": "webhook_id",
+                      "description": "(Required) The ID of the webhook."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "The ETag value of the resource you intend to update. This is used for optimistic locking to prevent you from accidentally overwriting changes made by someone else. You can get the ETag from a GET request for the resource. The `ETag` value should always be wrapped in double quotes, whether it is part of a weak `ETag` or standalone.",
+                    "key": "If-Match",
+                    "value": "W/\"1234\""
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "fa19b0eb-db27-4311-9485-3d747a2ce736",
+              "name": "A request is unauthorized.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":account_id",
+                    "webhooks",
+                    ":webhook_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<ulid>",
+                      "key": "webhook_id",
+                      "description": "(Required) The ID of the webhook."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "The ETag value of the resource you intend to update. This is used for optimistic locking to prevent you from accidentally overwriting changes made by someone else. You can get the ETag from a GET request for the resource. The `ETag` value should always be wrapped in double quotes, whether it is part of a weak `ETag` or standalone.",
+                    "key": "If-Match",
+                    "value": "W/\"1234\""
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"1dcf0f40-f0d1-4cf6-8c00-c3d019d32faf\",\n  \"object\": \"authorization_error\",\n  \"detail\": \"no valid authorization provided for this operation\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "fa02f185-82a7-420f-8a0f-7086b4bd7a07",
+              "name": "A requested is forbidden.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":account_id",
+                    "webhooks",
+                    ":webhook_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<ulid>",
+                      "key": "webhook_id",
+                      "description": "(Required) The ID of the webhook."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "The ETag value of the resource you intend to update. This is used for optimistic locking to prevent you from accidentally overwriting changes made by someone else. You can get the ETag from a GET request for the resource. The `ETag` value should always be wrapped in double quotes, whether it is part of a weak `ETag` or standalone.",
+                    "key": "If-Match",
+                    "value": "W/\"1234\""
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"fe68cdd2-ee87-4dbf-8950-63c5cbca94c7\",\n  \"object\": \"authorization_error\",\n  \"detail\": \"you don't have the right permissions to perform this operation\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a0049833-6e24-4c84-b3c4-d1b4ebda9266",
+              "name": "A requested resource isn't found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":account_id",
+                    "webhooks",
+                    ":webhook_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<ulid>",
+                      "key": "webhook_id",
+                      "description": "(Required) The ID of the webhook."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "The ETag value of the resource you intend to update. This is used for optimistic locking to prevent you from accidentally overwriting changes made by someone else. You can get the ETag from a GET request for the resource. The `ETag` value should always be wrapped in double quotes, whether it is part of a weak `ETag` or standalone.",
+                    "key": "If-Match",
+                    "value": "W/\"1234\""
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"7a5972ba-0825-4360-b852-fa2430e47034\",\n  \"object\": \"not_found_error\",\n  \"detail\": \"resource not found\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "8ad9ce91-c1a2-43db-af15-3644755b066f",
+              "name": "A request failed due to an internal error.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":account_id",
+                    "webhooks",
+                    ":webhook_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<ulid>",
+                      "key": "webhook_id",
+                      "description": "(Required) The ID of the webhook."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "The ETag value of the resource you intend to update. This is used for optimistic locking to prevent you from accidentally overwriting changes made by someone else. You can get the ETag from a GET request for the resource. The `ETag` value should always be wrapped in double quotes, whether it is part of a weak `ETag` or standalone.",
+                    "key": "If-Match",
+                    "value": "W/\"1234\""
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"d94b8bb2-a540-4a91-9c05-2aa3ae9a5e1e\",\n  \"object\": \"unexpected_internal_error\",\n  \"detail\": \"an internal error has led to the failure of this operation\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "a987cc81-60e1-484e-93f6-3aeed7408d9c",
+          "name": "Returns webhook events history for replay and debugging purposes",
+          "request": {
+            "name": "Returns webhook events history for replay and debugging purposes",
+            "description": {
+              "content": "Returns webhook events history for replay and debugging purposes. Filter events by type, delivery status, and time range to analyze past webhook deliveries and replay failed events.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "accounts",
+                ":account_id",
+                "webhooks",
+                ":webhook_id",
+                "events-history"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "delivery_status",
+                  "value": "<string>",
+                  "description": "Filter by event delivery status.\n\nCan be specified multiple times as a query parameter to return events\nwith multiple delivery statuses. If not provided,\nevents with all delivery statuses will be returned.\n\nExample: \"?delivery_status=pending&delivery_status=delivering\"\n"
+                },
+                {
+                  "disabled": false,
+                  "key": "delivery_status",
+                  "value": "<string>",
+                  "description": "Filter by event delivery status.\n\nCan be specified multiple times as a query parameter to return events\nwith multiple delivery statuses. If not provided,\nevents with all delivery statuses will be returned.\n\nExample: \"?delivery_status=pending&delivery_status=delivering\"\n"
+                },
+                {
+                  "disabled": false,
+                  "key": "type",
+                  "value": "<string>",
+                  "description": "Filter by event type.\n\nCan be used multiple times as query parameter to return events of multiple types. If not provided, events of all types will be returned.\n\nExample: \"?type=target-group-updated&type=quota-fill-registered\"\n"
+                },
+                {
+                  "disabled": false,
+                  "key": "type",
+                  "value": "<string>",
+                  "description": "Filter by event type.\n\nCan be used multiple times as query parameter to return events of multiple types. If not provided, events of all types will be returned.\n\nExample: \"?type=target-group-updated&type=quota-fill-registered\"\n"
+                },
+                {
+                  "disabled": false,
+                  "key": "end_time",
+                  "value": "<dateTime>",
+                  "description": "End time for retrieving webhook events. If not provided,\nthe current time will be used.\n"
+                },
+                {
+                  "disabled": false,
+                  "key": "start_time",
+                  "value": "<dateTime>",
+                  "description": "(Required) Start time from which to retrieve webhook events."
+                },
+                {
+                  "disabled": false,
+                  "key": "created_at_sort_order",
+                  "value": "asc",
+                  "description": "Sort order for webhook events based on creation time.\nUse 'asc' for ascending order or 'desc' for descending order.\n"
+                },
+                {
+                  "disabled": false,
+                  "key": "page_size",
+                  "value": "10",
+                  "description": "A limit on the number of objects to be returned, between 1 and 100."
+                },
+                {
+                  "disabled": false,
+                  "key": "start_after",
+                  "value": "<string>",
+                  "description": "Returns a list of objects after the provided pagination cursor, using the next_cursor from the previous response."
+                },
+                {
+                  "disabled": false,
+                  "key": "end_before",
+                  "value": "<string>",
+                  "description": "Returns a list of objects that come before the provided pagination cursor. This is used for navigating to a previous page."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "account_id",
+                  "description": "(Required) The account's unique identifier."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<ulid>",
+                  "key": "webhook_id",
+                  "description": "(Required) The ID of the webhook."
+                }
+              ]
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                "key": "Cint-API-Version",
+                "value": "<string>"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "3d2ea99b-c061-44c1-8257-16cecfd7a436",
+              "name": "A response containing webhook events history for replay and debugging.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":account_id",
+                    "webhooks",
+                    ":webhook_id",
+                    "events-history"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "delivery_status",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "delivery_status",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "type",
+                      "value": "target-group-updated"
+                    },
+                    {
+                      "key": "type",
+                      "value": "quota-fill-registered"
+                    },
+                    {
+                      "key": "end_time",
+                      "value": "2023-10-05T14:48:00.000Z"
+                    },
+                    {
+                      "key": "start_time",
+                      "value": "2023-10-05T14:48:00.000Z"
+                    },
+                    {
+                      "key": "created_at_sort_order",
+                      "value": "asc"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "15"
+                    },
+                    {
+                      "key": "start_after",
+                      "value": "bff6a669-a469-409d-8c94-dcf92258043a"
+                    },
+                    {
+                      "key": "end_before",
+                      "value": "7daa40ad-303b-40a2-89df-a9760400cde7"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<ulid>",
+                      "key": "webhook_id",
+                      "description": "(Required) The ID of the webhook."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"events\": [\n    {\n      \"type\": \"target-group-updated\",\n      \"payload\": {\n        \"account_id\": 1,\n        \"changes\": [\n          {\n            \"new_value\": {\n              \"currency_code\": \"USD\",\n              \"currency_scale\": 2,\n              \"value\": 10\n            },\n            \"object\": \"user_requested_cpi_change\"\n          }\n        ],\n        \"occurred_at\": \"2026-01-23 10:04:44.209000+00:00\",\n        \"project_id\": \"01JJ77E6X1Y2G1RG2KMPFPXKYZ\",\n        \"target_group_id\": \"01KFN50A2WJ5NW1NX39RRFFHKQ\",\n        \"user\": [\n          {\n            \"las_user_id\": \"2783dacc-dc2c-4bc0-a011-50d9d2e2df07\",\n            \"type\": \"las_user\"\n          }\n        ]\n      },\n      \"status\": \"delivered\",\n      \"created_at\": \"2026-01-23 10:04:44.562205+00:00\"\n    },\n    {\n      \"type\": \"target-group-updated\",\n      \"payload\": {\n        \"account_id\": 1,\n        \"changes\": [\n          {\n            \"new_value\": {\n              \"currency_code\": \"USD\",\n              \"currency_scale\": 2,\n              \"value\": 10\n            },\n            \"object\": \"user_requested_cpi_change\"\n          }\n        ],\n        \"occurred_at\": \"2026-01-23 10:04:44.209000+00:00\",\n        \"project_id\": \"01JJ77E6X1Y2G1RG2KMPFPXKYZ\",\n        \"target_group_id\": \"01KFN50A2WJ5NW1NX39RRFFHKQ\",\n        \"user\": [\n          {\n            \"las_user_id\": \"2783dacc-dc2c-4bc0-a011-50d9d2e2df07\",\n            \"type\": \"las_user\"\n          }\n        ]\n      },\n      \"status\": \"delivered\",\n      \"created_at\": \"2026-01-23 10:04:44.562205+00:00\"\n    }\n  ],\n  \"next_cursor\": \"bff6a669-a469-409d-8c94-dcf92258043a\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "47779d07-20e3-4143-b7d3-2c4b4b020c83",
+              "name": "A request is not valid and can't be processed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":account_id",
+                    "webhooks",
+                    ":webhook_id",
+                    "events-history"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "delivery_status",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "delivery_status",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "type",
+                      "value": "target-group-updated"
+                    },
+                    {
+                      "key": "type",
+                      "value": "quota-fill-registered"
+                    },
+                    {
+                      "key": "end_time",
+                      "value": "2023-10-05T14:48:00.000Z"
+                    },
+                    {
+                      "key": "start_time",
+                      "value": "2023-10-05T14:48:00.000Z"
+                    },
+                    {
+                      "key": "created_at_sort_order",
+                      "value": "asc"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "15"
+                    },
+                    {
+                      "key": "start_after",
+                      "value": "bff6a669-a469-409d-8c94-dcf92258043a"
+                    },
+                    {
+                      "key": "end_before",
+                      "value": "7daa40ad-303b-40a2-89df-a9760400cde7"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<ulid>",
+                      "key": "webhook_id",
+                      "description": "(Required) The ID of the webhook."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"9e278238-d011-4e05-8327-1ce1d5d26254\",\n  \"object\": \"bad_request_error\",\n  \"detail\": \"Expected field 'foo' is missing.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "17484825-7512-43e6-9359-5d55a607a1ef",
+              "name": "A request is unauthorized.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":account_id",
+                    "webhooks",
+                    ":webhook_id",
+                    "events-history"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "delivery_status",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "delivery_status",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "type",
+                      "value": "target-group-updated"
+                    },
+                    {
+                      "key": "type",
+                      "value": "quota-fill-registered"
+                    },
+                    {
+                      "key": "end_time",
+                      "value": "2023-10-05T14:48:00.000Z"
+                    },
+                    {
+                      "key": "start_time",
+                      "value": "2023-10-05T14:48:00.000Z"
+                    },
+                    {
+                      "key": "created_at_sort_order",
+                      "value": "asc"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "15"
+                    },
+                    {
+                      "key": "start_after",
+                      "value": "bff6a669-a469-409d-8c94-dcf92258043a"
+                    },
+                    {
+                      "key": "end_before",
+                      "value": "7daa40ad-303b-40a2-89df-a9760400cde7"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<ulid>",
+                      "key": "webhook_id",
+                      "description": "(Required) The ID of the webhook."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"1dcf0f40-f0d1-4cf6-8c00-c3d019d32faf\",\n  \"object\": \"authorization_error\",\n  \"detail\": \"no valid authorization provided for this operation\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6a0b81c8-3222-4635-a111-2bde299e1042",
+              "name": "A requested is forbidden.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":account_id",
+                    "webhooks",
+                    ":webhook_id",
+                    "events-history"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "delivery_status",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "delivery_status",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "type",
+                      "value": "target-group-updated"
+                    },
+                    {
+                      "key": "type",
+                      "value": "quota-fill-registered"
+                    },
+                    {
+                      "key": "end_time",
+                      "value": "2023-10-05T14:48:00.000Z"
+                    },
+                    {
+                      "key": "start_time",
+                      "value": "2023-10-05T14:48:00.000Z"
+                    },
+                    {
+                      "key": "created_at_sort_order",
+                      "value": "asc"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "15"
+                    },
+                    {
+                      "key": "start_after",
+                      "value": "bff6a669-a469-409d-8c94-dcf92258043a"
+                    },
+                    {
+                      "key": "end_before",
+                      "value": "7daa40ad-303b-40a2-89df-a9760400cde7"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<ulid>",
+                      "key": "webhook_id",
+                      "description": "(Required) The ID of the webhook."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"fe68cdd2-ee87-4dbf-8950-63c5cbca94c7\",\n  \"object\": \"authorization_error\",\n  \"detail\": \"you don't have the right permissions to perform this operation\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "64eef753-0091-40c2-876a-234816eab7f9",
+              "name": "A requested resource isn't found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":account_id",
+                    "webhooks",
+                    ":webhook_id",
+                    "events-history"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "delivery_status",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "delivery_status",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "type",
+                      "value": "target-group-updated"
+                    },
+                    {
+                      "key": "type",
+                      "value": "quota-fill-registered"
+                    },
+                    {
+                      "key": "end_time",
+                      "value": "2023-10-05T14:48:00.000Z"
+                    },
+                    {
+                      "key": "start_time",
+                      "value": "2023-10-05T14:48:00.000Z"
+                    },
+                    {
+                      "key": "created_at_sort_order",
+                      "value": "asc"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "15"
+                    },
+                    {
+                      "key": "start_after",
+                      "value": "bff6a669-a469-409d-8c94-dcf92258043a"
+                    },
+                    {
+                      "key": "end_before",
+                      "value": "7daa40ad-303b-40a2-89df-a9760400cde7"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<ulid>",
+                      "key": "webhook_id",
+                      "description": "(Required) The ID of the webhook."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"7a5972ba-0825-4360-b852-fa2430e47034\",\n  \"object\": \"not_found_error\",\n  \"detail\": \"resource not found\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "0969dbec-6129-4123-9d1f-db1d3002a138",
+              "name": "A request failed due to an internal error.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":account_id",
+                    "webhooks",
+                    ":webhook_id",
+                    "events-history"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "delivery_status",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "delivery_status",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "type",
+                      "value": "target-group-updated"
+                    },
+                    {
+                      "key": "type",
+                      "value": "quota-fill-registered"
+                    },
+                    {
+                      "key": "end_time",
+                      "value": "2023-10-05T14:48:00.000Z"
+                    },
+                    {
+                      "key": "start_time",
+                      "value": "2023-10-05T14:48:00.000Z"
+                    },
+                    {
+                      "key": "created_at_sort_order",
+                      "value": "asc"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "15"
+                    },
+                    {
+                      "key": "start_after",
+                      "value": "bff6a669-a469-409d-8c94-dcf92258043a"
+                    },
+                    {
+                      "key": "end_before",
+                      "value": "7daa40ad-303b-40a2-89df-a9760400cde7"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<ulid>",
+                      "key": "webhook_id",
+                      "description": "(Required) The ID of the webhook."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"d94b8bb2-a540-4a91-9c05-2aa3ae9a5e1e\",\n  \"object\": \"unexpected_internal_error\",\n  \"detail\": \"an internal error has led to the failure of this operation\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "c58be429-e739-42ce-aa97-beb5e0b12548",
+          "name": "Regenerates the secret for a webhook",
+          "request": {
+            "name": "Regenerates the secret for a webhook",
+            "description": {
+              "content": "Immediately invalidates the old secret and generates a new one for a webhook.\n\n**Important:** After regenerating, you must update your webhook handler with the new secret to continue verifying payloads. The old secret will no longer work.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "accounts",
+                ":account_id",
+                "webhooks",
+                ":webhook_id",
+                "regenerate-secret"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "account_id",
+                  "description": "(Required) The account's unique identifier."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<ulid>",
+                  "key": "webhook_id",
+                  "description": "(Required) The ID of the webhook."
+                }
+              ]
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                "key": "Cint-API-Version",
+                "value": "<string>"
+              },
+              {
+                "key": "Content-Type",
+                "value": ""
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            }
+          },
+          "response": [
+            {
+              "id": "00c895dd-ea83-4d33-9d33-53237ede1993",
+              "name": "The new webhook secret was generated successfully.\n\n**Important:** The new `secret` is only returned at this time. You must store it securely, as you will need it to verify the signature of incoming webhook requests.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":account_id",
+                    "webhooks",
+                    ":webhook_id",
+                    "regenerate-secret"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<ulid>",
+                      "key": "webhook_id",
+                      "description": "(Required) The ID of the webhook."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"01JPVZD75DW4KRP7MPFMF6KGZX\",\n  \"url\": \"https://example.com/session-updated-webhook\",\n  \"events\": [\n    \"session-updated\"\n  ],\n  \"secret\": \"FP7UPZpATKBcYJj4va95PYud+a3gCidRERiLO+9MoFE=\",\n  \"created_at\": \"2023-01-01T23:00:00.000Z\",\n  \"updated_at\": \"2023-01-01T23:00:00.000Z\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "50004955-fe6f-42c9-987b-967bee5e6996",
+              "name": "A request is not valid and can't be processed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":account_id",
+                    "webhooks",
+                    ":webhook_id",
+                    "regenerate-secret"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<ulid>",
+                      "key": "webhook_id",
+                      "description": "(Required) The ID of the webhook."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"9e278238-d011-4e05-8327-1ce1d5d26254\",\n  \"object\": \"bad_request_error\",\n  \"detail\": \"Expected field 'foo' is missing.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "02e9aaa7-5812-4076-9557-050f17e34cf9",
+              "name": "A request is unauthorized.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":account_id",
+                    "webhooks",
+                    ":webhook_id",
+                    "regenerate-secret"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<ulid>",
+                      "key": "webhook_id",
+                      "description": "(Required) The ID of the webhook."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"1dcf0f40-f0d1-4cf6-8c00-c3d019d32faf\",\n  \"object\": \"authorization_error\",\n  \"detail\": \"no valid authorization provided for this operation\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "179d1c01-fa48-49fd-a99f-8693dc4b0fd5",
+              "name": "A requested is forbidden.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":account_id",
+                    "webhooks",
+                    ":webhook_id",
+                    "regenerate-secret"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<ulid>",
+                      "key": "webhook_id",
+                      "description": "(Required) The ID of the webhook."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"fe68cdd2-ee87-4dbf-8950-63c5cbca94c7\",\n  \"object\": \"authorization_error\",\n  \"detail\": \"you don't have the right permissions to perform this operation\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "fdeece46-e127-4b57-b01b-7a5456c93ce8",
+              "name": "A request failed due to an internal error.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":account_id",
+                    "webhooks",
+                    ":webhook_id",
+                    "regenerate-secret"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<ulid>",
+                      "key": "webhook_id",
+                      "description": "(Required) The ID of the webhook."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"d94b8bb2-a540-4a91-9c05-2aa3ae9a5e1e\",\n  \"object\": \"unexpected_internal_error\",\n  \"detail\": \"an internal error has led to the failure of this operation\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "2ebd213b-7e65-46f5-9a2a-2974a4fa654d",
+          "name": "List all available webhook event types",
+          "request": {
+            "name": "List all available webhook event types",
+            "description": {
+              "content": "Lists all of the event types you can subscribe to when creating or updating a webhook subscription.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "accounts",
+                ":account_id",
+                "webhooks-events"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "account_id",
+                  "description": "(Required) The account's unique identifier."
+                }
+              ]
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                "key": "Cint-API-Version",
+                "value": "<string>"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "90ec3af8-5002-4c27-a456-5d1b91e39218",
+              "name": "A list of available webhook events was retrieved successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":account_id",
+                    "webhooks-events"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"events\": [\n    \"target-group-updated\",\n    \"quota-fill-registered\",\n    \"session-updated\"\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "279c467a-0637-4114-a1e6-2f94fd322a87",
+              "name": "A request is not valid and can't be processed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":account_id",
+                    "webhooks-events"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"9e278238-d011-4e05-8327-1ce1d5d26254\",\n  \"object\": \"bad_request_error\",\n  \"detail\": \"Expected field 'foo' is missing.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "40d4fb8f-8b63-4b62-8c10-dbe1202de75e",
+              "name": "A request is unauthorized.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":account_id",
+                    "webhooks-events"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"1dcf0f40-f0d1-4cf6-8c00-c3d019d32faf\",\n  \"object\": \"authorization_error\",\n  \"detail\": \"no valid authorization provided for this operation\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "3a6b31cd-9acd-42ec-ad33-29718e54ddb8",
+              "name": "A requested is forbidden.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":account_id",
+                    "webhooks-events"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"fe68cdd2-ee87-4dbf-8950-63c5cbca94c7\",\n  \"object\": \"authorization_error\",\n  \"detail\": \"you don't have the right permissions to perform this operation\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "9ad98bed-5011-4a99-ab4b-8954eb534f0f",
+              "name": "A request failed due to an internal error.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":account_id",
+                    "webhooks-events"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"d94b8bb2-a540-4a91-9c05-2aa3ae9a5e1e\",\n  \"object\": \"unexpected_internal_error\",\n  \"detail\": \"an internal error has led to the failure of this operation\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.cint.com/v1",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "985ea49d-c666-4544-b0d5-a6b2ec8183da",
+    "name": "Demand Accounts Notifications Webhooks API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Cint's demand ordering API is REST oriented. It has predictable resource based URLs, accepts JSON-encoded request bodies, returns JSON-encoded responses, and uses standard HTTP response codes, authentication, and verbs. Error responses are also JSON-encoded and follow a standard format, providing a unique error ID and detailed information about what went wrong.\n\nAuthentication is handled via bearer tokens passed in the `Authorization` header. All requests must also include a `Cint-API-Version` header with a date in `YYYY-MM-DD` format to specify the desired API version. Depending on the version you use, endpoint behavior may differ as we improve our API with every version release.\n\nWhile many operations work on a single object per request, the demand ordering API also provides asynchronous batch endpoints for performing bulk updates efficiently on certain resources. For safety, `POST` requests support an `Idempotency-Key` header to allow for safe retries without accidentally performing the same operation twice.\n",
+      "type": "text/plain"
+    }
+  }
+}

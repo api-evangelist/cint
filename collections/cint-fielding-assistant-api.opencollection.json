@@ -1,0 +1,110 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Demand Accounts Fielding Assistant API",
+    "version": "2025-12-18"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Fielding Assistant",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Retrieves the Fielding Assistant assignment for a target group",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cint.com/v1/demand/accounts/:account_id/projects/:project_id/target-groups/:target_group_id/fielding-assistant-assignment",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The account's unique identifier."
+              },
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the project, in ULID format."
+              },
+              {
+                "name": "target_group_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the target group, in ULID format."
+              }
+            ]
+          },
+          "docs": "Retrieves the current Fielding Assistant configuration for a target group. The response will show which modules, if any, are currently enabled. Examples:\n\n  * Pricing\n  * Quota overlay\n  * Pacing\n  * Soft launch"
+        },
+        {
+          "info": {
+            "name": "Create or update the Fielding Assistant assignment",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.cint.com/v1/demand/accounts/:account_id/projects/:project_id/target-groups/:target_group_id/fielding-assistant-assignment",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              },
+              {
+                "name": "If-Match",
+                "value": ""
+              },
+              {
+                "name": "If-None-Match",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The account's unique identifier."
+              },
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the project, in ULID format."
+              },
+              {
+                "name": "target_group_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the target group, in ULID format."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates or fully replaces the Fielding Assistant assignment for a target group. This is an \"all or nothing\" operation.\nTo modify an existing assignment, you must first GET the current configuration, make your changes,\nand then PUT the entire modified object back. Sending a request with only one module will disable all others.\nTo disable all modules, send an empty object `{}`. This endpoint uses the `If-Match` header for optimistic locking.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

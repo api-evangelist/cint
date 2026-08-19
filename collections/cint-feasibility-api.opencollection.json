@@ -1,0 +1,94 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Demand Accounts Feasibility API",
+    "version": "2025-12-18"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Feasibility",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Calculates feasibility for a draft target group",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.cint.com/v1/demand/accounts/:account_id/target-groups/calculate-feasibility",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The account's unique identifier."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Calculates the feasibility for a new, unsaved (draft) target group based on the specifications you provide in the request body. \nYou can use this endpoint to estimate the achievable number of completes and get a suggested price \nbefore you create the actual target group. If you include profiling details, \nthe response will also provide a feasibility breakdown for each quota.\n\n**Note:** Profiles with a large number of open-ended values or complex condition groups may result in reduced feasibility"
+        },
+        {
+          "info": {
+            "name": "Calculates feasibility for a non-draft target group",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.cint.com/v1/demand/accounts/:account_id/projects/:project_id/target-groups/:target_group_id/calculate-feasibility",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The account's unique identifier."
+              },
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the project, in ULID format."
+              },
+              {
+                "name": "target_group_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the target group, in ULID format."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Calculates feasibility information based on the current state of the target group.\nThe request properties are all optional. They serve as a way of performing what-if analysis on the Target Group. When a property is provided in the request, the feasibility analysis will behave as if the relevant property on the target group had the value which was sent in the request body. Any number of properties can be provided for what-if analysis this way. However, it should be kept in mind that the analysis "
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

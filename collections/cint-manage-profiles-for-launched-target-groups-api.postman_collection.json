@@ -1,0 +1,2937 @@
+{
+  "item": [
+    {
+      "id": "6a223636-dfef-4f82-8e24-de36e1cae469",
+      "name": "Manage Profiles for Launched Target Groups",
+      "description": {
+        "content": "Management of Target Group profiles after launch—including creating, updating, retrieving, and deleting profile configurations, along with their conditions, quotas, and interlock settings.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "9b12c6e0-664b-458e-a219-5bc5b97796c1",
+          "name": "List profiles for a target group",
+          "request": {
+            "name": "List profiles for a target group",
+            "description": {
+              "content": "Returns a list of all non-control, blended and regular profiles for the target group after launch.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "demand",
+                "accounts",
+                ":account_id",
+                "projects",
+                ":project_id",
+                "target-groups",
+                ":target_group_id",
+                "profiles"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "account_id",
+                  "description": "(Required) The account's unique identifier."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "project_id",
+                  "description": "(Required) A unique identifier for the project, in ULID format."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "target_group_id",
+                  "description": "(Required) A unique identifier for the target group, in ULID format."
+                }
+              ]
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                "key": "Cint-API-Version",
+                "value": "<string>"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "72f8dee4-93c6-41f7-b0a2-20fc22b4be07",
+              "name": "Successfully return list of profiles.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "demand",
+                    "accounts",
+                    ":account_id",
+                    "projects",
+                    ":project_id",
+                    "target-groups",
+                    ":target_group_id",
+                    "profiles"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "project_id",
+                      "description": "(Required) A unique identifier for the project, in ULID format."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "target_group_id",
+                      "description": "(Required) A unique identifier for the target group, in ULID format."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"locale\": \"eng-us\",\n  \"completes_goal\": 1500,\n  \"profiles\": [\n    {\n      \"object\": \"regular\",\n      \"id\": \"01JQM2QN1FDN1WZA3JZX639MAR\",\n      \"quotas_enabled\": true,\n      \"name\": \"HISPANIC\",\n      \"description\": \"Are you of Hispanic, Latino, or Spanish origin?\",\n      \"targets\": [\n        {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      ],\n      \"description_translated\": \"Are you of Hispanic, Latino, or Spanish origin?\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e08f58cb-937c-42af-b358-5a93fad10d27",
+              "name": "A request is not valid and can't be processed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "demand",
+                    "accounts",
+                    ":account_id",
+                    "projects",
+                    ":project_id",
+                    "target-groups",
+                    ":target_group_id",
+                    "profiles"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "project_id",
+                      "description": "(Required) A unique identifier for the project, in ULID format."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "target_group_id",
+                      "description": "(Required) A unique identifier for the target group, in ULID format."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"9e278238-d011-4e05-8327-1ce1d5d26254\",\n  \"object\": \"bad_request_error\",\n  \"detail\": \"Expected field 'foo' is missing.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d6214dd7-353b-4b84-8229-702fe4f2dfc9",
+              "name": "A request is unauthorized.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "demand",
+                    "accounts",
+                    ":account_id",
+                    "projects",
+                    ":project_id",
+                    "target-groups",
+                    ":target_group_id",
+                    "profiles"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "project_id",
+                      "description": "(Required) A unique identifier for the project, in ULID format."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "target_group_id",
+                      "description": "(Required) A unique identifier for the target group, in ULID format."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"1dcf0f40-f0d1-4cf6-8c00-c3d019d32faf\",\n  \"object\": \"authorization_error\",\n  \"detail\": \"no valid authorization provided for this operation\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "33092edd-8481-4832-ade5-85a078811639",
+              "name": "A requested is forbidden.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "demand",
+                    "accounts",
+                    ":account_id",
+                    "projects",
+                    ":project_id",
+                    "target-groups",
+                    ":target_group_id",
+                    "profiles"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "project_id",
+                      "description": "(Required) A unique identifier for the project, in ULID format."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "target_group_id",
+                      "description": "(Required) A unique identifier for the target group, in ULID format."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"fe68cdd2-ee87-4dbf-8950-63c5cbca94c7\",\n  \"object\": \"authorization_error\",\n  \"detail\": \"you don't have the right permissions to perform this operation\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ec722b33-29b9-4b61-9b10-4a1110d2ee00",
+              "name": "A requested resource isn't found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "demand",
+                    "accounts",
+                    ":account_id",
+                    "projects",
+                    ":project_id",
+                    "target-groups",
+                    ":target_group_id",
+                    "profiles"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "project_id",
+                      "description": "(Required) A unique identifier for the project, in ULID format."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "target_group_id",
+                      "description": "(Required) A unique identifier for the target group, in ULID format."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"7a5972ba-0825-4360-b852-fa2430e47034\",\n  \"object\": \"not_found_error\",\n  \"detail\": \"resource not found\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "187397e1-88b5-44b9-8757-f43643bb8106",
+              "name": "A request failed due to an internal error.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "demand",
+                    "accounts",
+                    ":account_id",
+                    "projects",
+                    ":project_id",
+                    "target-groups",
+                    ":target_group_id",
+                    "profiles"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "project_id",
+                      "description": "(Required) A unique identifier for the project, in ULID format."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "target_group_id",
+                      "description": "(Required) A unique identifier for the target group, in ULID format."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"d94b8bb2-a540-4a91-9c05-2aa3ae9a5e1e\",\n  \"object\": \"unexpected_internal_error\",\n  \"detail\": \"an internal error has led to the failure of this operation\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "03138b94-c27f-4634-9883-60c7791115c6",
+          "name": "Retrieve a profile",
+          "request": {
+            "name": "Retrieve a profile",
+            "description": {
+              "content": "Returns a regular profile detail or blended profile detail by profile ID.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "demand",
+                "accounts",
+                ":account_id",
+                "projects",
+                ":project_id",
+                "target-groups",
+                ":target_group_id",
+                "profiles",
+                ":profile_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "account_id",
+                  "description": "(Required) The account's unique identifier."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "project_id",
+                  "description": "(Required) A unique identifier for the project, in ULID format."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "target_group_id",
+                  "description": "(Required) A unique identifier for the target group, in ULID format."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<ULID>",
+                  "key": "profile_id",
+                  "description": "(Required) The character string representing a unique profile ID (ULID format)."
+                }
+              ]
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                "key": "Cint-API-Version",
+                "value": "<string>"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "ddd61232-2922-4537-afc2-8cdc84746d43",
+              "name": "Successfully return the profile.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "demand",
+                    "accounts",
+                    ":account_id",
+                    "projects",
+                    ":project_id",
+                    "target-groups",
+                    ":target_group_id",
+                    "profiles",
+                    ":profile_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "project_id",
+                      "description": "(Required) A unique identifier for the project, in ULID format."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "target_group_id",
+                      "description": "(Required) A unique identifier for the target group, in ULID format."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<ULID>",
+                      "key": "profile_id",
+                      "description": "(Required) The character string representing a unique profile ID (ULID format)."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"object\": \"regular\",\n  \"id\": \"01JQM2QN1FDN1WZA3JZX639MAR\",\n  \"quotas_enabled\": true,\n  \"name\": \"HISPANIC\",\n  \"description\": \"Are you of Hispanic, Latino, or Spanish origin?\",\n  \"targets\": [\n    {\n      \"id\": \"01JQMD8R7F0VW45KPWQ7WYNCFP\",\n      \"conditions\": [\n        {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      ],\n      \"quota\": {\n        \"completes_goal_percentage\": 40,\n        \"quota_nominal\": 40,\n        \"completes_goal\": 40,\n        \"name\": \"SF_Quota_12\",\n        \"completes\": 40,\n        \"prescreens\": 40\n      },\n      \"name\": \"Target-Male\",\n      \"text\": \"Condition Text\",\n      \"text_translated\": \"Condition Text\"\n    }\n  ],\n  \"description_translated\": \"Are you of Hispanic, Latino, or Spanish origin?\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a5cc98c0-164d-406d-9404-6262af4f50db",
+              "name": "A request is unauthorized.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "demand",
+                    "accounts",
+                    ":account_id",
+                    "projects",
+                    ":project_id",
+                    "target-groups",
+                    ":target_group_id",
+                    "profiles",
+                    ":profile_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "project_id",
+                      "description": "(Required) A unique identifier for the project, in ULID format."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "target_group_id",
+                      "description": "(Required) A unique identifier for the target group, in ULID format."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<ULID>",
+                      "key": "profile_id",
+                      "description": "(Required) The character string representing a unique profile ID (ULID format)."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"1dcf0f40-f0d1-4cf6-8c00-c3d019d32faf\",\n  \"object\": \"authorization_error\",\n  \"detail\": \"no valid authorization provided for this operation\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6d13bcd3-f539-446c-b79b-e3b8a3bde5b5",
+              "name": "A requested is forbidden.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "demand",
+                    "accounts",
+                    ":account_id",
+                    "projects",
+                    ":project_id",
+                    "target-groups",
+                    ":target_group_id",
+                    "profiles",
+                    ":profile_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "project_id",
+                      "description": "(Required) A unique identifier for the project, in ULID format."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "target_group_id",
+                      "description": "(Required) A unique identifier for the target group, in ULID format."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<ULID>",
+                      "key": "profile_id",
+                      "description": "(Required) The character string representing a unique profile ID (ULID format)."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"fe68cdd2-ee87-4dbf-8950-63c5cbca94c7\",\n  \"object\": \"authorization_error\",\n  \"detail\": \"you don't have the right permissions to perform this operation\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "400f0c98-915d-41a1-bcf3-eed4901b831f",
+              "name": "A requested resource isn't found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "demand",
+                    "accounts",
+                    ":account_id",
+                    "projects",
+                    ":project_id",
+                    "target-groups",
+                    ":target_group_id",
+                    "profiles",
+                    ":profile_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "project_id",
+                      "description": "(Required) A unique identifier for the project, in ULID format."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "target_group_id",
+                      "description": "(Required) A unique identifier for the target group, in ULID format."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<ULID>",
+                      "key": "profile_id",
+                      "description": "(Required) The character string representing a unique profile ID (ULID format)."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"7a5972ba-0825-4360-b852-fa2430e47034\",\n  \"object\": \"not_found_error\",\n  \"detail\": \"resource not found\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "044ac99f-e306-4c61-a8e1-882081dcb919",
+              "name": "A request failed due to an internal error.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "demand",
+                    "accounts",
+                    ":account_id",
+                    "projects",
+                    ":project_id",
+                    "target-groups",
+                    ":target_group_id",
+                    "profiles",
+                    ":profile_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "project_id",
+                      "description": "(Required) A unique identifier for the project, in ULID format."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "target_group_id",
+                      "description": "(Required) A unique identifier for the target group, in ULID format."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<ULID>",
+                      "key": "profile_id",
+                      "description": "(Required) The character string representing a unique profile ID (ULID format)."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"d94b8bb2-a540-4a91-9c05-2aa3ae9a5e1e\",\n  \"object\": \"unexpected_internal_error\",\n  \"detail\": \"an internal error has led to the failure of this operation\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "431deba9-206a-4c21-9e0d-bf38450eaeaa",
+          "name": "Update completes goal on a target group and its profiles",
+          "request": {
+            "name": "Update completes goal on a target group and its profiles",
+            "description": {
+              "content": "Updates the completes goal for a target group, both at the root target group level level and for individual quotas.\n\nKey behaviors:\n\n* You can update the target group `completes_goal`, individual quota goals within `profiles`, or both in a single request.\n* If you only update the total `completes_goal`, the goals for individual quotas will be recalculated based on supplier distribution data.\n* To get the necessary `profile_id` and `id` (for the quota), you must first call the `GET /.../profiles` endpoint.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "demand",
+                "accounts",
+                ":account_id",
+                "projects",
+                ":project_id",
+                "target-groups",
+                ":target_group_id",
+                "profiles",
+                "completes-goal"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "account_id",
+                  "description": "(Required) The account's unique identifier."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "project_id",
+                  "description": "(Required) A unique identifier for the project, in ULID format."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "target_group_id",
+                  "description": "(Required) A unique identifier for the target group, in ULID format."
+                }
+              ]
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                "key": "Cint-API-Version",
+                "value": "<string>"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"completes_goal\": \"<int>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "9cf01f4f-f0fe-46cc-ac7d-0b4cff7afe7d",
+              "name": "Successfully updated the filling goal.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "demand",
+                    "accounts",
+                    ":account_id",
+                    "projects",
+                    ":project_id",
+                    "target-groups",
+                    ":target_group_id",
+                    "profiles",
+                    "completes-goal"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "project_id",
+                      "description": "(Required) A unique identifier for the project, in ULID format."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "target_group_id",
+                      "description": "(Required) A unique identifier for the target group, in ULID format."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"completes_goal\": 1500\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"locale\": \"eng-us\",\n  \"completes_goal\": 1500,\n  \"profiles\": [\n    {\n      \"object\": \"regular\",\n      \"id\": \"01JQM2QN1FDN1WZA3JZX639MAR\",\n      \"quotas_enabled\": true,\n      \"name\": \"HISPANIC\",\n      \"description\": \"Are you of Hispanic, Latino, or Spanish origin?\",\n      \"targets\": [\n        {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      ],\n      \"description_translated\": \"Are you of Hispanic, Latino, or Spanish origin?\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "20fddebd-df10-4a93-8564-b8e286a031d1",
+              "name": "A request is not valid and can't be processed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "demand",
+                    "accounts",
+                    ":account_id",
+                    "projects",
+                    ":project_id",
+                    "target-groups",
+                    ":target_group_id",
+                    "profiles",
+                    "completes-goal"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "project_id",
+                      "description": "(Required) A unique identifier for the project, in ULID format."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "target_group_id",
+                      "description": "(Required) A unique identifier for the target group, in ULID format."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"completes_goal\": 1500\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"9e278238-d011-4e05-8327-1ce1d5d26254\",\n  \"object\": \"bad_request_error\",\n  \"detail\": \"Expected field 'foo' is missing.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b6819e69-5e3a-48cb-8c67-206f50cfc0d6",
+              "name": "A request is unauthorized.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "demand",
+                    "accounts",
+                    ":account_id",
+                    "projects",
+                    ":project_id",
+                    "target-groups",
+                    ":target_group_id",
+                    "profiles",
+                    "completes-goal"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "project_id",
+                      "description": "(Required) A unique identifier for the project, in ULID format."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "target_group_id",
+                      "description": "(Required) A unique identifier for the target group, in ULID format."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"completes_goal\": 1500\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"1dcf0f40-f0d1-4cf6-8c00-c3d019d32faf\",\n  \"object\": \"authorization_error\",\n  \"detail\": \"no valid authorization provided for this operation\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5c549be5-38a0-4481-8c24-05fa31a3affd",
+              "name": "A requested is forbidden.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "demand",
+                    "accounts",
+                    ":account_id",
+                    "projects",
+                    ":project_id",
+                    "target-groups",
+                    ":target_group_id",
+                    "profiles",
+                    "completes-goal"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "project_id",
+                      "description": "(Required) A unique identifier for the project, in ULID format."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "target_group_id",
+                      "description": "(Required) A unique identifier for the target group, in ULID format."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"completes_goal\": 1500\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"fe68cdd2-ee87-4dbf-8950-63c5cbca94c7\",\n  \"object\": \"authorization_error\",\n  \"detail\": \"you don't have the right permissions to perform this operation\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "965741a2-f52e-4cc5-b52a-9007b5d426bc",
+              "name": "A requested resource isn't found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "demand",
+                    "accounts",
+                    ":account_id",
+                    "projects",
+                    ":project_id",
+                    "target-groups",
+                    ":target_group_id",
+                    "profiles",
+                    "completes-goal"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "project_id",
+                      "description": "(Required) A unique identifier for the project, in ULID format."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "target_group_id",
+                      "description": "(Required) A unique identifier for the target group, in ULID format."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"completes_goal\": 1500\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"7a5972ba-0825-4360-b852-fa2430e47034\",\n  \"object\": \"not_found_error\",\n  \"detail\": \"resource not found\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "2b0998a6-f173-418d-a153-34bffab08b43",
+              "name": "Unprocessable Entity",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "demand",
+                    "accounts",
+                    ":account_id",
+                    "projects",
+                    ":project_id",
+                    "target-groups",
+                    ":target_group_id",
+                    "profiles",
+                    "completes-goal"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "project_id",
+                      "description": "(Required) A unique identifier for the project, in ULID format."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "target_group_id",
+                      "description": "(Required) A unique identifier for the target group, in ULID format."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"completes_goal\": 1500\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"object\": \"unprocessable_entity_error\",\n  \"title\": \"profile request validation\",\n  \"detail\": \"Validation error: The provided profile configuration is invalid.\",\n  \"invalid_params\": [\n    {\n      \"error_type\": \"data_validation_error\",\n      \"name\": \"profile_validation_error_001\",\n      \"reason\": \"profile_condition_min_greater_than_max_001\",\n      \"detail\": \"The minimum value cannot be greater than the maximum value.\",\n      \"metadata\": {\n        \"profile_id\": \"01H8XGJWBWBAQ4J1Z5F4A9C3K8\",\n        \"question_id\": [\n          123\n        ],\n        \"error_level\": \"error\"\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "fe238065-620f-436b-95af-7e519ad96168",
+              "name": "A request failed due to an internal error.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "demand",
+                    "accounts",
+                    ":account_id",
+                    "projects",
+                    ":project_id",
+                    "target-groups",
+                    ":target_group_id",
+                    "profiles",
+                    "completes-goal"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "project_id",
+                      "description": "(Required) A unique identifier for the project, in ULID format."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "target_group_id",
+                      "description": "(Required) A unique identifier for the target group, in ULID format."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"completes_goal\": 1500\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"d94b8bb2-a540-4a91-9c05-2aa3ae9a5e1e\",\n  \"object\": \"unexpected_internal_error\",\n  \"detail\": \"an internal error has led to the failure of this operation\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "27003619-f054-4085-915e-5f2bb9750653",
+          "name": "Delete profiles",
+          "request": {
+            "name": "Delete profiles",
+            "description": {
+              "content": "Allows the user to delete multiple profiles and quotas associated to the profile on a target group.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "demand",
+                "accounts",
+                ":account_id",
+                "projects",
+                ":project_id",
+                "target-groups",
+                ":target_group_id",
+                "profiles",
+                "delete-profiles"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "project_id",
+                  "description": "(Required) A unique identifier for the project, in ULID format."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "account_id",
+                  "description": "(Required) The account's unique identifier."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "target_group_id",
+                  "description": "(Required) A unique identifier for the target group, in ULID format."
+                }
+              ]
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                "key": "Cint-API-Version",
+                "value": "<string>"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"profile_ids\": [\n    \"<ULID>\"\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "3f99cd22-e032-4f86-a605-4dd7ac9047a1",
+              "name": "Successfully deleted profiles",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "demand",
+                    "accounts",
+                    ":account_id",
+                    "projects",
+                    ":project_id",
+                    "target-groups",
+                    ":target_group_id",
+                    "profiles",
+                    "delete-profiles"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "project_id",
+                      "description": "(Required) A unique identifier for the project, in ULID format."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "target_group_id",
+                      "description": "(Required) A unique identifier for the target group, in ULID format."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"profile_ids\": [\n    \"01HY0PYB3TW23RQRVNFYRC2PP6\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "97449462-c648-40b6-b0a5-c1716b2ad83c",
+              "name": "A request is not valid and can't be processed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "demand",
+                    "accounts",
+                    ":account_id",
+                    "projects",
+                    ":project_id",
+                    "target-groups",
+                    ":target_group_id",
+                    "profiles",
+                    "delete-profiles"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "project_id",
+                      "description": "(Required) A unique identifier for the project, in ULID format."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "target_group_id",
+                      "description": "(Required) A unique identifier for the target group, in ULID format."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"profile_ids\": [\n    \"01HY0PYB3TW23RQRVNFYRC2PP6\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"9e278238-d011-4e05-8327-1ce1d5d26254\",\n  \"object\": \"bad_request_error\",\n  \"detail\": \"Expected field 'foo' is missing.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c698acfe-9ea9-42ed-8020-1301297f74bc",
+              "name": "A request is unauthorized.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "demand",
+                    "accounts",
+                    ":account_id",
+                    "projects",
+                    ":project_id",
+                    "target-groups",
+                    ":target_group_id",
+                    "profiles",
+                    "delete-profiles"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "project_id",
+                      "description": "(Required) A unique identifier for the project, in ULID format."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "target_group_id",
+                      "description": "(Required) A unique identifier for the target group, in ULID format."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"profile_ids\": [\n    \"01HY0PYB3TW23RQRVNFYRC2PP6\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"1dcf0f40-f0d1-4cf6-8c00-c3d019d32faf\",\n  \"object\": \"authorization_error\",\n  \"detail\": \"no valid authorization provided for this operation\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "fc7379bd-cf57-401b-b43b-4705d1591bd8",
+              "name": "A requested is forbidden.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "demand",
+                    "accounts",
+                    ":account_id",
+                    "projects",
+                    ":project_id",
+                    "target-groups",
+                    ":target_group_id",
+                    "profiles",
+                    "delete-profiles"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "project_id",
+                      "description": "(Required) A unique identifier for the project, in ULID format."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "target_group_id",
+                      "description": "(Required) A unique identifier for the target group, in ULID format."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"profile_ids\": [\n    \"01HY0PYB3TW23RQRVNFYRC2PP6\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"fe68cdd2-ee87-4dbf-8950-63c5cbca94c7\",\n  \"object\": \"authorization_error\",\n  \"detail\": \"you don't have the right permissions to perform this operation\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "848d5350-baa7-488f-8ae5-46baa49a177e",
+              "name": "A requested resource isn't found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "demand",
+                    "accounts",
+                    ":account_id",
+                    "projects",
+                    ":project_id",
+                    "target-groups",
+                    ":target_group_id",
+                    "profiles",
+                    "delete-profiles"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "project_id",
+                      "description": "(Required) A unique identifier for the project, in ULID format."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "target_group_id",
+                      "description": "(Required) A unique identifier for the target group, in ULID format."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"profile_ids\": [\n    \"01HY0PYB3TW23RQRVNFYRC2PP6\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"7a5972ba-0825-4360-b852-fa2430e47034\",\n  \"object\": \"not_found_error\",\n  \"detail\": \"resource not found\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "0ce9159a-cf30-4c68-8f33-c2226f78059d",
+              "name": "Unprocessable Entity",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "demand",
+                    "accounts",
+                    ":account_id",
+                    "projects",
+                    ":project_id",
+                    "target-groups",
+                    ":target_group_id",
+                    "profiles",
+                    "delete-profiles"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "project_id",
+                      "description": "(Required) A unique identifier for the project, in ULID format."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "target_group_id",
+                      "description": "(Required) A unique identifier for the target group, in ULID format."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"profile_ids\": [\n    \"01HY0PYB3TW23RQRVNFYRC2PP6\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"object\": \"unprocessable_entity_error\",\n  \"detail\": \"Validation error4%USQMm#ky\",\n  \"title\": \"profile request validation\",\n  \"invalid_params\": [\n    {\n      \"error_type\": \"data_validation_error\",\n      \"name\": \"profile_validation_error_046\",\n      \"reason\": \"ungroup_quota_not_unique_007\",\n      \"detail\": \"string\",\n      \"metadata\": {\n        \"question_id\": [\n          9524,\n          5337\n        ],\n        \"profile_id\": \"string\",\n        \"interlock_id\": \"string\",\n        \"quota_id\": \"string\",\n        \"error_level\": \"error\"\n      }\n    },\n    {\n      \"error_type\": \"data_validation_error\",\n      \"name\": \"profile_validation_error_036\",\n      \"reason\": \"not_supported_question_option_020\",\n      \"detail\": \"string\",\n      \"metadata\": {\n        \"question_id\": [\n          4500,\n          4894\n        ],\n        \"profile_id\": \"string\",\n        \"interlock_id\": \"string\",\n        \"quota_id\": \"string\",\n        \"error_level\": \"warning\"\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e13db151-c147-405d-929b-f25b221dfcde",
+              "name": "A request failed due to an internal error.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "demand",
+                    "accounts",
+                    ":account_id",
+                    "projects",
+                    ":project_id",
+                    "target-groups",
+                    ":target_group_id",
+                    "profiles",
+                    "delete-profiles"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "project_id",
+                      "description": "(Required) A unique identifier for the project, in ULID format."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "target_group_id",
+                      "description": "(Required) A unique identifier for the target group, in ULID format."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"profile_ids\": [\n    \"01HY0PYB3TW23RQRVNFYRC2PP6\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"d94b8bb2-a540-4a91-9c05-2aa3ae9a5e1e\",\n  \"object\": \"unexpected_internal_error\",\n  \"detail\": \"an internal error has led to the failure of this operation\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "88aa5cb4-c898-4a75-8e7a-71501ef841f4",
+          "name": "Manage a target group's profiles",
+          "request": {
+            "name": "Manage a target group's profiles",
+            "description": {
+              "content": "Replaces all profiles on a launched target group with the set of profiles provided in the request.\n\n:::warning \nThis is a destructive \"all or nothing\" operation. Any existing profiles on the target group that are not included in this request will be deleted.\n:::\n\nThe request is fully validated before any changes are applied. If any profile in the request is invalid, the entire operation is halted, and no changes are made to the target group.\n\nThe API automatically removes duplicate open-ended values in this request before validation and saving, but rejects duplicates in selection or range conditions.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "demand",
+                "accounts",
+                ":account_id",
+                "projects",
+                ":project_id",
+                "target-groups",
+                ":target_group_id",
+                "profiles",
+                "manage-profiles"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "account_id",
+                  "description": "(Required) The account's unique identifier."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "project_id",
+                  "description": "(Required) A unique identifier for the project, in ULID format."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "target_group_id",
+                  "description": "(Required) A unique identifier for the target group, in ULID format."
+                }
+              ]
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                "key": "Cint-API-Version",
+                "value": "<string>"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"completes_goal\": \"<int>\",\n  \"profiling\": {\n    \"template_id\": \"<UUID>\",\n    \"profile_adjustment_type\": \"<string>\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "6f5e108d-f50d-4c46-b4e4-f0fdee697daf",
+              "name": "Successfully applied profiles to the target group.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "demand",
+                    "accounts",
+                    ":account_id",
+                    "projects",
+                    ":project_id",
+                    "target-groups",
+                    ":target_group_id",
+                    "profiles",
+                    "manage-profiles"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "project_id",
+                      "description": "(Required) A unique identifier for the project, in ULID format."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "target_group_id",
+                      "description": "(Required) A unique identifier for the target group, in ULID format."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"completes_goal\": 1500,\n  \"profiling\": {\n    \"template_id\": \"e198c976-ce22-436d-acc1-95aa318cc54d\",\n    \"profile_adjustment_type\": \"<string>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"locale\": \"eng-us\",\n  \"completes_goal\": 1500,\n  \"profiles\": [\n    {\n      \"object\": \"regular\",\n      \"id\": \"01JQM2QN1FDN1WZA3JZX639MAR\",\n      \"quotas_enabled\": true,\n      \"name\": \"HISPANIC\",\n      \"description\": \"Are you of Hispanic, Latino, or Spanish origin?\",\n      \"targets\": [\n        {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      ],\n      \"description_translated\": \"Are you of Hispanic, Latino, or Spanish origin?\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "eca21aa4-28be-43f0-9819-1f5980a350c0",
+              "name": "A request is not valid and can't be processed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "demand",
+                    "accounts",
+                    ":account_id",
+                    "projects",
+                    ":project_id",
+                    "target-groups",
+                    ":target_group_id",
+                    "profiles",
+                    "manage-profiles"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "project_id",
+                      "description": "(Required) A unique identifier for the project, in ULID format."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "target_group_id",
+                      "description": "(Required) A unique identifier for the target group, in ULID format."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"completes_goal\": 1500,\n  \"profiling\": {\n    \"template_id\": \"e198c976-ce22-436d-acc1-95aa318cc54d\",\n    \"profile_adjustment_type\": \"<string>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "The `traceparent` header carries the trace ID and parent span ID, as defined by the W3C Trace Context specification. It's used to trace a single request as it moves through multiple services.",
+                  "key": "traceparent",
+                  "value": "00-0af7651916cd43dd8448eb211c80319c-b7ad6b7169203331-01"
+                },
+                {
+                  "disabled": false,
+                  "description": "The `tracestate` header complements the `traceparent` header by carrying vendor-specific trace information. This allows different services to add their own data to a trace.",
+                  "key": "tracestate",
+                  "value": "ot=foo:bar;k1:13"
+                },
+                {
+                  "disabled": false,
+                  "description": "Boolean value representing whether request is the product of synthetic traffic. By default, set to false. ",
+                  "key": "is-synthetic-traffic",
+                  "value": "false"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"object\": \"string\",\n  \"detail\": \"string\",\n  \"title\": \"string\",\n  \"invalid_params\": [\n    {\n      \"name\": \"string\",\n      \"reason\": \"string\"\n    },\n    {\n      \"name\": \"string\",\n      \"reason\": \"string\"\n    }\n  ],\n  \"instance\": \"string\",\n  \"type\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f440bba9-3c03-443a-91f2-392b31684aea",
+              "name": "Unprocessable Entity",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "demand",
+                    "accounts",
+                    ":account_id",
+                    "projects",
+                    ":project_id",
+                    "target-groups",
+                    ":target_group_id",
+                    "profiles",
+                    "manage-profiles"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "project_id",
+                      "description": "(Required) A unique identifier for the project, in ULID format."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "target_group_id",
+                      "description": "(Required) A unique identifier for the target group, in ULID format."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"completes_goal\": 1500,\n  \"profiling\": {\n    \"template_id\": \"e198c976-ce22-436d-acc1-95aa318cc54d\",\n    \"profile_adjustment_type\": \"<string>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"object\": \"unprocessable_entity_error\",\n  \"title\": \"profile request validation\",\n  \"detail\": \"Validation error\",\n  \"invalid_params\": [\n    {\n      \"error_type\": \"data_validation_error\",\n      \"name\": \"profile_validation_error_037\",\n      \"reason\": \"target_id_not_found_for_profile_045\",\n      \"detail\": \"string\",\n      \"metadata\": {\n        \"question_id\": [\n          3921,\n          348\n        ],\n        \"profile_id\": \"string\",\n        \"interlock_id\": \"string\",\n        \"quota_id\": \"string\",\n        \"error_level\": \"error\"\n      }\n    },\n    {\n      \"error_type\": \"data_validation_error\",\n      \"name\": \"profile_validation_error_015\",\n      \"reason\": \"quota_value_less_than_completes_046\",\n      \"detail\": \"string\",\n      \"metadata\": {\n        \"question_id\": [\n          8584,\n          8027\n        ],\n        \"profile_id\": \"string\",\n        \"interlock_id\": \"string\",\n        \"quota_id\": \"string\",\n        \"error_level\": \"warning\"\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7ae01037-5aa5-458c-8965-e9703aafd624",
+              "name": "A request failed due to an internal error.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "demand",
+                    "accounts",
+                    ":account_id",
+                    "projects",
+                    ":project_id",
+                    "target-groups",
+                    ":target_group_id",
+                    "profiles",
+                    "manage-profiles"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "project_id",
+                      "description": "(Required) A unique identifier for the project, in ULID format."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "target_group_id",
+                      "description": "(Required) A unique identifier for the target group, in ULID format."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"completes_goal\": 1500,\n  \"profiling\": {\n    \"template_id\": \"e198c976-ce22-436d-acc1-95aa318cc54d\",\n    \"profile_adjustment_type\": \"<string>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "The `traceparent` header carries the trace ID and parent span ID, as defined by the W3C Trace Context specification. It's used to trace a single request as it moves through multiple services.",
+                  "key": "traceparent",
+                  "value": "00-0af7651916cd43dd8448eb211c80319c-b7ad6b7169203331-01"
+                },
+                {
+                  "disabled": false,
+                  "description": "The `tracestate` header complements the `traceparent` header by carrying vendor-specific trace information. This allows different services to add their own data to a trace.",
+                  "key": "tracestate",
+                  "value": "ot=foo:bar;k1:13"
+                },
+                {
+                  "disabled": false,
+                  "description": "Boolean value representing whether request is the product of synthetic traffic. By default, set to false. ",
+                  "key": "is-synthetic-traffic",
+                  "value": "false"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"object\": \"string\",\n  \"detail\": \"string\",\n  \"errors\": [\n    {\n      \"name\": \"string\",\n      \"reason\": \"string\"\n    },\n    {\n      \"name\": \"string\",\n      \"reason\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.cint.com/v1",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "961dd27a-e7d8-4298-aeec-343496edf32c",
+    "name": "Demand Accounts Manage Profiles for Launched Target Groups API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Cint's demand ordering API is REST oriented. It has predictable resource based URLs, accepts JSON-encoded request bodies, returns JSON-encoded responses, and uses standard HTTP response codes, authentication, and verbs. Error responses are also JSON-encoded and follow a standard format, providing a unique error ID and detailed information about what went wrong.\n\nAuthentication is handled via bearer tokens passed in the `Authorization` header. All requests must also include a `Cint-API-Version` header with a date in `YYYY-MM-DD` format to specify the desired API version. Depending on the version you use, endpoint behavior may differ as we improve our API with every version release.\n\nWhile many operations work on a single object per request, the demand ordering API also provides asynchronous batch endpoints for performing bulk updates efficiently on certain resources. For safety, `POST` requests support an `Idempotency-Key` header to allow for safe retries without accidentally performing the same operation twice.\n",
+      "type": "text/plain"
+    }
+  }
+}

@@ -1,0 +1,96 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Demand Accounts Target Groups (Batch) API",
+    "version": "2025-12-18"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Target Groups (Batch)",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create a bulk update target group project managers job",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.cint.com/v1/demand/accounts/:account_id/projects/:project_id/batch-jobs/update-target-group-project-managers",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The account's unique identifier."
+              },
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the project, in ULID format."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "This endpoint creates an asynchronous job to update the project manager for one or more target groups within a specific project. Because the update is processed in the background, a successful request immediately returns a 201 Created status with a Location header. The header contains the URL to the job, which you can use to track its progress."
+        },
+        {
+          "info": {
+            "name": "Retrieves a bulk update target group project managers job",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cint.com/v1/demand/accounts/:account_id/projects/:project_id/batch-jobs/update-target-group-project-managers/:job_id",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The account's unique identifier."
+              },
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the project, in ULID format."
+              },
+              {
+                "name": "job_id",
+                "value": "",
+                "type": "path",
+                "description": "The character string representing a unique job ID."
+              }
+            ]
+          },
+          "docs": "After creating a bulk update job, you can use this endpoint to check its status. You'll need to poll this endpoint until the job's status changes from `Processing` to either `Completed` or `Failed` to get the final results."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

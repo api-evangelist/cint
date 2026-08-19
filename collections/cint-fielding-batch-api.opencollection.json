@@ -1,0 +1,404 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Demand Accounts Fielding (Batch) API",
+    "version": "2025-12-18"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Fielding (Batch)",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Creates a job to complete multiple target groups",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.cint.com/v1/demand/accounts/:account_id/projects/:project_id/batch-jobs/complete-fielding-runs-by-target-group-id",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              },
+              {
+                "name": "idempotency-key",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The account's unique identifier."
+              },
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the project, in ULID format."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "This endpoint creates a bulk job to complete fielding runs for a list of specified target group IDs. This action will immediately complete the \nspecified target groups, regardless of whether their completes goals or end dates have been reached.\nIf a target group is already completed, the system considers the action successful.\n\nTo ensure that the same job is not created multiple times, this endpoint uses an `Idempotency-Key` from the request header. If a job with \nthe same key has already been s"
+        },
+        {
+          "info": {
+            "name": "Retrieves a bulk \"complete\" job status",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cint.com/v1/demand/accounts/:account_id/projects/:project_id/batch-jobs/complete-fielding-runs-by-target-group-id/:job_id",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The account's unique identifier."
+              },
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the project, in ULID format."
+              },
+              {
+                "name": "job_id",
+                "value": "",
+                "type": "path",
+                "description": "The character string representing a unique job ID."
+              }
+            ]
+          },
+          "docs": "This endpoint retrieves the status and details of a previously created bulk-complete job using its job ID.\n\nYou should poll this endpoint periodically until the `status` field is either `Completed` or `Failed`. If the status is `Processing`, the job is still running.\nOnce the job is finished, the `updated_target_groups` and `failed_target_groups` lists will show the outcome for each target group included in the original request.\nIf a target group was already in the desired status, it will be inc"
+        },
+        {
+          "info": {
+            "name": "Creates a job to launch multiple target groups",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.cint.com/v1/demand/accounts/:account_id/projects/:project_id/batch-jobs/launch-fielding-runs-by-target-group-id",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              },
+              {
+                "name": "idempotency-key",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The account's unique identifier."
+              },
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the project, in ULID format."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "This endpoint creates a bulk job to launch fielding runs for a list of specified target group IDs. This action will start the fielding runs \nfor the specified target groups, updating their fielding start date to the current time. A fielding run can only be launched if it is in a \n'scheduled' state.\nIf a target group is already live, the system considers the action successful.\n\nTo ensure that the same job is not created multiple times, this endpoint uses an `Idempotency-Key` from the request head"
+        },
+        {
+          "info": {
+            "name": "Retrieves a bulk \"launch\" job status",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cint.com/v1/demand/accounts/:account_id/projects/:project_id/batch-jobs/launch-fielding-runs-by-target-group-id/:job_id",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The account's unique identifier."
+              },
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the project, in ULID format."
+              },
+              {
+                "name": "job_id",
+                "value": "",
+                "type": "path",
+                "description": "The character string representing a unique job ID."
+              }
+            ]
+          },
+          "docs": "This endpoint retrieves the status and details of a previously created bulk-launch job using its job ID.\n\nYou should poll this endpoint periodically until the `status` field is either `Completed` or `Failed`. If the status is `Processing`, the job is still running.\nOnce the job is finished, the `updated_target_groups` and `failed_target_groups` lists will show the outcome for each target group included in the original request.\nIf a target group was already in the desired status, it will be inclu"
+        },
+        {
+          "info": {
+            "name": "Creates a job to pause multiple target groups",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.cint.com/v1/demand/accounts/:account_id/projects/:project_id/batch-jobs/pause-fielding-runs-by-target-group-id",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              },
+              {
+                "name": "idempotency-key",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The account's unique identifier."
+              },
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the project, in ULID format."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "This endpoint creates a bulk job to pause fielding runs for a list of specified target group IDs. This action will pause the fielding runs for the specified target groups.\nA target group can only be paused if it is currently in a 'live' state.\nIf a target group is already paused, the system considers the action successful.\n\nTo ensure that the same job is not created multiple times, this endpoint uses an `Idempotency-Key` from the request header. If a job with the same key has already been \nsubmi"
+        },
+        {
+          "info": {
+            "name": "Retrieves a bulk \"pause\" job status",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cint.com/v1/demand/accounts/:account_id/projects/:project_id/batch-jobs/pause-fielding-runs-by-target-group-id/:job_id",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The account's unique identifier."
+              },
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the project, in ULID format."
+              },
+              {
+                "name": "job_id",
+                "value": "",
+                "type": "path",
+                "description": "The character string representing a unique job ID."
+              }
+            ]
+          },
+          "docs": "This endpoint retrieves the status and details of a previously created bulk-pause job using its job ID.\n\nYou should poll this endpoint periodically until the `status` field is either `Completed` or `Failed`. If the status is `Processing`, the job is still running.\nOnce the job is finished, the `updated_target_groups` and `failed_target_groups` lists will show the outcome for each target group included in the original request.\nIf a target group was already in the desired status, it will be includ"
+        },
+        {
+          "info": {
+            "name": "Creates a job to relaunch multiple target groups",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.cint.com/v1/demand/accounts/:account_id/projects/:project_id/batch-jobs/relaunch-fielding-runs-by-target-group-id",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              },
+              {
+                "name": "idempotency-key",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The account's unique identifier."
+              },
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the project, in ULID format."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "This endpoint creates a bulk job to relaunch fielding runs for a list of specified target group IDs. This action will restart the fielding runs for previously completed \ntarget groups. A target group can only be relaunched if it is in a 'completed' state and its completes goal and end date have not yet been reached.\n\nTo ensure that the same job is not created multiple times, this endpoint uses an `Idempotency-Key` from the request header. If a job with the same key has already been \nsubmitted, t"
+        },
+        {
+          "info": {
+            "name": "Retrieves a bulk \"relaunch\" job status",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cint.com/v1/demand/accounts/:account_id/projects/:project_id/batch-jobs/relaunch-fielding-runs-by-target-group-id/:job_id",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The account's unique identifier."
+              },
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the project, in ULID format."
+              },
+              {
+                "name": "job_id",
+                "value": "",
+                "type": "path",
+                "description": "The character string representing a unique job ID."
+              }
+            ]
+          },
+          "docs": "This endpoint retrieves the status and details of a previously created bulk-relaunch job using its job ID.\n\nYou should poll this endpoint periodically until the `status` field is either `Completed` or `Failed`. If the status is `Processing`, the job is still running.\nOnce the job is finished, the `updated_target_groups` and `failed_target_groups` lists will show the outcome for each target group included in the original request.\nIf a target group was already in the desired status, it will be inc"
+        },
+        {
+          "info": {
+            "name": "Creates a job to resume multiple target groups",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.cint.com/v1/demand/accounts/:account_id/projects/:project_id/batch-jobs/resume-fielding-runs-by-target-group-id",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              },
+              {
+                "name": "idempotency-key",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The account's unique identifier."
+              },
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the project, in ULID format."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "This endpoint creates a bulk job to resume fielding runs for a list of specified target group IDs. This action will resume the fielding \nruns for previously paused target groups. A target group can only be resumed if its completes goal and end date have not yet been reached.\nIf a target group is already live, the system considers the action successful.\n\nTo ensure that the same job is not created multiple times, this endpoint uses an `Idempotency-Key` from the request header. If a job \nwith the s"
+        },
+        {
+          "info": {
+            "name": "Retrieves a bulk \"resume\" job status",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cint.com/v1/demand/accounts/:account_id/projects/:project_id/batch-jobs/resume-fielding-runs-by-target-group-id/:job_id",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The account's unique identifier."
+              },
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the project, in ULID format."
+              },
+              {
+                "name": "job_id",
+                "value": "",
+                "type": "path",
+                "description": "The character string representing a unique job ID."
+              }
+            ]
+          },
+          "docs": "This endpoint retrieves the status and details of a previously created bulk-resume job using its job ID.\n\nYou should poll this endpoint periodically until the `status` field is either `Completed` or `Failed`. If the status is `Processing`, the job is still running.\nOnce the job is finished, the `updated_target_groups` and `failed_target_groups` lists will show the outcome for each target group included in the original request.\nIf a target group was already in the desired status, it will be inclu"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

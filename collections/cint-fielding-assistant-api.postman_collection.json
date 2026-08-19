@@ -1,0 +1,1374 @@
+{
+  "item": [
+    {
+      "id": "bc0afb4e-f0f1-40e7-98be-ee5f2ef18dcd",
+      "name": "Fielding Assistant",
+      "description": {
+        "content": "Get, update Target Group Fielding Assistant assignments. Fielding Assistant provides optional modules to automate common workflows and optimise your Target Group.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "8d78de0e-518a-4fb3-a5fb-161bfa364604",
+          "name": "Retrieves the Fielding Assistant assignment for a target group",
+          "request": {
+            "name": "Retrieves the Fielding Assistant assignment for a target group",
+            "description": {
+              "content": "Retrieves the current Fielding Assistant configuration for a target group. The response will show which modules, if any, are currently enabled. Examples:\n\n  * Pricing\n  * Quota overlay\n  * Pacing\n  * Soft launch",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "demand",
+                "accounts",
+                ":account_id",
+                "projects",
+                ":project_id",
+                "target-groups",
+                ":target_group_id",
+                "fielding-assistant-assignment"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "account_id",
+                  "description": "(Required) The account's unique identifier."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "project_id",
+                  "description": "(Required) A unique identifier for the project, in ULID format."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "target_group_id",
+                  "description": "(Required) A unique identifier for the target group, in ULID format."
+                }
+              ]
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                "key": "Cint-API-Version",
+                "value": "<string>"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "1f0d3920-244a-419c-9984-4de5b6d3e7e4",
+              "name": "The Fielding Assistant assignment details were retrieved successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "demand",
+                    "accounts",
+                    ":account_id",
+                    "projects",
+                    ":project_id",
+                    "target-groups",
+                    ":target_group_id",
+                    "fielding-assistant-assignment"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "project_id",
+                      "description": "(Required) A unique identifier for the project, in ULID format."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "target_group_id",
+                      "description": "(Required) A unique identifier for the target group, in ULID format."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "(Required) The `ETag` header provides a unique identifier that represents the current version of a resource. It's used for caching and to prevent concurrent modification issues.",
+                  "key": "ETag",
+                  "value": "W/\"1234\""
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"pricing\": {\n    \"type\": \"dynamic\",\n    \"maximum_cpi\\\"\": {\n      \"value\": \"5.00\",\n      \"currency_code\": \"USD\",\n      \"currency_scale\": 2\n    }\n  },\n  \"pacing\": {\n    \"type\": \"linear\",\n    \"increment_interval\": \"P1D\"\n  },\n  \"quota_overlay\": {\n    \"prevent_overfill\\\"\": true,\n    \"balance_fill\": true\n  },\n  \"soft_launch\": null\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5d0c194e-73ed-4a7c-9403-8bc9be5a5cec",
+              "name": "A request is not valid and can't be processed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "demand",
+                    "accounts",
+                    ":account_id",
+                    "projects",
+                    ":project_id",
+                    "target-groups",
+                    ":target_group_id",
+                    "fielding-assistant-assignment"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "project_id",
+                      "description": "(Required) A unique identifier for the project, in ULID format."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "target_group_id",
+                      "description": "(Required) A unique identifier for the target group, in ULID format."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"9e278238-d011-4e05-8327-1ce1d5d26254\",\n  \"object\": \"bad_request_error\",\n  \"detail\": \"Expected field 'foo' is missing.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "dd23a504-2d09-419e-948c-6c1ae84c29c5",
+              "name": "A request is unauthorized.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "demand",
+                    "accounts",
+                    ":account_id",
+                    "projects",
+                    ":project_id",
+                    "target-groups",
+                    ":target_group_id",
+                    "fielding-assistant-assignment"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "project_id",
+                      "description": "(Required) A unique identifier for the project, in ULID format."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "target_group_id",
+                      "description": "(Required) A unique identifier for the target group, in ULID format."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"1dcf0f40-f0d1-4cf6-8c00-c3d019d32faf\",\n  \"object\": \"authorization_error\",\n  \"detail\": \"no valid authorization provided for this operation\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ba7109e1-321e-4b64-a74b-9305ca2d12df",
+              "name": "A requested is forbidden.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "demand",
+                    "accounts",
+                    ":account_id",
+                    "projects",
+                    ":project_id",
+                    "target-groups",
+                    ":target_group_id",
+                    "fielding-assistant-assignment"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "project_id",
+                      "description": "(Required) A unique identifier for the project, in ULID format."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "target_group_id",
+                      "description": "(Required) A unique identifier for the target group, in ULID format."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"fe68cdd2-ee87-4dbf-8950-63c5cbca94c7\",\n  \"object\": \"authorization_error\",\n  \"detail\": \"you don't have the right permissions to perform this operation\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "cf58484d-3486-4db9-ae04-ada5266ff098",
+              "name": "A requested resource isn't found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "demand",
+                    "accounts",
+                    ":account_id",
+                    "projects",
+                    ":project_id",
+                    "target-groups",
+                    ":target_group_id",
+                    "fielding-assistant-assignment"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "project_id",
+                      "description": "(Required) A unique identifier for the project, in ULID format."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "target_group_id",
+                      "description": "(Required) A unique identifier for the target group, in ULID format."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"7a5972ba-0825-4360-b852-fa2430e47034\",\n  \"object\": \"not_found_error\",\n  \"detail\": \"resource not found\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "602e3e31-d562-44ac-bd0c-6195949cf484",
+              "name": "A request failed due to an internal error.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "demand",
+                    "accounts",
+                    ":account_id",
+                    "projects",
+                    ":project_id",
+                    "target-groups",
+                    ":target_group_id",
+                    "fielding-assistant-assignment"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "project_id",
+                      "description": "(Required) A unique identifier for the project, in ULID format."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "target_group_id",
+                      "description": "(Required) A unique identifier for the target group, in ULID format."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"d94b8bb2-a540-4a91-9c05-2aa3ae9a5e1e\",\n  \"object\": \"unexpected_internal_error\",\n  \"detail\": \"an internal error has led to the failure of this operation\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "3fbda570-9058-4575-8765-9c63bfc5ac14",
+          "name": "Create or update the Fielding Assistant assignment",
+          "request": {
+            "name": "Create or update the Fielding Assistant assignment",
+            "description": {
+              "content": "Creates or fully replaces the Fielding Assistant assignment for a target group. This is an \"all or nothing\" operation.\nTo modify an existing assignment, you must first GET the current configuration, make your changes,\nand then PUT the entire modified object back. Sending a request with only one module will disable all others.\nTo disable all modules, send an empty object `{}`. This endpoint uses the `If-Match` header for optimistic locking.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "demand",
+                "accounts",
+                ":account_id",
+                "projects",
+                ":project_id",
+                "target-groups",
+                ":target_group_id",
+                "fielding-assistant-assignment"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "account_id",
+                  "description": "(Required) The account's unique identifier."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "project_id",
+                  "description": "(Required) A unique identifier for the project, in ULID format."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "target_group_id",
+                  "description": "(Required) A unique identifier for the target group, in ULID format."
+                }
+              ]
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "The ETag value of the resource you intend to update. This is used for optimistic locking to prevent you from accidentally overwriting changes made by someone else. You can get the ETag from a GET request for the resource. The `ETag` value should always be wrapped in double quotes, whether it is part of a weak `ETag` or standalone.",
+                "key": "If-Match",
+                "value": "<etag>"
+              },
+              {
+                "disabled": false,
+                "description": "The ETag value of the resource you intend to update. This is used for optimistic locking to prevent you from accidentally overwriting changes made by someone else. You can get the ETag from a GET request for the resource. The `ETag` value should always be wrapped in double quotes, whether it is part of a weak `ETag` or standalone. Using `*` will match any version state.",
+                "key": "If-None-Match",
+                "value": "<etag>"
+              },
+              {
+                "disabled": false,
+                "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                "key": "Cint-API-Version",
+                "value": "<string>"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"pricing\": {\n    \"type\": \"<string>\",\n    \"total_budget\": {\n      \"value\": \"<string>\",\n      \"currency_code\": \"<string>\",\n      \"currency_scale\": \"<integer>\"\n    },\n    \"maximum_cpi\": {\n      \"value\": \"<string>\",\n      \"currency_code\": \"<string>\",\n      \"currency_scale\": \"<integer>\"\n    },\n    \"minimum_cpi\": {\n      \"value\": \"<string>\",\n      \"currency_code\": \"<string>\",\n      \"currency_scale\": \"<integer>\"\n    }\n  },\n  \"quota_overlay\": {\n    \"prevent_overfill\": \"<boolean>\",\n    \"balance_fill\": \"<boolean>\"\n  },\n  \"pacing\": {\n    \"type\": \"<string>\",\n    \"increment_interval\": \"<duration>\"\n  },\n  \"soft_launch\": {\n    \"end_at\": \"<dateTime>\",\n    \"filling_goal_percentage\": \"<integer>\",\n    \"demographics_strictness_percentage\": \"<integer>\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "b1ae4c6d-0d4e-4c29-b3bb-46b599ddfbdb",
+              "name": "Fielding assistant assignment on target group successfully created or updated.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "demand",
+                    "accounts",
+                    ":account_id",
+                    "projects",
+                    ":project_id",
+                    "target-groups",
+                    ":target_group_id",
+                    "fielding-assistant-assignment"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "project_id",
+                      "description": "(Required) A unique identifier for the project, in ULID format."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "target_group_id",
+                      "description": "(Required) A unique identifier for the target group, in ULID format."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "The ETag value of the resource you intend to update. This is used for optimistic locking to prevent you from accidentally overwriting changes made by someone else. You can get the ETag from a GET request for the resource. The `ETag` value should always be wrapped in double quotes, whether it is part of a weak `ETag` or standalone.",
+                    "key": "If-Match",
+                    "value": "W/\"1234\""
+                  },
+                  {
+                    "disabled": false,
+                    "description": "The ETag value of the resource you intend to update. This is used for optimistic locking to prevent you from accidentally overwriting changes made by someone else. You can get the ETag from a GET request for the resource. The `ETag` value should always be wrapped in double quotes, whether it is part of a weak `ETag` or standalone. Using `*` will match any version state.",
+                    "key": "If-None-Match",
+                    "value": "1"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"pricing\": {\n    \"type\": \"dynamic\",\n    \"maximum_cpi\": {\n      \"value\": \"5.00\",\n      \"currency_code\": \"USD\"\n    }\n  },\n  \"pacing\": {\n    \"type\": \"linear\",\n    \"increment_interval\": \"P1D\"\n  },\n  \"quota_overlay\": {\n    \"prevent_overfill\": true,\n    \"balance_fill\": true\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "d75bc6f4-8acf-413e-9d4c-5d41106826ac",
+              "name": "A request is not valid and can't be processed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "demand",
+                    "accounts",
+                    ":account_id",
+                    "projects",
+                    ":project_id",
+                    "target-groups",
+                    ":target_group_id",
+                    "fielding-assistant-assignment"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "project_id",
+                      "description": "(Required) A unique identifier for the project, in ULID format."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "target_group_id",
+                      "description": "(Required) A unique identifier for the target group, in ULID format."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "The ETag value of the resource you intend to update. This is used for optimistic locking to prevent you from accidentally overwriting changes made by someone else. You can get the ETag from a GET request for the resource. The `ETag` value should always be wrapped in double quotes, whether it is part of a weak `ETag` or standalone.",
+                    "key": "If-Match",
+                    "value": "W/\"1234\""
+                  },
+                  {
+                    "disabled": false,
+                    "description": "The ETag value of the resource you intend to update. This is used for optimistic locking to prevent you from accidentally overwriting changes made by someone else. You can get the ETag from a GET request for the resource. The `ETag` value should always be wrapped in double quotes, whether it is part of a weak `ETag` or standalone. Using `*` will match any version state.",
+                    "key": "If-None-Match",
+                    "value": "1"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"pricing\": {\n    \"type\": \"dynamic\",\n    \"maximum_cpi\": {\n      \"value\": \"5.00\",\n      \"currency_code\": \"USD\"\n    }\n  },\n  \"pacing\": {\n    \"type\": \"linear\",\n    \"increment_interval\": \"P1D\"\n  },\n  \"quota_overlay\": {\n    \"prevent_overfill\": true,\n    \"balance_fill\": true\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"9e278238-d011-4e05-8327-1ce1d5d26254\",\n  \"object\": \"bad_request_error\",\n  \"detail\": \"Expected field 'foo' is missing.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "3773325a-ec0d-44a1-b9ad-10185c9f7be6",
+              "name": "A request is unauthorized.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "demand",
+                    "accounts",
+                    ":account_id",
+                    "projects",
+                    ":project_id",
+                    "target-groups",
+                    ":target_group_id",
+                    "fielding-assistant-assignment"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "project_id",
+                      "description": "(Required) A unique identifier for the project, in ULID format."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "target_group_id",
+                      "description": "(Required) A unique identifier for the target group, in ULID format."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "The ETag value of the resource you intend to update. This is used for optimistic locking to prevent you from accidentally overwriting changes made by someone else. You can get the ETag from a GET request for the resource. The `ETag` value should always be wrapped in double quotes, whether it is part of a weak `ETag` or standalone.",
+                    "key": "If-Match",
+                    "value": "W/\"1234\""
+                  },
+                  {
+                    "disabled": false,
+                    "description": "The ETag value of the resource you intend to update. This is used for optimistic locking to prevent you from accidentally overwriting changes made by someone else. You can get the ETag from a GET request for the resource. The `ETag` value should always be wrapped in double quotes, whether it is part of a weak `ETag` or standalone. Using `*` will match any version state.",
+                    "key": "If-None-Match",
+                    "value": "1"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"pricing\": {\n    \"type\": \"dynamic\",\n    \"maximum_cpi\": {\n      \"value\": \"5.00\",\n      \"currency_code\": \"USD\"\n    }\n  },\n  \"pacing\": {\n    \"type\": \"linear\",\n    \"increment_interval\": \"P1D\"\n  },\n  \"quota_overlay\": {\n    \"prevent_overfill\": true,\n    \"balance_fill\": true\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"1dcf0f40-f0d1-4cf6-8c00-c3d019d32faf\",\n  \"object\": \"authorization_error\",\n  \"detail\": \"no valid authorization provided for this operation\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "726b5d17-2dac-4c9d-815f-eeae5e43d99d",
+              "name": "A requested is forbidden.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "demand",
+                    "accounts",
+                    ":account_id",
+                    "projects",
+                    ":project_id",
+                    "target-groups",
+                    ":target_group_id",
+                    "fielding-assistant-assignment"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "project_id",
+                      "description": "(Required) A unique identifier for the project, in ULID format."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "target_group_id",
+                      "description": "(Required) A unique identifier for the target group, in ULID format."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "The ETag value of the resource you intend to update. This is used for optimistic locking to prevent you from accidentally overwriting changes made by someone else. You can get the ETag from a GET request for the resource. The `ETag` value should always be wrapped in double quotes, whether it is part of a weak `ETag` or standalone.",
+                    "key": "If-Match",
+                    "value": "W/\"1234\""
+                  },
+                  {
+                    "disabled": false,
+                    "description": "The ETag value of the resource you intend to update. This is used for optimistic locking to prevent you from accidentally overwriting changes made by someone else. You can get the ETag from a GET request for the resource. The `ETag` value should always be wrapped in double quotes, whether it is part of a weak `ETag` or standalone. Using `*` will match any version state.",
+                    "key": "If-None-Match",
+                    "value": "1"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"pricing\": {\n    \"type\": \"dynamic\",\n    \"maximum_cpi\": {\n      \"value\": \"5.00\",\n      \"currency_code\": \"USD\"\n    }\n  },\n  \"pacing\": {\n    \"type\": \"linear\",\n    \"increment_interval\": \"P1D\"\n  },\n  \"quota_overlay\": {\n    \"prevent_overfill\": true,\n    \"balance_fill\": true\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"fe68cdd2-ee87-4dbf-8950-63c5cbca94c7\",\n  \"object\": \"authorization_error\",\n  \"detail\": \"you don't have the right permissions to perform this operation\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "9ff97a6e-3c88-4ffd-83cb-45bfe13bd428",
+              "name": "A requested resource isn't found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "demand",
+                    "accounts",
+                    ":account_id",
+                    "projects",
+                    ":project_id",
+                    "target-groups",
+                    ":target_group_id",
+                    "fielding-assistant-assignment"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "project_id",
+                      "description": "(Required) A unique identifier for the project, in ULID format."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "target_group_id",
+                      "description": "(Required) A unique identifier for the target group, in ULID format."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "The ETag value of the resource you intend to update. This is used for optimistic locking to prevent you from accidentally overwriting changes made by someone else. You can get the ETag from a GET request for the resource. The `ETag` value should always be wrapped in double quotes, whether it is part of a weak `ETag` or standalone.",
+                    "key": "If-Match",
+                    "value": "W/\"1234\""
+                  },
+                  {
+                    "disabled": false,
+                    "description": "The ETag value of the resource you intend to update. This is used for optimistic locking to prevent you from accidentally overwriting changes made by someone else. You can get the ETag from a GET request for the resource. The `ETag` value should always be wrapped in double quotes, whether it is part of a weak `ETag` or standalone. Using `*` will match any version state.",
+                    "key": "If-None-Match",
+                    "value": "1"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"pricing\": {\n    \"type\": \"dynamic\",\n    \"maximum_cpi\": {\n      \"value\": \"5.00\",\n      \"currency_code\": \"USD\"\n    }\n  },\n  \"pacing\": {\n    \"type\": \"linear\",\n    \"increment_interval\": \"P1D\"\n  },\n  \"quota_overlay\": {\n    \"prevent_overfill\": true,\n    \"balance_fill\": true\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"7a5972ba-0825-4360-b852-fa2430e47034\",\n  \"object\": \"not_found_error\",\n  \"detail\": \"resource not found\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "01370d77-2ebd-4f4c-868a-f90a347952d8",
+              "name": "The resource could not be modified because the ETag in the If-Match header does not match the current version. This means the resource was updated by another request after you retrieved it.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "demand",
+                    "accounts",
+                    ":account_id",
+                    "projects",
+                    ":project_id",
+                    "target-groups",
+                    ":target_group_id",
+                    "fielding-assistant-assignment"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "project_id",
+                      "description": "(Required) A unique identifier for the project, in ULID format."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "target_group_id",
+                      "description": "(Required) A unique identifier for the target group, in ULID format."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "The ETag value of the resource you intend to update. This is used for optimistic locking to prevent you from accidentally overwriting changes made by someone else. You can get the ETag from a GET request for the resource. The `ETag` value should always be wrapped in double quotes, whether it is part of a weak `ETag` or standalone.",
+                    "key": "If-Match",
+                    "value": "W/\"1234\""
+                  },
+                  {
+                    "disabled": false,
+                    "description": "The ETag value of the resource you intend to update. This is used for optimistic locking to prevent you from accidentally overwriting changes made by someone else. You can get the ETag from a GET request for the resource. The `ETag` value should always be wrapped in double quotes, whether it is part of a weak `ETag` or standalone. Using `*` will match any version state.",
+                    "key": "If-None-Match",
+                    "value": "1"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"pricing\": {\n    \"type\": \"dynamic\",\n    \"maximum_cpi\": {\n      \"value\": \"5.00\",\n      \"currency_code\": \"USD\"\n    }\n  },\n  \"pacing\": {\n    \"type\": \"linear\",\n    \"increment_interval\": \"P1D\"\n  },\n  \"quota_overlay\": {\n    \"prevent_overfill\": true,\n    \"balance_fill\": true\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Precondition Failed",
+              "code": 412,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "The `traceparent` header carries the trace ID and parent span ID, as defined by the W3C Trace Context specification. It's used to trace a single request as it moves through multiple services.",
+                  "key": "traceparent",
+                  "value": "00-0af7651916cd43dd8448eb211c80319c-b7ad6b7169203331-01"
+                },
+                {
+                  "disabled": false,
+                  "description": "The `tracestate` header complements the `traceparent` header by carrying vendor-specific trace information. This allows different services to add their own data to a trace.",
+                  "key": "tracestate",
+                  "value": "ot=foo:bar;k1:13"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"3d61d9c3-68ee-4026-b436-6e76a2b33932\",\n  \"object\": \"precondition_failed_error\",\n  \"detail\": \"The resource has been modified since you last retrieved it. Please fetch the latest version and try your request again.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c1137f26-33d5-4a9c-957d-aaecbe302085",
+              "name": "A request failed due to an internal error.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "demand",
+                    "accounts",
+                    ":account_id",
+                    "projects",
+                    ":project_id",
+                    "target-groups",
+                    ":target_group_id",
+                    "fielding-assistant-assignment"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "project_id",
+                      "description": "(Required) A unique identifier for the project, in ULID format."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "target_group_id",
+                      "description": "(Required) A unique identifier for the target group, in ULID format."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "The ETag value of the resource you intend to update. This is used for optimistic locking to prevent you from accidentally overwriting changes made by someone else. You can get the ETag from a GET request for the resource. The `ETag` value should always be wrapped in double quotes, whether it is part of a weak `ETag` or standalone.",
+                    "key": "If-Match",
+                    "value": "W/\"1234\""
+                  },
+                  {
+                    "disabled": false,
+                    "description": "The ETag value of the resource you intend to update. This is used for optimistic locking to prevent you from accidentally overwriting changes made by someone else. You can get the ETag from a GET request for the resource. The `ETag` value should always be wrapped in double quotes, whether it is part of a weak `ETag` or standalone. Using `*` will match any version state.",
+                    "key": "If-None-Match",
+                    "value": "1"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"pricing\": {\n    \"type\": \"dynamic\",\n    \"maximum_cpi\": {\n      \"value\": \"5.00\",\n      \"currency_code\": \"USD\"\n    }\n  },\n  \"pacing\": {\n    \"type\": \"linear\",\n    \"increment_interval\": \"P1D\"\n  },\n  \"quota_overlay\": {\n    \"prevent_overfill\": true,\n    \"balance_fill\": true\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"d94b8bb2-a540-4a91-9c05-2aa3ae9a5e1e\",\n  \"object\": \"unexpected_internal_error\",\n  \"detail\": \"an internal error has led to the failure of this operation\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.cint.com/v1",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "06323260-1965-44b3-b4b2-11af0361e004",
+    "name": "Demand Accounts Fielding Assistant API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Cint's demand ordering API is REST oriented. It has predictable resource based URLs, accepts JSON-encoded request bodies, returns JSON-encoded responses, and uses standard HTTP response codes, authentication, and verbs. Error responses are also JSON-encoded and follow a standard format, providing a unique error ID and detailed information about what went wrong.\n\nAuthentication is handled via bearer tokens passed in the `Authorization` header. All requests must also include a `Cint-API-Version` header with a date in `YYYY-MM-DD` format to specify the desired API version. Depending on the version you use, endpoint behavior may differ as we improve our API with every version release.\n\nWhile many operations work on a single object per request, the demand ordering API also provides asynchronous batch endpoints for performing bulk updates efficiently on certain resources. For safety, `POST` requests support an `Idempotency-Key` header to allow for safe retries without accidentally performing the same operation twice.\n",
+      "type": "text/plain"
+    }
+  }
+}

@@ -1,0 +1,474 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Demand Accounts Recontacts API",
+    "version": "2025-12-18"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Recontacts",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create a job to remove all recontact respondent IDs",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.cint.com/v1/demand/accounts/:account_id/projects/:project_id/target-groups/:target_group_id/recontacts/jobs/remove-all-rsids",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The account's unique identifier."
+              },
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the project, in ULID format."
+              },
+              {
+                "name": "target_group_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the target group, in ULID format."
+              }
+            ]
+          },
+          "docs": "This endpoint creates an asynchronous job to remove all stored Respondent IDs (RSIDs) recontact opportunities for the specified Target Group.\n\nA successful request returns a `201 Created` response with a `job_id` that you can use to track the operation's status.\n\n:::caution Operational Constraint\nOnly one recontact job can run at a time per Target Group. If a job is already in `Processing` status for this Target Group, the API will return a `409 Conflict` error.\n\nEstimated execution time: Removi"
+        },
+        {
+          "info": {
+            "name": "Get information on a remove all Recontact opportunities job",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cint.com/v1/demand/accounts/:account_id/projects/:project_id/target-groups/:target_group_id/recontacts/jobs/remove-all-rsids/:job_id",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The account's unique identifier."
+              },
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the project, in ULID format."
+              },
+              {
+                "name": "target_group_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the target group, in ULID format."
+              },
+              {
+                "name": "job_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the asynchronous recontact job."
+              }
+            ]
+          },
+          "docs": "Gets information on a specific remove all Respondent ID (RSID) Recontact opportunities job. This will remove all IDs from the Target Group and will prevent any more respondents entering your survey, or the work being launched or relaunched until more IDs are added. This should be checked regularly for progress and status. Execution time can vary but removing 10,000 identifiers could take between 3 and 5 minutes."
+        },
+        {
+          "info": {
+            "name": "Create a job to upload respondent IDs by file",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.cint.com/v1/demand/accounts/:account_id/projects/:project_id/target-groups/:target_group_id/recontacts/jobs/upload-rsids-by-file",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The account's unique identifier."
+              },
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the project, in ULID format."
+              },
+              {
+                "name": "target_group_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the target group, in ULID format."
+              }
+            ],
+            "body": {
+              "type": "multipart-form",
+              "data": [
+                {
+                  "name": "file",
+                  "type": "text",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "docs": "This endpoint creates an asynchronous job to upload a file containing Respondent IDs (RSIDs) for recontact opportunities. The new IDs will be added to any existing ones for the specified Target Group.\n\nA successful request returns a `201 Created` response with a `job_id` that you can use to track the file processing status.\n\n### File Format Rules\n\n*   The file must be in `CSV` or `TXT` format.\n*   The file must **not** contain a header row.\n*   Each line in the file must contain a single, unique"
+        },
+        {
+          "info": {
+            "name": "Get an upload-by-file job status",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cint.com/v1/demand/accounts/:account_id/projects/:project_id/target-groups/:target_group_id/recontacts/jobs/upload-rsids-by-file/:job_id",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The account's unique identifier."
+              },
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the project, in ULID format."
+              },
+              {
+                "name": "target_group_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the target group, in ULID format."
+              },
+              {
+                "name": "job_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the asynchronous recontact job."
+              }
+            ]
+          },
+          "docs": "This endpoint retrieves the status and details of a specific \"upload by file\" job. After creating a job, you should poll this endpoint periodically until the `status` field changes from `Processing` to either `Completed` or `Failed` to get the final result."
+        },
+        {
+          "info": {
+            "name": "List Recontact upload-by-file jobs",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cint.com/v1/demand/accounts/:account_id/projects/:project_id/target-groups/:target_group_id/recontacts/jobs/upload-respondents-by-file",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The account's unique identifier."
+              },
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the project, in ULID format."
+              },
+              {
+                "name": "target_group_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the target group, in ULID format."
+              },
+              {
+                "name": "page_size",
+                "value": "15",
+                "type": "query",
+                "description": "A limit on the number of objects to be returned, between 1 and 100."
+              },
+              {
+                "name": "start_after",
+                "value": "bff6a669-a469-409d-8c94-dcf92258043a",
+                "type": "query",
+                "description": "Returns a list of objects after the provided pagination cursor, using the next_cursor from the previous response."
+              }
+            ]
+          },
+          "docs": "This endpoint retrieves a paginated list of Recontact upload-by-file jobs for the specified Target Group. This includes jobs created via both the `upload-rsids-by-file` and `upload-respondents-by-file` endpoints.\n\nEach job includes the job ID, the original uploaded file name, the job status, the creation timestamp, and the user who created it. The results are sorted by creation date in descending order (most recent first).\n\nUse the `next_cursor` value from the response as the `start_after` param"
+        },
+        {
+          "info": {
+            "name": "Create a job to upload Recontact opportunities by file",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.cint.com/v1/demand/accounts/:account_id/projects/:project_id/target-groups/:target_group_id/recontacts/jobs/upload-respondents-by-file",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The account's unique identifier."
+              },
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the project, in ULID format."
+              },
+              {
+                "name": "target_group_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the target group, in ULID format."
+              },
+              {
+                "name": "entity_type",
+                "value": "",
+                "type": "query",
+                "description": "The entity type of the respondent identifiers included in the file as recontact opportunities. Use `RSID` or `RESPONDENT_ID` for Respondent IDs, and `RID` or `RESPONSE_ID` for Response IDs."
+              }
+            ],
+            "body": {
+              "type": "multipart-form",
+              "data": [
+                {
+                  "name": "file",
+                  "type": "text",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "docs": "This endpoint creates an asynchronous job to upload Recontact opportunities by file for the specified Target Group. Choose between sending a file with Respondent IDs or Response IDs. The new IDs will be added to the existing ones.\n\nA successful request returns a `201 Created` response with a `job_id` that you can use to track the file processing status.\n\n### File Format Rules\n\n*   The file must be in `CSV` or `TXT` format.\n*   The file must **not** contain a header row.\n*   Each line in the file"
+        },
+        {
+          "info": {
+            "name": "Retrieve the status of a Recontact upload-by-file job",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cint.com/v1/demand/accounts/:account_id/projects/:project_id/target-groups/:target_group_id/recontacts/jobs/upload-respondents-by-file/:job_id",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The account's unique identifier."
+              },
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the project, in ULID format."
+              },
+              {
+                "name": "target_group_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the target group, in ULID format."
+              },
+              {
+                "name": "job_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the asynchronous recontact job."
+              }
+            ]
+          },
+          "docs": "This endpoint retrieves the status and details of a specific Recontact upload respondents by file job. After creating a job, you should poll this endpoint periodically until the `status` field changes from `Processing` to either `Completed` or `Failed` to get the final result.\n\n:::tip Execution Time\nWhile execution time may vary, storing 10,000 new respondents typically takes between 10 and 15 minutes.\n:::\n"
+        },
+        {
+          "info": {
+            "name": "Download the file associated with a Recontact upload job",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cint.com/v1/demand/accounts/:account_id/projects/:project_id/target-groups/:target_group_id/recontacts/jobs/upload-respondents-by-file/:job_id/download",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The account's unique identifier."
+              },
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the project, in ULID format."
+              },
+              {
+                "name": "target_group_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the target group, in ULID format."
+              },
+              {
+                "name": "job_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the asynchronous recontact job."
+              }
+            ]
+          },
+          "docs": "This endpoint downloads the uploaded file for the specified recontact upload job. The response is returned as a binary file attachment.\n\nThe attachment filename is derived from the original file name provided at upload time, sanitized for safe use in HTTP headers (non-alphanumeric characters other than dots, hyphens, and underscores are replaced with underscores). If the original file name is unavailable or invalid, the filename is derived from the internal storage key.\n"
+        },
+        {
+          "info": {
+            "name": "Get recontact overview for a target group",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cint.com/v1/demand/accounts/:account_id/projects/:project_id/target-groups/:target_group_id/recontacts/overview",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The account's unique identifier."
+              },
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the project, in ULID format."
+              },
+              {
+                "name": "target_group_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the target group, in ULID format."
+              }
+            ]
+          },
+          "docs": "This endpoint retrieves the total number of saved Respondent IDs that have an opportunity to enter the Target Group.\n\nYou can use this count to:\n*   Monitor how close you are to the recontact capacity limit.\n*   Check the result of an upload or removal job.\n*   Determine the maximum number of respondents you can request in your filling goal.\n"
+        },
+        {
+          "info": {
+            "name": "List recontact respondent IDs",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cint.com/v1/demand/accounts/:account_id/projects/:project_id/target-groups/:target_group_id/recontacts/rsids",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The account's unique identifier."
+              },
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the project, in ULID format."
+              },
+              {
+                "name": "target_group_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the target group, in ULID format."
+              },
+              {
+                "name": "page_size",
+                "value": "15",
+                "type": "query",
+                "description": "A limit on the number of objects to be returned, between 1 and 100."
+              },
+              {
+                "name": "start_after",
+                "value": "bff6a669-a469-409d-8c94-dcf92258043a",
+                "type": "query",
+                "description": "Returns a list of objects after the provided pagination cursor, using the next_cursor from the previous response."
+              },
+              {
+                "name": "end_before",
+                "value": "7daa40ad-303b-40a2-89df-a9760400cde7",
+                "type": "query",
+                "description": "Returns a list of objects that come before the provided pagination cursor. This is used for navigating to a previous page."
+              }
+            ]
+          },
+          "docs": "This endpoint returns a paginated list of all Respondent IDs (RSIDs) eligible for recontact on this Target Group. Use the `start_after` parameter with the `next_cursor` value from a previous response to navigate through pages."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,205 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Demand Accounts Definitions API",
+    "version": "2025-12-18"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Definitions",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Lists business units for an account",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cint.com/v1/accounts/:account_id/business-units",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The account's unique identifier."
+              }
+            ]
+          },
+          "docs": "Lists available account business units. Business unit definitions are supposed to help you organize surveys between different parts of your organization. They also determine the currency used by their assigned surveys. \n\n:::info\nTo get default business unit assigned to the user within the account then use /accounts/{account_id}/users/{user_id}/business-units API mentioned under Accounts section.\n:::\n"
+        },
+        {
+          "info": {
+            "name": "Lists clients for an account",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cint.com/v1/accounts/:account_id/clients",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The account's unique identifier."
+              },
+              {
+                "name": "page_size",
+                "value": "15",
+                "type": "query",
+                "description": "A limit on the number of objects to be returned, between 1 and 100."
+              },
+              {
+                "name": "page_number",
+                "value": "2",
+                "type": "query",
+                "description": "The page number of the results to retrieve."
+              }
+            ]
+          },
+          "docs": "Lists the clients that have been configured for the specified account."
+        },
+        {
+          "info": {
+            "name": "Lists all countries",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cint.com/v1/countries",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              }
+            ]
+          },
+          "docs": "Lists all available countries. Countries are used for target group filtering purposes. `0/NA` is a special country code that can be used for scenarios where a country is not applicable."
+        },
+        {
+          "info": {
+            "name": "Lists all industries",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cint.com/v1/industries",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              }
+            ]
+          },
+          "docs": "Lists the available industries that you can associate with your target groups."
+        },
+        {
+          "info": {
+            "name": "Lists all industry lockouts",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cint.com/v1/industry-lockouts",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              }
+            ]
+          },
+          "docs": "Lists the available industry lockout options. You can apply an industry lockout to a target group to prevent respondents from participating if they have recently completed another target group in the same industry."
+        },
+        {
+          "info": {
+            "name": "List all supported integration cases",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cint.com/v1/integration-use-cases",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              }
+            ]
+          },
+          "docs": "Lists all supported integration use cases, which indicate the purpose for which an integration will be used."
+        },
+        {
+          "info": {
+            "name": "Lists all locales",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cint.com/v1/locales",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              }
+            ]
+          },
+          "docs": "Lists all available locales (a combination of country and language) that are well-supported on the platform. You can use this endpoint to discover which locales are recommended for the best performance and panelist availability. The output will include ISO 3166-1 alpha-2 country codes and associated ISO 639-2/T three-letter language codes. You will use this to form a valid locale string where you specify the three-letter language code, an underscore, and the two-letter country code e.g., eng_us."
+        },
+        {
+          "info": {
+            "name": "Lists study types",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cint.com/v1/study-types",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              }
+            ]
+          },
+          "docs": "Lists the available study types. You can assign a study type to a target group to indicate its purpose and associated limits."
+        },
+        {
+          "info": {
+            "name": "Lists suppliers",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cint.com/v1/suppliers",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              }
+            ]
+          },
+          "docs": "Lists the suppliers available on the Cint Exchange. You can use the IDs retrieved from this endpoint to configure allocation templates."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

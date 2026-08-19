@@ -1,0 +1,358 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Demand Accounts Allocation Templates Admin API",
+    "version": "2025-12-18"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Allocation Templates Admin",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Retrieves the default allocation template for an account",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cint.com/v1/demand/accounts/:account_id/allocation-template-association",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The account's unique identifier."
+              }
+            ]
+          },
+          "docs": "Retrieves the default allocation template for an account"
+        },
+        {
+          "info": {
+            "name": "Assigns a default allocation template to an account",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.cint.com/v1/demand/accounts/:account_id/allocation-template-association",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              },
+              {
+                "name": "If-Match",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The account's unique identifier."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Assigns a default allocation template to an account. This endpoint uses the If-Match header for optimistic locking. To get the required ETag value, first make a request to the [GET endpoint](./get-account-allocation-template-association) for this resource."
+        },
+        {
+          "info": {
+            "name": "Lists allocation templates for an account",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cint.com/v1/demand/accounts/:account_id/allocation-templates",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The account's unique identifier."
+              },
+              {
+                "name": "page_size",
+                "value": "15",
+                "type": "query",
+                "description": "A limit on the number of objects to be returned, between 1 and 100."
+              },
+              {
+                "name": "start_after",
+                "value": "bff6a669-a469-409d-8c94-dcf92258043a",
+                "type": "query",
+                "description": "Returns a list of objects after the provided pagination cursor, using the next_cursor from the previous response."
+              },
+              {
+                "name": "end_before",
+                "value": "7daa40ad-303b-40a2-89df-a9760400cde7",
+                "type": "query",
+                "description": "Returns a list of objects that come before the provided pagination cursor. This is used for navigating to a previous page."
+              }
+            ]
+          },
+          "docs": "Lists a paginated set of allocation templates for an account. The response includes each template's ID, name, and last update details. Use the `page_size` parameter to control the number of results per page, and use the `start_after` and `end_before` parameters to navigate between pages."
+        },
+        {
+          "info": {
+            "name": "Create an allocation template",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.cint.com/v1/demand/accounts/:account_id/allocation-templates",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              },
+              {
+                "name": "idempotency-key",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The account's unique identifier."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a new allocation template for an account. You'll need to provide a template name and the allocation specifications, which define supplier blocks, distribution groups, and their respective percentages."
+        },
+        {
+          "info": {
+            "name": "Retrieve an allocation template by ID",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cint.com/v1/demand/accounts/:account_id/allocation-templates/:template_id",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The account's unique identifier."
+              },
+              {
+                "name": "template_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the template."
+              },
+              {
+                "name": "locale",
+                "value": "jpn_jp",
+                "type": "query",
+                "description": "Filter results by the specified locale code."
+              }
+            ]
+          },
+          "docs": "Retrieves the details of a specific allocation template by its ID.\nNOTE: The response currently includes only Cint Exchange suppliers. Support for private exchange suppliers is not yet available."
+        },
+        {
+          "info": {
+            "name": "Update an allocation template",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.cint.com/v1/demand/accounts/:account_id/allocation-templates/:template_id",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              },
+              {
+                "name": "If-Match",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The account's unique identifier."
+              },
+              {
+                "name": "template_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the template."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates the name and allocation specifications for a template. This endpoint uses the If-Match header for optimistic locking. To get the required ETag value, first make a GET request for this resource."
+        },
+        {
+          "info": {
+            "name": "Delete an allocation template",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.cint.com/v1/demand/accounts/:account_id/allocation-templates/:template_id",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The account's unique identifier."
+              },
+              {
+                "name": "template_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the template."
+              }
+            ]
+          },
+          "docs": "Delete an allocation template"
+        },
+        {
+          "info": {
+            "name": "Lists global allocation templates",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cint.com/v1/demand/allocation-templates",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "page_size",
+                "value": "15",
+                "type": "query",
+                "description": "A limit on the number of objects to be returned, between 1 and 100."
+              },
+              {
+                "name": "start_after",
+                "value": "bff6a669-a469-409d-8c94-dcf92258043a",
+                "type": "query",
+                "description": "Returns a list of objects after the provided pagination cursor, using the next_cursor from the previous response."
+              },
+              {
+                "name": "end_before",
+                "value": "7daa40ad-303b-40a2-89df-a9760400cde7",
+                "type": "query",
+                "description": "Returns a list of objects that come before the provided pagination cursor. This is used for navigating to a previous page."
+              }
+            ]
+          },
+          "docs": "Lists a paginated set of global allocation templates. The response includes each template's ID, name, and last update details. Use the `page_size` parameter to control the number of results per page, and use the `start_after` and `end_before` parameters to navigate between pages."
+        },
+        {
+          "info": {
+            "name": "Retrieves a global allocation template by ID",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cint.com/v1/demand/allocation-templates/:template_id",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "template_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the template."
+              },
+              {
+                "name": "locale",
+                "value": "jpn_jp",
+                "type": "query",
+                "description": "Filter results by the specified locale code."
+              }
+            ]
+          },
+          "docs": "Retrieves the details of a specific global allocation template by its ID.\nNOTE: The response currently includes only Cint Exchange suppliers. Support for private exchange suppliers is not yet available."
+        },
+        {
+          "info": {
+            "name": "Retrieves the system allocation template",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cint.com/v1/demand/system-allocation-template",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "locale",
+                "value": "jpn_jp",
+                "type": "query",
+                "description": "Filter results by the specified locale code."
+              }
+            ]
+          },
+          "docs": "Retrieves the system's default allocation template for a specific locale. This template contains a dynamic list of all suppliers currently available in that market. You can use this data as a baseline to ensure your custom allocation templates only include suppliers that are valid for a specific country or region."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

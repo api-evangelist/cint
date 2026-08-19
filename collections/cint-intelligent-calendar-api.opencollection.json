@@ -1,0 +1,88 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Demand Accounts Intelligent Calendar API",
+    "version": "2025-12-18"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Intelligent Calendar",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Suggest the required fielding time for a target group",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.cint.com/v1/demand/intelligent-calendar/suggest-days",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Suggests the optimal number of days required to field a target group based on its specifications. You can use this endpoint to estimate fielding time before creating a target group. You'll need to provide details like the locale, price, length of interview (LOI), incidence rate (IR), and desired number of completes."
+        },
+        {
+          "info": {
+            "name": "Suggests an optimal fielding time range for a locale",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cint.com/v1/demand/intelligent-calendar/suggest-time-range",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "days",
+                "value": "10",
+                "type": "query",
+                "description": "The number of days to field the target group. Use this parameter OR both `start` and `end`."
+              },
+              {
+                "name": "start",
+                "value": "2023-01-01T23:00:00.000Z",
+                "type": "query",
+                "description": "The start date for the fielding window (RFC3339 format). Use this parameter in conjunction with `end`, OR only use `days`."
+              },
+              {
+                "name": "end",
+                "value": "2023-01-31T23:00:00.000Z",
+                "type": "query",
+                "description": "The end date for the fielding window (RFC3339 format). Use this parameter in conjunction with `start`, OR only use `days`."
+              },
+              {
+                "name": "locale",
+                "value": "",
+                "type": "query",
+                "description": "Locale code."
+              }
+            ]
+          },
+          "docs": "Suggests an optimal time range to field a target group in a specific locale, taking into account local holidays and respondent activity patterns.\n\nHow to specify a time range:\n\n* To get a suggestion for a specific duration starting from now, provide the `days` parameter.\n* To get a suggestion within a specific date window, provide both the `start` and `end` parameters.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

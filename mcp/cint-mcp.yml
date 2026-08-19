@@ -2,7 +2,8 @@ generated: '2026-07-18'
 method: derived
 status: candidate
 source: openapi/cint-demand-openapi.yml
-note: Candidate MCP tool surface derived one-per-operation from the Cint Demand OpenAPI. No official Cint MCP server found.
+note: Candidate MCP tool surface derived one-per-operation from the Cint Demand OpenAPI. No official Cint
+  MCP server found.
 server:
   name: cint-demand
   transport: http
@@ -797,3 +798,9 @@ tools:
   source_operation: openapi/cint-demand-openapi.yml#get_target_group_changelog
   method: GET
   path: /demand/accounts/{account_id}/projects/{project_id}/target-groups/{target_group_id}/changelog
+deployment:
+  mode: none
+  verified: derived
+  tools: 158
+  checked: '2026-08-12'
+  source: catalog MCP census

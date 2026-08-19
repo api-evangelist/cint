@@ -1,0 +1,712 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Demand Accounts Target Groups API",
+    "version": "2025-12-18"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Target Groups",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List target groups for a project",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cint.com/v1/demand/accounts/:account_id/projects/:project_id/target-groups",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The account's unique identifier."
+              },
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the project, in ULID format."
+              },
+              {
+                "name": "end_before",
+                "value": "7daa40ad-303b-40a2-89df-a9760400cde7",
+                "type": "query",
+                "description": "Returns a list of objects that come before the provided pagination cursor. This is used for navigating to a previous page."
+              },
+              {
+                "name": "start_after",
+                "value": "bff6a669-a469-409d-8c94-dcf92258043a",
+                "type": "query",
+                "description": "Returns a list of objects after the provided pagination cursor, using the next_cursor from the previous response."
+              },
+              {
+                "name": "page_size",
+                "value": "15",
+                "type": "query",
+                "description": "A limit on the number of objects to be returned, between 1 and 100."
+              },
+              {
+                "name": "exclusion_status",
+                "value": "",
+                "type": "query",
+                "description": "Only return target groups with the specified exclusion status."
+              },
+              {
+                "name": "name",
+                "value": "",
+                "type": "query",
+                "description": "The (partial) name of the target group to match against. Supports partial and stemmed matching. This query parameter is deprecated and replaced by the `search_string` parameter. If only the `name` parameter is supplied, it will be used as if it was the `search_string`. If both `name` and `search_string` are supplied, `name` will be ignored.\n"
+              },
+              {
+                "name": "search_string",
+                "value": "",
+                "type": "query",
+                "description": "Search string to match against. The string will be used to search based on the target group's name and/or the target group's human readable ID. Supports partial matching for target group name and human readable ID. Also supports English language stemmed matching for target group name.\n"
+              },
+              {
+                "name": "human_readable_ids",
+                "value": "",
+                "type": "query",
+                "description": "An array of target group human readable ID's to filter by. When there are no other filter or search parameters supplied, the call will return a list of target groups that match these ID's.\n"
+              },
+              {
+                "name": "target_group_customer_reference_numbers",
+                "value": "",
+                "type": "query",
+                "description": "An array of target group customer reference numbers to filter by. When there are no other filter or search parameters supplied, the call will return a list of target groups that match these values.\n"
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "Target Group status(es) to match against."
+              },
+              {
+                "name": "country",
+                "value": "",
+                "type": "query",
+                "description": "Target Group country or countries to match against. Get a list of all available countries [here](#tag/Definitions/operation/list_all_question_categories)."
+              },
+              {
+                "name": "language",
+                "value": "",
+                "type": "query",
+                "description": "Target Group language(s) to match against."
+              },
+              {
+                "name": "project_manager_id",
+                "value": "",
+                "type": "query",
+                "description": "Filters the list of projects by the assigned project manager's ID."
+              }
+            ]
+          },
+          "docs": "Fetch a paginated list of essential data points and statistical metrics related to Target Groups of a single project, such as current status, progress, and other relevant details, based on filter criteria such as language, country, name, etc."
+        },
+        {
+          "info": {
+            "name": "Create a target group in draft status",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.cint.com/v1/demand/accounts/:account_id/projects/:project_id/target-groups",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The account's unique identifier."
+              },
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the project, in ULID format."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a new target group in `draft` status.\n\nKey behaviors:\n\n* The `profiles` attribute is optional. However, if you provide it, you must also set the `profile_adjustment_type`.\n* **Constraint:** A given profile (or question) ID must appear in _only one_ of the arrays. Duplicate IDs will cause the request to fail.\n\nThe API automatically removes duplicate open-ended values in this request before validation and saving, but rejects duplicates in selection or range conditions.\n"
+        },
+        {
+          "info": {
+            "name": "Retrieve a draft target group",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cint.com/v1/demand/accounts/:account_id/projects/:project_id/target-groups/:target_group_id",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The account's unique identifier."
+              },
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the project, in ULID format."
+              },
+              {
+                "name": "target_group_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the target group, in ULID format."
+              }
+            ]
+          },
+          "docs": "Retrieves a target group by its ID.\n\n**Note:** This endpoint is intended for `draft` target groups. If the requested target group is not in draft status, this endpoint will return a `301 Moved Permanently` redirect to it's target group details endpoint.\n"
+        },
+        {
+          "info": {
+            "name": "Update a target group in draft status",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.cint.com/v1/demand/accounts/:account_id/projects/:project_id/target-groups/:target_group_id",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The account's unique identifier."
+              },
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the project, in ULID format."
+              },
+              {
+                "name": "target_group_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the target group, in ULID format."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update a target group in draft status.\n\nprofiles is optional field. If provided, `profile_adjustment_type` must be set as `percentage` or `nominal`.\n\n**Constraint:** a given profile (or question) ID must appear in _only one_ of these arrays.  \nIf the same ID is listed in more than one `profile`, the draft will fail to save.\n\nThe API automatically removes duplicate open-ended values in this request before validation and saving, but rejects duplicates in selection or range conditions.\n"
+        },
+        {
+          "info": {
+            "name": "Retrieve target group details",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cint.com/v1/demand/accounts/:account_id/projects/:project_id/target-groups/:target_group_id/details",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The account's unique identifier."
+              },
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the project, in ULID format."
+              },
+              {
+                "name": "target_group_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the target group, in ULID format."
+              }
+            ]
+          },
+          "docs": "Fetch details of a launched Target Group, such as Business Unit ID, Study Type ID, Industry ID, Locale, Completes Goal, and other  metadata related to the Target Group.\nAttempting to retrieve a draft Target Group details will result in a Not Found error."
+        },
+        {
+          "info": {
+            "name": "Update launched target group details",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.cint.com/v1/demand/accounts/:account_id/projects/:project_id/target-groups/:target_group_id/details",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The account's unique identifier."
+              },
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the project, in ULID format."
+              },
+              {
+                "name": "target_group_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the target group, in ULID format."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update a launched Target Group details, such as the Project Manager ID, Live URL, and other metadata related to the Target Group.\nAttempting to update a draft Target Group details will result in a Not Found error."
+        },
+        {
+          "info": {
+            "name": "Retrieve a rate card",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cint.com/v1/demand/accounts/:account_id/business-units/:business_unit_id/rate-card",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The account's unique identifier."
+              },
+              {
+                "name": "business_unit_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier for the business unit."
+              },
+              {
+                "name": "country_code",
+                "value": "US",
+                "type": "query",
+                "description": "Country code to find the rate card for."
+              }
+            ]
+          },
+          "docs": "Rate Cards predefine the prices that a buyer will be charged for sessions on a Target Group that fits the equivalent IR and LOI metrics. Buyers can understand the interaction of the active Rate Card on a Target Group with the statistics, price changes and available configurations such as maximum prices and price boost via help documents and guides. This API allows buyers to look up a Rate Card based on the provided search parameters. The Rate Card is returned as a 2D array where each row array i"
+        },
+        {
+          "info": {
+            "name": "Retrieve a target group's rate card",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cint.com/v1/demand/accounts/:account_id/projects/:project_id/target-groups/:target_group_id/rate-card",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The account's unique identifier."
+              },
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the project, in ULID format."
+              },
+              {
+                "name": "target_group_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the target group, in ULID format."
+              }
+            ]
+          },
+          "docs": "Depending on the state of the Target Group, this may be a predicted Rate Card, which may be replaced by a new version before the Target Group collects completes or the actual Rate Card which is permanently associated with the Target Group. This association is made when the Target Group first goes live. Rate Cards predefine the prices that a buyer will be charged for sessions on a Target Group that fits the equivalent IR and LOI metrics. Buyers can understand the interaction of the active Rate Ca"
+        },
+        {
+          "info": {
+            "name": "Update target group cost per interview",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.cint.com/v1/demand/accounts/:account_id/projects/:project_id/target-groups/:target_group_id/cost-per-interview",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The account's unique identifier."
+              },
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the project, in ULID format."
+              },
+              {
+                "name": "target_group_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the target group, in ULID format."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates the cost per interview to the value specified in the request body. The target group cannot be in draft state. The Target Group CPI must not exceed the platform limit of $105.00. For non-USD amounts, the CPI is compared against the equivalent limit in the provided currency. Note - This limit is subject to platform configuration and may change."
+        },
+        {
+          "info": {
+            "name": "Update target group filling strategy",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.cint.com/v1/demand/accounts/:account_id/projects/:project_id/target-groups/:target_group_id/filling-strategy",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The account's unique identifier."
+              },
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the project, in ULID format."
+              },
+              {
+                "name": "target_group_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the target group, in ULID format."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates the filling strategy to the value specified in the request body."
+        },
+        {
+          "info": {
+            "name": "Compute available target group transitions",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.cint.com/v1/demand/accounts/:account_id/projects/:project_id/compute-target-group-transitions",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The account's unique identifier."
+              },
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the project, in ULID format."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Returns all target group Ids for the given query parameters and the available possible actions on the returned set of target groups."
+        },
+        {
+          "info": {
+            "name": "Retrieve basic attributes and stats for a target group",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cint.com/v1/demand/accounts/:account_id/projects/:project_id/target-groups/:target_group_id/overview",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The account's unique identifier."
+              },
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the project, in ULID format."
+              },
+              {
+                "name": "target_group_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the target group, in ULID format."
+              }
+            ]
+          },
+          "docs": "Fetch a set of essential data points and statistical metrics related to a specific launched Target Group, such as its current status, progress, and other relevant details.\nAttempting to retrieve a draft Target Group overview will result in a Not Found error."
+        },
+        {
+          "info": {
+            "name": "Retrieve basic attributes and stats for a target group by ID",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cint.com/v1/demand/target-groups/:target_group_id/overview",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "target_group_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the target group, in ULID format."
+              }
+            ]
+          },
+          "docs": "Fetch a set of essential data points and statistical metrics related to a specific launched Target Group, such as its current status, progress, and other relevant details."
+        },
+        {
+          "info": {
+            "name": "Retrieve a target group's performance metrics",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cint.com/v1/demand/accounts/:account_id/projects/:project_id/target-groups/:target_group_id/performance",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The account's unique identifier."
+              },
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the project, in ULID format."
+              },
+              {
+                "name": "target_group_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the target group, in ULID format."
+              }
+            ]
+          },
+          "docs": "Fetch a set of essential data points and statistical metrics related to a specific launched Target Group."
+        },
+        {
+          "info": {
+            "name": "Retrieve a target group's collected completes",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cint.com/v1/demand/accounts/:account_id/projects/:project_id/target-groups/:target_group_id/completes-aggregated-by-interval",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The account's unique identifier."
+              },
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the project, in ULID format."
+              },
+              {
+                "name": "target_group_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the target group, in ULID format."
+              },
+              {
+                "name": "aggregation_interval",
+                "value": "P1DT5H",
+                "type": "query",
+                "description": "An ISO-8601 formatted interval which is used to aggregate a time series."
+              }
+            ]
+          },
+          "docs": "Returns a list of timestamps according to the aggregation interval and the Target Group's fielding period, with a count of completes collected thus far for each interval. When no interval is provided as a parameter, the endpoint defaults to an interval of 24 hours."
+        },
+        {
+          "info": {
+            "name": "Retrieve a target group's Changelog",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cint.com/v1/demand/accounts/:account_id/projects/:project_id/target-groups/:target_group_id/changelog",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The account's unique identifier."
+              },
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the project, in ULID format."
+              },
+              {
+                "name": "target_group_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the target group, in ULID format."
+              },
+              {
+                "name": "page_size",
+                "value": "15",
+                "type": "query",
+                "description": "A limit on the number of objects to be returned, between 1 and 50.\n"
+              },
+              {
+                "name": "start_after",
+                "value": "bff6a669-a469-409d-8c94-dcf92258043a",
+                "type": "query",
+                "description": "Returns a list of objects after the provided pagination cursor, using the next_cursor from the previous response."
+              },
+              {
+                "name": "end_before",
+                "value": "7daa40ad-303b-40a2-89df-a9760400cde7",
+                "type": "query",
+                "description": "Returns a list of objects that come before the provided pagination cursor. This is used for navigating to a previous page."
+              },
+              {
+                "name": "change_types",
+                "value": "",
+                "type": "query",
+                "description": "Filter parameter to return only changes of given types."
+              }
+            ]
+          },
+          "docs": "Returns a paginated list of historical changes for the target group.\n\n**Note:** The list of change types is extensible. Consumers should expect that new change types may be introduced in the future.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,96 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Demand Accounts Exclusive Endpoints API",
+    "version": "2025-12-18"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Exclusive Endpoints",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Generates a price prediction",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.cint.com/v1/demand/accounts/:account_id/business-units/:business_unit_id/generate-price-prediction",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The account's unique identifier."
+              },
+              {
+                "name": "business_unit_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier for the business unit."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Predicts the cost per interview (CPI) for a potential target group using either a `rate_card` or `dynamic` pricing model. The model you choose must match the business unit's pricing configuration.\nPrivate Exchange required.\nThis endpoint is only available for accounts with a Private Exchange. If your account does not have this feature enabled, requests will fail with a 403 Forbiddenerror. Please contact your account manager if you need access to this functionality."
+        },
+        {
+          "info": {
+            "name": "Retrieves the pricing details for a target group",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cint.com/v1/demand/accounts/:account_id/business-units/:business_unit_id/target-groups/:target_group_id/price",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The account's unique identifier."
+              },
+              {
+                "name": "business_unit_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier for the business unit."
+              },
+              {
+                "name": "target_group_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the target group, in ULID format."
+              }
+            ]
+          },
+          "docs": "Retrieves the current pricing details for a specific target group. The response includes the cost per interview (CPI) and the pricing context (`rate_card` or `dynamic`) for both the Open Exchange and any applicable Private Exchange suppliers.\nPrivate Exchange required.\nThis endpoint is only available for accounts with a Private Exchange. If your account does not have this feature enabled, requests will fail with a `403 Forbidden` error. Please contact your account manager if you need access to t"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

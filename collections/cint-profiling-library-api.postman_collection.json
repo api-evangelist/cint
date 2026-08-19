@@ -1,0 +1,1028 @@
+{
+  "item": [
+    {
+      "id": "4570beca-f0fb-4047-994d-5630c78ef436",
+      "name": "Profiling Library",
+      "description": {
+        "content": "List all profiling questions including account specific questions with translations and categories. Profiling questions allow you to target and filter respondents based on their characteristics.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "2b2d8474-a825-4c63-8c54-4b251f0b2b31",
+          "name": "Lists all available questions, answers, and conditions.",
+          "request": {
+            "name": "Lists all available questions, answers, and conditions.",
+            "description": {
+              "content": "Lists the available standard and account-specific profiling questions you can use to define your target audience. This endpoint provides the `question_id` and `option` IDs required for building the `profiling` object in other API calls, such as when creating a target group or calculating feasibility.\n\nKey behaviors:\n\n* **Filtering:** You can filter the list by providing a comma-separated list of question `id`s, or perform a text search across questions and answers using the `query` parameter. **If no question IDs are provided, all questions and answers/conditions will be returned.**\n* **Custom Qualifications:** By default, only standard Cint questions are returned. Use the `allow_custom_quals` parameter to include your account-specific questions, or `only_custom_quals` to retrieve **only** those questions.\n* **Translation:** The `description` and `text` fields are translated based on the `locale` and `translation_language` parameters. The `..._translated` fields provide a consistent English-language fallback.\n* **Pagination:** The response is paginated. Use the `page_size` parameter to control the number of results per page and the `start_after` or `end_before` cursors to navigate between pages.\n* **Defaults:** If you don't provide a `locale`, the default is `eng_us`. If `translation_language` is omitted, the default is English.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "demand",
+                "accounts",
+                ":account_id",
+                "questions-translation"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "id",
+                  "value": "<string>",
+                  "description": "List of comma separated question IDs."
+                },
+                {
+                  "disabled": false,
+                  "key": "locale",
+                  "value": "<string>",
+                  "description": "(Required) Locale of target group in <language 1st 3 chars>_<country 2 char abbreviation> format."
+                },
+                {
+                  "disabled": false,
+                  "key": "translation_language",
+                  "value": "<string>",
+                  "description": "The ISO 639-2 (3-letter) code for the language to use for the `description_translated` and `text_translated` fields."
+                },
+                {
+                  "disabled": false,
+                  "key": "query",
+                  "value": "<string>",
+                  "description": "Text filter on the results set."
+                },
+                {
+                  "disabled": false,
+                  "key": "allow_custom_quals",
+                  "value": "<boolean>",
+                  "description": "If `true`, the response will include your account's custom qualifications in addition to the standard ones."
+                },
+                {
+                  "disabled": false,
+                  "key": "only_custom_quals",
+                  "value": "<boolean>",
+                  "description": "If `true`, the response will only include your account's custom qualifications."
+                },
+                {
+                  "disabled": false,
+                  "key": "end_before",
+                  "value": "<string>",
+                  "description": "Returns a list of objects that come before the provided pagination cursor. This is used for navigating to a previous page."
+                },
+                {
+                  "disabled": false,
+                  "key": "start_after",
+                  "value": "<string>",
+                  "description": "Returns a list of objects after the provided pagination cursor, using the next_cursor from the previous response."
+                },
+                {
+                  "disabled": false,
+                  "key": "page_size",
+                  "value": "10",
+                  "description": "A limit on the number of objects to be returned, between 1 and 100."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "account_id",
+                  "description": "(Required) The account's unique identifier."
+                }
+              ]
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                "key": "Cint-API-Version",
+                "value": "<string>"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "a5f208c4-1975-4909-8936-b177b611bcac",
+              "name": "A list of profiling questions and translations were retrieved successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "demand",
+                    "accounts",
+                    ":account_id",
+                    "questions-translation"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "id",
+                      "value": "42,43,97"
+                    },
+                    {
+                      "key": "locale",
+                      "value": "eng_us"
+                    },
+                    {
+                      "key": "translation_language",
+                      "value": "spa"
+                    },
+                    {
+                      "key": "query",
+                      "value": "automotive"
+                    },
+                    {
+                      "key": "allow_custom_quals",
+                      "value": "true"
+                    },
+                    {
+                      "key": "only_custom_quals",
+                      "value": "true"
+                    },
+                    {
+                      "key": "end_before",
+                      "value": "7daa40ad-303b-40a2-89df-a9760400cde7"
+                    },
+                    {
+                      "key": "start_after",
+                      "value": "bff6a669-a469-409d-8c94-dcf92258043a"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "15"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"total\": 5,\n  \"profiles\": [\n    {\n      \"object\": \"regular\",\n      \"name\": \"AGE\",\n      \"description\": \"Por favor, indique su edad.\",\n      \"description_translated\": \"What is your age?\",\n      \"quotas_enabled\": false,\n      \"targets\": [\n        {\n          \"text\": \"\",\n          \"text_translated\": \"\",\n          \"conditions\": [\n            {\n              \"object\": \"range\",\n              \"question_id\": 42,\n              \"option\": null\n            }\n          ]\n        }\n      ],\n      \"option_mask\": \"XX\",\n      \"standard\": true,\n      \"profile_condition_type\": \"Numeric - Open-end\",\n      \"classification_id\": 32,\n      \"classification_code\": \"DEM\"\n    },\n    {\n      \"object\": \"regular\",\n      \"name\": \"GENDER\",\n      \"description\": \"¿Es usted…?\",\n      \"description_translated\": \"What is your gender?\",\n      \"quotas_enabled\": false,\n      \"targets\": [\n        {\n          \"text\": \"Hombre\",\n          \"text_translated\": \"Male\",\n          \"conditions\": [\n            {\n              \"object\": \"selection\",\n              \"question_id\": 43,\n              \"option\": \"1\"\n            }\n          ]\n        },\n        {\n          \"text\": \"Mujer\",\n          \"text_translated\": \"Female\",\n          \"conditions\": [\n            {\n              \"object\": \"selection\",\n              \"question_id\": 43,\n              \"option\": \"2\"\n            }\n          ]\n        },\n        {\n          \"text\": \"Ninguno de los anteriores\",\n          \"text_translated\": \"None of the above\",\n          \"conditions\": [\n            {\n              \"object\": \"selection\",\n              \"question_id\": 43,\n              \"option\": \"-3105\"\n            }\n          ]\n        }\n      ],\n      \"option_mask\": \"TestingJohnnyZ\",\n      \"standard\": true,\n      \"profile_condition_type\": \"Single Punch\",\n      \"classification_id\": 32,\n      \"classification_code\": \"DEM\"\n    },\n    {\n      \"object\": \"regular\",\n      \"name\": \"ZIP\",\n      \"description\": \"¿Cuál es su código postal?\",\n      \"description_translated\": \"What is your zip code?\",\n      \"quotas_enabled\": false,\n      \"targets\": [\n        {\n          \"text\": \"\",\n          \"text_translated\": \"\",\n          \"conditions\": [\n            {\n              \"object\": \"open_ended\",\n              \"question_id\": 45,\n              \"option\": null,\n              \"allow_all_values\": true\n            }\n          ]\n        }\n      ],\n      \"option_mask\": \"XXXXX\",\n      \"standard\": true,\n      \"profile_condition_type\": \"Numeric - Open-end\",\n      \"classification_id\": 32,\n      \"classification_code\": \"DEM\"\n    },\n    {\n      \"object\": \"regular\",\n      \"name\": \"HISPANIC\",\n      \"description\": \"¿Es usted Hispano, Latino o del origen Español?\",\n      \"description_translated\": \"Are you of Hispanic, Latino, or Spanish origin?\",\n      \"quotas_enabled\": false,\n      \"targets\": [\n        {\n          \"text\": \"Argentina\",\n          \"text_translated\": \"Argentina\",\n          \"conditions\": [\n            {\n              \"object\": \"selection\",\n              \"question_id\": 47,\n              \"option\": \"4\"\n            }\n          ]\n        },\n        {\n          \"text\": \"Colombia\",\n          \"text_translated\": \"Colombia\",\n          \"conditions\": [\n            {\n              \"object\": \"selection\",\n              \"question_id\": 47,\n              \"option\": \"5\"\n            }\n          ]\n        },\n        {\n          \"text\": \"Ecuador\",\n          \"text_translated\": \"Ecuador\",\n          \"conditions\": [\n            {\n              \"object\": \"selection\",\n              \"question_id\": 47,\n              \"option\": \"6\"\n            }\n          ]\n        },\n        {\n          \"text\": \"El Salvador\",\n          \"text_translated\": \"El Salvador\",\n          \"conditions\": [\n            {\n              \"object\": \"selection\",\n              \"question_id\": 47,\n              \"option\": \"7\"\n            }\n          ]\n        },\n        {\n          \"text\": \"España\",\n          \"text_translated\": \"Spain\",\n          \"conditions\": [\n            {\n              \"object\": \"selection\",\n              \"question_id\": 47,\n              \"option\": \"12\"\n            }\n          ]\n        },\n        {\n          \"text\": \"Guatemala\",\n          \"text_translated\": \"Guatemala\",\n          \"conditions\": [\n            {\n              \"object\": \"selection\",\n              \"question_id\": 47,\n              \"option\": \"8\"\n            }\n          ]\n        },\n        {\n          \"text\": \"Nicaragua\",\n          \"text_translated\": \"Nicaragua\",\n          \"conditions\": [\n            {\n              \"object\": \"selection\",\n              \"question_id\": 47,\n              \"option\": \"9\"\n            }\n          ]\n        },\n        {\n          \"text\": \"No, no soy ni Hispano ni Latino ni de Origen Español\",\n          \"text_translated\": \"No , not of Hispanic, Latino, or Spanish origin\",\n          \"conditions\": [\n            {\n              \"object\": \"selection\",\n              \"question_id\": 47,\n              \"option\": \"1\"\n            }\n          ]\n        },\n        {\n          \"text\": \"Otro\",\n          \"text_translated\": \"Other\",\n          \"conditions\": [\n            {\n              \"object\": \"selection\",\n              \"question_id\": 47,\n              \"option\": \"14\"\n            }\n          ]\n        },\n        {\n          \"text\": \"Panama\",\n          \"text_translated\": \"Panama\",\n          \"conditions\": [\n            {\n              \"object\": \"selection\",\n              \"question_id\": 47,\n              \"option\": \"10\"\n            }\n          ]\n        },\n        {\n          \"text\": \"Peru\",\n          \"text_translated\": \"Peru\",\n          \"conditions\": [\n            {\n              \"object\": \"selection\",\n              \"question_id\": 47,\n              \"option\": \"11\"\n            }\n          ]\n        },\n        {\n          \"text\": \"Prefiero no responder\",\n          \"text_translated\": \"Prefer not to answer\",\n          \"conditions\": [\n            {\n              \"object\": \"selection\",\n              \"question_id\": 47,\n              \"option\": \"15\"\n            }\n          ]\n        },\n        {\n          \"text\": \"Si, Puerto Rico\",\n          \"text_translated\": \"Yes, Puerto Rican\",\n          \"conditions\": [\n            {\n              \"object\": \"selection\",\n              \"question_id\": 47,\n              \"option\": \"16\"\n            }\n          ]\n        },\n        {\n          \"text\": \"Si, soy Mexicano, México-Americano o Chicano\",\n          \"text_translated\": \"Yes, Mexican, Mexican American, Chicano\",\n          \"conditions\": [\n            {\n              \"object\": \"selection\",\n              \"question_id\": 47,\n              \"option\": \"2\"\n            }\n          ]\n        },\n        {\n          \"text\": \"Sí, Cubano\",\n          \"text_translated\": \"Yes, Cuban\",\n          \"conditions\": [\n            {\n              \"object\": \"selection\",\n              \"question_id\": 47,\n              \"option\": \"3\"\n            }\n          ]\n        },\n        {\n          \"text\": \"Venezuela\",\n          \"text_translated\": \"Venezuela\",\n          \"conditions\": [\n            {\n              \"object\": \"selection\",\n              \"question_id\": 47,\n              \"option\": \"13\"\n            }\n          ]\n        }\n      ],\n      \"option_mask\": \"\",\n      \"standard\": true,\n      \"profile_condition_type\": \"Single Punch\",\n      \"classification_id\": 32,\n      \"classification_code\": \"DEM\"\n    },\n    {\n      \"object\": \"regular\",\n      \"name\": \"STORES 1\",\n      \"description\": \"Thinking about grocery shopping for your household, about how often do you shop at each of the following stores for groceries?\",\n      \"description_translated\": \"Thinking about grocery shopping for your household, about how often do you shop at each of the following stores for groceries?\",\n      \"quotas_enabled\": false,\n      \"targets\": [\n        {\n          \"text\": \"Wal- Mart\",\n          \"text_translated\": \"Wal- Mart\",\n          \"conditions\": [\n            {\n              \"object\": \"selection\",\n              \"question_id\": 63,\n              \"option\": \"1\"\n            }\n          ]\n        },\n        {\n          \"text\": \"Target\",\n          \"text_translated\": \"Target\",\n          \"conditions\": [\n            {\n              \"object\": \"selection\",\n              \"question_id\": 63,\n              \"option\": \"2\"\n            }\n          ]\n        },\n        {\n          \"text\": \"Whole Foods\",\n          \"text_translated\": \"Whole Foods\",\n          \"conditions\": [\n            {\n              \"object\": \"selection\",\n              \"question_id\": 63,\n              \"option\": \"3\"\n            }\n          ]\n        },\n        {\n          \"text\": \"Trader Joe's\",\n          \"text_translated\": \"Trader Joe's\",\n          \"conditions\": [\n            {\n              \"object\": \"selection\",\n              \"question_id\": 63,\n              \"option\": \"4\"\n            }\n          ]\n        },\n        {\n          \"text\": \"7-11\",\n          \"text_translated\": \"7-11\",\n          \"conditions\": [\n            {\n              \"object\": \"selection\",\n              \"question_id\": 63,\n              \"option\": \"5\"\n            }\n          ]\n        },\n        {\n          \"text\": \"Walgreen's\",\n          \"text_translated\": \"Walgreen's\",\n          \"conditions\": [\n            {\n              \"object\": \"selection\",\n              \"question_id\": 63,\n              \"option\": \"6\"\n            }\n          ]\n        },\n        {\n          \"text\": \"CVS\",\n          \"text_translated\": \"CVS\",\n          \"conditions\": [\n            {\n              \"object\": \"selection\",\n              \"question_id\": 63,\n              \"option\": \"7\"\n            }\n          ]\n        },\n        {\n          \"text\": \"Kroger\",\n          \"text_translated\": \"Kroger\",\n          \"conditions\": [\n            {\n              \"object\": \"selection\",\n              \"question_id\": 63,\n              \"option\": \"8\"\n            }\n          ]\n        },\n        {\n          \"text\": \"Randalls\",\n          \"text_translated\": \"Randalls\",\n          \"conditions\": [\n            {\n              \"object\": \"selection\",\n              \"question_id\": 63,\n              \"option\": \"9\"\n            }\n          ]\n        },\n        {\n          \"text\": \"CostCo\",\n          \"text_translated\": \"CostCo\",\n          \"conditions\": [\n            {\n              \"object\": \"selection\",\n              \"question_id\": 63,\n              \"option\": \"10\"\n            }\n          ]\n        },\n        {\n          \"text\": \"Sam's Club\",\n          \"text_translated\": \"Sam's Club\",\n          \"conditions\": [\n            {\n              \"object\": \"selection\",\n              \"question_id\": 63,\n              \"option\": \"11\"\n            }\n          ]\n        },\n        {\n          \"text\": \"None of the above\",\n          \"text_translated\": \"None of the above\",\n          \"conditions\": [\n            {\n              \"object\": \"selection\",\n              \"question_id\": 63,\n              \"option\": \"-3105\"\n            }\n          ]\n        }\n      ],\n      \"option_mask\": \"\",\n      \"standard\": false,\n      \"profile_condition_type\": \"Multi Punch\",\n      \"classification_id\": -1,\n      \"classification_code\": \"\"\n    }\n  ],\n  \"has_more\": true,\n  \"next_cursor\": \"00000000-0000-0000-0000-00000000003f\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "463122ac-acb0-425c-84d4-682791bdbdc4",
+              "name": "A request is not valid and can't be processed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "demand",
+                    "accounts",
+                    ":account_id",
+                    "questions-translation"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "id",
+                      "value": "42,43,97"
+                    },
+                    {
+                      "key": "locale",
+                      "value": "eng_us"
+                    },
+                    {
+                      "key": "translation_language",
+                      "value": "spa"
+                    },
+                    {
+                      "key": "query",
+                      "value": "automotive"
+                    },
+                    {
+                      "key": "allow_custom_quals",
+                      "value": "true"
+                    },
+                    {
+                      "key": "only_custom_quals",
+                      "value": "true"
+                    },
+                    {
+                      "key": "end_before",
+                      "value": "7daa40ad-303b-40a2-89df-a9760400cde7"
+                    },
+                    {
+                      "key": "start_after",
+                      "value": "bff6a669-a469-409d-8c94-dcf92258043a"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "15"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"9e278238-d011-4e05-8327-1ce1d5d26254\",\n  \"object\": \"bad_request_error\",\n  \"detail\": \"Expected field 'foo' is missing.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7314e718-8ea0-4c96-ba0e-e60fa343a76c",
+              "name": "A request is unauthorized.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "demand",
+                    "accounts",
+                    ":account_id",
+                    "questions-translation"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "id",
+                      "value": "42,43,97"
+                    },
+                    {
+                      "key": "locale",
+                      "value": "eng_us"
+                    },
+                    {
+                      "key": "translation_language",
+                      "value": "spa"
+                    },
+                    {
+                      "key": "query",
+                      "value": "automotive"
+                    },
+                    {
+                      "key": "allow_custom_quals",
+                      "value": "true"
+                    },
+                    {
+                      "key": "only_custom_quals",
+                      "value": "true"
+                    },
+                    {
+                      "key": "end_before",
+                      "value": "7daa40ad-303b-40a2-89df-a9760400cde7"
+                    },
+                    {
+                      "key": "start_after",
+                      "value": "bff6a669-a469-409d-8c94-dcf92258043a"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "15"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"1dcf0f40-f0d1-4cf6-8c00-c3d019d32faf\",\n  \"object\": \"authorization_error\",\n  \"detail\": \"no valid authorization provided for this operation\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d793b248-d426-4572-ae8c-d65dbd6641b6",
+              "name": "A requested is forbidden.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "demand",
+                    "accounts",
+                    ":account_id",
+                    "questions-translation"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "id",
+                      "value": "42,43,97"
+                    },
+                    {
+                      "key": "locale",
+                      "value": "eng_us"
+                    },
+                    {
+                      "key": "translation_language",
+                      "value": "spa"
+                    },
+                    {
+                      "key": "query",
+                      "value": "automotive"
+                    },
+                    {
+                      "key": "allow_custom_quals",
+                      "value": "true"
+                    },
+                    {
+                      "key": "only_custom_quals",
+                      "value": "true"
+                    },
+                    {
+                      "key": "end_before",
+                      "value": "7daa40ad-303b-40a2-89df-a9760400cde7"
+                    },
+                    {
+                      "key": "start_after",
+                      "value": "bff6a669-a469-409d-8c94-dcf92258043a"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "15"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"fe68cdd2-ee87-4dbf-8950-63c5cbca94c7\",\n  \"object\": \"authorization_error\",\n  \"detail\": \"you don't have the right permissions to perform this operation\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c144f5f2-fea3-4e5a-ac23-d1f5d01a016b",
+              "name": "A requested resource isn't found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "demand",
+                    "accounts",
+                    ":account_id",
+                    "questions-translation"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "id",
+                      "value": "42,43,97"
+                    },
+                    {
+                      "key": "locale",
+                      "value": "eng_us"
+                    },
+                    {
+                      "key": "translation_language",
+                      "value": "spa"
+                    },
+                    {
+                      "key": "query",
+                      "value": "automotive"
+                    },
+                    {
+                      "key": "allow_custom_quals",
+                      "value": "true"
+                    },
+                    {
+                      "key": "only_custom_quals",
+                      "value": "true"
+                    },
+                    {
+                      "key": "end_before",
+                      "value": "7daa40ad-303b-40a2-89df-a9760400cde7"
+                    },
+                    {
+                      "key": "start_after",
+                      "value": "bff6a669-a469-409d-8c94-dcf92258043a"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "15"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"7a5972ba-0825-4360-b852-fa2430e47034\",\n  \"object\": \"not_found_error\",\n  \"detail\": \"resource not found\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "3e36eb75-c357-4148-977e-522bb7523ed9",
+              "name": "A request failed due to an internal error.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "demand",
+                    "accounts",
+                    ":account_id",
+                    "questions-translation"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "id",
+                      "value": "42,43,97"
+                    },
+                    {
+                      "key": "locale",
+                      "value": "eng_us"
+                    },
+                    {
+                      "key": "translation_language",
+                      "value": "spa"
+                    },
+                    {
+                      "key": "query",
+                      "value": "automotive"
+                    },
+                    {
+                      "key": "allow_custom_quals",
+                      "value": "true"
+                    },
+                    {
+                      "key": "only_custom_quals",
+                      "value": "true"
+                    },
+                    {
+                      "key": "end_before",
+                      "value": "7daa40ad-303b-40a2-89df-a9760400cde7"
+                    },
+                    {
+                      "key": "start_after",
+                      "value": "bff6a669-a469-409d-8c94-dcf92258043a"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "15"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"d94b8bb2-a540-4a91-9c05-2aa3ae9a5e1e\",\n  \"object\": \"unexpected_internal_error\",\n  \"detail\": \"an internal error has led to the failure of this operation\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "5db081d2-acae-4106-ae73-a3184a83947d",
+          "name": "Lists all available question categories",
+          "request": {
+            "name": "Lists all available question categories",
+            "description": {
+              "content": "Lists all available categories for profiling questions. You can use these categories to help organize and discover relevant questions when building a target group.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "demand",
+                "questions",
+                "categories"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                "key": "Cint-API-Version",
+                "value": "<string>"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "232582a3-112d-4ef2-bcea-2284a1b94354",
+              "name": "A list of question categories was retrieved successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "demand",
+                    "questions",
+                    "categories"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"categories\": [\n    {\n      \"id\": 23,\n      \"code\": \"AIR\",\n      \"name\": \"Airlines/Travel\"\n    },\n    {\n      \"id\": 25,\n      \"code\": \"AUT\",\n      \"name\": \"Automotive\"\n    },\n    {\n      \"id\": 28,\n      \"code\": \"B2B\",\n      \"name\": \"Business to Business\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "90a099b2-8600-4ff2-b26f-3098e5abe6fb",
+              "name": "A request is not valid and can't be processed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "demand",
+                    "questions",
+                    "categories"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"9e278238-d011-4e05-8327-1ce1d5d26254\",\n  \"object\": \"bad_request_error\",\n  \"detail\": \"Expected field 'foo' is missing.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d5e1b236-080a-49ca-a6e4-96f72d17affe",
+              "name": "A request is unauthorized.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "demand",
+                    "questions",
+                    "categories"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"1dcf0f40-f0d1-4cf6-8c00-c3d019d32faf\",\n  \"object\": \"authorization_error\",\n  \"detail\": \"no valid authorization provided for this operation\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "302f35e0-69d9-4dec-9cfb-03d725df4a4f",
+              "name": "A requested is forbidden.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "demand",
+                    "questions",
+                    "categories"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"fe68cdd2-ee87-4dbf-8950-63c5cbca94c7\",\n  \"object\": \"authorization_error\",\n  \"detail\": \"you don't have the right permissions to perform this operation\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f1c03e46-9a78-409b-9cfc-2f222a51bc79",
+              "name": "A request failed due to an internal error.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "demand",
+                    "questions",
+                    "categories"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"d94b8bb2-a540-4a91-9c05-2aa3ae9a5e1e\",\n  \"object\": \"unexpected_internal_error\",\n  \"detail\": \"an internal error has led to the failure of this operation\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.cint.com/v1",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "e63fd00f-f351-4a9e-ae92-61c3ebb3795e",
+    "name": "Demand Accounts Profiling Library API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Cint's demand ordering API is REST oriented. It has predictable resource based URLs, accepts JSON-encoded request bodies, returns JSON-encoded responses, and uses standard HTTP response codes, authentication, and verbs. Error responses are also JSON-encoded and follow a standard format, providing a unique error ID and detailed information about what went wrong.\n\nAuthentication is handled via bearer tokens passed in the `Authorization` header. All requests must also include a `Cint-API-Version` header with a date in `YYYY-MM-DD` format to specify the desired API version. Depending on the version you use, endpoint behavior may differ as we improve our API with every version release.\n\nWhile many operations work on a single object per request, the demand ordering API also provides asynchronous batch endpoints for performing bulk updates efficiently on certain resources. For safety, `POST` requests support an `Idempotency-Key` header to allow for safe retries without accidentally performing the same operation twice.\n",
+      "type": "text/plain"
+    }
+  }
+}

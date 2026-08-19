@@ -1,0 +1,336 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Demand Accounts Notifications Webhooks API",
+    "version": "2025-12-18"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Notifications Webhooks",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Lists all webhooks for an account",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cint.com/v1/accounts/:account_id/webhooks",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The account's unique identifier."
+              },
+              {
+                "name": "page_size",
+                "value": "15",
+                "type": "query",
+                "description": "A limit on the number of objects to be returned, between 1 and 100."
+              },
+              {
+                "name": "start_after",
+                "value": "bff6a669-a469-409d-8c94-dcf92258043a",
+                "type": "query",
+                "description": "Returns a list of objects after the provided pagination cursor, using the next_cursor from the previous response."
+              },
+              {
+                "name": "end_before",
+                "value": "7daa40ad-303b-40a2-89df-a9760400cde7",
+                "type": "query",
+                "description": "Returns a list of objects that come before the provided pagination cursor. This is used for navigating to a previous page."
+              }
+            ]
+          },
+          "docs": "Lists all of the webhook subscriptions that have been configured for your account."
+        },
+        {
+          "info": {
+            "name": "Creates a new webhook for an account",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.cint.com/v1/accounts/:account_id/webhooks",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The account's unique identifier."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a new webhook subscription for an account. This allows your application to receive real-time notifications for specific events."
+        },
+        {
+          "info": {
+            "name": "Retrieves a webhook for an account",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cint.com/v1/accounts/:account_id/webhooks/:webhook_id",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The account's unique identifier."
+              },
+              {
+                "name": "webhook_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the webhook."
+              }
+            ]
+          },
+          "docs": "Retrieves the details of a specific webhook subscription. Note the `ETag` header in the response, which is required for making updates or deletions."
+        },
+        {
+          "info": {
+            "name": "Updates a webhook for an account",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.cint.com/v1/accounts/:account_id/webhooks/:webhook_id",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              },
+              {
+                "name": "If-Match",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The account's unique identifier."
+              },
+              {
+                "name": "webhook_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the webhook."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates the URL or the list of subscribed events for a webhook.\n\nThis endpoint uses optimistic locking. You must provide the webhook's current version in the `If-Match` header.\nYou can get this value from the `ETag` header of a `GET` request for this resource.\n"
+        },
+        {
+          "info": {
+            "name": "Deletes a webhook for an account",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.cint.com/v1/accounts/:account_id/webhooks/:webhook_id",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              },
+              {
+                "name": "If-Match",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The account's unique identifier."
+              },
+              {
+                "name": "webhook_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the webhook."
+              }
+            ]
+          },
+          "docs": "Permanently deletes a webhook subscription.\n\nThis endpoint uses optimistic locking. You must provide the webhook's current version in the `If-Match` header to confirm the deletion.\nYou can get this value from the `ETag` header of a `GET` request for this resource.\n"
+        },
+        {
+          "info": {
+            "name": "Returns webhook events history for replay and debugging purposes",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cint.com/v1/accounts/:account_id/webhooks/:webhook_id/events-history",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The account's unique identifier."
+              },
+              {
+                "name": "webhook_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the webhook."
+              },
+              {
+                "name": "delivery_status",
+                "value": "",
+                "type": "query",
+                "description": "Filter by event delivery status.\n\nCan be specified multiple times as a query parameter to return events\nwith multiple delivery statuses. If not provided,\nevents with all delivery statuses will be returned.\n\nExample: \"?delivery_status=pending&delivery_status=delivering\"\n"
+              },
+              {
+                "name": "type",
+                "value": "",
+                "type": "query",
+                "description": "Filter by event type.\n\nCan be used multiple times as query parameter to return events of multiple types. If not provided, events of all types will be returned.\n\nExample: \"?type=target-group-updated&type=quota-fill-registered\"\n"
+              },
+              {
+                "name": "end_time",
+                "value": "",
+                "type": "query",
+                "description": "End time for retrieving webhook events. If not provided,\nthe current time will be used.\n"
+              },
+              {
+                "name": "start_time",
+                "value": "",
+                "type": "query",
+                "description": "Start time from which to retrieve webhook events."
+              },
+              {
+                "name": "created_at_sort_order",
+                "value": "",
+                "type": "query",
+                "description": "Sort order for webhook events based on creation time.\nUse 'asc' for ascending order or 'desc' for descending order.\n"
+              },
+              {
+                "name": "page_size",
+                "value": "15",
+                "type": "query",
+                "description": "A limit on the number of objects to be returned, between 1 and 100."
+              },
+              {
+                "name": "start_after",
+                "value": "bff6a669-a469-409d-8c94-dcf92258043a",
+                "type": "query",
+                "description": "Returns a list of objects after the provided pagination cursor, using the next_cursor from the previous response."
+              },
+              {
+                "name": "end_before",
+                "value": "7daa40ad-303b-40a2-89df-a9760400cde7",
+                "type": "query",
+                "description": "Returns a list of objects that come before the provided pagination cursor. This is used for navigating to a previous page."
+              }
+            ]
+          },
+          "docs": "Returns webhook events history for replay and debugging purposes. Filter events by type, delivery status, and time range to analyze past webhook deliveries and replay failed events.\n"
+        },
+        {
+          "info": {
+            "name": "Regenerates the secret for a webhook",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.cint.com/v1/accounts/:account_id/webhooks/:webhook_id/regenerate-secret",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The account's unique identifier."
+              },
+              {
+                "name": "webhook_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the webhook."
+              }
+            ]
+          },
+          "docs": "Immediately invalidates the old secret and generates a new one for a webhook.\n\n**Important:** After regenerating, you must update your webhook handler with the new secret to continue verifying payloads. The old secret will no longer work.\n"
+        },
+        {
+          "info": {
+            "name": "List all available webhook event types",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cint.com/v1/accounts/:account_id/webhooks-events",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The account's unique identifier."
+              }
+            ]
+          },
+          "docs": "Lists all of the event types you can subscribe to when creating or updating a webhook subscription."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

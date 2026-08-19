@@ -1,0 +1,82 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Demand Accounts Profiling Helper API",
+    "version": "2025-12-18"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Profiling Helper",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Generates a blended profile from regular profiles",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.cint.com/v1/demand/accounts/:account_id/drafts/generate-blended-profile",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The account's unique identifier."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Generates a single `blended` profile by combining two or three `regular` profiles.\n\nThis allows you to experiment with complex, interlocked quota structures without creating a target group.\nThe endpoint automatically calculates the supplier distribution for the resulting quotas.\n\nKey behaviors:\n\n* You must provide between two and three regular profiles to be blended.\n* When this profile is later used to create a target group, there is a limit of 350 total quotas.\n"
+        },
+        {
+          "info": {
+            "name": "Validates a profile",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.cint.com/v1/demand/accounts/:account_id/profiles/validate",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The account's unique identifier."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Validates a complete profile and target configuration without creating or modifying any resources.\n\nYou can use this stateless endpoint to check your profile logic for business rule violations (e.g., overlapping quotas) before you use it to create or update a target group.\nIt provides detailed warnings and errors to help you build a valid configuration.\n\nThe API automatically removes duplicate open-ended values in this request before validation, but rejects duplicates in selection or range condi"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

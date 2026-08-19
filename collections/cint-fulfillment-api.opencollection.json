@@ -1,0 +1,70 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Demand Accounts Fulfillment API",
+    "version": "2025-12-18"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Fulfillment",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Retrieve a respondent's session status",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cint.com/v1/fulfillment/respondents/:RID",
+            "headers": [
+              {
+                "name": "Authorization",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "RID",
+                "value": "",
+                "type": "path",
+                "description": "The session ID of the respondent routed to your survey. \nThe ID is passed in the URL path as a parameter and is of type UUID4.\n"
+              }
+            ]
+          },
+          "docs": "Retrieves the current status of a session that has taken a survey for your target group."
+        },
+        {
+          "info": {
+            "name": "Update a respondent's status",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.cint.com/v1/fulfillment/respondents/transition",
+            "headers": [
+              {
+                "name": "Authorization",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates the respondent's status defined by the status code in the body of the request.\n\nThe following table contains the possible codes that can be supplied in the body's `status` field: \n\n| Cint Status Definition | S2S Code |\n| :---- | :---- |\n| Complete | **5** |\n| Screenout | **2** |\n| Quality Terminate | **4** |\n| Quota Full | **3** |\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

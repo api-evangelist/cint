@@ -1,0 +1,214 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Demand Accounts Reports API",
+    "version": "2025-12-18"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Reports",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List report requests",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cint.com/v1/demand/accounts/:account_id/reports",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The account's unique identifier."
+              },
+              {
+                "name": "report_type",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "end_before",
+                "value": "7daa40ad-303b-40a2-89df-a9760400cde7",
+                "type": "query",
+                "description": "Returns a list of objects that come before the provided pagination cursor. This is used for navigating to a previous page."
+              },
+              {
+                "name": "start_after",
+                "value": "bff6a669-a469-409d-8c94-dcf92258043a",
+                "type": "query",
+                "description": "Returns a list of objects after the provided pagination cursor, using the next_cursor from the previous response."
+              },
+              {
+                "name": "page_size",
+                "value": "15",
+                "type": "query",
+                "description": "A limit on the number of objects to be returned, between 1 and 100."
+              },
+              {
+                "name": "level",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "Status",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Retrieves a paginated list of report requests. This endpoint is the starting point for managing report workflows.\n\n:::note Data and Timeframe Limitations\n*   A single report request can cover a maximum duration of six months.\n*   Data is available for the last 12 months.\n*   Reporting data is near-real-time but should not be used for live management of target groups, as latency cannot be guaranteed.\n:::\n\nYou will need one of the following roles to access this endpoint:\n*   Buyer Admin (`buy_admi"
+        },
+        {
+          "info": {
+            "name": "Download a report",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cint.com/v1/demand/accounts/:account_id/reports/:report_id/download",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The account's unique identifier."
+              },
+              {
+                "name": "report_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the report."
+              }
+            ]
+          },
+          "docs": "This endpoint retrieves a generated report file. The format of the file, either CSV or XLSX, depends on the original report type.\n\n:::info Handling the Response\nThe body of a successful response contains the raw data of the report file, not a JSON object. You'll need to configure your HTTP client to save the raw response body to a file with the appropriate extension (e.g., `.csv` or `.xlsx`).\n:::\n"
+        },
+        {
+          "info": {
+            "name": "Get a shareable report link",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cint.com/v1/demand/accounts/:account_id/reports/:report_id/share",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The account's unique identifier."
+              },
+              {
+                "name": "report_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the report."
+              },
+              {
+                "name": "report_type",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "This endpoint generates a temporary, shareable link (a pre-signed URL) for a specific report.\n\n:::info URL Expiration\nThe pre-signed URL is temporary and will expire after a set period of time. You should not store this URL for long-term use. Instead, call this endpoint to generate a new URL each time you need to provide access.\n:::\n"
+        },
+        {
+          "info": {
+            "name": "Report Request Status",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cint.com/v1/demand/accounts/:account_id/reports/:report_id/status",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The account's unique identifier."
+              },
+              {
+                "name": "report_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the report."
+              }
+            ]
+          },
+          "docs": "Get status for a report job"
+        },
+        {
+          "info": {
+            "name": "Generate a report",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.cint.com/v1/demand/accounts/:account_id/reports/:report_type",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The account's unique identifier."
+              },
+              {
+                "name": "report_type",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "This endpoint initiates an asynchronous job to generate a report. A successful request immediately returns a `202 Accepted` response containing a `report_id`, which you can use to track the job's progress with the `/status` endpoint.\n\n### Report Types and Rules\n\nThe following table outlines the rules for each `report_type`:\n\n| Report Type | Supported Levels (`filter`) | Multi-select Rules |\n| :--- | :--- | :--- |\n| `completes` | `account`, `business_unit`, `project`, `target_group` | Multiple ID"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

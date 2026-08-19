@@ -1,0 +1,1066 @@
+{
+  "item": [
+    {
+      "id": "c57ef4b5-45fa-459b-8eab-36f7b85cbb7e",
+      "name": "Profiling Helper",
+      "description": {
+        "content": "Helps by generating different profile configurations, including interlocked profiles for draft.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "92d5d5e8-5a3e-487e-a8c9-4f63ff29bbf8",
+          "name": "Generates a blended profile from regular profiles",
+          "request": {
+            "name": "Generates a blended profile from regular profiles",
+            "description": {
+              "content": "Generates a single `blended` profile by combining two or three `regular` profiles.\n\nThis allows you to experiment with complex, interlocked quota structures without creating a target group.\nThe endpoint automatically calculates the supplier distribution for the resulting quotas.\n\nKey behaviors:\n\n* You must provide between two and three regular profiles to be blended.\n* When this profile is later used to create a target group, there is a limit of 350 total quotas.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "demand",
+                "accounts",
+                ":account_id",
+                "drafts",
+                "generate-blended-profile"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "account_id",
+                  "description": "(Required) The account's unique identifier."
+                }
+              ]
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                "key": "Cint-API-Version",
+                "value": "<string>"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"locale\": \"<string>\",\n  \"completes_goal\": \"<int>\",\n  \"start_at\": \"<string>\",\n  \"end_at\": \"<string>\",\n  \"collects_pii\": \"<boolean>\",\n  \"profiling\": {\n    \"profile_adjustment_type\": \"<string>\",\n    \"profiles\": [\n      {\n        \"object\": \"<string>\",\n        \"quotas_enabled\": \"<boolean>\",\n        \"targets\": [\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        ],\n        \"name\": \"<string>\"\n      },\n      {\n        \"object\": \"<string>\",\n        \"quotas_enabled\": \"<boolean>\",\n        \"targets\": [\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        ],\n        \"name\": \"<string>\"\n      }\n    ]\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "1e134d71-2482-4eef-af50-2038cda584ac",
+              "name": "The blended profile was generated successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "demand",
+                    "accounts",
+                    ":account_id",
+                    "drafts",
+                    "generate-blended-profile"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"locale\": \"eng_us\",\n  \"completes_goal\": 1000,\n  \"start_at\": \"2024-10-09T12:00:00.000Z\",\n  \"end_at\": \"2024-10-23T12:00:00.000Z\",\n  \"collects_pii\": false,\n  \"profiling\": {\n    \"profile_adjustment_type\": \"percentage\",\n    \"profiles\": [\n      {\n        \"object\": \"regular\",\n        \"name\": \"GENDER\",\n        \"quotas_enabled\": true,\n        \"targets\": [\n          {\n            \"name\": \"Target-Male\",\n            \"conditions\": [\n              {\n                \"object\": \"selection\",\n                \"question_id\": 43,\n                \"option\": \"1\"\n              }\n            ],\n            \"quota\": {\n              \"completes_goal_percentage\": 50\n            }\n          }\n        ]\n      },\n      {\n        \"object\": \"regular\",\n        \"name\": \"AGE\",\n        \"quotas_enabled\": true,\n        \"targets\": [\n          {\n            \"name\": \"Target-Age-18-34\",\n            \"conditions\": [\n              {\n                \"object\": \"range\",\n                \"question_id\": 42,\n                \"min\": 18,\n                \"max\": 34\n              }\n            ],\n            \"quota\": {\n              \"completes_goal_percentage\": 50\n            }\n          }\n        ]\n      }\n    ]\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"object\": \"blended\",\n  \"quotas_enabled\": true,\n  \"name\": \"HISPANIC\",\n  \"description\": \"Are you of Hispanic, Latino, or Spanish origin?\",\n  \"targets\": [\n    {\n      \"id\": \"01JQMD8R7F0VW45KPWQ7WYNCFP\",\n      \"conditions\": [\n        {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      ],\n      \"quota\": {\n        \"completes_goal_percentage\": 40,\n        \"quota_nominal\": 40,\n        \"completes_goal\": 40,\n        \"name\": \"SF_Quota_12\"\n      },\n      \"name\": \"Target-Condition\",\n      \"text\": \"Condition Text\",\n      \"text_translated\": \"Condition Text\"\n    }\n  ],\n  \"description_translated\": \"Are you of Hispanic, Latino, or Spanish origin?\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ee13c3de-0138-4bbf-9035-9e1615041dee",
+              "name": "The request is malformed or contains syntactically invalid parameters.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "demand",
+                    "accounts",
+                    ":account_id",
+                    "drafts",
+                    "generate-blended-profile"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"locale\": \"eng_us\",\n  \"completes_goal\": 1000,\n  \"start_at\": \"2024-10-09T12:00:00.000Z\",\n  \"end_at\": \"2024-10-23T12:00:00.000Z\",\n  \"collects_pii\": false,\n  \"profiling\": {\n    \"profile_adjustment_type\": \"percentage\",\n    \"profiles\": [\n      {\n        \"object\": \"regular\",\n        \"name\": \"GENDER\",\n        \"quotas_enabled\": true,\n        \"targets\": [\n          {\n            \"name\": \"Target-Male\",\n            \"conditions\": [\n              {\n                \"object\": \"selection\",\n                \"question_id\": 43,\n                \"option\": \"1\"\n              }\n            ],\n            \"quota\": {\n              \"completes_goal_percentage\": 50\n            }\n          }\n        ]\n      },\n      {\n        \"object\": \"regular\",\n        \"name\": \"AGE\",\n        \"quotas_enabled\": true,\n        \"targets\": [\n          {\n            \"name\": \"Target-Age-18-34\",\n            \"conditions\": [\n              {\n                \"object\": \"range\",\n                \"question_id\": 42,\n                \"min\": 18,\n                \"max\": 34\n              }\n            ],\n            \"quota\": {\n              \"completes_goal_percentage\": 50\n            }\n          }\n        ]\n      }\n    ]\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"object\": \"string\",\n  \"detail\": \"string\",\n  \"invalid_params\": [\n    {\n      \"name\": \"string\",\n      \"reason\": \"string\"\n    },\n    {\n      \"name\": \"string\",\n      \"reason\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "9071446b-8de2-44cd-a73c-96bcd5fc4651",
+              "name": "A request is unauthorized.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "demand",
+                    "accounts",
+                    ":account_id",
+                    "drafts",
+                    "generate-blended-profile"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"locale\": \"eng_us\",\n  \"completes_goal\": 1000,\n  \"start_at\": \"2024-10-09T12:00:00.000Z\",\n  \"end_at\": \"2024-10-23T12:00:00.000Z\",\n  \"collects_pii\": false,\n  \"profiling\": {\n    \"profile_adjustment_type\": \"percentage\",\n    \"profiles\": [\n      {\n        \"object\": \"regular\",\n        \"name\": \"GENDER\",\n        \"quotas_enabled\": true,\n        \"targets\": [\n          {\n            \"name\": \"Target-Male\",\n            \"conditions\": [\n              {\n                \"object\": \"selection\",\n                \"question_id\": 43,\n                \"option\": \"1\"\n              }\n            ],\n            \"quota\": {\n              \"completes_goal_percentage\": 50\n            }\n          }\n        ]\n      },\n      {\n        \"object\": \"regular\",\n        \"name\": \"AGE\",\n        \"quotas_enabled\": true,\n        \"targets\": [\n          {\n            \"name\": \"Target-Age-18-34\",\n            \"conditions\": [\n              {\n                \"object\": \"range\",\n                \"question_id\": 42,\n                \"min\": 18,\n                \"max\": 34\n              }\n            ],\n            \"quota\": {\n              \"completes_goal_percentage\": 50\n            }\n          }\n        ]\n      }\n    ]\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"1dcf0f40-f0d1-4cf6-8c00-c3d019d32faf\",\n  \"object\": \"authorization_error\",\n  \"detail\": \"no valid authorization provided for this operation\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "84b235ba-ce44-4fec-b11a-d6a2b21b1934",
+              "name": "A requested is forbidden.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "demand",
+                    "accounts",
+                    ":account_id",
+                    "drafts",
+                    "generate-blended-profile"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"locale\": \"eng_us\",\n  \"completes_goal\": 1000,\n  \"start_at\": \"2024-10-09T12:00:00.000Z\",\n  \"end_at\": \"2024-10-23T12:00:00.000Z\",\n  \"collects_pii\": false,\n  \"profiling\": {\n    \"profile_adjustment_type\": \"percentage\",\n    \"profiles\": [\n      {\n        \"object\": \"regular\",\n        \"name\": \"GENDER\",\n        \"quotas_enabled\": true,\n        \"targets\": [\n          {\n            \"name\": \"Target-Male\",\n            \"conditions\": [\n              {\n                \"object\": \"selection\",\n                \"question_id\": 43,\n                \"option\": \"1\"\n              }\n            ],\n            \"quota\": {\n              \"completes_goal_percentage\": 50\n            }\n          }\n        ]\n      },\n      {\n        \"object\": \"regular\",\n        \"name\": \"AGE\",\n        \"quotas_enabled\": true,\n        \"targets\": [\n          {\n            \"name\": \"Target-Age-18-34\",\n            \"conditions\": [\n              {\n                \"object\": \"range\",\n                \"question_id\": 42,\n                \"min\": 18,\n                \"max\": 34\n              }\n            ],\n            \"quota\": {\n              \"completes_goal_percentage\": 50\n            }\n          }\n        ]\n      }\n    ]\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"fe68cdd2-ee87-4dbf-8950-63c5cbca94c7\",\n  \"object\": \"authorization_error\",\n  \"detail\": \"you don't have the right permissions to perform this operation\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "35f11329-a6d4-4ca9-9192-d8171e013890",
+              "name": "A requested resource isn't found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "demand",
+                    "accounts",
+                    ":account_id",
+                    "drafts",
+                    "generate-blended-profile"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"locale\": \"eng_us\",\n  \"completes_goal\": 1000,\n  \"start_at\": \"2024-10-09T12:00:00.000Z\",\n  \"end_at\": \"2024-10-23T12:00:00.000Z\",\n  \"collects_pii\": false,\n  \"profiling\": {\n    \"profile_adjustment_type\": \"percentage\",\n    \"profiles\": [\n      {\n        \"object\": \"regular\",\n        \"name\": \"GENDER\",\n        \"quotas_enabled\": true,\n        \"targets\": [\n          {\n            \"name\": \"Target-Male\",\n            \"conditions\": [\n              {\n                \"object\": \"selection\",\n                \"question_id\": 43,\n                \"option\": \"1\"\n              }\n            ],\n            \"quota\": {\n              \"completes_goal_percentage\": 50\n            }\n          }\n        ]\n      },\n      {\n        \"object\": \"regular\",\n        \"name\": \"AGE\",\n        \"quotas_enabled\": true,\n        \"targets\": [\n          {\n            \"name\": \"Target-Age-18-34\",\n            \"conditions\": [\n              {\n                \"object\": \"range\",\n                \"question_id\": 42,\n                \"min\": 18,\n                \"max\": 34\n              }\n            ],\n            \"quota\": {\n              \"completes_goal_percentage\": 50\n            }\n          }\n        ]\n      }\n    ]\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"7a5972ba-0825-4360-b852-fa2430e47034\",\n  \"object\": \"not_found_error\",\n  \"detail\": \"resource not found\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "46fc66db-284b-46ae-beda-087e5c0768c6",
+              "name": "The request is well-formed, but the profile configuration is invalid (e.g., overlapping quotas, incorrect logic). The response body contains detailed validation errors.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "demand",
+                    "accounts",
+                    ":account_id",
+                    "drafts",
+                    "generate-blended-profile"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"locale\": \"eng_us\",\n  \"completes_goal\": 1000,\n  \"start_at\": \"2024-10-09T12:00:00.000Z\",\n  \"end_at\": \"2024-10-23T12:00:00.000Z\",\n  \"collects_pii\": false,\n  \"profiling\": {\n    \"profile_adjustment_type\": \"percentage\",\n    \"profiles\": [\n      {\n        \"object\": \"regular\",\n        \"name\": \"GENDER\",\n        \"quotas_enabled\": true,\n        \"targets\": [\n          {\n            \"name\": \"Target-Male\",\n            \"conditions\": [\n              {\n                \"object\": \"selection\",\n                \"question_id\": 43,\n                \"option\": \"1\"\n              }\n            ],\n            \"quota\": {\n              \"completes_goal_percentage\": 50\n            }\n          }\n        ]\n      },\n      {\n        \"object\": \"regular\",\n        \"name\": \"AGE\",\n        \"quotas_enabled\": true,\n        \"targets\": [\n          {\n            \"name\": \"Target-Age-18-34\",\n            \"conditions\": [\n              {\n                \"object\": \"range\",\n                \"question_id\": 42,\n                \"min\": 18,\n                \"max\": 34\n              }\n            ],\n            \"quota\": {\n              \"completes_goal_percentage\": 50\n            }\n          }\n        ]\n      }\n    ]\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"object\": \"unprocessable_entity_error\",\n  \"title\": \"profile request validation\",\n  \"detail\": \"Validation error\",\n  \"invalid_params\": [\n    {\n      \"error_type\": \"data_validation_error\",\n      \"name\": \"profile_validation_error_001\",\n      \"reason\": \"profile_condition_min_greater_than_max_001\",\n      \"detail\": \"The minimum value cannot be greater than the maximum value.\",\n      \"metadata\": {\n        \"profile_id\": \"01H8XGJWBWBAQ4J1Z5F4A9C3K8\",\n        \"question_id\": [\n          123\n        ],\n        \"error_level\": \"error\"\n      }\n    },\n    {\n      \"error_type\": \"data_validation_error\",\n      \"name\": \"profile_validation_error_001\",\n      \"reason\": \"profile_condition_min_greater_than_max_001\",\n      \"detail\": \"The minimum value cannot be greater than the maximum value.\",\n      \"metadata\": {\n        \"profile_id\": \"01H8XGJWBWBAQ4J1Z5F4A9C3K8\",\n        \"question_id\": [\n          123\n        ],\n        \"error_level\": \"error\"\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c1199ebf-3397-41f9-84e3-9ac81af00ca6",
+              "name": "An unexpected internal error occurred.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "demand",
+                    "accounts",
+                    ":account_id",
+                    "drafts",
+                    "generate-blended-profile"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"locale\": \"eng_us\",\n  \"completes_goal\": 1000,\n  \"start_at\": \"2024-10-09T12:00:00.000Z\",\n  \"end_at\": \"2024-10-23T12:00:00.000Z\",\n  \"collects_pii\": false,\n  \"profiling\": {\n    \"profile_adjustment_type\": \"percentage\",\n    \"profiles\": [\n      {\n        \"object\": \"regular\",\n        \"name\": \"GENDER\",\n        \"quotas_enabled\": true,\n        \"targets\": [\n          {\n            \"name\": \"Target-Male\",\n            \"conditions\": [\n              {\n                \"object\": \"selection\",\n                \"question_id\": 43,\n                \"option\": \"1\"\n              }\n            ],\n            \"quota\": {\n              \"completes_goal_percentage\": 50\n            }\n          }\n        ]\n      },\n      {\n        \"object\": \"regular\",\n        \"name\": \"AGE\",\n        \"quotas_enabled\": true,\n        \"targets\": [\n          {\n            \"name\": \"Target-Age-18-34\",\n            \"conditions\": [\n              {\n                \"object\": \"range\",\n                \"question_id\": 42,\n                \"min\": 18,\n                \"max\": 34\n              }\n            ],\n            \"quota\": {\n              \"completes_goal_percentage\": 50\n            }\n          }\n        ]\n      }\n    ]\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"object\": \"string\",\n  \"detail\": \"string\",\n  \"errors\": [\n    {\n      \"name\": \"string\",\n      \"reason\": \"string\"\n    },\n    {\n      \"name\": \"string\",\n      \"reason\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "dda2a2c5-525c-4b4f-849a-c62ac83bd806",
+          "name": "Validates a profile",
+          "request": {
+            "name": "Validates a profile",
+            "description": {
+              "content": "Validates a complete profile and target configuration without creating or modifying any resources.\n\nYou can use this stateless endpoint to check your profile logic for business rule violations (e.g., overlapping quotas) before you use it to create or update a target group.\nIt provides detailed warnings and errors to help you build a valid configuration.\n\nThe API automatically removes duplicate open-ended values in this request before validation, but rejects duplicates in selection or range conditions.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "demand",
+                "accounts",
+                ":account_id",
+                "profiles",
+                "validate"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "account_id",
+                  "description": "(Required) The account's unique identifier."
+                }
+              ]
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                "key": "Cint-API-Version",
+                "value": "<string>"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"locale\": \"<string>\",\n  \"completes_goal\": \"<int>\",\n  \"profiling\": {\n    \"profile_adjustment_type\": \"<string>\",\n    \"profiles\": [\n      {\n        \"object\": \"<string>\",\n        \"quotas_enabled\": \"<boolean>\",\n        \"targets\": [\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        ],\n        \"name\": \"<string>\"\n      }\n    ]\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "0bb44b90-1cd1-40e8-949e-7a5a6428f133",
+              "name": "The profile configuration is valid and has no errors or warnings.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "demand",
+                    "accounts",
+                    ":account_id",
+                    "profiles",
+                    "validate"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"locale\": \"eng_us\",\n  \"completes_goal\": 1500,\n  \"profiling\": {\n    \"profile_adjustment_type\": \"percentage\",\n    \"profiles\": [\n      {\n        \"object\": \"regular\",\n        \"quotas_enabled\": true,\n        \"targets\": [\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        ],\n        \"name\": \"SF_YoungAge\"\n      }\n    ]\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "666e8580-3d5f-4976-867d-17db4d1ac94e",
+              "name": "The request is malformed or contains syntactically invalid parameters.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "demand",
+                    "accounts",
+                    ":account_id",
+                    "profiles",
+                    "validate"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"locale\": \"eng_us\",\n  \"completes_goal\": 1500,\n  \"profiling\": {\n    \"profile_adjustment_type\": \"percentage\",\n    \"profiles\": [\n      {\n        \"object\": \"regular\",\n        \"quotas_enabled\": true,\n        \"targets\": [\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        ],\n        \"name\": \"SF_YoungAge\"\n      }\n    ]\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"object\": \"string\",\n  \"detail\": \"string\",\n  \"invalid_params\": [\n    {\n      \"name\": \"string\",\n      \"reason\": \"string\"\n    },\n    {\n      \"name\": \"string\",\n      \"reason\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d0519f00-a1fe-4d4c-8bd7-f87d534f1d62",
+              "name": "A request is unauthorized.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "demand",
+                    "accounts",
+                    ":account_id",
+                    "profiles",
+                    "validate"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"locale\": \"eng_us\",\n  \"completes_goal\": 1500,\n  \"profiling\": {\n    \"profile_adjustment_type\": \"percentage\",\n    \"profiles\": [\n      {\n        \"object\": \"regular\",\n        \"quotas_enabled\": true,\n        \"targets\": [\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        ],\n        \"name\": \"SF_YoungAge\"\n      }\n    ]\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"1dcf0f40-f0d1-4cf6-8c00-c3d019d32faf\",\n  \"object\": \"authorization_error\",\n  \"detail\": \"no valid authorization provided for this operation\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "027a624f-5e9f-4863-b9a8-41824abadaaf",
+              "name": "A requested is forbidden.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "demand",
+                    "accounts",
+                    ":account_id",
+                    "profiles",
+                    "validate"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"locale\": \"eng_us\",\n  \"completes_goal\": 1500,\n  \"profiling\": {\n    \"profile_adjustment_type\": \"percentage\",\n    \"profiles\": [\n      {\n        \"object\": \"regular\",\n        \"quotas_enabled\": true,\n        \"targets\": [\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        ],\n        \"name\": \"SF_YoungAge\"\n      }\n    ]\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"fe68cdd2-ee87-4dbf-8950-63c5cbca94c7\",\n  \"object\": \"authorization_error\",\n  \"detail\": \"you don't have the right permissions to perform this operation\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "45433a45-85f0-4c5a-a229-f4cde2bc2693",
+              "name": "The request is well-formed, but the profile configuration is invalid (e.g., overlapping quotas, incorrect logic). The response body contains detailed validation errors.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "demand",
+                    "accounts",
+                    ":account_id",
+                    "profiles",
+                    "validate"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"locale\": \"eng_us\",\n  \"completes_goal\": 1500,\n  \"profiling\": {\n    \"profile_adjustment_type\": \"percentage\",\n    \"profiles\": [\n      {\n        \"object\": \"regular\",\n        \"quotas_enabled\": true,\n        \"targets\": [\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        ],\n        \"name\": \"SF_YoungAge\"\n      }\n    ]\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"object\": \"unprocessable_entity_error\",\n  \"title\": \"profile request validation\",\n  \"detail\": \"Validation error5O*I\",\n  \"invalid_params\": [\n    {\n      \"error_type\": \"data_validation_error\",\n      \"name\": \"profile_validation_error_018\",\n      \"reason\": \"total_number_of_profiles_cannot_be_greater_than_max_077\",\n      \"detail\": \"string\",\n      \"metadata\": {\n        \"question_id\": [\n          473,\n          4805\n        ],\n        \"profile_id\": \"string\",\n        \"interlock_id\": \"string\",\n        \"quota_id\": \"string\",\n        \"error_level\": \"warning\"\n      }\n    },\n    {\n      \"error_type\": \"data_validation_error\",\n      \"name\": \"profile_validation_error_024\",\n      \"reason\": \"blended_profile_with_control_as_blended_type_cannot_have_duplicate_target_or_quota_name_073\",\n      \"detail\": \"string\",\n      \"metadata\": {\n        \"question_id\": [\n          2519,\n          81\n        ],\n        \"profile_id\": \"string\",\n        \"interlock_id\": \"string\",\n        \"quota_id\": \"string\",\n        \"error_level\": \"error\"\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "24c3ba6a-ff67-464e-83f3-f7183c6263ad",
+              "name": "An unexpected internal error occurred.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "demand",
+                    "accounts",
+                    ":account_id",
+                    "profiles",
+                    "validate"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"locale\": \"eng_us\",\n  \"completes_goal\": 1500,\n  \"profiling\": {\n    \"profile_adjustment_type\": \"percentage\",\n    \"profiles\": [\n      {\n        \"object\": \"regular\",\n        \"quotas_enabled\": true,\n        \"targets\": [\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        ],\n        \"name\": \"SF_YoungAge\"\n      }\n    ]\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"object\": \"string\",\n  \"detail\": \"string\",\n  \"errors\": [\n    {\n      \"name\": \"string\",\n      \"reason\": \"string\"\n    },\n    {\n      \"name\": \"string\",\n      \"reason\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.cint.com/v1",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "d995a342-1410-4999-892a-d17252a1f780",
+    "name": "Demand Accounts Profiling Helper API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Cint's demand ordering API is REST oriented. It has predictable resource based URLs, accepts JSON-encoded request bodies, returns JSON-encoded responses, and uses standard HTTP response codes, authentication, and verbs. Error responses are also JSON-encoded and follow a standard format, providing a unique error ID and detailed information about what went wrong.\n\nAuthentication is handled via bearer tokens passed in the `Authorization` header. All requests must also include a `Cint-API-Version` header with a date in `YYYY-MM-DD` format to specify the desired API version. Depending on the version you use, endpoint behavior may differ as we improve our API with every version release.\n\nWhile many operations work on a single object per request, the demand ordering API also provides asynchronous batch endpoints for performing bulk updates efficiently on certain resources. For safety, `POST` requests support an `Idempotency-Key` header to allow for safe retries without accidentally performing the same operation twice.\n",
+      "type": "text/plain"
+    }
+  }
+}

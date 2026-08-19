@@ -1,0 +1,1299 @@
+{
+  "item": [
+    {
+      "id": "fd8c7225-e9e0-47e6-8c5b-e56fbc1790e9",
+      "name": "Feasibility",
+      "description": {
+        "content": "Understand the success of the Target Groups you want to run, have already saved or are in field by providing a Target Group ID or details.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "b1ae058c-0a90-4429-9bd1-16b1fd30265e",
+          "name": "Calculates feasibility for a draft target group",
+          "request": {
+            "name": "Calculates feasibility for a draft target group",
+            "description": {
+              "content": "Calculates the feasibility for a new, unsaved (draft) target group based on the specifications you provide in the request body. \nYou can use this endpoint to estimate the achievable number of completes and get a suggested price \nbefore you create the actual target group. If you include profiling details, \nthe response will also provide a feasibility breakdown for each quota.\n\n**Note:** Profiles with a large number of open-ended values or complex condition groups may result in reduced feasibility accuracy or a zero feasibility value. We recommend reviewing the suggested price carefully and running your own sample to validate the results.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "demand",
+                "accounts",
+                ":account_id",
+                "target-groups",
+                "calculate-feasibility"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "account_id",
+                  "description": "(Required) The account's unique identifier."
+                }
+              ]
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                "key": "Cint-API-Version",
+                "value": "<string>"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"business_unit_id\": \"<integer>\",\n  \"locale\": \"<string>\",\n  \"expected_incidence_rate\": \"<number>\",\n  \"expected_length_of_interview_minutes\": \"<integer>\",\n  \"fielding_specification\": {\n    \"start_at\": \"<dateTime>\",\n    \"end_at\": \"<dateTime>\"\n  },\n  \"completes_goal\": \"<integer>\",\n  \"collects_pii\": \"<boolean>\",\n  \"step_days\": \"<number>\",\n  \"cost_per_interview\": {\n    \"value\": \"<string>\",\n    \"currency_code\": \"<string>\"\n  },\n  \"price\": {\n    \"value\": \"<string>\",\n    \"currency_code\": \"<string>\"\n  },\n  \"rate_card_price_boost\": {\n    \"value\": \"<string>\",\n    \"currency_code\": \"<string>\"\n  },\n  \"profiling\": {\n    \"profile_adjustment_type\": \"<string>\",\n    \"profiles\": [\n      {\n        \"object\": \"<string>\",\n        \"quotas_enabled\": \"<boolean>\",\n        \"targets\": [\n          {\n            \"conditions\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"quota\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ]\n      },\n      {\n        \"object\": \"<string>\",\n        \"quotas_enabled\": \"<boolean>\",\n        \"targets\": [\n          {\n            \"conditions\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"quota\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ]\n      }\n    ]\n  },\n  \"allocations\": {\n    \"open_exchange_allocations\": {\n      \"blocked_supplier_ids\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"exchange_min_percentage\": \"<integer>\",\n      \"exchange_max_percentage\": \"<integer>\",\n      \"groups\": [\n        {\n          \"group_name\": \"<string>\",\n          \"min_percentage\": \"<integer>\",\n          \"max_percentage\": \"<integer>\",\n          \"suppliers\": [\n            \"<string>\",\n            \"<string>\"\n          ],\n          \"supplier_id\": \"<string>\"\n        },\n        {\n          \"group_name\": \"<string>\",\n          \"min_percentage\": \"<integer>\",\n          \"max_percentage\": \"<integer>\",\n          \"suppliers\": [\n            \"<string>\",\n            \"<string>\"\n          ],\n          \"supplier_id\": \"<string>\"\n        }\n      ]\n    },\n    \"private_exchange_allocations\": {\n      \"blocked_supplier_ids\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"groups\": [\n        {\n          \"group_name\": \"<string>\",\n          \"min_percentage\": \"<integer>\",\n          \"max_percentage\": \"<integer>\",\n          \"supplier_id\": \"<string>\"\n        },\n        {\n          \"group_name\": \"<string>\",\n          \"min_percentage\": \"<integer>\",\n          \"max_percentage\": \"<integer>\",\n          \"supplier_id\": \"<string>\"\n        }\n      ]\n    }\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "20de2020-7574-4377-bcc7-ae6e9a733681",
+              "name": "The feasibility report was generated successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "demand",
+                    "accounts",
+                    ":account_id",
+                    "target-groups",
+                    "calculate-feasibility"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"business_unit_id\": 1234,\n  \"locale\": \"eng_us\",\n  \"expected_incidence_rate\": 0.25,\n  \"expected_length_of_interview_minutes\": 15,\n  \"completes_goal\": 500,\n  \"fielding_specification\": {\n    \"start_at\": \"2024-08-01T10:00:00.000Z\",\n    \"end_at\": \"2024-08-31T10:00:00.000Z\"\n  },\n  \"profiling\": {\n    \"profile_adjustment_type\": \"percentage\",\n    \"profiles\": [\n      {\n        \"object\": \"regular\",\n        \"quotas_enabled\": true,\n        \"targets\": [\n          {\n            \"conditions\": [\n              {\n                \"object\": \"range\",\n                \"question_id\": 12413,\n                \"min\": 18,\n                \"max\": 34\n              }\n            ],\n            \"quota\": {\n              \"completes_goal_percentage\": 50\n            }\n          }\n        ]\n      }\n    ]\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "The `traceparent` header carries the trace ID and parent span ID, as defined by the W3C Trace Context specification. It's used to trace a single request as it moves through multiple services.",
+                  "key": "traceparent",
+                  "value": "00-0af7651916cd43dd8448eb211c80319c-b7ad6b7169203331-01"
+                },
+                {
+                  "disabled": false,
+                  "description": "The `tracestate` header complements the `traceparent` header by carrying vendor-specific trace information. This allows different services to add their own data to a trace.",
+                  "key": "tracestate",
+                  "value": "ot=foo:bar;k1:13"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"suggested_price\": {\n    \"value\": \"4.25\",\n    \"currency_code\": \"USD\",\n    \"currency_scale\": 2\n  },\n  \"suggested_completes_goal_range\": {\n    \"min\": 450,\n    \"max\": 525\n  },\n  \"profiles\": [\n    {\n      \"object\": \"regular\",\n      \"targets\": [\n        {\n          \"conditions\": [\n            {\n              \"object\": \"range\",\n              \"question_id\": 12413,\n              \"min\": 18,\n              \"max\": 34\n            }\n          ],\n          \"quota\": {\n            \"min_completes\": {\n              \"projected_completes_goal\": 225\n            },\n            \"max_completes\": {\n              \"projected_completes_goal\": 262\n            }\n          }\n        }\n      ]\n    }\n  ],\n  \"allocations\": {\n    \"open_exchange_allocations\": {\n      \"min_completes\": 450,\n      \"max_completes\": 525,\n      \"groups\": []\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ad91c440-1f16-44a8-9c1d-fc383dd3831c",
+              "name": "A request is not valid and can't be processed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "demand",
+                    "accounts",
+                    ":account_id",
+                    "target-groups",
+                    "calculate-feasibility"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"business_unit_id\": 1234,\n  \"locale\": \"eng_us\",\n  \"expected_incidence_rate\": 0.25,\n  \"expected_length_of_interview_minutes\": 15,\n  \"completes_goal\": 500,\n  \"fielding_specification\": {\n    \"start_at\": \"2024-08-01T10:00:00.000Z\",\n    \"end_at\": \"2024-08-31T10:00:00.000Z\"\n  },\n  \"profiling\": {\n    \"profile_adjustment_type\": \"percentage\",\n    \"profiles\": [\n      {\n        \"object\": \"regular\",\n        \"quotas_enabled\": true,\n        \"targets\": [\n          {\n            \"conditions\": [\n              {\n                \"object\": \"range\",\n                \"question_id\": 12413,\n                \"min\": 18,\n                \"max\": 34\n              }\n            ],\n            \"quota\": {\n              \"completes_goal_percentage\": 50\n            }\n          }\n        ]\n      }\n    ]\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"9e278238-d011-4e05-8327-1ce1d5d26254\",\n  \"object\": \"bad_request_error\",\n  \"detail\": \"Expected field 'foo' is missing.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ff92117d-70c5-4213-a159-caa84241b284",
+              "name": "A request is unauthorized.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "demand",
+                    "accounts",
+                    ":account_id",
+                    "target-groups",
+                    "calculate-feasibility"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"business_unit_id\": 1234,\n  \"locale\": \"eng_us\",\n  \"expected_incidence_rate\": 0.25,\n  \"expected_length_of_interview_minutes\": 15,\n  \"completes_goal\": 500,\n  \"fielding_specification\": {\n    \"start_at\": \"2024-08-01T10:00:00.000Z\",\n    \"end_at\": \"2024-08-31T10:00:00.000Z\"\n  },\n  \"profiling\": {\n    \"profile_adjustment_type\": \"percentage\",\n    \"profiles\": [\n      {\n        \"object\": \"regular\",\n        \"quotas_enabled\": true,\n        \"targets\": [\n          {\n            \"conditions\": [\n              {\n                \"object\": \"range\",\n                \"question_id\": 12413,\n                \"min\": 18,\n                \"max\": 34\n              }\n            ],\n            \"quota\": {\n              \"completes_goal_percentage\": 50\n            }\n          }\n        ]\n      }\n    ]\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"1dcf0f40-f0d1-4cf6-8c00-c3d019d32faf\",\n  \"object\": \"authorization_error\",\n  \"detail\": \"no valid authorization provided for this operation\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b4c195b5-90d2-47c1-a368-152de0e846ed",
+              "name": "A requested is forbidden.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "demand",
+                    "accounts",
+                    ":account_id",
+                    "target-groups",
+                    "calculate-feasibility"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"business_unit_id\": 1234,\n  \"locale\": \"eng_us\",\n  \"expected_incidence_rate\": 0.25,\n  \"expected_length_of_interview_minutes\": 15,\n  \"completes_goal\": 500,\n  \"fielding_specification\": {\n    \"start_at\": \"2024-08-01T10:00:00.000Z\",\n    \"end_at\": \"2024-08-31T10:00:00.000Z\"\n  },\n  \"profiling\": {\n    \"profile_adjustment_type\": \"percentage\",\n    \"profiles\": [\n      {\n        \"object\": \"regular\",\n        \"quotas_enabled\": true,\n        \"targets\": [\n          {\n            \"conditions\": [\n              {\n                \"object\": \"range\",\n                \"question_id\": 12413,\n                \"min\": 18,\n                \"max\": 34\n              }\n            ],\n            \"quota\": {\n              \"completes_goal_percentage\": 50\n            }\n          }\n        ]\n      }\n    ]\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"fe68cdd2-ee87-4dbf-8950-63c5cbca94c7\",\n  \"object\": \"authorization_error\",\n  \"detail\": \"you don't have the right permissions to perform this operation\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "fa924042-347b-4525-b686-a28b6f3a4102",
+              "name": "A requested resource isn't found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "demand",
+                    "accounts",
+                    ":account_id",
+                    "target-groups",
+                    "calculate-feasibility"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"business_unit_id\": 1234,\n  \"locale\": \"eng_us\",\n  \"expected_incidence_rate\": 0.25,\n  \"expected_length_of_interview_minutes\": 15,\n  \"completes_goal\": 500,\n  \"fielding_specification\": {\n    \"start_at\": \"2024-08-01T10:00:00.000Z\",\n    \"end_at\": \"2024-08-31T10:00:00.000Z\"\n  },\n  \"profiling\": {\n    \"profile_adjustment_type\": \"percentage\",\n    \"profiles\": [\n      {\n        \"object\": \"regular\",\n        \"quotas_enabled\": true,\n        \"targets\": [\n          {\n            \"conditions\": [\n              {\n                \"object\": \"range\",\n                \"question_id\": 12413,\n                \"min\": 18,\n                \"max\": 34\n              }\n            ],\n            \"quota\": {\n              \"completes_goal_percentage\": 50\n            }\n          }\n        ]\n      }\n    ]\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"7a5972ba-0825-4360-b852-fa2430e47034\",\n  \"object\": \"not_found_error\",\n  \"detail\": \"resource not found\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "dda6c8d2-49f2-447c-9a1d-a8ee77c889db",
+              "name": "A request failed due to invalid state of the entity",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "demand",
+                    "accounts",
+                    ":account_id",
+                    "target-groups",
+                    "calculate-feasibility"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"business_unit_id\": 1234,\n  \"locale\": \"eng_us\",\n  \"expected_incidence_rate\": 0.25,\n  \"expected_length_of_interview_minutes\": 15,\n  \"completes_goal\": 500,\n  \"fielding_specification\": {\n    \"start_at\": \"2024-08-01T10:00:00.000Z\",\n    \"end_at\": \"2024-08-31T10:00:00.000Z\"\n  },\n  \"profiling\": {\n    \"profile_adjustment_type\": \"percentage\",\n    \"profiles\": [\n      {\n        \"object\": \"regular\",\n        \"quotas_enabled\": true,\n        \"targets\": [\n          {\n            \"conditions\": [\n              {\n                \"object\": \"range\",\n                \"question_id\": 12413,\n                \"min\": 18,\n                \"max\": 34\n              }\n            ],\n            \"quota\": {\n              \"completes_goal_percentage\": 50\n            }\n          }\n        ]\n      }\n    ]\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"d94b8bb2-a540-4a91-9c05-2aa3ae9a5e1e\",\n  \"object\": \"invalid_state_error\",\n  \"detail\": \"The entity does not meet the required state.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "8acac09e-d35a-4203-943e-a6f86d6b6e01",
+              "name": "A request failed due to an internal error.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "demand",
+                    "accounts",
+                    ":account_id",
+                    "target-groups",
+                    "calculate-feasibility"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"business_unit_id\": 1234,\n  \"locale\": \"eng_us\",\n  \"expected_incidence_rate\": 0.25,\n  \"expected_length_of_interview_minutes\": 15,\n  \"completes_goal\": 500,\n  \"fielding_specification\": {\n    \"start_at\": \"2024-08-01T10:00:00.000Z\",\n    \"end_at\": \"2024-08-31T10:00:00.000Z\"\n  },\n  \"profiling\": {\n    \"profile_adjustment_type\": \"percentage\",\n    \"profiles\": [\n      {\n        \"object\": \"regular\",\n        \"quotas_enabled\": true,\n        \"targets\": [\n          {\n            \"conditions\": [\n              {\n                \"object\": \"range\",\n                \"question_id\": 12413,\n                \"min\": 18,\n                \"max\": 34\n              }\n            ],\n            \"quota\": {\n              \"completes_goal_percentage\": 50\n            }\n          }\n        ]\n      }\n    ]\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"d94b8bb2-a540-4a91-9c05-2aa3ae9a5e1e\",\n  \"object\": \"unexpected_internal_error\",\n  \"detail\": \"an internal error has led to the failure of this operation\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "ede93569-e165-4c21-b880-f19087186fa7",
+          "name": "Calculates feasibility for a non-draft target group",
+          "request": {
+            "name": "Calculates feasibility for a non-draft target group",
+            "description": {
+              "content": "Calculates feasibility information based on the current state of the target group.\nThe request properties are all optional. They serve as a way of performing what-if analysis on the Target Group. When a property is provided in the request, the feasibility analysis will behave as if the relevant property on the target group had the value which was sent in the request body. Any number of properties can be provided for what-if analysis this way. However, it should be kept in mind that the analysis is still performed on _the current target group_, therefore it will be influenced by factors such as the number of completes collected so far, the exchange rate of the target group's currency versus USD when it went live, etc.\n**Note:** Profiles with a large number of open-ended values or complex condition groups may result in reduced feasibility accuracy or a zero feasibility value. We recommend reviewing the suggested price carefully and running your own sample to validate the results.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "demand",
+                "accounts",
+                ":account_id",
+                "projects",
+                ":project_id",
+                "target-groups",
+                ":target_group_id",
+                "calculate-feasibility"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "account_id",
+                  "description": "(Required) The account's unique identifier."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "project_id",
+                  "description": "(Required) A unique identifier for the project, in ULID format."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "target_group_id",
+                  "description": "(Required) A unique identifier for the target group, in ULID format."
+                }
+              ]
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                "key": "Cint-API-Version",
+                "value": "<string>"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"locale\": \"<string>\",\n  \"collects_pii\": \"<boolean>\",\n  \"incidence_rate\": \"<number>\",\n  \"length_of_interview\": \"<integer>\",\n  \"completes_goal\": \"<integer>\",\n  \"start_at\": \"<dateTime>\",\n  \"end_at\": \"<dateTime>\",\n  \"step_days\": \"<number>\",\n  \"cost_per_interview\": {\n    \"value\": \"<string>\",\n    \"currency_code\": \"<string>\"\n  },\n  \"price\": {\n    \"value\": \"<string>\",\n    \"currency_code\": \"<string>\"\n  },\n  \"rate_card_price_boost\": {\n    \"value\": \"<string>\",\n    \"currency_code\": \"<string>\"\n  },\n  \"profiling\": {\n    \"profile_adjustment_type\": \"<string>\",\n    \"profiles\": [\n      {\n        \"object\": \"<string>\",\n        \"quotas_enabled\": \"<boolean>\",\n        \"targets\": [\n          {\n            \"conditions\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"quota\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ]\n      },\n      {\n        \"object\": \"<string>\",\n        \"quotas_enabled\": \"<boolean>\",\n        \"targets\": [\n          {\n            \"conditions\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"quota\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ]\n      }\n    ]\n  },\n  \"allocations\": {\n    \"open_exchange_allocations\": {\n      \"blocked_supplier_ids\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"exchange_min_percentage\": \"<integer>\",\n      \"exchange_max_percentage\": \"<integer>\",\n      \"groups\": [\n        {\n          \"group_name\": \"<string>\",\n          \"min_percentage\": \"<integer>\",\n          \"max_percentage\": \"<integer>\",\n          \"suppliers\": [\n            \"<string>\",\n            \"<string>\"\n          ],\n          \"supplier_id\": \"<string>\"\n        },\n        {\n          \"group_name\": \"<string>\",\n          \"min_percentage\": \"<integer>\",\n          \"max_percentage\": \"<integer>\",\n          \"suppliers\": [\n            \"<string>\",\n            \"<string>\"\n          ],\n          \"supplier_id\": \"<string>\"\n        }\n      ]\n    },\n    \"private_exchange_allocations\": {\n      \"blocked_supplier_ids\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"groups\": [\n        {\n          \"group_name\": \"<string>\",\n          \"min_percentage\": \"<integer>\",\n          \"max_percentage\": \"<integer>\",\n          \"supplier_id\": \"<string>\"\n        },\n        {\n          \"group_name\": \"<string>\",\n          \"min_percentage\": \"<integer>\",\n          \"max_percentage\": \"<integer>\",\n          \"supplier_id\": \"<string>\"\n        }\n      ]\n    }\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "4ffd941f-227d-4d9d-a344-cfa3ca9fae25",
+              "name": "Successfully obtained target group feasibility.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "demand",
+                    "accounts",
+                    ":account_id",
+                    "projects",
+                    ":project_id",
+                    "target-groups",
+                    ":target_group_id",
+                    "calculate-feasibility"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "project_id",
+                      "description": "(Required) A unique identifier for the project, in ULID format."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "target_group_id",
+                      "description": "(Required) A unique identifier for the target group, in ULID format."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"locale\": \"eng_us\",\n  \"collects_pii\": true,\n  \"incidence_rate\": 0.5,\n  \"length_of_interview\": 20,\n  \"completes_goal\": 40,\n  \"start_at\": \"2023-01-01T23:00:00.000Z\",\n  \"end_at\": \"2023-01-31T23:00:00.000Z\",\n  \"step_days\": \"<number>\",\n  \"cost_per_interview\": {\n    \"value\": \"2.7352\",\n    \"currency_code\": \"USD\"\n  },\n  \"price\": {\n    \"value\": \"2.7352\",\n    \"currency_code\": \"USD\"\n  },\n  \"rate_card_price_boost\": {\n    \"value\": \"2.7352\",\n    \"currency_code\": \"USD\"\n  },\n  \"profiling\": {\n    \"profile_adjustment_type\": \"percentage\",\n    \"profiles\": [\n      {\n        \"object\": \"regular\",\n        \"quotas_enabled\": true,\n        \"targets\": [\n          {\n            \"conditions\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"quota\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ]\n      },\n      {\n        \"object\": \"regular\",\n        \"quotas_enabled\": true,\n        \"targets\": [\n          {\n            \"conditions\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"quota\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ]\n      }\n    ]\n  },\n  \"allocations\": {\n    \"open_exchange_allocations\": {\n      \"blocked_supplier_ids\": [\n        \"234\",\n        \"234\"\n      ],\n      \"exchange_min_percentage\": 0,\n      \"exchange_max_percentage\": 100,\n      \"groups\": [\n        {\n          \"group_name\": \"Unique Test group name\",\n          \"min_percentage\": 0,\n          \"max_percentage\": 100,\n          \"suppliers\": [\n            \"434\",\n            \"434\"\n          ],\n          \"supplier_id\": \"43\"\n        },\n        {\n          \"group_name\": \"Unique Test group name\",\n          \"min_percentage\": 0,\n          \"max_percentage\": 100,\n          \"suppliers\": [\n            \"434\",\n            \"434\"\n          ],\n          \"supplier_id\": \"43\"\n        }\n      ]\n    },\n    \"private_exchange_allocations\": {\n      \"blocked_supplier_ids\": [\n        \"435\",\n        \"435\"\n      ],\n      \"groups\": [\n        {\n          \"group_name\": \"Test group\",\n          \"min_percentage\": 0,\n          \"max_percentage\": 100,\n          \"supplier_id\": \"43\"\n        },\n        {\n          \"group_name\": \"Test group\",\n          \"min_percentage\": 0,\n          \"max_percentage\": 100,\n          \"supplier_id\": \"43\"\n        }\n      ]\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "The `traceparent` header carries the trace ID and parent span ID, as defined by the W3C Trace Context specification. It's used to trace a single request as it moves through multiple services.",
+                  "key": "traceparent",
+                  "value": "00-0af7651916cd43dd8448eb211c80319c-b7ad6b7169203331-01"
+                },
+                {
+                  "disabled": false,
+                  "description": "The `tracestate` header complements the `traceparent` header by carrying vendor-specific trace information. This allows different services to add their own data to a trace.",
+                  "key": "tracestate",
+                  "value": "ot=foo:bar;k1:13"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"suggested_price\": {\n    \"value\": \"2.7352\",\n    \"currency_code\": \"USD\",\n    \"currency_scale\": 2\n  },\n  \"suggested_price_range\": {\n    \"min\": {\n      \"value\": \"2.7352\",\n      \"currency_code\": \"USD\",\n      \"currency_scale\": 2\n    },\n    \"max\": {\n      \"value\": \"2.7352\",\n      \"currency_code\": \"USD\",\n      \"currency_scale\": 2\n    }\n  },\n  \"suggested_completes_goal_range\": {\n    \"min\": 25,\n    \"max\": 30\n  },\n  \"profiles\": [\n    {\n      \"object\": \"regular\",\n      \"targets\": [\n        {\n          \"conditions\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"quota\": {\n            \"min_completes\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"max_completes\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        }\n      ]\n    },\n    {\n      \"object\": \"regular\",\n      \"targets\": [\n        {\n          \"conditions\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"quota\": {\n            \"min_completes\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"max_completes\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        }\n      ]\n    }\n  ],\n  \"allocations\": {\n    \"open_exchange_allocations\": {\n      \"min_completes\": 55,\n      \"max_completes\": 85,\n      \"groups\": [\n        {\n          \"group_name\": \"Test group\",\n          \"min_completes\": 55,\n          \"max_completes\": 85\n        },\n        {\n          \"group_name\": \"Test group\",\n          \"min_completes\": 55,\n          \"max_completes\": 85\n        }\n      ]\n    },\n    \"private_exchange_allocations\": {\n      \"groups\": [\n        {\n          \"group_name\": \"Test group\",\n          \"min_completes\": 55,\n          \"max_completes\": 85\n        },\n        {\n          \"group_name\": \"Test group\",\n          \"min_completes\": 55,\n          \"max_completes\": 85\n        }\n      ]\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "99f29c0e-a761-4b61-a6c4-7299d904a459",
+              "name": "A request is not valid and can't be processed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "demand",
+                    "accounts",
+                    ":account_id",
+                    "projects",
+                    ":project_id",
+                    "target-groups",
+                    ":target_group_id",
+                    "calculate-feasibility"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "project_id",
+                      "description": "(Required) A unique identifier for the project, in ULID format."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "target_group_id",
+                      "description": "(Required) A unique identifier for the target group, in ULID format."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"locale\": \"eng_us\",\n  \"collects_pii\": true,\n  \"incidence_rate\": 0.5,\n  \"length_of_interview\": 20,\n  \"completes_goal\": 40,\n  \"start_at\": \"2023-01-01T23:00:00.000Z\",\n  \"end_at\": \"2023-01-31T23:00:00.000Z\",\n  \"step_days\": \"<number>\",\n  \"cost_per_interview\": {\n    \"value\": \"2.7352\",\n    \"currency_code\": \"USD\"\n  },\n  \"price\": {\n    \"value\": \"2.7352\",\n    \"currency_code\": \"USD\"\n  },\n  \"rate_card_price_boost\": {\n    \"value\": \"2.7352\",\n    \"currency_code\": \"USD\"\n  },\n  \"profiling\": {\n    \"profile_adjustment_type\": \"percentage\",\n    \"profiles\": [\n      {\n        \"object\": \"regular\",\n        \"quotas_enabled\": true,\n        \"targets\": [\n          {\n            \"conditions\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"quota\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ]\n      },\n      {\n        \"object\": \"regular\",\n        \"quotas_enabled\": true,\n        \"targets\": [\n          {\n            \"conditions\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"quota\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ]\n      }\n    ]\n  },\n  \"allocations\": {\n    \"open_exchange_allocations\": {\n      \"blocked_supplier_ids\": [\n        \"234\",\n        \"234\"\n      ],\n      \"exchange_min_percentage\": 0,\n      \"exchange_max_percentage\": 100,\n      \"groups\": [\n        {\n          \"group_name\": \"Unique Test group name\",\n          \"min_percentage\": 0,\n          \"max_percentage\": 100,\n          \"suppliers\": [\n            \"434\",\n            \"434\"\n          ],\n          \"supplier_id\": \"43\"\n        },\n        {\n          \"group_name\": \"Unique Test group name\",\n          \"min_percentage\": 0,\n          \"max_percentage\": 100,\n          \"suppliers\": [\n            \"434\",\n            \"434\"\n          ],\n          \"supplier_id\": \"43\"\n        }\n      ]\n    },\n    \"private_exchange_allocations\": {\n      \"blocked_supplier_ids\": [\n        \"435\",\n        \"435\"\n      ],\n      \"groups\": [\n        {\n          \"group_name\": \"Test group\",\n          \"min_percentage\": 0,\n          \"max_percentage\": 100,\n          \"supplier_id\": \"43\"\n        },\n        {\n          \"group_name\": \"Test group\",\n          \"min_percentage\": 0,\n          \"max_percentage\": 100,\n          \"supplier_id\": \"43\"\n        }\n      ]\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"9e278238-d011-4e05-8327-1ce1d5d26254\",\n  \"object\": \"bad_request_error\",\n  \"detail\": \"Expected field 'foo' is missing.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "05954c40-1776-4f11-9c4f-6b4c5a24d3ce",
+              "name": "A request is unauthorized.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "demand",
+                    "accounts",
+                    ":account_id",
+                    "projects",
+                    ":project_id",
+                    "target-groups",
+                    ":target_group_id",
+                    "calculate-feasibility"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "project_id",
+                      "description": "(Required) A unique identifier for the project, in ULID format."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "target_group_id",
+                      "description": "(Required) A unique identifier for the target group, in ULID format."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"locale\": \"eng_us\",\n  \"collects_pii\": true,\n  \"incidence_rate\": 0.5,\n  \"length_of_interview\": 20,\n  \"completes_goal\": 40,\n  \"start_at\": \"2023-01-01T23:00:00.000Z\",\n  \"end_at\": \"2023-01-31T23:00:00.000Z\",\n  \"step_days\": \"<number>\",\n  \"cost_per_interview\": {\n    \"value\": \"2.7352\",\n    \"currency_code\": \"USD\"\n  },\n  \"price\": {\n    \"value\": \"2.7352\",\n    \"currency_code\": \"USD\"\n  },\n  \"rate_card_price_boost\": {\n    \"value\": \"2.7352\",\n    \"currency_code\": \"USD\"\n  },\n  \"profiling\": {\n    \"profile_adjustment_type\": \"percentage\",\n    \"profiles\": [\n      {\n        \"object\": \"regular\",\n        \"quotas_enabled\": true,\n        \"targets\": [\n          {\n            \"conditions\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"quota\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ]\n      },\n      {\n        \"object\": \"regular\",\n        \"quotas_enabled\": true,\n        \"targets\": [\n          {\n            \"conditions\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"quota\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ]\n      }\n    ]\n  },\n  \"allocations\": {\n    \"open_exchange_allocations\": {\n      \"blocked_supplier_ids\": [\n        \"234\",\n        \"234\"\n      ],\n      \"exchange_min_percentage\": 0,\n      \"exchange_max_percentage\": 100,\n      \"groups\": [\n        {\n          \"group_name\": \"Unique Test group name\",\n          \"min_percentage\": 0,\n          \"max_percentage\": 100,\n          \"suppliers\": [\n            \"434\",\n            \"434\"\n          ],\n          \"supplier_id\": \"43\"\n        },\n        {\n          \"group_name\": \"Unique Test group name\",\n          \"min_percentage\": 0,\n          \"max_percentage\": 100,\n          \"suppliers\": [\n            \"434\",\n            \"434\"\n          ],\n          \"supplier_id\": \"43\"\n        }\n      ]\n    },\n    \"private_exchange_allocations\": {\n      \"blocked_supplier_ids\": [\n        \"435\",\n        \"435\"\n      ],\n      \"groups\": [\n        {\n          \"group_name\": \"Test group\",\n          \"min_percentage\": 0,\n          \"max_percentage\": 100,\n          \"supplier_id\": \"43\"\n        },\n        {\n          \"group_name\": \"Test group\",\n          \"min_percentage\": 0,\n          \"max_percentage\": 100,\n          \"supplier_id\": \"43\"\n        }\n      ]\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"1dcf0f40-f0d1-4cf6-8c00-c3d019d32faf\",\n  \"object\": \"authorization_error\",\n  \"detail\": \"no valid authorization provided for this operation\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6d8078db-3f56-4b4d-a08e-97e31ec71d90",
+              "name": "A requested is forbidden.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "demand",
+                    "accounts",
+                    ":account_id",
+                    "projects",
+                    ":project_id",
+                    "target-groups",
+                    ":target_group_id",
+                    "calculate-feasibility"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "project_id",
+                      "description": "(Required) A unique identifier for the project, in ULID format."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "target_group_id",
+                      "description": "(Required) A unique identifier for the target group, in ULID format."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"locale\": \"eng_us\",\n  \"collects_pii\": true,\n  \"incidence_rate\": 0.5,\n  \"length_of_interview\": 20,\n  \"completes_goal\": 40,\n  \"start_at\": \"2023-01-01T23:00:00.000Z\",\n  \"end_at\": \"2023-01-31T23:00:00.000Z\",\n  \"step_days\": \"<number>\",\n  \"cost_per_interview\": {\n    \"value\": \"2.7352\",\n    \"currency_code\": \"USD\"\n  },\n  \"price\": {\n    \"value\": \"2.7352\",\n    \"currency_code\": \"USD\"\n  },\n  \"rate_card_price_boost\": {\n    \"value\": \"2.7352\",\n    \"currency_code\": \"USD\"\n  },\n  \"profiling\": {\n    \"profile_adjustment_type\": \"percentage\",\n    \"profiles\": [\n      {\n        \"object\": \"regular\",\n        \"quotas_enabled\": true,\n        \"targets\": [\n          {\n            \"conditions\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"quota\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ]\n      },\n      {\n        \"object\": \"regular\",\n        \"quotas_enabled\": true,\n        \"targets\": [\n          {\n            \"conditions\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"quota\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ]\n      }\n    ]\n  },\n  \"allocations\": {\n    \"open_exchange_allocations\": {\n      \"blocked_supplier_ids\": [\n        \"234\",\n        \"234\"\n      ],\n      \"exchange_min_percentage\": 0,\n      \"exchange_max_percentage\": 100,\n      \"groups\": [\n        {\n          \"group_name\": \"Unique Test group name\",\n          \"min_percentage\": 0,\n          \"max_percentage\": 100,\n          \"suppliers\": [\n            \"434\",\n            \"434\"\n          ],\n          \"supplier_id\": \"43\"\n        },\n        {\n          \"group_name\": \"Unique Test group name\",\n          \"min_percentage\": 0,\n          \"max_percentage\": 100,\n          \"suppliers\": [\n            \"434\",\n            \"434\"\n          ],\n          \"supplier_id\": \"43\"\n        }\n      ]\n    },\n    \"private_exchange_allocations\": {\n      \"blocked_supplier_ids\": [\n        \"435\",\n        \"435\"\n      ],\n      \"groups\": [\n        {\n          \"group_name\": \"Test group\",\n          \"min_percentage\": 0,\n          \"max_percentage\": 100,\n          \"supplier_id\": \"43\"\n        },\n        {\n          \"group_name\": \"Test group\",\n          \"min_percentage\": 0,\n          \"max_percentage\": 100,\n          \"supplier_id\": \"43\"\n        }\n      ]\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"fe68cdd2-ee87-4dbf-8950-63c5cbca94c7\",\n  \"object\": \"authorization_error\",\n  \"detail\": \"you don't have the right permissions to perform this operation\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f9a47787-2cd6-4033-b5ec-7c9f6340605f",
+              "name": "A requested resource isn't found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "demand",
+                    "accounts",
+                    ":account_id",
+                    "projects",
+                    ":project_id",
+                    "target-groups",
+                    ":target_group_id",
+                    "calculate-feasibility"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "project_id",
+                      "description": "(Required) A unique identifier for the project, in ULID format."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "target_group_id",
+                      "description": "(Required) A unique identifier for the target group, in ULID format."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"locale\": \"eng_us\",\n  \"collects_pii\": true,\n  \"incidence_rate\": 0.5,\n  \"length_of_interview\": 20,\n  \"completes_goal\": 40,\n  \"start_at\": \"2023-01-01T23:00:00.000Z\",\n  \"end_at\": \"2023-01-31T23:00:00.000Z\",\n  \"step_days\": \"<number>\",\n  \"cost_per_interview\": {\n    \"value\": \"2.7352\",\n    \"currency_code\": \"USD\"\n  },\n  \"price\": {\n    \"value\": \"2.7352\",\n    \"currency_code\": \"USD\"\n  },\n  \"rate_card_price_boost\": {\n    \"value\": \"2.7352\",\n    \"currency_code\": \"USD\"\n  },\n  \"profiling\": {\n    \"profile_adjustment_type\": \"percentage\",\n    \"profiles\": [\n      {\n        \"object\": \"regular\",\n        \"quotas_enabled\": true,\n        \"targets\": [\n          {\n            \"conditions\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"quota\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ]\n      },\n      {\n        \"object\": \"regular\",\n        \"quotas_enabled\": true,\n        \"targets\": [\n          {\n            \"conditions\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"quota\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ]\n      }\n    ]\n  },\n  \"allocations\": {\n    \"open_exchange_allocations\": {\n      \"blocked_supplier_ids\": [\n        \"234\",\n        \"234\"\n      ],\n      \"exchange_min_percentage\": 0,\n      \"exchange_max_percentage\": 100,\n      \"groups\": [\n        {\n          \"group_name\": \"Unique Test group name\",\n          \"min_percentage\": 0,\n          \"max_percentage\": 100,\n          \"suppliers\": [\n            \"434\",\n            \"434\"\n          ],\n          \"supplier_id\": \"43\"\n        },\n        {\n          \"group_name\": \"Unique Test group name\",\n          \"min_percentage\": 0,\n          \"max_percentage\": 100,\n          \"suppliers\": [\n            \"434\",\n            \"434\"\n          ],\n          \"supplier_id\": \"43\"\n        }\n      ]\n    },\n    \"private_exchange_allocations\": {\n      \"blocked_supplier_ids\": [\n        \"435\",\n        \"435\"\n      ],\n      \"groups\": [\n        {\n          \"group_name\": \"Test group\",\n          \"min_percentage\": 0,\n          \"max_percentage\": 100,\n          \"supplier_id\": \"43\"\n        },\n        {\n          \"group_name\": \"Test group\",\n          \"min_percentage\": 0,\n          \"max_percentage\": 100,\n          \"supplier_id\": \"43\"\n        }\n      ]\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"7a5972ba-0825-4360-b852-fa2430e47034\",\n  \"object\": \"not_found_error\",\n  \"detail\": \"resource not found\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "8c589719-a812-4f76-aab0-40cadfa2c4b0",
+              "name": "A request failed due to invalid state of the entity",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "demand",
+                    "accounts",
+                    ":account_id",
+                    "projects",
+                    ":project_id",
+                    "target-groups",
+                    ":target_group_id",
+                    "calculate-feasibility"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "project_id",
+                      "description": "(Required) A unique identifier for the project, in ULID format."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "target_group_id",
+                      "description": "(Required) A unique identifier for the target group, in ULID format."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"locale\": \"eng_us\",\n  \"collects_pii\": true,\n  \"incidence_rate\": 0.5,\n  \"length_of_interview\": 20,\n  \"completes_goal\": 40,\n  \"start_at\": \"2023-01-01T23:00:00.000Z\",\n  \"end_at\": \"2023-01-31T23:00:00.000Z\",\n  \"step_days\": \"<number>\",\n  \"cost_per_interview\": {\n    \"value\": \"2.7352\",\n    \"currency_code\": \"USD\"\n  },\n  \"price\": {\n    \"value\": \"2.7352\",\n    \"currency_code\": \"USD\"\n  },\n  \"rate_card_price_boost\": {\n    \"value\": \"2.7352\",\n    \"currency_code\": \"USD\"\n  },\n  \"profiling\": {\n    \"profile_adjustment_type\": \"percentage\",\n    \"profiles\": [\n      {\n        \"object\": \"regular\",\n        \"quotas_enabled\": true,\n        \"targets\": [\n          {\n            \"conditions\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"quota\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ]\n      },\n      {\n        \"object\": \"regular\",\n        \"quotas_enabled\": true,\n        \"targets\": [\n          {\n            \"conditions\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"quota\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ]\n      }\n    ]\n  },\n  \"allocations\": {\n    \"open_exchange_allocations\": {\n      \"blocked_supplier_ids\": [\n        \"234\",\n        \"234\"\n      ],\n      \"exchange_min_percentage\": 0,\n      \"exchange_max_percentage\": 100,\n      \"groups\": [\n        {\n          \"group_name\": \"Unique Test group name\",\n          \"min_percentage\": 0,\n          \"max_percentage\": 100,\n          \"suppliers\": [\n            \"434\",\n            \"434\"\n          ],\n          \"supplier_id\": \"43\"\n        },\n        {\n          \"group_name\": \"Unique Test group name\",\n          \"min_percentage\": 0,\n          \"max_percentage\": 100,\n          \"suppliers\": [\n            \"434\",\n            \"434\"\n          ],\n          \"supplier_id\": \"43\"\n        }\n      ]\n    },\n    \"private_exchange_allocations\": {\n      \"blocked_supplier_ids\": [\n        \"435\",\n        \"435\"\n      ],\n      \"groups\": [\n        {\n          \"group_name\": \"Test group\",\n          \"min_percentage\": 0,\n          \"max_percentage\": 100,\n          \"supplier_id\": \"43\"\n        },\n        {\n          \"group_name\": \"Test group\",\n          \"min_percentage\": 0,\n          \"max_percentage\": 100,\n          \"supplier_id\": \"43\"\n        }\n      ]\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"d94b8bb2-a540-4a91-9c05-2aa3ae9a5e1e\",\n  \"object\": \"invalid_state_error\",\n  \"detail\": \"The entity does not meet the required state.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "3e8acbe1-be49-47b6-ae26-9922a9e8c5ed",
+              "name": "A request failed due to an internal error.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "demand",
+                    "accounts",
+                    ":account_id",
+                    "projects",
+                    ":project_id",
+                    "target-groups",
+                    ":target_group_id",
+                    "calculate-feasibility"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "account_id",
+                      "description": "(Required) The account's unique identifier."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "project_id",
+                      "description": "(Required) A unique identifier for the project, in ULID format."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "target_group_id",
+                      "description": "(Required) A unique identifier for the target group, in ULID format."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.\n",
+                    "key": "Cint-API-Version",
+                    "value": "2025-12-18"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"locale\": \"eng_us\",\n  \"collects_pii\": true,\n  \"incidence_rate\": 0.5,\n  \"length_of_interview\": 20,\n  \"completes_goal\": 40,\n  \"start_at\": \"2023-01-01T23:00:00.000Z\",\n  \"end_at\": \"2023-01-31T23:00:00.000Z\",\n  \"step_days\": \"<number>\",\n  \"cost_per_interview\": {\n    \"value\": \"2.7352\",\n    \"currency_code\": \"USD\"\n  },\n  \"price\": {\n    \"value\": \"2.7352\",\n    \"currency_code\": \"USD\"\n  },\n  \"rate_card_price_boost\": {\n    \"value\": \"2.7352\",\n    \"currency_code\": \"USD\"\n  },\n  \"profiling\": {\n    \"profile_adjustment_type\": \"percentage\",\n    \"profiles\": [\n      {\n        \"object\": \"regular\",\n        \"quotas_enabled\": true,\n        \"targets\": [\n          {\n            \"conditions\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"quota\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ]\n      },\n      {\n        \"object\": \"regular\",\n        \"quotas_enabled\": true,\n        \"targets\": [\n          {\n            \"conditions\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"quota\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ]\n      }\n    ]\n  },\n  \"allocations\": {\n    \"open_exchange_allocations\": {\n      \"blocked_supplier_ids\": [\n        \"234\",\n        \"234\"\n      ],\n      \"exchange_min_percentage\": 0,\n      \"exchange_max_percentage\": 100,\n      \"groups\": [\n        {\n          \"group_name\": \"Unique Test group name\",\n          \"min_percentage\": 0,\n          \"max_percentage\": 100,\n          \"suppliers\": [\n            \"434\",\n            \"434\"\n          ],\n          \"supplier_id\": \"43\"\n        },\n        {\n          \"group_name\": \"Unique Test group name\",\n          \"min_percentage\": 0,\n          \"max_percentage\": 100,\n          \"suppliers\": [\n            \"434\",\n            \"434\"\n          ],\n          \"supplier_id\": \"43\"\n        }\n      ]\n    },\n    \"private_exchange_allocations\": {\n      \"blocked_supplier_ids\": [\n        \"435\",\n        \"435\"\n      ],\n      \"groups\": [\n        {\n          \"group_name\": \"Test group\",\n          \"min_percentage\": 0,\n          \"max_percentage\": 100,\n          \"supplier_id\": \"43\"\n        },\n        {\n          \"group_name\": \"Test group\",\n          \"min_percentage\": 0,\n          \"max_percentage\": 100,\n          \"supplier_id\": \"43\"\n        }\n      ]\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"d94b8bb2-a540-4a91-9c05-2aa3ae9a5e1e\",\n  \"object\": \"unexpected_internal_error\",\n  \"detail\": \"an internal error has led to the failure of this operation\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.cint.com/v1",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "6099568d-0be2-4229-8582-efdd37e079cc",
+    "name": "Demand Accounts Feasibility API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Cint's demand ordering API is REST oriented. It has predictable resource based URLs, accepts JSON-encoded request bodies, returns JSON-encoded responses, and uses standard HTTP response codes, authentication, and verbs. Error responses are also JSON-encoded and follow a standard format, providing a unique error ID and detailed information about what went wrong.\n\nAuthentication is handled via bearer tokens passed in the `Authorization` header. All requests must also include a `Cint-API-Version` header with a date in `YYYY-MM-DD` format to specify the desired API version. Depending on the version you use, endpoint behavior may differ as we improve our API with every version release.\n\nWhile many operations work on a single object per request, the demand ordering API also provides asynchronous batch endpoints for performing bulk updates efficiently on certain resources. For safety, `POST` requests support an `Idempotency-Key` header to allow for safe retries without accidentally performing the same operation twice.\n",
+      "type": "text/plain"
+    }
+  }
+}

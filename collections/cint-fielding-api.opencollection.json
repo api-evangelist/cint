@@ -1,0 +1,566 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Demand Accounts Fielding API",
+    "version": "2025-12-18"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Fielding",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Job to launch a draft target group",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.cint.com/v1/demand/accounts/:account_id/projects/:project_id/target-groups/:target_group_id/fielding-run-jobs/launch-from-draft",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              },
+              {
+                "name": "idempotency-key",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The account's unique identifier."
+              },
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the project, in ULID format."
+              },
+              {
+                "name": "target_group_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the target group, in ULID format."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates an asynchronous job to launch a `draft` target group, setting its status to `live`.\n\nA `201 Created` response indicates that the job was successfully created, not that the target group is live.\nTo check the outcome, you must poll the job status URL returned in the `Location` header.\nYou can find the details for the status endpoint here: [Get launch job status](./get-launch-fielding-run-from-draft-job).\n"
+        },
+        {
+          "info": {
+            "name": "Retrieves a \"launch from draft\" job status",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cint.com/v1/demand/accounts/:account_id/projects/:project_id/target-groups/:target_group_id/fielding-run-jobs/launch-from-draft/:job_id",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The account's unique identifier."
+              },
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the project, in ULID format."
+              },
+              {
+                "name": "target_group_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the target group, in ULID format."
+              },
+              {
+                "name": "job_id",
+                "value": "",
+                "type": "path",
+                "description": "The character string representing a unique job ID."
+              }
+            ]
+          },
+          "docs": "Retrieves the status and results of a \"launch from draft\" job.\n\nYou should poll this endpoint periodically until the `status` field is either `Completed` or `Failed`.\n\n* If the status is `Completed`, the `created_fielding_run_id` field will contain the ID of the new fielding run.\n* If the status is `Failed`, the `failure_reason` object will provide details about the error.\n"
+        },
+        {
+          "info": {
+            "name": "Schedules a draft target group to go live",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.cint.com/v1/demand/accounts/:account_id/projects/:project_id/target-groups/:target_group_id/fielding-run-jobs/schedule-from-draft",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              },
+              {
+                "name": "idempotency-key",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The account's unique identifier."
+              },
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the project, in ULID format."
+              },
+              {
+                "name": "target_group_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the target group, in ULID format."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates an asynchronous job to schedule a `draft` target group, setting its status to `scheduled`.\n\nA `201 Created` response indicates that the job was successfully created, not that the target group is scheduled.\nTo check the outcome, you must poll the job status URL returned in the `Location` header.\nYou can find the details for the status endpoint here: [Get schedule job status](./get-schedule-fielding-run-from-draft-job).\n"
+        },
+        {
+          "info": {
+            "name": "Retrieves a \"schedule from draft\" job status",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cint.com/v1/demand/accounts/:account_id/projects/:project_id/target-groups/:target_group_id/fielding-run-jobs/schedule-from-draft/:job_id",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The account's unique identifier."
+              },
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the project, in ULID format."
+              },
+              {
+                "name": "target_group_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the target group, in ULID format."
+              },
+              {
+                "name": "job_id",
+                "value": "",
+                "type": "path",
+                "description": "The character string representing a unique job ID."
+              }
+            ]
+          },
+          "docs": "Retrieves the status and results of a \"schedule from draft\" job.\n\nYou should poll this endpoint periodically until the `status` field is either `Completed` or `Failed`.\nOnce the job is finished, the `created_fielding_run_id` field will contain the ID of the created fielding run.\n"
+        },
+        {
+          "info": {
+            "name": "Lists the fielding runs for a target group",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cint.com/v1/demand/accounts/:account_id/projects/:project_id/target-groups/:target_group_id/fielding-runs",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The account's unique identifier."
+              },
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the project, in ULID format."
+              },
+              {
+                "name": "target_group_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the target group, in ULID format."
+              }
+            ]
+          },
+          "docs": "Lists the fielding runs associated with a target group.\n\nA fielding run defines the time period during which a target group is live and collecting data.\n\n**Note:** A target group can have at most one fielding run at any time.\nTherefore, the `data` array in the response will contain either zero or one item, and the `has_more` flag will always be `false`.\n"
+        },
+        {
+          "info": {
+            "name": "Retrieves a fielding run",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.cint.com/v1/demand/accounts/:account_id/projects/:project_id/target-groups/:target_group_id/fielding-runs/:fielding_run_id",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The account's unique identifier."
+              },
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the project, in ULID format."
+              },
+              {
+                "name": "target_group_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the target group, in ULID format."
+              },
+              {
+                "name": "fielding_run_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the fielding run."
+              }
+            ]
+          },
+          "docs": "Retrieves the details of a specific fielding run, including its start and end times, status, and version."
+        },
+        {
+          "info": {
+            "name": "Updates a fielding run",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.cint.com/v1/demand/accounts/:account_id/projects/:project_id/target-groups/:target_group_id/fielding-runs/:fielding_run_id",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              },
+              {
+                "name": "If-Match",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The account's unique identifier."
+              },
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the project, in ULID format."
+              },
+              {
+                "name": "target_group_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the target group, in ULID format."
+              },
+              {
+                "name": "fielding_run_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the fielding run."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates the `start_fielding_at` and `end_fielding_at` dates for a specific fielding run.\n\nThis endpoint uses optimistic locking. You must provide the fielding run's current version in the `If-Match` header.\nYou can get this value from the `ETag` header of a `GET` request for this resource.\n\nFielding runs can only be updated for target groups in either scheduled, live or paused status. The operation will fail if the target group status is `completed`.\n"
+        },
+        {
+          "info": {
+            "name": "Completes a fielding run",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.cint.com/v1/demand/accounts/:account_id/projects/:project_id/target-groups/:target_group_id/fielding-runs/:fielding_run_id/complete",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              },
+              {
+                "name": "If-Match",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The account's unique identifier."
+              },
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the project, in ULID format."
+              },
+              {
+                "name": "target_group_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the target group, in ULID format."
+              },
+              {
+                "name": "fielding_run_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the fielding run."
+              }
+            ]
+          },
+          "docs": "Immediately completes a `live` or `scheduled` fielding run, setting its status to `completed`.\n\nThis action will close the target group to new respondents, regardless of whether its completes goal or end date has been reached.\n\nThis endpoint uses optimistic locking. You must provide the fielding run's current version in the `If-Match` header.\nYou can get this value from the `ETag` header of a `GET` request for this resource.\n"
+        },
+        {
+          "info": {
+            "name": "Launches fielding run immediately",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.cint.com/v1/demand/accounts/:account_id/projects/:project_id/target-groups/:target_group_id/fielding-runs/:fielding_run_id/launch-now",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              },
+              {
+                "name": "If-Match",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The account's unique identifier."
+              },
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the project, in ULID format."
+              },
+              {
+                "name": "target_group_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the target group, in ULID format."
+              },
+              {
+                "name": "fielding_run_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the fielding run."
+              }
+            ]
+          },
+          "docs": "Immediately launches a `scheduled` fielding run, setting its status to `live`.\n\nThis action updates the `start_fielding_at` timestamp to the current time.\nThe `end_fielding_at` timestamp is also recalculated to preserve the original fielding duration.\n\nThis endpoint uses optimistic locking. You must provide the fielding run's current version in the `If-Match` header.\nYou can get this value from the `ETag` header of a `GET` request for the resource.\n"
+        },
+        {
+          "info": {
+            "name": "Pauses a fielding run",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.cint.com/v1/demand/accounts/:account_id/projects/:project_id/target-groups/:target_group_id/fielding-runs/:fielding_run_id/pause",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              },
+              {
+                "name": "If-Match",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The account's unique identifier."
+              },
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the project, in ULID format."
+              },
+              {
+                "name": "target_group_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the target group, in ULID format."
+              },
+              {
+                "name": "fielding_run_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the fielding run."
+              }
+            ]
+          },
+          "docs": "Pauses a `live` fielding run, setting its status to `paused`.\n\nWhile a fielding run is paused, it will not collect new completes. You can set it `live` again using the `resume` endpoint.\n\nThis endpoint uses optimistic locking. You must provide the fielding run's current version in the `If-Match` header.\nYou can get this value from the `ETag` header of a `GET` request for this resource.\n"
+        },
+        {
+          "info": {
+            "name": "Relaunches a fielding run",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.cint.com/v1/demand/accounts/:account_id/projects/:project_id/target-groups/:target_group_id/fielding-runs/:fielding_run_id/relaunch",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              },
+              {
+                "name": "If-Match",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The account's unique identifier."
+              },
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the project, in ULID format."
+              },
+              {
+                "name": "target_group_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the target group, in ULID format."
+              },
+              {
+                "name": "fielding_run_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the fielding run."
+              }
+            ]
+          },
+          "docs": "Relaunches a `completed` fielding run, setting its status back to `live`.\n\nKey behaviors:\n\n* A fielding run will only be relaunched if its completes goal and end date have not yet been reached.\n* This endpoint uses optimistic locking. You must provide the fielding run's current version in the `If-Match` header.\nYou can get this value from the `ETag` header of a `GET` request for this resource.\n"
+        },
+        {
+          "info": {
+            "name": "Resumes a fielding run",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.cint.com/v1/demand/accounts/:account_id/projects/:project_id/target-groups/:target_group_id/fielding-runs/:fielding_run_id/resume",
+            "headers": [
+              {
+                "name": "Cint-API-Version",
+                "value": ""
+              },
+              {
+                "name": "If-Match",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "The account's unique identifier."
+              },
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the project, in ULID format."
+              },
+              {
+                "name": "target_group_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the target group, in ULID format."
+              },
+              {
+                "name": "fielding_run_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for the fielding run."
+              }
+            ]
+          },
+          "docs": "Resumes a `paused` fielding run, setting its status back to `live`.\n\nKey behaviors:\n\n* A fielding run will only be resumed if its completes goal and end date have not yet been reached.\n* This endpoint uses optimistic locking. You must provide the fielding run's current version in the `If-Match` header.\nYou can get this value from the `ETag` header of a `GET` request for this resource.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
