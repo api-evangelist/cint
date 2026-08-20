@@ -49,6 +49,8 @@ apis:
   humanURL: https://developer.cint.com/demand/
   baseURL: https://api.cint.com/v1
   tags:
+  - Account
+  tags_raw:
   - Accounts
   properties:
   - type: OpenAPI
@@ -366,6 +368,8 @@ apis:
   humanURL: https://developer.cint.com/demand/
   baseURL: https://api.cint.com/v1
   tags:
+  - Project
+  tags_raw:
   - Projects
   properties:
   - type: OpenAPI
