@@ -556,6 +556,8 @@ maintainers:
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: Website
+  url: https://www.cint.com/
 - type: DeveloperPortal
   url: https://developer.cint.com/demand/
 - type: Documentation
