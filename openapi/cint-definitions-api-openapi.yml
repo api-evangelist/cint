@@ -1,15 +1,7 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
-  title: Demand Accounts Definitions API
-  description: 'Cint''s demand ordering API is REST oriented. It has predictable resource based URLs, accepts JSON-encoded request bodies, returns JSON-encoded responses, and uses standard HTTP response codes, authentication, and verbs. Error responses are also JSON-encoded and follow a standard format, providing a unique error ID and detailed information about what went wrong.
-
-
-    Authentication is handled via bearer tokens passed in the `Authorization` header. All requests must also include a `Cint-API-Version` header with a date in `YYYY-MM-DD` format to specify the desired API version. Depending on the version you use, endpoint behavior may differ as we improve our API with every version release.
-
-
-    While many operations work on a single object per request, the demand ordering API also provides asynchronous batch endpoints for performing bulk updates efficiently on certain resources. For safety, `POST` requests support an `Idempotency-Key` header to allow for safe retries without accidentally performing the same operation twice.
-
-    '
+  title: Demand Definitions API
+  description: Cint's demand ordering API is REST oriented.
   version: '2025-12-18'
 servers:
 - description: Production server
@@ -29,7 +21,14 @@ paths:
       - Definitions
       summary: Lists business units for an account
       operationId: get_business_units
-      description: "Lists available account business units. Business unit definitions are supposed to help you organize surveys between different parts of your organization. They also determine the currency used by their assigned surveys. \n\n:::info\nTo get default business unit assigned to the user within the account then use /accounts/{account_id}/users/{user_id}/business-units API mentioned under Accounts section.\n:::\n"
+      description: 'Lists available account business units. Business unit definitions are supposed to help you organize surveys between different parts of your organization. They also determine the currency used by their assigned surveys.
+
+
+        :::info
+
+        To get default business unit assigned to the user within the account then use /accounts/{account_id}/users/{user_id}/business-units API mentioned under Accounts section.
+
+        :::'
       responses:
         '200':
           description: A list of business units was retrieved successfully.
@@ -383,23 +382,11 @@ paths:
           $ref: '#/components/responses/Error_Internal'
 components:
   schemas:
-    CountryListItem:
-      type: object
-      description: Contains details for a single country.
-      readOnly: true
-      properties:
-        id:
-          type: integer
-          description: Unique identifier of the country.
-          example: 243
-        code:
-          type: string
-          description: Unique text code of the country.
-          example: GB
-        name:
-          type: string
-          description: A human-readable name for the country.
-          example: United Kingdom
+    AccountID:
+      description: The account's unique identifier.
+      type: integer
+      format: int32
+      example: 101
     SupplierDetailsItem:
       type: object
       description: Contains details for a single supplier.
@@ -416,66 +403,6 @@ components:
         name:
           type: string
           description: A human-readable name for the supplier.
-          example: Acme Inc
-    InvalidParam:
-      type: object
-      description: Describes a single invalid parameter in a request.
-      properties:
-        name:
-          type: string
-          description: The name of the parameter that failed validation.
-        reason:
-          type: string
-          description: A short explanation of why the parameter was invalid.
-      required:
-      - name
-      - reason
-    IndustryListItem:
-      type: object
-      description: Contains details for a single industry.
-      readOnly: true
-      properties:
-        id:
-          type: integer
-          description: Unique identifier of the industry.
-          example: 19
-        code:
-          type: string
-          description: Unique text code of the industry.
-          example: politics
-        name:
-          type: string
-          description: A human-readable name for the industry.
-          example: Politics
-    StudyTypeListItem:
-      type: object
-      description: Contains details for a single study type.
-      readOnly: true
-      properties:
-        id:
-          type: integer
-          description: Unique identifier of the study type.
-          example: 1
-        code:
-          type: string
-          description: Unique text code of the study type.
-          example: adhoc
-        name:
-          type: string
-          description: A human-readable name for the study type.
-          example: Adhoc
-    ClientListItem:
-      type: object
-      description: Contains details for a single client.
-      readOnly: true
-      properties:
-        id:
-          type: integer
-          description: Unique identifier of the client.
-          example: 1234
-        name:
-          type: string
-          description: A human-readable name for the client.
           example: Acme Inc
     IndustryLockoutItem:
       type: object
@@ -494,62 +421,23 @@ components:
           type: string
           description: A human-readable name for the industry lockout.
           example: Past 90 Days / 3 Months
-    Error:
+    CountryListItem:
       type: object
-      description: The standard error object returned for all failed API requests.
-      required:
-      - object
-      - detail
-      properties:
-        id:
-          type: string
-          format: uuid
-          description: A unique identifier for this specific error instance.
-        object:
-          type: string
-          description: A short informative string identifying the type of the error
-          pattern: ^([a-z]*_)*([a-z]*)$
-        detail:
-          type: string
-          description: An error message provides a concise overview of the cause of the error.
-        invalid_params:
-          type: array
-          nullable: true
-          description: An optional field containing a list of invalid parameters may be presented in validation errors for additional information.
-          items:
-            $ref: '#/components/schemas/InvalidParam'
-    BusinessUnit:
-      type: object
-      description: Contains details for a single business unit.
+      description: Contains details for a single country.
       readOnly: true
       properties:
         id:
           type: integer
-          description: Unique identifier of the business unit.
-          example: 1234
+          description: Unique identifier of the country.
+          example: 243
+        code:
+          type: string
+          description: Unique text code of the country.
+          example: GB
         name:
           type: string
-          description: A human-readable name for the business unit.
-          example: Example
-        currency_code:
-          type: string
-          description: The ISO 4217 currency code for the business unit.
-          example: GBP
-        pricing_models:
-          type: array
-          description: Contains available pricing models for the business unit.
-          items:
-            type: string
-            description: The pricing model assigned to the business unit.
-            enum:
-            - rate_card
-            - dynamic
-            example: rate_card
-    AccountID:
-      description: The account's unique identifier.
-      type: integer
-      format: int32
-      example: 101
+          description: A human-readable name for the country.
+          example: United Kingdom
     Locales:
       type: object
       description: Contains a list of suggested countries and their supported languages.
@@ -613,6 +501,23 @@ components:
           - is_preferred: false
             name: Chinese Simplified
             code: chi
+    StudyTypeListItem:
+      type: object
+      description: Contains details for a single study type.
+      readOnly: true
+      properties:
+        id:
+          type: integer
+          description: Unique identifier of the study type.
+          example: 1
+        code:
+          type: string
+          description: Unique text code of the study type.
+          example: adhoc
+        name:
+          type: string
+          description: A human-readable name for the study type.
+          example: Adhoc
     IntegrationUseCaseListItem:
       type: object
       description: Contains details for a single integration use case.
@@ -630,6 +535,101 @@ components:
           type: string
           description: A description for the use case.
           example: Create, update, and retrieve surveys, allocations, groups, qualifications, and quotas.
+    ClientListItem:
+      type: object
+      description: Contains details for a single client.
+      readOnly: true
+      properties:
+        id:
+          type: integer
+          description: Unique identifier of the client.
+          example: 1234
+        name:
+          type: string
+          description: A human-readable name for the client.
+          example: Acme Inc
+    Error:
+      type: object
+      description: The standard error object returned for all failed API requests.
+      required:
+      - object
+      - detail
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: A unique identifier for this specific error instance.
+        object:
+          type: string
+          description: A short informative string identifying the type of the error
+          pattern: ^([a-z]*_)*([a-z]*)$
+        detail:
+          type: string
+          description: An error message provides a concise overview of the cause of the error.
+        invalid_params:
+          type:
+          - array
+          - 'null'
+          description: An optional field containing a list of invalid parameters may be presented in validation errors for additional information.
+          items:
+            $ref: '#/components/schemas/InvalidParam'
+    InvalidParam:
+      type: object
+      description: Describes a single invalid parameter in a request.
+      properties:
+        name:
+          type: string
+          description: The name of the parameter that failed validation.
+        reason:
+          type: string
+          description: A short explanation of why the parameter was invalid.
+      required:
+      - name
+      - reason
+    BusinessUnit:
+      type: object
+      description: Contains details for a single business unit.
+      readOnly: true
+      properties:
+        id:
+          type: integer
+          description: Unique identifier of the business unit.
+          example: 1234
+        name:
+          type: string
+          description: A human-readable name for the business unit.
+          example: Example
+        currency_code:
+          type: string
+          description: The ISO 4217 currency code for the business unit.
+          example: GBP
+        pricing_models:
+          type: array
+          description: Contains available pricing models for the business unit.
+          items:
+            type: string
+            description: The pricing model assigned to the business unit.
+            enum:
+            - rate_card
+            - dynamic
+            example: rate_card
+    IndustryListItem:
+      type: object
+      description: Contains details for a single industry.
+      readOnly: true
+      properties:
+        id:
+          type: integer
+          description: Unique identifier of the industry.
+          example: 19
+        code:
+          type: string
+          description: Unique text code of the industry.
+          example: politics
+        name:
+          type: string
+          description: A human-readable name for the industry.
+          example: Politics
   responses:
     Error_Internal:
       description: A request failed due to an internal error.
@@ -641,26 +641,6 @@ components:
             id: d94b8bb2-a540-4a91-9c05-2aa3ae9a5e1e
             object: unexpected_internal_error
             detail: an internal error has led to the failure of this operation
-    Error_Forbidden:
-      description: A requested is forbidden.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            id: fe68cdd2-ee87-4dbf-8950-63c5cbca94c7
-            object: authorization_error
-            detail: you don't have the right permissions to perform this operation
-    Error_Unauthorized:
-      description: A request is unauthorized.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            id: 1dcf0f40-f0d1-4cf6-8c00-c3d019d32faf
-            object: authorization_error
-            detail: no valid authorization provided for this operation
     Error_BadRequest:
       description: A request is not valid and can't be processed.
       content:
@@ -671,7 +651,44 @@ components:
             id: 9e278238-d011-4e05-8327-1ce1d5d26254
             object: bad_request_error
             detail: Expected field 'foo' is missing.
+    Error_Unauthorized:
+      description: A request is unauthorized.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            id: 1dcf0f40-f0d1-4cf6-8c00-c3d019d32faf
+            object: authorization_error
+            detail: no valid authorization provided for this operation
+    Error_Forbidden:
+      description: A requested is forbidden.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            id: fe68cdd2-ee87-4dbf-8950-63c5cbca94c7
+            object: authorization_error
+            detail: you don't have the right permissions to perform this operation
   parameters:
+    PageNumber:
+      name: page_number
+      in: query
+      description: The page number of the results to retrieve.
+      schema:
+        type: integer
+        minimum: 0
+        default: 0
+      example: 2
+    PageSize:
+      name: page_size
+      in: query
+      description: A limit on the number of objects to be returned, between 1 and 100.
+      schema:
+        type: integer
+        default: 10
+      example: 15
     CintAPIVersion-2025-12-18:
       name: Cint-API-Version
       in: header
@@ -682,23 +699,6 @@ components:
       description: 'This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.
 
         '
-    PageSize:
-      name: page_size
-      in: query
-      description: A limit on the number of objects to be returned, between 1 and 100.
-      schema:
-        type: integer
-        default: 10
-      example: 15
-    PageNumber:
-      name: page_number
-      in: query
-      description: The page number of the results to retrieve.
-      schema:
-        type: integer
-        minimum: 0
-        default: 0
-      example: 2
     AccountID:
       name: account_id
       description: The account's unique identifier.

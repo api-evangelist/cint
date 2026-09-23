@@ -1,15 +1,7 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
-  title: Demand Accounts Recontacts API
-  description: 'Cint''s demand ordering API is REST oriented. It has predictable resource based URLs, accepts JSON-encoded request bodies, returns JSON-encoded responses, and uses standard HTTP response codes, authentication, and verbs. Error responses are also JSON-encoded and follow a standard format, providing a unique error ID and detailed information about what went wrong.
-
-
-    Authentication is handled via bearer tokens passed in the `Authorization` header. All requests must also include a `Cint-API-Version` header with a date in `YYYY-MM-DD` format to specify the desired API version. Depending on the version you use, endpoint behavior may differ as we improve our API with every version release.
-
-
-    While many operations work on a single object per request, the demand ordering API also provides asynchronous batch endpoints for performing bulk updates efficiently on certain resources. For safety, `POST` requests support an `Idempotency-Key` header to allow for safe retries without accidentally performing the same operation twice.
-
-    '
+  title: Demand Recontacts API
+  description: Cint's demand ordering API is REST oriented.
   version: '2025-12-18'
 servers:
 - description: Production server
@@ -39,9 +31,7 @@ paths:
 
         Estimated execution time: Removing 10,000 respondents typically takes between 3 and 5 minutes.
 
-        :::
-
-        '
+        :::'
       tags:
       - Recontacts
       parameters:
@@ -115,21 +105,21 @@ paths:
         ### File Format Rules
 
 
-        *   The file must be in `CSV` or `TXT` format.
+        * The file must be in `CSV` or `TXT` format.
 
-        *   The file must **not** contain a header row.
+        * The file must **not** contain a header row.
 
-        *   Each line in the file must contain a single, unique Respondent ID.
+        * Each line in the file must contain a single, unique Respondent ID.
 
 
         ### Validation and Capacity Limits
 
 
-        *   **Total Capacity**: The total number of respondent IDs for a target group (existing plus new) cannot exceed 100,000.
+        * **Total Capacity**: The total number of respondent IDs for a target group (existing plus new) cannot exceed 100,000.
 
-        *   **File Size**: The uploaded file size must be less than 5MB.
+        * **File Size**: The uploaded file size must be less than 5MB.
 
-        *   **Files per Job**: Only one file can be uploaded per job.
+        * **Files per Job**: Only one file can be uploaded per job.
 
 
         :::caution Operational Constraint
@@ -139,9 +129,7 @@ paths:
 
         Estimated execution time: Uploading 10,000 new respondents typically takes between 10 and 15 minutes.
 
-        :::
-
-        '
+        :::'
       tags:
       - Recontacts
       parameters:
@@ -274,21 +262,21 @@ paths:
         ### File Format Rules
 
 
-        *   The file must be in `CSV` or `TXT` format.
+        * The file must be in `CSV` or `TXT` format.
 
-        *   The file must **not** contain a header row.
+        * The file must **not** contain a header row.
 
-        *   Each line in the file must contain a single identifier.
+        * Each line in the file must contain a single identifier.
 
-        *   Only one file can be uploaded per job.
+        * Only one file can be uploaded per job.
 
 
         ### Validation and Capacity Limits
 
 
-        *   **Total Capacity**: The total number of IDs (existing plus new) cannot exceed 100,000.
+        * **Total Capacity**: The total number of IDs (existing plus new) cannot exceed 100,000.
 
-        *   **File Size**: The uploaded file size must be less than 5MB.
+        * **File Size**: The uploaded file size must be less than 5MB.
 
 
         ### Identifier Types
@@ -296,9 +284,9 @@ paths:
 
         Use the `entity_type` query parameter to specify the type of identifiers in your file:
 
-        *   `RSID` or `RESPONDENT_ID` — for Respondent IDs
+        * `RSID` or `RESPONDENT_ID` — for Respondent IDs
 
-        *   `RID` or `RESPONSE_ID` — for Response IDs (these will be internally mapped and saved as Respondent IDs)
+        * `RID` or `RESPONSE_ID` — for Response IDs (these will be internally mapped and saved as Respondent IDs)
 
 
         :::caution Operational Constraint
@@ -308,9 +296,7 @@ paths:
 
         Estimated execution time: Uploading 10,000 new respondents typically takes between 10 and 15 minutes.
 
-        :::
-
-        '
+        :::'
       tags:
       - Recontacts
       parameters:
@@ -378,9 +364,7 @@ paths:
 
         A page may contain fewer than `page_size` items even when more pages exist. Always check the `next_cursor` field to determine whether additional pages are available.
 
-        :::
-
-        '
+        :::'
       tags:
       - Recontacts
       parameters:
@@ -432,9 +416,7 @@ paths:
 
         While execution time may vary, storing 10,000 new respondents typically takes between 10 and 15 minutes.
 
-        :::
-
-        '
+        :::'
       tags:
       - Recontacts
       parameters:
@@ -505,9 +487,7 @@ paths:
       description: 'This endpoint downloads the uploaded file for the specified recontact upload job. The response is returned as a binary file attachment.
 
 
-        The attachment filename is derived from the original file name provided at upload time, sanitized for safe use in HTTP headers (non-alphanumeric characters other than dots, hyphens, and underscores are replaced with underscores). If the original file name is unavailable or invalid, the filename is derived from the internal storage key.
-
-        '
+        The attachment filename is derived from the original file name provided at upload time, sanitized for safe use in HTTP headers (non-alphanumeric characters other than dots, hyphens, and underscores are replaced with underscores). If the original file name is unavailable or invalid, the filename is derived from the internal storage key.'
       tags:
       - Recontacts
       parameters:
@@ -549,13 +529,11 @@ paths:
 
         You can use this count to:
 
-        *   Monitor how close you are to the recontact capacity limit.
+        * Monitor how close you are to the recontact capacity limit.
 
-        *   Check the result of an upload or removal job.
+        * Check the result of an upload or removal job.
 
-        *   Determine the maximum number of respondents you can request in your filling goal.
-
-        '
+        * Determine the maximum number of respondents you can request in your filling goal.'
       tags:
       - Recontacts
       parameters:
@@ -621,117 +599,28 @@ paths:
         '500':
           $ref: '#/components/responses/Error_Internal'
 components:
-  parameters:
-    UpdateRecontactsJobID:
-      name: job_id
-      in: path
-      required: true
-      description: A unique identifier for the asynchronous recontact job.
-      schema:
-        $ref: '#/components/schemas/JobID'
-    RecontactJobUploadRespondentEntityType:
-      name: entity_type
-      in: query
-      required: true
-      description: The entity type of the respondent identifiers included in the file as recontact opportunities. Use `RSID` or `RESPONDENT_ID` for Respondent IDs, and `RID` or `RESPONSE_ID` for Response IDs.
-      schema:
-        $ref: '#/components/schemas/RecontactUploadJobEntityType'
-    ProjectID:
-      name: project_id
-      description: A unique identifier for the project, in ULID format.
-      in: path
-      required: true
-      schema:
-        $ref: '#/components/schemas/ProjectID'
-    EndBefore:
-      name: end_before
-      in: query
-      description: Returns a list of objects that come before the provided pagination cursor. This is used for navigating to a previous page.
-      schema:
-        type: string
-      example: 7daa40ad-303b-40a2-89df-a9760400cde7
-    CintAPIVersion-2025-12-18:
-      name: Cint-API-Version
-      in: header
-      required: true
-      schema:
-        type: string
-        example: 2025-12-18
-      description: 'This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.
-
-        '
-    PageSize:
-      name: page_size
-      in: query
-      description: A limit on the number of objects to be returned, between 1 and 100.
-      schema:
-        type: integer
-        default: 10
-      example: 15
-    StartAfter:
-      name: start_after
-      in: query
-      description: Returns a list of objects after the provided pagination cursor, using the next_cursor from the previous response.
-      schema:
-        type: string
-      example: bff6a669-a469-409d-8c94-dcf92258043a
-    TargetGroupID:
-      name: target_group_id
-      description: A unique identifier for the target group, in ULID format.
-      in: path
-      required: true
-      schema:
-        $ref: '#/components/schemas/TargetGroupID'
-    AccountID:
-      name: account_id
-      description: The account's unique identifier.
-      in: path
-      required: true
-      schema:
-        $ref: '#/components/schemas/AccountID'
   schemas:
-    JobID:
-      description: The character string representing a unique job ID.
-      type: string
-      example: 01BTGNYV6HRNK8K8VKZASZCFP1
-    GetRecontactRsidsUpdateJobResponse:
+    RecontactsRespondentIDListResponse:
       type: object
-      description: The response payload containing the status and details of a recontact job.
-      required:
-      - job_id
-      - created_at
-      - created_by
-      - status
+      description: The response payload for a paginated list of respondent IDs.
       properties:
-        job_id:
-          $ref: '#/components/schemas/JobID'
-        created_at:
+        data:
+          type: array
+          items:
+            type: string
+            format: uuid
+          description: List of Respondent IDs
+          example:
+          - 5a3b2ada-0066-4dcb-afdd-7302be78ce9e
+          - 5a3b2ada-0066-4dcb-afdd-7302be78ce9f
+        next_cursor:
           type: string
-          format: date-time
-          description: The timestamp when the job was created, in ISO 8601 format.
-          example: '2030-01-01T12:00:00.000Z'
-        completed_at:
+          description: A pagination cursor that points to the next page of results. If this field is `null` or absent, you are on the last page.
+          example: MDFKUkc0UFdISDRKMEpWRVRTTTNKTlZKWlcmMGVmZmRjOTctMTYxZS00NmJlLWJlM2MtNTU5NTYyMWU3ZDcx
+        url:
           type: string
-          format: date-time
-          nullable: true
-          description: The timestamp when the job finished processing. This field is `null` while the job status is `Processing`.
-          example: '2030-01-01T12:05:00.000Z'
-        status:
-          $ref: '#/components/schemas/RecontactJobStatus'
-        created_by:
-          $ref: '#/components/schemas/UserID'
-        failure_reason:
-          nullable: true
-          description: An object containing the reason for the job's failure. This field is `null` unless the job `status` is `Failed`.
-          allOf:
-          - $ref: '#/components/schemas/RecontactJobFailureReason'
-        partial_success_reason:
-          nullable: true
-          description: An object containing details about a partial success. This field may be present when the job `status` is `Completed` but not all items could be processed.
-          allOf:
-          - $ref: '#/components/schemas/RecontactJobPartialSuccessReason'
-        job_trace_id:
-          $ref: '#/components/schemas/JobTraceId'
+          description: The relative URL path for the current page of results.
+          example: /demand/accounts/101/projects/01BTGNYV6HRNK8K8VKZASZCFP0/target-groups/01BTGNYV6HRNK8K8VKZASZCFP1/recontacts/rsids
     RecontactUploadJobEntityType:
       type: string
       description: Indicates the respondent entity type. Use `RSID` or `RESPONDENT_ID` for Respondent IDs, and `RID` or `RESPONSE_ID` for Response IDs.
@@ -752,8 +641,9 @@ components:
           items:
             $ref: '#/components/schemas/GetUploadByFileJobResponse'
         next_cursor:
-          type: string
-          nullable: true
+          type:
+          - string
+          - 'null'
           description: A pagination cursor that points to the next page of results. If this field is `null` or absent, you are on the last page.
           example: MDFKUkc0UFdISDRKMEpWRVRTTTNKTlZKWlc
     GetRecontactRemoveAllRsidsJobStatusResponse:
@@ -772,9 +662,10 @@ components:
           format: date-time
           example: '2023-01-01T23:00:00.000Z'
         completed_at:
-          type: string
+          type:
+          - string
+          - 'null'
           format: date-time
-          nullable: true
           description: The timestamp when the job finished processing. This field is `null` while the job status is `Processing`.
           example: '2023-01-01T23:00:00.000Z'
         status:
@@ -782,30 +673,101 @@ components:
         created_by:
           $ref: '#/components/schemas/UserID'
         failure_reason:
-          nullable: true
           description: An object containing the reason for the job's failure. This field is `null` unless the job `status` is `Failed`.
           allOf:
           - $ref: '#/components/schemas/RecontactJobFailureReason'
         job_trace_id:
           $ref: '#/components/schemas/JobTraceId'
-    InvalidParam:
+    AccountID:
+      description: The account's unique identifier.
+      type: integer
+      format: int32
+      example: 101
+    CreateRecontactUploadRespondentsByFileJobResponse:
       type: object
-      description: Describes a single invalid parameter in a request.
-      properties:
-        name:
-          type: string
-          description: The name of the parameter that failed validation.
-        reason:
-          type: string
-          description: A short explanation of why the parameter was invalid.
+      description: The response payload containing the `job_id` for a newly created Recontact upload-by-file job.
       required:
-      - name
-      - reason
-    TargetGroupID:
-      description: A unique identifier for the target group, in ULID format.
+      - job_id
+      properties:
+        job_id:
+          $ref: '#/components/schemas/JobID'
+    RecontactJobFailureReason:
+      type: object
+      description: The reason for the failure of a job.
+      required:
+      - code
+      - description
+      properties:
+        code:
+          type: string
+          description: A machine-readable error code for the failure.
+          example: JobExecutionStartMessageFailed
+        description:
+          type: string
+          description: A human-readable explanation of the failure.
+          example: The job execution start message failed. Please contact Cint for further assistance.
+    GetTargetGroupRecontactsOverviewResponse:
+      type: object
+      description: The response payload containing the recontact overview for a target group.
+      required:
+      - saved_respondent_ids_count
+      properties:
+        saved_respondent_ids_count:
+          type: integer
+          description: The number of saved respondent IDs
+          minimum: 0
+          maximum: 100000
+          example: 1000
+    GetUploadByFileJobResponse:
+      type: object
+      description: Summary details for an upload recontacts by file job.
+      required:
+      - job_id
+      - file_name
+      - status
+      - created_at
+      - created_by
+      properties:
+        job_id:
+          $ref: '#/components/schemas/JobID'
+        file_name:
+          type: string
+          description: The original name of the uploaded file.
+          example: respondents.csv
+        status:
+          $ref: '#/components/schemas/RecontactJobStatus'
+        created_at:
+          type: string
+          format: date-time
+          description: The timestamp when the job was created, in ISO 8601 format.
+          example: '2024-01-01T14:05:05Z'
+        created_by:
+          $ref: '#/components/schemas/UserID'
+    JobID:
+      description: The character string representing a unique job ID.
       type: string
-      pattern: ^[0-9A-Z]{26}$
       example: 01BTGNYV6HRNK8K8VKZASZCFP1
+    RecontactJobPartialSuccessReason:
+      type: object
+      description: The reason for the partial success of a job.
+      required:
+      - description
+      properties:
+        description:
+          type: string
+          example: Upload partially successful. 500 respondent IDs uploaded successfully, 10 failed (invalid or empty).
+    JobTraceId:
+      type: string
+      description: The trace ID from the creation job request. Only present when the job status is 'Failed'. The trace ID as defined by the W3C trace context specification.
+      example: 0af7651916cd43dd8448eb211c80319c
+    RecontactJobStatus:
+      type: string
+      description: The status of an async Recontact update job.
+      enum:
+      - Completed
+      - Failed
+      - Processing
+      example: Completed
     CreateRecontactsJobResponse:
       type: object
       description: The response payload containing thejob_idfor a newly created recontact job.
@@ -833,132 +795,35 @@ components:
           type: string
           description: An error message provides a concise overview of the cause of the error.
         invalid_params:
-          type: array
-          nullable: true
+          type:
+          - array
+          - 'null'
           description: An optional field containing a list of invalid parameters may be presented in validation errors for additional information.
           items:
             $ref: '#/components/schemas/InvalidParam'
-    GetUploadByFileJobResponse:
+    InvalidParam:
       type: object
-      description: Summary details for an upload recontacts by file job.
-      required:
-      - job_id
-      - file_name
-      - status
-      - created_at
-      - created_by
+      description: Describes a single invalid parameter in a request.
       properties:
-        job_id:
-          $ref: '#/components/schemas/JobID'
-        file_name:
+        name:
           type: string
-          description: The original name of the uploaded file.
-          example: respondents.csv
-        status:
-          $ref: '#/components/schemas/RecontactJobStatus'
-        created_at:
+          description: The name of the parameter that failed validation.
+        reason:
           type: string
-          format: date-time
-          description: The timestamp when the job was created, in ISO 8601 format.
-          example: '2024-01-01T14:05:05Z'
-        created_by:
-          $ref: '#/components/schemas/UserID'
-    ProjectID:
-      description: The character string representing a unique project ID (ULID format).
+          description: A short explanation of why the parameter was invalid.
+      required:
+      - name
+      - reason
+    TargetGroupID:
+      description: A unique identifier for the target group, in ULID format.
       type: string
       pattern: ^[0-9A-Z]{26}$
-      example: 01BTGNYV6HRNK8K8VKZASZCFP0
-    GetTargetGroupRecontactsOverviewResponse:
-      type: object
-      description: The response payload containing the recontact overview for a target group.
-      required:
-      - saved_respondent_ids_count
-      properties:
-        saved_respondent_ids_count:
-          type: integer
-          description: The number of saved respondent IDs
-          minimum: 0
-          maximum: 100000
-          example: 1000
-    RecontactJobPartialSuccessReason:
-      type: object
-      description: The reason for the partial success of a job.
-      required:
-      - description
-      properties:
-        description:
-          type: string
-          example: Upload partially successful. 500 respondent IDs uploaded successfully, 10 failed (invalid or empty).
-    CreateRecontactUploadRespondentsByFileJobResponse:
-      type: object
-      description: The response payload containing the `job_id` for a newly created Recontact upload-by-file job.
-      required:
-      - job_id
-      properties:
-        job_id:
-          $ref: '#/components/schemas/JobID'
+      example: 01BTGNYV6HRNK8K8VKZASZCFP1
     UserID:
       type: string
       format: uuid
       description: A unique identifier for the user.
       example: b551326b-ac9d-4d32-8823-4f025787dab9
-    AccountID:
-      description: The account's unique identifier.
-      type: integer
-      format: int32
-      example: 101
-    RecontactJobFailureReason:
-      type: object
-      description: The reason for the failure of a job.
-      required:
-      - code
-      - description
-      properties:
-        code:
-          type: string
-          description: A machine-readable error code for the failure.
-          example: JobExecutionStartMessageFailed
-        description:
-          type: string
-          description: A human-readable explanation of the failure.
-          example: The job execution start message failed. Please contact Cint for further assistance.
-    RecontactJobStatus:
-      type: string
-      description: The status of an async Recontact update job.
-      enum:
-      - Completed
-      - Failed
-      - Processing
-      example: Completed
-    JobTraceId:
-      type: string
-      description: The trace ID from the creation job request. Only present when the job status is 'Failed'. The trace ID as defined by the W3C trace context specification.
-      example: 0af7651916cd43dd8448eb211c80319c
-    GetRecontactUploadRespondentsByFileJobResponse:
-      description: The response payload containing the status and details of a Recontact upload-by-file job.
-      allOf:
-      - $ref: '#/components/schemas/GetRecontactRsidsUpdateJobResponse'
-    RecontactsRespondentIDListResponse:
-      type: object
-      description: The response payload for a paginated list of respondent IDs.
-      properties:
-        data:
-          type: array
-          items:
-            type: string
-            format: uuid
-          description: List of Respondent IDs
-          example:
-          - 5a3b2ada-0066-4dcb-afdd-7302be78ce9e
-          - 5a3b2ada-0066-4dcb-afdd-7302be78ce9f
-        next_cursor:
-          type: string
-          description: A pagination cursor that points to the next page of results. If this field is `null` or absent, you are on the last page.
-          example: MDFKUkc0UFdISDRKMEpWRVRTTTNKTlZKWlcmMGVmZmRjOTctMTYxZS00NmJlLWJlM2MtNTU5NTYyMWU3ZDcx
-        url:
-          type: string
-          description: The relative URL path for the current page of results.
-          example: /demand/accounts/101/projects/01BTGNYV6HRNK8K8VKZASZCFP0/target-groups/01BTGNYV6HRNK8K8VKZASZCFP1/recontacts/rsids
     CreateRecontactUploadRsidsByFileJobResponse:
       type: object
       description: The response payload containing the `job_id` for the newly created file upload job.
@@ -967,6 +832,52 @@ components:
       properties:
         job_id:
           $ref: '#/components/schemas/JobID'
+    GetRecontactUploadRespondentsByFileJobResponse:
+      description: The response payload containing the status and details of a Recontact upload-by-file job.
+      allOf:
+      - $ref: '#/components/schemas/GetRecontactRsidsUpdateJobResponse'
+    ProjectID:
+      description: The character string representing a unique project ID (ULID format).
+      type: string
+      pattern: ^[0-9A-Z]{26}$
+      example: 01BTGNYV6HRNK8K8VKZASZCFP0
+    GetRecontactRsidsUpdateJobResponse:
+      type: object
+      description: The response payload containing the status and details of a recontact job.
+      required:
+      - job_id
+      - created_at
+      - created_by
+      - status
+      properties:
+        job_id:
+          $ref: '#/components/schemas/JobID'
+        created_at:
+          type: string
+          format: date-time
+          description: The timestamp when the job was created, in ISO 8601 format.
+          example: '2030-01-01T12:00:00.000Z'
+        completed_at:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          description: The timestamp when the job finished processing. This field is `null` while the job status is `Processing`.
+          example: '2030-01-01T12:05:00.000Z'
+        status:
+          $ref: '#/components/schemas/RecontactJobStatus'
+        created_by:
+          $ref: '#/components/schemas/UserID'
+        failure_reason:
+          description: An object containing the reason for the job's failure. This field is `null` unless the job `status` is `Failed`.
+          allOf:
+          - $ref: '#/components/schemas/RecontactJobFailureReason'
+        partial_success_reason:
+          description: An object containing details about a partial success. This field may be present when the job `status` is `Completed` but not all items could be processed.
+          allOf:
+          - $ref: '#/components/schemas/RecontactJobPartialSuccessReason'
+        job_trace_id:
+          $ref: '#/components/schemas/JobTraceId'
   responses:
     Error_ContentTooLarge:
       description: The request entity was larger than limits defined by the server.
@@ -978,16 +889,6 @@ components:
             id: 7a5972ba-0825-4360-b852-fa2430e47034
             object: content_too_large_error
             detail: File upload limit exceeded
-    Error_NotFound:
-      description: A requested resource isn't found.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            id: 7a5972ba-0825-4360-b852-fa2430e47034
-            object: not_found_error
-            detail: resource not found
     Error_Internal:
       description: A request failed due to an internal error.
       content:
@@ -998,46 +899,6 @@ components:
             id: d94b8bb2-a540-4a91-9c05-2aa3ae9a5e1e
             object: unexpected_internal_error
             detail: an internal error has led to the failure of this operation
-    Error_UnsupportedMediaType:
-      description: The request content format is not supported.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            id: 7a5972ba-0825-4360-b852-fa2430e47034
-            object: unsupported_media_type_error
-            detail: The 'Content-Type' header is incorrectly set 'application/pdf'
-    Error_Forbidden:
-      description: A requested is forbidden.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            id: fe68cdd2-ee87-4dbf-8950-63c5cbca94c7
-            object: authorization_error
-            detail: you don't have the right permissions to perform this operation
-    Error_Conflict:
-      description: An already existing resource has conflicts with the request.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            id: 3d61d9c3-68ee-4026-b436-6e76a2b33932
-            object: conflict_error
-            detail: this operation causes conflict(s) on the resources
-    Error_Unauthorized:
-      description: A request is unauthorized.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            id: 1dcf0f40-f0d1-4cf6-8c00-c3d019d32faf
-            object: authorization_error
-            detail: no valid authorization provided for this operation
     Error_BadRequest:
       description: A request is not valid and can't be processed.
       content:
@@ -1048,6 +909,124 @@ components:
             id: 9e278238-d011-4e05-8327-1ce1d5d26254
             object: bad_request_error
             detail: Expected field 'foo' is missing.
+    Error_UnsupportedMediaType:
+      description: The request content format is not supported.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            id: 7a5972ba-0825-4360-b852-fa2430e47034
+            object: unsupported_media_type_error
+            detail: The 'Content-Type' header is incorrectly set 'application/pdf'
+    Error_Unauthorized:
+      description: A request is unauthorized.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            id: 1dcf0f40-f0d1-4cf6-8c00-c3d019d32faf
+            object: authorization_error
+            detail: no valid authorization provided for this operation
+    Error_NotFound:
+      description: A requested resource isn't found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            id: 7a5972ba-0825-4360-b852-fa2430e47034
+            object: not_found_error
+            detail: resource not found
+    Error_Conflict:
+      description: An already existing resource has conflicts with the request.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            id: 3d61d9c3-68ee-4026-b436-6e76a2b33932
+            object: conflict_error
+            detail: this operation causes conflict(s) on the resources
+    Error_Forbidden:
+      description: A requested is forbidden.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            id: fe68cdd2-ee87-4dbf-8950-63c5cbca94c7
+            object: authorization_error
+            detail: you don't have the right permissions to perform this operation
+  parameters:
+    StartAfter:
+      name: start_after
+      in: query
+      description: Returns a list of objects after the provided pagination cursor, using the next_cursor from the previous response.
+      schema:
+        type: string
+      example: bff6a669-a469-409d-8c94-dcf92258043a
+    EndBefore:
+      name: end_before
+      in: query
+      description: Returns a list of objects that come before the provided pagination cursor. This is used for navigating to a previous page.
+      schema:
+        type: string
+      example: 7daa40ad-303b-40a2-89df-a9760400cde7
+    PageSize:
+      name: page_size
+      in: query
+      description: A limit on the number of objects to be returned, between 1 and 100.
+      schema:
+        type: integer
+        default: 10
+      example: 15
+    ProjectID:
+      name: project_id
+      description: A unique identifier for the project, in ULID format.
+      in: path
+      required: true
+      schema:
+        $ref: '#/components/schemas/ProjectID'
+    CintAPIVersion-2025-12-18:
+      name: Cint-API-Version
+      in: header
+      required: true
+      schema:
+        type: string
+        example: 2025-12-18
+      description: 'This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.
+
+        '
+    AccountID:
+      name: account_id
+      description: The account's unique identifier.
+      in: path
+      required: true
+      schema:
+        $ref: '#/components/schemas/AccountID'
+    RecontactJobUploadRespondentEntityType:
+      name: entity_type
+      in: query
+      required: true
+      description: The entity type of the respondent identifiers included in the file as recontact opportunities. Use `RSID` or `RESPONDENT_ID` for Respondent IDs, and `RID` or `RESPONSE_ID` for Response IDs.
+      schema:
+        $ref: '#/components/schemas/RecontactUploadJobEntityType'
+    UpdateRecontactsJobID:
+      name: job_id
+      in: path
+      required: true
+      description: A unique identifier for the asynchronous recontact job.
+      schema:
+        $ref: '#/components/schemas/JobID'
+    TargetGroupID:
+      name: target_group_id
+      description: A unique identifier for the target group, in ULID format.
+      in: path
+      required: true
+      schema:
+        $ref: '#/components/schemas/TargetGroupID'
   securitySchemes:
     BearerAuth:
       type: http

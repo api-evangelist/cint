@@ -1,15 +1,7 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
   title: Demand Accounts API
-  description: 'Cint''s demand ordering API is REST oriented. It has predictable resource based URLs, accepts JSON-encoded request bodies, returns JSON-encoded responses, and uses standard HTTP response codes, authentication, and verbs. Error responses are also JSON-encoded and follow a standard format, providing a unique error ID and detailed information about what went wrong.
-
-
-    Authentication is handled via bearer tokens passed in the `Authorization` header. All requests must also include a `Cint-API-Version` header with a date in `YYYY-MM-DD` format to specify the desired API version. Depending on the version you use, endpoint behavior may differ as we improve our API with every version release.
-
-
-    While many operations work on a single object per request, the demand ordering API also provides asynchronous batch endpoints for performing bulk updates efficiently on certain resources. For safety, `POST` requests support an `Idempotency-Key` header to allow for safe retries without accidentally performing the same operation twice.
-
-    '
+  description: Cint's demand ordering API is REST oriented.
   version: '2025-12-18'
 servers:
 - description: Production server
@@ -110,7 +102,14 @@ paths:
       - Accounts
       summary: Get default business unit assigned to user
       operationId: get_user_account_business_unit_id
-      description: "Returns the business unit ID associated with the specified user's account. \n\n:::info\nThis API doesn't return all the business units within an account. To get all the business units for an account use `/accounts/{account_id}/business-units`.\n:::\n"
+      description: 'Returns the business unit ID associated with the specified user''s account.
+
+
+        :::info
+
+        This API doesn''t return all the business units within an account. To get all the business units for an account use `/accounts/{account_id}/business-units`.
+
+        :::'
       responses:
         '200':
           description: The business unit associated with the specified user and account.
@@ -129,39 +128,6 @@ paths:
         '500':
           $ref: '#/components/responses/Error_Internal'
 components:
-  parameters:
-    UserID:
-      in: path
-      name: user_id
-      schema:
-        $ref: '#/components/schemas/UserID'
-      required: true
-      description: Uniquely identifies a user.
-    CintAPIVersion-2025-12-18:
-      name: Cint-API-Version
-      in: header
-      required: true
-      schema:
-        type: string
-        example: 2025-12-18
-      description: 'This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.
-
-        '
-    AccountID:
-      name: account_id
-      description: The account's unique identifier.
-      in: path
-      required: true
-      schema:
-        $ref: '#/components/schemas/AccountID'
-    UserType:
-      name: user_type
-      in: query
-      description: Filters users by user type. Currently, only 'project_manager' is supported.
-      schema:
-        type: string
-        enum:
-        - project_manager
   schemas:
     UserID:
       type: string
@@ -187,16 +153,12 @@ components:
           type: string
           description: An error message provides a concise overview of the cause of the error.
         invalid_params:
-          type: array
-          nullable: true
+          type:
+          - array
+          - 'null'
           description: An optional field containing a list of invalid parameters may be presented in validation errors for additional information.
           items:
             $ref: '#/components/schemas/InvalidParam'
-    AccountID:
-      description: The account's unique identifier.
-      type: integer
-      format: int32
-      example: 101
     UserAccountBusinessUnit:
       type: object
       description: A response containing the business unit of the user's account.
@@ -205,6 +167,32 @@ components:
           type: integer
           description: Unique identifier of the business unit.
           example: 1234
+    UsersList:
+      type: object
+      description: A list of all users for a specific account.
+      readOnly: true
+      properties:
+        users:
+          type: array
+          description: A list of users.
+          items:
+            type: object
+            properties:
+              id:
+                $ref: '#/components/schemas/UserID'
+              email:
+                type: string
+                description: The email address of the user.
+              name:
+                type: string
+                description: The name of the user.
+          example:
+          - id: 43292405-363e-4fa3-85a6-6e74a49fab2e
+            email: jane.doe@cint.com
+            name: Jane Doe
+          - id: 54736158-e90e-404c-bc32-4d938f8a9cfa
+            email: john.doe@cint.com
+            name: John Doe
     ServiceClientsList:
       type: object
       description: A list of all service clients for a specific account.
@@ -253,32 +241,11 @@ components:
             name: Acme Inc.
           - id: 2
             name: Globex Corp.
-    UsersList:
-      type: object
-      description: A list of all users for a specific account.
-      readOnly: true
-      properties:
-        users:
-          type: array
-          description: A list of users.
-          items:
-            type: object
-            properties:
-              id:
-                $ref: '#/components/schemas/UserID'
-              email:
-                type: string
-                description: The email address of the user.
-              name:
-                type: string
-                description: The name of the user.
-          example:
-          - id: 43292405-363e-4fa3-85a6-6e74a49fab2e
-            email: jane.doe@cint.com
-            name: Jane Doe
-          - id: 54736158-e90e-404c-bc32-4d938f8a9cfa
-            email: john.doe@cint.com
-            name: John Doe
+    AccountID:
+      description: The account's unique identifier.
+      type: integer
+      format: int32
+      example: 101
     InvalidParam:
       type: object
       description: Describes a single invalid parameter in a request.
@@ -293,6 +260,16 @@ components:
       - name
       - reason
   responses:
+    Error_Internal:
+      description: A request failed due to an internal error.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            id: d94b8bb2-a540-4a91-9c05-2aa3ae9a5e1e
+            object: unexpected_internal_error
+            detail: an internal error has led to the failure of this operation
     Error_BadRequest:
       description: A request is not valid and can't be processed.
       content:
@@ -313,16 +290,6 @@ components:
             id: 1dcf0f40-f0d1-4cf6-8c00-c3d019d32faf
             object: authorization_error
             detail: no valid authorization provided for this operation
-    Error_Forbidden:
-      description: A requested is forbidden.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            id: fe68cdd2-ee87-4dbf-8950-63c5cbca94c7
-            object: authorization_error
-            detail: you don't have the right permissions to perform this operation
     Error_NotFound:
       description: A requested resource isn't found.
       content:
@@ -333,16 +300,49 @@ components:
             id: 7a5972ba-0825-4360-b852-fa2430e47034
             object: not_found_error
             detail: resource not found
-    Error_Internal:
-      description: A request failed due to an internal error.
+    Error_Forbidden:
+      description: A requested is forbidden.
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
           example:
-            id: d94b8bb2-a540-4a91-9c05-2aa3ae9a5e1e
-            object: unexpected_internal_error
-            detail: an internal error has led to the failure of this operation
+            id: fe68cdd2-ee87-4dbf-8950-63c5cbca94c7
+            object: authorization_error
+            detail: you don't have the right permissions to perform this operation
+  parameters:
+    UserID:
+      in: path
+      name: user_id
+      schema:
+        $ref: '#/components/schemas/UserID'
+      required: true
+      description: Uniquely identifies a user.
+    CintAPIVersion-2025-12-18:
+      name: Cint-API-Version
+      in: header
+      required: true
+      schema:
+        type: string
+        example: 2025-12-18
+      description: 'This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.
+
+        '
+    AccountID:
+      name: account_id
+      description: The account's unique identifier.
+      in: path
+      required: true
+      schema:
+        $ref: '#/components/schemas/AccountID'
+    UserType:
+      name: user_type
+      in: query
+      description: Filters users by user type. Currently, only 'project_manager' is supported.
+      schema:
+        type: string
+        enum:
+        - project_manager
   securitySchemes:
     BearerAuth:
       type: http

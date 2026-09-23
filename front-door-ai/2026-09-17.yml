@@ -1,0 +1,33 @@
+# Front Door AI Index — cint — 2026-09-17
+# AI vocabulary counted on the provider's root page. Generated; do not edit.
+# `score` is null unless ownership is `own` — see front_door_ai.py.
+front_door_ai:
+  slug: cint
+  lexicon_version: '1.0'
+  probed_at: '2026-09-17'
+  host: www.cint.com
+  final_host: www.cint.com
+  ownership: own
+  owner: cint
+  shares_host_with: null
+  inherited_from: null
+  verdict: scored
+  score: 46
+  host_score: 46
+  density: 9.69
+  words: 4749
+  tiers:
+    agentic: 6
+    core: 40
+    model: 0
+  ambiguous: 8
+  top_terms:
+    AI: 39
+    intelligence: 3
+    prompts: 3
+    AI agent: 2
+    agent: 2
+    automation: 2
+    AI assistant: 1
+    machine learning: 1
+    smart: 1

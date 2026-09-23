@@ -1222,7 +1222,7 @@
                   "value": "application/json"
                 }
               ],
-              "body": "{\n  \"report_pre_signed_url\": \"https://cint-reports.s3.amazonaws.com/some-report-file.csv?AWSAccessKeyId=AKIAIOSFODNN7EXAMPLE&Expires=1678886400&Signature=vjXoG...\"\n}",
+              "body": "{\n  \"report_pre_signed_url\": \"https://cint-reports.s3.amazonaws.com/some-report-file.csv?AWSAccessKeyId=REDACTED_AWS_ACCESS_KEY_ID&Expires=1678886400&Signature=vjXoG...\"\n}",
               "cookie": [],
               "_postman_previewlanguage": "json"
             },

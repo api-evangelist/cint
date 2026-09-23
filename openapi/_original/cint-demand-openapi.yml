@@ -6025,7 +6025,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ReportShareResponse'
               example:
-                report_pre_signed_url: https://cint-reports.s3.amazonaws.com/some-report-file.csv?AWSAccessKeyId=AKIAIOSFODNN7EXAMPLE&Expires=1678886400&Signature=vjXoG...
+                report_pre_signed_url: https://cint-reports.s3.amazonaws.com/some-report-file.csv?AWSAccessKeyId=REDACTED_AWS_ACCESS_KEY_ID&Expires=1678886400&Signature=vjXoG...
         '400':
           $ref: '#/components/responses/Error_BadRequest'
         '401':
