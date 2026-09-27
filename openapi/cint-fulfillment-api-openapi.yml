@@ -95,7 +95,37 @@ paths:
               schema:
                 $ref: '#/components/schemas/respondent_fillfilment_transition_result'
 components:
+  parameters:
+    RID:
+      in: path
+      name: RID
+      schema:
+        type: string
+        example: 6780395e-94fa-1eb7-612c-d2e19af42758
+      required: true
+      description: "The session ID of the respondent routed to your survey. \nThe ID is passed in the URL path as a parameter and is of type UUID4.\n"
+    AuthorizationHeader:
+      name: Authorization
+      in: header
+      required: true
+      schema:
+        type: string
+        example: <api_key>
+      description: API Key for authentication.
   schemas:
+    respondent_fillfilment_transition_result:
+      title: Respondent fulfillment session id transition result
+      type: object
+      description: Respondent's session status result.
+      properties:
+        id:
+          type: string
+          example: 6780395e-94fa-1eb7-612c-d2e19af42758
+          description: The session ID (RID) of the respondent whose status was updated.
+        status:
+          type: integer
+          example: 5
+          description: The status to which the session (RID) was updated to.
     respondent_fillfilment_transition_request:
       title: Respondent Fulfillment Transition Request
       type: object
@@ -131,36 +161,6 @@ components:
               href:
                 type: string
                 example: https://goo.gl/forms/yukKhXoZOxzw8p2w2?&fedResponseID=6780395e-94fa-1eb7-612c-d2e19af42758
-    respondent_fillfilment_transition_result:
-      title: Respondent fulfillment session id transition result
-      type: object
-      description: Respondent's session status result.
-      properties:
-        id:
-          type: string
-          example: 6780395e-94fa-1eb7-612c-d2e19af42758
-          description: The session ID (RID) of the respondent whose status was updated.
-        status:
-          type: integer
-          example: 5
-          description: The status to which the session (RID) was updated to.
-  parameters:
-    AuthorizationHeader:
-      name: Authorization
-      in: header
-      required: true
-      schema:
-        type: string
-        example: <api_key>
-      description: API Key for authentication.
-    RID:
-      in: path
-      name: RID
-      schema:
-        type: string
-        example: 6780395e-94fa-1eb7-612c-d2e19af42758
-      required: true
-      description: "The session ID of the respondent routed to your survey. \nThe ID is passed in the URL path as a parameter and is of type UUID4.\n"
   securitySchemes:
     BearerAuth:
       type: http
