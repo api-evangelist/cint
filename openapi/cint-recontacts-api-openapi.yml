@@ -600,31 +600,20 @@ paths:
           $ref: '#/components/responses/Error_Internal'
 components:
   schemas:
+    TargetGroupID:
+      description: A unique identifier for the target group, in ULID format.
+      type: string
+      pattern: ^[0-9A-Z]{26}$
+      example: 01BTGNYV6HRNK8K8VKZASZCFP1
+    UserID:
+      type: string
+      format: uuid
+      description: A unique identifier for the user.
+      example: b551326b-ac9d-4d32-8823-4f025787dab9
     GetRecontactUploadRespondentsByFileJobResponse:
       description: The response payload containing the status and details of a Recontact upload-by-file job.
       allOf:
       - $ref: '#/components/schemas/GetRecontactRsidsUpdateJobResponse'
-    RecontactsRespondentIDListResponse:
-      type: object
-      description: The response payload for a paginated list of respondent IDs.
-      properties:
-        data:
-          type: array
-          items:
-            type: string
-            format: uuid
-          description: List of Respondent IDs
-          example:
-          - 5a3b2ada-0066-4dcb-afdd-7302be78ce9e
-          - 5a3b2ada-0066-4dcb-afdd-7302be78ce9f
-        next_cursor:
-          type: string
-          description: A pagination cursor that points to the next page of results. If this field is `null` or absent, you are on the last page.
-          example: MDFKUkc0UFdISDRKMEpWRVRTTTNKTlZKWlcmMGVmZmRjOTctMTYxZS00NmJlLWJlM2MtNTU5NTYyMWU3ZDcx
-        url:
-          type: string
-          description: The relative URL path for the current page of results.
-          example: /demand/accounts/101/projects/01BTGNYV6HRNK8K8VKZASZCFP0/target-groups/01BTGNYV6HRNK8K8VKZASZCFP1/recontacts/rsids
     GetRecontactRsidsUpdateJobResponse:
       type: object
       description: The response payload containing the status and details of a recontact job.
@@ -662,24 +651,89 @@ components:
           - $ref: '#/components/schemas/RecontactJobPartialSuccessReason'
         job_trace_id:
           $ref: '#/components/schemas/JobTraceId'
-    CreateRecontactsJobResponse:
+    GetTargetGroupRecontactsOverviewResponse:
       type: object
-      description: The response payload containing thejob_idfor a newly created recontact job.
+      description: The response payload containing the recontact overview for a target group.
       required:
-      - job_id
+      - saved_respondent_ids_count
       properties:
-        job_id:
-          $ref: '#/components/schemas/JobID'
-    UserID:
+        saved_respondent_ids_count:
+          type: integer
+          description: The number of saved respondent IDs
+          minimum: 0
+          maximum: 100000
+          example: 1000
+    Error:
+      type: object
+      description: The standard error object returned for all failed API requests.
+      required:
+      - object
+      - detail
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: A unique identifier for this specific error instance.
+        object:
+          type: string
+          description: A short informative string identifying the type of the error
+          pattern: ^([a-z]*_)*([a-z]*)$
+        detail:
+          type: string
+          description: An error message provides a concise overview of the cause of the error.
+        invalid_params:
+          type:
+          - array
+          - 'null'
+          description: An optional field containing a list of invalid parameters may be presented in validation errors for additional information.
+          items:
+            $ref: '#/components/schemas/InvalidParam'
+    RecontactUploadJobEntityType:
       type: string
-      format: uuid
-      description: A unique identifier for the user.
-      example: b551326b-ac9d-4d32-8823-4f025787dab9
-    AccountID:
-      description: The account's unique identifier.
-      type: integer
-      format: int32
-      example: 101
+      description: Indicates the respondent entity type. Use `RSID` or `RESPONDENT_ID` for Respondent IDs, and `RID` or `RESPONSE_ID` for Response IDs.
+      enum:
+      - RSID
+      - RESPONDENT_ID
+      - RID
+      - RESPONSE_ID
+      example: RID
+    RecontactsRespondentIDListResponse:
+      type: object
+      description: The response payload for a paginated list of respondent IDs.
+      properties:
+        data:
+          type: array
+          items:
+            type: string
+            format: uuid
+          description: List of Respondent IDs
+          example:
+          - 5a3b2ada-0066-4dcb-afdd-7302be78ce9e
+          - 5a3b2ada-0066-4dcb-afdd-7302be78ce9f
+        next_cursor:
+          type: string
+          description: A pagination cursor that points to the next page of results. If this field is `null` or absent, you are on the last page.
+          example: MDFKUkc0UFdISDRKMEpWRVRTTTNKTlZKWlcmMGVmZmRjOTctMTYxZS00NmJlLWJlM2MtNTU5NTYyMWU3ZDcx
+        url:
+          type: string
+          description: The relative URL path for the current page of results.
+          example: /demand/accounts/101/projects/01BTGNYV6HRNK8K8VKZASZCFP0/target-groups/01BTGNYV6HRNK8K8VKZASZCFP1/recontacts/rsids
+    GetUploadByFileJobsPaginatedResponse:
+      type: object
+      description: Paginated response containing upload recontacts by file jobs.
+      required:
+      - data
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/GetUploadByFileJobResponse'
+        next_cursor:
+          type:
+          - string
+          - 'null'
+          description: A pagination cursor that points to the next page of results. If this field is `null` or absent, you are on the last page.
+          example: MDFKUkc0UFdISDRKMEpWRVRTTTNKTlZKWlc
     GetUploadByFileJobResponse:
       type: object
       description: Summary details for an upload recontacts by file job.
@@ -705,10 +759,40 @@ components:
           example: '2024-01-01T14:05:05Z'
         created_by:
           $ref: '#/components/schemas/UserID'
-    JobTraceId:
+    InvalidParam:
+      type: object
+      description: Describes a single invalid parameter in a request.
+      properties:
+        name:
+          type: string
+          description: The name of the parameter that failed validation.
+        reason:
+          type: string
+          description: A short explanation of why the parameter was invalid.
+      required:
+      - name
+      - reason
+    ProjectID:
+      description: The character string representing a unique project ID (ULID format).
       type: string
-      description: The trace ID from the creation job request. Only present when the job status is 'Failed'. The trace ID as defined by the W3C trace context specification.
-      example: 0af7651916cd43dd8448eb211c80319c
+      pattern: ^[0-9A-Z]{26}$
+      example: 01BTGNYV6HRNK8K8VKZASZCFP0
+    CreateRecontactUploadRsidsByFileJobResponse:
+      type: object
+      description: The response payload containing the `job_id` for the newly created file upload job.
+      required:
+      - job_id
+      properties:
+        job_id:
+          $ref: '#/components/schemas/JobID'
+    CreateRecontactUploadRespondentsByFileJobResponse:
+      type: object
+      description: The response payload containing the `job_id` for a newly created Recontact upload-by-file job.
+      required:
+      - job_id
+      properties:
+        job_id:
+          $ref: '#/components/schemas/JobID'
     GetRecontactRemoveAllRsidsJobStatusResponse:
       type: object
       description: Recontacts Remove All RSIDs job status details.
@@ -741,48 +825,6 @@ components:
           - $ref: '#/components/schemas/RecontactJobFailureReason'
         job_trace_id:
           $ref: '#/components/schemas/JobTraceId'
-    RecontactUploadJobEntityType:
-      type: string
-      description: Indicates the respondent entity type. Use `RSID` or `RESPONDENT_ID` for Respondent IDs, and `RID` or `RESPONSE_ID` for Response IDs.
-      enum:
-      - RSID
-      - RESPONDENT_ID
-      - RID
-      - RESPONSE_ID
-      example: RID
-    Error:
-      type: object
-      description: The standard error object returned for all failed API requests.
-      required:
-      - object
-      - detail
-      properties:
-        id:
-          type: string
-          format: uuid
-          description: A unique identifier for this specific error instance.
-        object:
-          type: string
-          description: A short informative string identifying the type of the error
-          pattern: ^([a-z]*_)*([a-z]*)$
-        detail:
-          type: string
-          description: An error message provides a concise overview of the cause of the error.
-        invalid_params:
-          type:
-          - array
-          - 'null'
-          description: An optional field containing a list of invalid parameters may be presented in validation errors for additional information.
-          items:
-            $ref: '#/components/schemas/InvalidParam'
-    CreateRecontactUploadRespondentsByFileJobResponse:
-      type: object
-      description: The response payload containing the `job_id` for a newly created Recontact upload-by-file job.
-      required:
-      - job_id
-      properties:
-        job_id:
-          $ref: '#/components/schemas/JobID'
     RecontactJobPartialSuccessReason:
       type: object
       description: The reason for the partial success of a job.
@@ -792,10 +834,6 @@ components:
         description:
           type: string
           example: Upload partially successful. 500 respondent IDs uploaded successfully, 10 failed (invalid or empty).
-    JobID:
-      description: The character string representing a unique job ID.
-      type: string
-      example: 01BTGNYV6HRNK8K8VKZASZCFP1
     RecontactJobFailureReason:
       type: object
       description: The reason for the failure of a job.
@@ -811,31 +849,23 @@ components:
           type: string
           description: A human-readable explanation of the failure.
           example: The job execution start message failed. Please contact Cint for further assistance.
-    GetTargetGroupRecontactsOverviewResponse:
+    AccountID:
+      description: The account's unique identifier.
+      type: integer
+      format: int32
+      example: 101
+    CreateRecontactsJobResponse:
       type: object
-      description: The response payload containing the recontact overview for a target group.
+      description: The response payload containing thejob_idfor a newly created recontact job.
       required:
-      - saved_respondent_ids_count
+      - job_id
       properties:
-        saved_respondent_ids_count:
-          type: integer
-          description: The number of saved respondent IDs
-          minimum: 0
-          maximum: 100000
-          example: 1000
-    InvalidParam:
-      type: object
-      description: Describes a single invalid parameter in a request.
-      properties:
-        name:
-          type: string
-          description: The name of the parameter that failed validation.
-        reason:
-          type: string
-          description: A short explanation of why the parameter was invalid.
-      required:
-      - name
-      - reason
+        job_id:
+          $ref: '#/components/schemas/JobID'
+    JobTraceId:
+      type: string
+      description: The trace ID from the creation job request. Only present when the job status is 'Failed'. The trace ID as defined by the W3C trace context specification.
+      example: 0af7651916cd43dd8448eb211c80319c
     RecontactJobStatus:
       type: string
       description: The status of an async Recontact update job.
@@ -844,41 +874,39 @@ components:
       - Failed
       - Processing
       example: Completed
-    TargetGroupID:
-      description: A unique identifier for the target group, in ULID format.
+    JobID:
+      description: The character string representing a unique job ID.
       type: string
-      pattern: ^[0-9A-Z]{26}$
       example: 01BTGNYV6HRNK8K8VKZASZCFP1
-    CreateRecontactUploadRsidsByFileJobResponse:
-      type: object
-      description: The response payload containing the `job_id` for the newly created file upload job.
-      required:
-      - job_id
-      properties:
-        job_id:
-          $ref: '#/components/schemas/JobID'
-    GetUploadByFileJobsPaginatedResponse:
-      type: object
-      description: Paginated response containing upload recontacts by file jobs.
-      required:
-      - data
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/GetUploadByFileJobResponse'
-        next_cursor:
-          type:
-          - string
-          - 'null'
-          description: A pagination cursor that points to the next page of results. If this field is `null` or absent, you are on the last page.
-          example: MDFKUkc0UFdISDRKMEpWRVRTTTNKTlZKWlc
-    ProjectID:
-      description: The character string representing a unique project ID (ULID format).
-      type: string
-      pattern: ^[0-9A-Z]{26}$
-      example: 01BTGNYV6HRNK8K8VKZASZCFP0
   parameters:
+    ProjectID:
+      name: project_id
+      description: A unique identifier for the project, in ULID format.
+      in: path
+      required: true
+      schema:
+        $ref: '#/components/schemas/ProjectID'
+    AccountID:
+      name: account_id
+      description: The account's unique identifier.
+      in: path
+      required: true
+      schema:
+        $ref: '#/components/schemas/AccountID'
+    RecontactJobUploadRespondentEntityType:
+      name: entity_type
+      in: query
+      required: true
+      description: The entity type of the respondent identifiers included in the file as recontact opportunities. Use `RSID` or `RESPONDENT_ID` for Respondent IDs, and `RID` or `RESPONSE_ID` for Response IDs.
+      schema:
+        $ref: '#/components/schemas/RecontactUploadJobEntityType'
+    StartAfter:
+      name: start_after
+      in: query
+      description: Returns a list of objects after the provided pagination cursor, using the next_cursor from the previous response.
+      schema:
+        type: string
+      example: bff6a669-a469-409d-8c94-dcf92258043a
     EndBefore:
       name: end_before
       in: query
@@ -886,6 +914,28 @@ components:
       schema:
         type: string
       example: 7daa40ad-303b-40a2-89df-a9760400cde7
+    UpdateRecontactsJobID:
+      name: job_id
+      in: path
+      required: true
+      description: A unique identifier for the asynchronous recontact job.
+      schema:
+        $ref: '#/components/schemas/JobID'
+    TargetGroupID:
+      name: target_group_id
+      description: A unique identifier for the target group, in ULID format.
+      in: path
+      required: true
+      schema:
+        $ref: '#/components/schemas/TargetGroupID'
+    PageSize:
+      name: page_size
+      in: query
+      description: A limit on the number of objects to be returned, between 1 and 100.
+      schema:
+        type: integer
+        default: 10
+      example: 15
     CintAPIVersion-2025-12-18:
       name: Cint-API-Version
       in: header
@@ -896,127 +946,7 @@ components:
       description: 'This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.
 
         '
-    RecontactJobUploadRespondentEntityType:
-      name: entity_type
-      in: query
-      required: true
-      description: The entity type of the respondent identifiers included in the file as recontact opportunities. Use `RSID` or `RESPONDENT_ID` for Respondent IDs, and `RID` or `RESPONSE_ID` for Response IDs.
-      schema:
-        $ref: '#/components/schemas/RecontactUploadJobEntityType'
-    ProjectID:
-      name: project_id
-      description: A unique identifier for the project, in ULID format.
-      in: path
-      required: true
-      schema:
-        $ref: '#/components/schemas/ProjectID'
-    PageSize:
-      name: page_size
-      in: query
-      description: A limit on the number of objects to be returned, between 1 and 100.
-      schema:
-        type: integer
-        default: 10
-      example: 15
-    StartAfter:
-      name: start_after
-      in: query
-      description: Returns a list of objects after the provided pagination cursor, using the next_cursor from the previous response.
-      schema:
-        type: string
-      example: bff6a669-a469-409d-8c94-dcf92258043a
-    TargetGroupID:
-      name: target_group_id
-      description: A unique identifier for the target group, in ULID format.
-      in: path
-      required: true
-      schema:
-        $ref: '#/components/schemas/TargetGroupID'
-    AccountID:
-      name: account_id
-      description: The account's unique identifier.
-      in: path
-      required: true
-      schema:
-        $ref: '#/components/schemas/AccountID'
-    UpdateRecontactsJobID:
-      name: job_id
-      in: path
-      required: true
-      description: A unique identifier for the asynchronous recontact job.
-      schema:
-        $ref: '#/components/schemas/JobID'
   responses:
-    Error_UnsupportedMediaType:
-      description: The request content format is not supported.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            id: 7a5972ba-0825-4360-b852-fa2430e47034
-            object: unsupported_media_type_error
-            detail: The 'Content-Type' header is incorrectly set 'application/pdf'
-    Error_BadRequest:
-      description: A request is not valid and can't be processed.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            id: 9e278238-d011-4e05-8327-1ce1d5d26254
-            object: bad_request_error
-            detail: Expected field 'foo' is missing.
-    Error_Unauthorized:
-      description: A request is unauthorized.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            id: 1dcf0f40-f0d1-4cf6-8c00-c3d019d32faf
-            object: authorization_error
-            detail: no valid authorization provided for this operation
-    Error_Forbidden:
-      description: A requested is forbidden.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            id: fe68cdd2-ee87-4dbf-8950-63c5cbca94c7
-            object: authorization_error
-            detail: you don't have the right permissions to perform this operation
-    Error_Conflict:
-      description: An already existing resource has conflicts with the request.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            id: 3d61d9c3-68ee-4026-b436-6e76a2b33932
-            object: conflict_error
-            detail: this operation causes conflict(s) on the resources
-    Error_Internal:
-      description: A request failed due to an internal error.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            id: d94b8bb2-a540-4a91-9c05-2aa3ae9a5e1e
-            object: unexpected_internal_error
-            detail: an internal error has led to the failure of this operation
-    Error_ContentTooLarge:
-      description: The request entity was larger than limits defined by the server.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            id: 7a5972ba-0825-4360-b852-fa2430e47034
-            object: content_too_large_error
-            detail: File upload limit exceeded
     Error_NotFound:
       description: A requested resource isn't found.
       content:
@@ -1027,6 +957,76 @@ components:
             id: 7a5972ba-0825-4360-b852-fa2430e47034
             object: not_found_error
             detail: resource not found
+    Error_ContentTooLarge:
+      description: The request entity was larger than limits defined by the server.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            id: 7a5972ba-0825-4360-b852-fa2430e47034
+            object: content_too_large_error
+            detail: File upload limit exceeded
+    Error_UnsupportedMediaType:
+      description: The request content format is not supported.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            id: 7a5972ba-0825-4360-b852-fa2430e47034
+            object: unsupported_media_type_error
+            detail: The 'Content-Type' header is incorrectly set 'application/pdf'
+    Error_Unauthorized:
+      description: A request is unauthorized.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            id: 1dcf0f40-f0d1-4cf6-8c00-c3d019d32faf
+            object: authorization_error
+            detail: no valid authorization provided for this operation
+    Error_Conflict:
+      description: An already existing resource has conflicts with the request.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            id: 3d61d9c3-68ee-4026-b436-6e76a2b33932
+            object: conflict_error
+            detail: this operation causes conflict(s) on the resources
+    Error_BadRequest:
+      description: A request is not valid and can't be processed.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            id: 9e278238-d011-4e05-8327-1ce1d5d26254
+            object: bad_request_error
+            detail: Expected field 'foo' is missing.
+    Error_Internal:
+      description: A request failed due to an internal error.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            id: d94b8bb2-a540-4a91-9c05-2aa3ae9a5e1e
+            object: unexpected_internal_error
+            detail: an internal error has led to the failure of this operation
+    Error_Forbidden:
+      description: A requested is forbidden.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            id: fe68cdd2-ee87-4dbf-8950-63c5cbca94c7
+            object: authorization_error
+            detail: you don't have the right permissions to perform this operation
   securitySchemes:
     BearerAuth:
       type: http

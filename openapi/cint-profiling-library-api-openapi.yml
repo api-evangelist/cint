@@ -357,89 +357,6 @@ paths:
         '500':
           $ref: '#/components/responses/Error_Internal'
 components:
-  parameters:
-    EndBefore:
-      name: end_before
-      in: query
-      description: Returns a list of objects that come before the provided pagination cursor. This is used for navigating to a previous page.
-      schema:
-        type: string
-      example: 7daa40ad-303b-40a2-89df-a9760400cde7
-    QuestionsTranslationQuery:
-      name: query
-      in: query
-      description: Text filter on the results set.
-      schema:
-        type: string
-        example: automotive
-    QuestionsTranslationAllowCustomQuals:
-      name: allow_custom_quals
-      in: query
-      description: If `true`, the response will include your account's custom qualifications in addition to the standard ones.
-      schema:
-        type: boolean
-        example: true
-    CintAPIVersion-2025-12-18:
-      name: Cint-API-Version
-      in: header
-      required: true
-      schema:
-        type: string
-        example: 2025-12-18
-      description: 'This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.
-
-        '
-    PageSize:
-      name: page_size
-      in: query
-      description: A limit on the number of objects to be returned, between 1 and 100.
-      schema:
-        type: integer
-        default: 10
-      example: 15
-    QuestionsTranslationAllowOnlyCustomQuals:
-      name: only_custom_quals
-      in: query
-      description: If `true`, the response will only include your account's custom qualifications.
-      schema:
-        type: boolean
-        example: true
-    QuestionsTranslationLocale:
-      name: locale
-      in: query
-      description: Locale of target group in <language 1st 3 chars>_<country 2 char abbreviation> format.
-      required: true
-      schema:
-        type: string
-        example: eng_us
-    StartAfter:
-      name: start_after
-      in: query
-      description: Returns a list of objects after the provided pagination cursor, using the next_cursor from the previous response.
-      schema:
-        type: string
-      example: bff6a669-a469-409d-8c94-dcf92258043a
-    AccountID:
-      name: account_id
-      description: The account's unique identifier.
-      in: path
-      required: true
-      schema:
-        $ref: '#/components/schemas/AccountID'
-    QuestionsTranslationTranslationLanguage:
-      name: translation_language
-      in: query
-      description: The ISO 639-2 (3-letter) code for the language to use for the `description_translated` and `text_translated` fields.
-      schema:
-        type: string
-        example: spa
-    QuestionsTranslationIDs:
-      name: id
-      in: query
-      description: List of comma separated question IDs.
-      schema:
-        type: string
-        example: 42,43,97
   schemas:
     QuestionQuotaV3:
       description: A polymorphic array containing conditions for a question. For question types like `range` or `open_ended` that do not have predefined conditions, this may be an empty array.
@@ -456,96 +373,6 @@ components:
         minItems: 0
         items:
           $ref: '#/components/schemas/RequestDraftNoQuotaV3'
-    QuestionCategoryID:
-      type: integer
-      description: The unique identifier for a question category.
-      example: 43
-    ProfileTargetsSelectionConditionsV3:
-      title: Selection condition
-      type: object
-      description: A profiling condition that targets a specific answer option (e.g. gender).
-      required:
-      - object
-      - question_id
-      - option
-      properties:
-        object:
-          type: string
-          description: The type of profiling condition. For this object, the value is always 'selection'.
-          enum:
-          - selection
-          example: selection
-        question_id:
-          $ref: '#/components/schemas/QuestionID'
-        option:
-          type: string
-          description: The unique identifier for the selected answer option.
-          example: '1'
-    RequestDraftNoQuotaV3:
-      type: object
-      description: No quotas specified. The request will proceed without applying any quotas.
-      required:
-      - object
-      - conditions
-      properties:
-        object:
-          type: string
-          description: Object field to distinguish the operation.
-          enum:
-          - nominal
-          example: nominal
-        conditions:
-          type: array
-          description: List of conditions.
-          minItems: 1
-          items:
-            $ref: '#/components/schemas/InterlockProfileConditionsV3'
-    ProfileTargetsRangeConditionsV3:
-      title: Range condition
-      type: object
-      description: A profiling condition that targets a numeric range (e.g. age).
-      required:
-      - object
-      - question_id
-      - min
-      - max
-      properties:
-        object:
-          type: string
-          description: The type of profiling condition. For this object, the value is always 'range'.
-          enum:
-          - range
-          example: range
-        question_id:
-          $ref: '#/components/schemas/QuestionID'
-        min:
-          type: integer
-          format: int32
-          minimum: 1
-          maximum: 99
-          description: The minimum numeric value (inclusive).
-          example: 18
-        max:
-          type: integer
-          format: int32
-          minimum: 1
-          maximum: 99
-          description: The maximum numeric value (inclusive).
-          example: 24
-    ListQuestionCategories:
-      type: object
-      description: Lists all available question categories.
-      properties:
-        categories:
-          type: array
-          description: List of question categories.
-          items:
-            $ref: '#/components/schemas/QuestionCategory'
-      example:
-        categories:
-        - id: 23
-          code: AIR
-          name: Airlines/Travel
     ProfileTargetsOpenEndedConditionsV3:
       title: Open-ended condition
       description: A profiling condition that targets open-ended text values.
@@ -615,11 +442,6 @@ components:
         question_id: 45
         open_ended_values: []
         allow_all_values: true
-    AccountID:
-      description: The account's unique identifier.
-      type: integer
-      format: int32
-      example: 101
     Error:
       type: object
       description: The standard error object returned for all failed API requests.
@@ -645,16 +467,54 @@ components:
           description: An optional field containing a list of invalid parameters may be presented in validation errors for additional information.
           items:
             $ref: '#/components/schemas/InvalidParam'
-    NextCursor:
-      description: 'An identifier for pagination that indicates there are more items available.
-
-        When present, use this value to retrieve the next page of results.
-
-        '
-      type:
-      - string
-      - 'null'
-      example: bff6a669-a469-409d-8c94-dcf92258043a
+    ProfileTargetsSelectionConditionsV3:
+      title: Selection condition
+      type: object
+      description: A profiling condition that targets a specific answer option (e.g. gender).
+      required:
+      - object
+      - question_id
+      - option
+      properties:
+        object:
+          type: string
+          description: The type of profiling condition. For this object, the value is always 'selection'.
+          enum:
+          - selection
+          example: selection
+        question_id:
+          $ref: '#/components/schemas/QuestionID'
+        option:
+          type: string
+          description: The unique identifier for the selected answer option.
+          example: '1'
+    ListQuestionCategories:
+      type: object
+      description: Lists all available question categories.
+      properties:
+        categories:
+          type: array
+          description: List of question categories.
+          items:
+            $ref: '#/components/schemas/QuestionCategory'
+      example:
+        categories:
+        - id: 23
+          code: AIR
+          name: Airlines/Travel
+    InvalidParam:
+      type: object
+      description: Describes a single invalid parameter in a request.
+      properties:
+        name:
+          type: string
+          description: The name of the parameter that failed validation.
+        reason:
+          type: string
+          description: A short explanation of why the parameter was invalid.
+      required:
+      - name
+      - reason
     QuestionCategory:
       type: object
       description: Indicates the question's category.
@@ -694,6 +554,48 @@ components:
           description: A flag that's true if there are more results to retrieve in a subsequent request.
         next_cursor:
           $ref: '#/components/schemas/NextCursor'
+    NextCursor:
+      description: 'An identifier for pagination that indicates there are more items available.
+
+        When present, use this value to retrieve the next page of results.
+
+        '
+      type:
+      - string
+      - 'null'
+      example: bff6a669-a469-409d-8c94-dcf92258043a
+    QuestionCategoryCode:
+      description: Code that uniquely identifies the question category.
+      type: string
+      enum:
+      - AIR
+      - ART
+      - AUT
+      - B2B
+      - BAN
+      - BEA
+      - BEV
+      - DEM
+      - DEV
+      - EDU
+      - ELE
+      - FAS
+      - FOO
+      - HOB
+      - HOM
+      - IT
+      - MED
+      - PER
+      - POL
+      - REC
+      - SUP
+      - TOB
+      - OTH
+    AccountID:
+      description: The account's unique identifier.
+      type: integer
+      format: int32
+      example: 101
     QuestionQuotaDetailsV3:
       type: object
       description: Quota for conditions.
@@ -719,25 +621,38 @@ components:
           minItems: 1
           items:
             $ref: '#/components/schemas/InterlockProfileConditionsV3'
-    InterlockProfileConditionsV3:
-      description: A polymorphic object representing a single profiling condition, which can be a `selection`, `range`, or `open_ended` type.
-      oneOf:
-      - $ref: '#/components/schemas/ProfileTargetsSelectionConditionsV3'
-      - $ref: '#/components/schemas/ProfileTargetsRangeConditionsV3'
-      - $ref: '#/components/schemas/ProfileTargetsOpenEndedConditionsV3'
-    InvalidParam:
+    ProfileTargetsRangeConditionsV3:
+      title: Range condition
       type: object
-      description: Describes a single invalid parameter in a request.
-      properties:
-        name:
-          type: string
-          description: The name of the parameter that failed validation.
-        reason:
-          type: string
-          description: A short explanation of why the parameter was invalid.
+      description: A profiling condition that targets a numeric range (e.g. age).
       required:
-      - name
-      - reason
+      - object
+      - question_id
+      - min
+      - max
+      properties:
+        object:
+          type: string
+          description: The type of profiling condition. For this object, the value is always 'range'.
+          enum:
+          - range
+          example: range
+        question_id:
+          $ref: '#/components/schemas/QuestionID'
+        min:
+          type: integer
+          format: int32
+          minimum: 1
+          maximum: 99
+          description: The minimum numeric value (inclusive).
+          example: 18
+        max:
+          type: integer
+          format: int32
+          minimum: 1
+          maximum: 99
+          description: The maximum numeric value (inclusive).
+          example: 24
     QuestionResponseProfileFormat:
       type: object
       description: Contains the details for a single profiling question, including its answer options and translations.
@@ -799,78 +714,123 @@ components:
           type: string
           description: The code representing the classification of the question (e.g. AUT = Automotive, BAN = Banking/Finance, AIR = Airlines/Travel).
           example: BAN
-    QuestionCategoryCode:
-      description: Code that uniquely identifies the question category.
-      type: string
-      enum:
-      - AIR
-      - ART
-      - AUT
-      - B2B
-      - BAN
-      - BEA
-      - BEV
-      - DEM
-      - DEV
-      - EDU
-      - ELE
-      - FAS
-      - FOO
-      - HOB
-      - HOM
-      - IT
-      - MED
-      - PER
-      - POL
-      - REC
-      - SUP
-      - TOB
-      - OTH
+    RequestDraftNoQuotaV3:
+      type: object
+      description: No quotas specified. The request will proceed without applying any quotas.
+      required:
+      - object
+      - conditions
+      properties:
+        object:
+          type: string
+          description: Object field to distinguish the operation.
+          enum:
+          - nominal
+          example: nominal
+        conditions:
+          type: array
+          description: List of conditions.
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/InterlockProfileConditionsV3'
+    InterlockProfileConditionsV3:
+      description: A polymorphic object representing a single profiling condition, which can be a `selection`, `range`, or `open_ended` type.
+      oneOf:
+      - $ref: '#/components/schemas/ProfileTargetsSelectionConditionsV3'
+      - $ref: '#/components/schemas/ProfileTargetsRangeConditionsV3'
+      - $ref: '#/components/schemas/ProfileTargetsOpenEndedConditionsV3'
     QuestionID:
       type: integer
       description: The unique identifier for a profiling question.
       example: 12413
+    QuestionCategoryID:
+      type: integer
+      description: The unique identifier for a question category.
+      example: 43
+  parameters:
+    QuestionsTranslationAllowOnlyCustomQuals:
+      name: only_custom_quals
+      in: query
+      description: If `true`, the response will only include your account's custom qualifications.
+      schema:
+        type: boolean
+        example: true
+    QuestionsTranslationAllowCustomQuals:
+      name: allow_custom_quals
+      in: query
+      description: If `true`, the response will include your account's custom qualifications in addition to the standard ones.
+      schema:
+        type: boolean
+        example: true
+    AccountID:
+      name: account_id
+      description: The account's unique identifier.
+      in: path
+      required: true
+      schema:
+        $ref: '#/components/schemas/AccountID'
+    StartAfter:
+      name: start_after
+      in: query
+      description: Returns a list of objects after the provided pagination cursor, using the next_cursor from the previous response.
+      schema:
+        type: string
+      example: bff6a669-a469-409d-8c94-dcf92258043a
+    QuestionsTranslationTranslationLanguage:
+      name: translation_language
+      in: query
+      description: The ISO 639-2 (3-letter) code for the language to use for the `description_translated` and `text_translated` fields.
+      schema:
+        type: string
+        example: spa
+    QuestionsTranslationLocale:
+      name: locale
+      in: query
+      description: Locale of target group in <language 1st 3 chars>_<country 2 char abbreviation> format.
+      required: true
+      schema:
+        type: string
+        example: eng_us
+    EndBefore:
+      name: end_before
+      in: query
+      description: Returns a list of objects that come before the provided pagination cursor. This is used for navigating to a previous page.
+      schema:
+        type: string
+      example: 7daa40ad-303b-40a2-89df-a9760400cde7
+    QuestionsTranslationIDs:
+      name: id
+      in: query
+      description: List of comma separated question IDs.
+      schema:
+        type: string
+        example: 42,43,97
+    QuestionsTranslationQuery:
+      name: query
+      in: query
+      description: Text filter on the results set.
+      schema:
+        type: string
+        example: automotive
+    PageSize:
+      name: page_size
+      in: query
+      description: A limit on the number of objects to be returned, between 1 and 100.
+      schema:
+        type: integer
+        default: 10
+      example: 15
+    CintAPIVersion-2025-12-18:
+      name: Cint-API-Version
+      in: header
+      required: true
+      schema:
+        type: string
+        example: 2025-12-18
+      description: 'This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.
+
+        '
   responses:
-    Error_BadRequest:
-      description: A request is not valid and can't be processed.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            id: 9e278238-d011-4e05-8327-1ce1d5d26254
-            object: bad_request_error
-            detail: Expected field 'foo' is missing.
-    Error_Unauthorized:
-      description: A request is unauthorized.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            id: 1dcf0f40-f0d1-4cf6-8c00-c3d019d32faf
-            object: authorization_error
-            detail: no valid authorization provided for this operation
-    Error_Forbidden:
-      description: A requested is forbidden.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            id: fe68cdd2-ee87-4dbf-8950-63c5cbca94c7
-            object: authorization_error
-            detail: you don't have the right permissions to perform this operation
-    Error_Internal:
-      description: A request failed due to an internal error.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            id: d94b8bb2-a540-4a91-9c05-2aa3ae9a5e1e
-            object: unexpected_internal_error
-            detail: an internal error has led to the failure of this operation
     Error_NotFound:
       description: A requested resource isn't found.
       content:
@@ -881,6 +841,46 @@ components:
             id: 7a5972ba-0825-4360-b852-fa2430e47034
             object: not_found_error
             detail: resource not found
+    Error_Unauthorized:
+      description: A request is unauthorized.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            id: 1dcf0f40-f0d1-4cf6-8c00-c3d019d32faf
+            object: authorization_error
+            detail: no valid authorization provided for this operation
+    Error_BadRequest:
+      description: A request is not valid and can't be processed.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            id: 9e278238-d011-4e05-8327-1ce1d5d26254
+            object: bad_request_error
+            detail: Expected field 'foo' is missing.
+    Error_Internal:
+      description: A request failed due to an internal error.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            id: d94b8bb2-a540-4a91-9c05-2aa3ae9a5e1e
+            object: unexpected_internal_error
+            detail: an internal error has led to the failure of this operation
+    Error_Forbidden:
+      description: A requested is forbidden.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            id: fe68cdd2-ee87-4dbf-8950-63c5cbca94c7
+            object: authorization_error
+            detail: you don't have the right permissions to perform this operation
   securitySchemes:
     BearerAuth:
       type: http

@@ -381,7 +381,80 @@ paths:
         '500':
           $ref: '#/components/responses/Error_Internal'
 components:
+  parameters:
+    PageNumber:
+      name: page_number
+      in: query
+      description: The page number of the results to retrieve.
+      schema:
+        type: integer
+        minimum: 0
+        default: 0
+      example: 2
+    AccountID:
+      name: account_id
+      description: The account's unique identifier.
+      in: path
+      required: true
+      schema:
+        $ref: '#/components/schemas/AccountID'
+    PageSize:
+      name: page_size
+      in: query
+      description: A limit on the number of objects to be returned, between 1 and 100.
+      schema:
+        type: integer
+        default: 10
+      example: 15
+    CintAPIVersion-2025-12-18:
+      name: Cint-API-Version
+      in: header
+      required: true
+      schema:
+        type: string
+        example: 2025-12-18
+      description: 'This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.
+
+        '
   schemas:
+    Error:
+      type: object
+      description: The standard error object returned for all failed API requests.
+      required:
+      - object
+      - detail
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: A unique identifier for this specific error instance.
+        object:
+          type: string
+          description: A short informative string identifying the type of the error
+          pattern: ^([a-z]*_)*([a-z]*)$
+        detail:
+          type: string
+          description: An error message provides a concise overview of the cause of the error.
+        invalid_params:
+          type:
+          - array
+          - 'null'
+          description: An optional field containing a list of invalid parameters may be presented in validation errors for additional information.
+          items:
+            $ref: '#/components/schemas/InvalidParam'
+    InvalidParam:
+      type: object
+      description: Describes a single invalid parameter in a request.
+      properties:
+        name:
+          type: string
+          description: The name of the parameter that failed validation.
+        reason:
+          type: string
+          description: A short explanation of why the parameter was invalid.
+      required:
+      - name
+      - reason
     CountryListItem:
       type: object
       description: Contains details for a single country.
@@ -399,45 +472,23 @@ components:
           type: string
           description: A human-readable name for the country.
           example: United Kingdom
-    IndustryLockoutItem:
+    StudyTypeListItem:
       type: object
-      description: Contains details for a single industry lockout.
+      description: Contains details for a single study type.
       readOnly: true
       properties:
         id:
           type: integer
-          description: Unique identifier of the industry lockout.
-          example: 90
+          description: Unique identifier of the study type.
+          example: 1
         code:
           type: string
-          description: Unique text code of the industry lockout.
-          example: past_90_days
+          description: Unique text code of the study type.
+          example: adhoc
         name:
           type: string
-          description: A human-readable name for the industry lockout.
-          example: Past 90 Days / 3 Months
-    AccountID:
-      description: The account's unique identifier.
-      type: integer
-      format: int32
-      example: 101
-    IndustryListItem:
-      type: object
-      description: Contains details for a single industry.
-      readOnly: true
-      properties:
-        id:
-          type: integer
-          description: Unique identifier of the industry.
-          example: 19
-        code:
-          type: string
-          description: Unique text code of the industry.
-          example: politics
-        name:
-          type: string
-          description: A human-readable name for the industry.
-          example: Politics
+          description: A human-readable name for the study type.
+          example: Adhoc
     Locales:
       type: object
       description: Contains a list of suggested countries and their supported languages.
@@ -501,31 +552,6 @@ components:
           - is_preferred: false
             name: Chinese Simplified
             code: chi
-    Error:
-      type: object
-      description: The standard error object returned for all failed API requests.
-      required:
-      - object
-      - detail
-      properties:
-        id:
-          type: string
-          format: uuid
-          description: A unique identifier for this specific error instance.
-        object:
-          type: string
-          description: A short informative string identifying the type of the error
-          pattern: ^([a-z]*_)*([a-z]*)$
-        detail:
-          type: string
-          description: An error message provides a concise overview of the cause of the error.
-        invalid_params:
-          type:
-          - array
-          - 'null'
-          description: An optional field containing a list of invalid parameters may be presented in validation errors for additional information.
-          items:
-            $ref: '#/components/schemas/InvalidParam'
     BusinessUnit:
       type: object
       description: Contains details for a single business unit.
@@ -553,49 +579,28 @@ components:
             - rate_card
             - dynamic
             example: rate_card
-    ClientListItem:
+    IndustryListItem:
       type: object
-      description: Contains details for a single client.
+      description: Contains details for a single industry.
       readOnly: true
       properties:
         id:
           type: integer
-          description: Unique identifier of the client.
-          example: 1234
-        name:
-          type: string
-          description: A human-readable name for the client.
-          example: Acme Inc
-    InvalidParam:
-      type: object
-      description: Describes a single invalid parameter in a request.
-      properties:
-        name:
-          type: string
-          description: The name of the parameter that failed validation.
-        reason:
-          type: string
-          description: A short explanation of why the parameter was invalid.
-      required:
-      - name
-      - reason
-    StudyTypeListItem:
-      type: object
-      description: Contains details for a single study type.
-      readOnly: true
-      properties:
-        id:
-          type: integer
-          description: Unique identifier of the study type.
-          example: 1
+          description: Unique identifier of the industry.
+          example: 19
         code:
           type: string
-          description: Unique text code of the study type.
-          example: adhoc
+          description: Unique text code of the industry.
+          example: politics
         name:
           type: string
-          description: A human-readable name for the study type.
-          example: Adhoc
+          description: A human-readable name for the industry.
+          example: Politics
+    AccountID:
+      description: The account's unique identifier.
+      type: integer
+      format: int32
+      example: 101
     IntegrationUseCaseListItem:
       type: object
       description: Contains details for a single integration use case.
@@ -630,52 +635,37 @@ components:
           type: string
           description: A human-readable name for the supplier.
           example: Acme Inc
-  parameters:
-    CintAPIVersion-2025-12-18:
-      name: Cint-API-Version
-      in: header
-      required: true
-      schema:
-        type: string
-        example: 2025-12-18
-      description: 'This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.
-
-        '
-    PageSize:
-      name: page_size
-      in: query
-      description: A limit on the number of objects to be returned, between 1 and 100.
-      schema:
-        type: integer
-        default: 10
-      example: 15
-    AccountID:
-      name: account_id
-      description: The account's unique identifier.
-      in: path
-      required: true
-      schema:
-        $ref: '#/components/schemas/AccountID'
-    PageNumber:
-      name: page_number
-      in: query
-      description: The page number of the results to retrieve.
-      schema:
-        type: integer
-        minimum: 0
-        default: 0
-      example: 2
+    IndustryLockoutItem:
+      type: object
+      description: Contains details for a single industry lockout.
+      readOnly: true
+      properties:
+        id:
+          type: integer
+          description: Unique identifier of the industry lockout.
+          example: 90
+        code:
+          type: string
+          description: Unique text code of the industry lockout.
+          example: past_90_days
+        name:
+          type: string
+          description: A human-readable name for the industry lockout.
+          example: Past 90 Days / 3 Months
+    ClientListItem:
+      type: object
+      description: Contains details for a single client.
+      readOnly: true
+      properties:
+        id:
+          type: integer
+          description: Unique identifier of the client.
+          example: 1234
+        name:
+          type: string
+          description: A human-readable name for the client.
+          example: Acme Inc
   responses:
-    Error_BadRequest:
-      description: A request is not valid and can't be processed.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            id: 9e278238-d011-4e05-8327-1ce1d5d26254
-            object: bad_request_error
-            detail: Expected field 'foo' is missing.
     Error_Unauthorized:
       description: A request is unauthorized.
       content:
@@ -686,16 +676,16 @@ components:
             id: 1dcf0f40-f0d1-4cf6-8c00-c3d019d32faf
             object: authorization_error
             detail: no valid authorization provided for this operation
-    Error_Forbidden:
-      description: A requested is forbidden.
+    Error_BadRequest:
+      description: A request is not valid and can't be processed.
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
           example:
-            id: fe68cdd2-ee87-4dbf-8950-63c5cbca94c7
-            object: authorization_error
-            detail: you don't have the right permissions to perform this operation
+            id: 9e278238-d011-4e05-8327-1ce1d5d26254
+            object: bad_request_error
+            detail: Expected field 'foo' is missing.
     Error_Internal:
       description: A request failed due to an internal error.
       content:
@@ -706,6 +696,16 @@ components:
             id: d94b8bb2-a540-4a91-9c05-2aa3ae9a5e1e
             object: unexpected_internal_error
             detail: an internal error has led to the failure of this operation
+    Error_Forbidden:
+      description: A requested is forbidden.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            id: fe68cdd2-ee87-4dbf-8950-63c5cbca94c7
+            object: authorization_error
+            detail: you don't have the right permissions to perform this operation
   securitySchemes:
     BearerAuth:
       type: http
