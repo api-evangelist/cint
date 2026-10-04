@@ -353,175 +353,58 @@ paths:
         '500':
           $ref: '#/components/responses/Error_Internal'
 components:
+  responses:
+    Error_Internal:
+      description: A request failed due to an internal error.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            id: d94b8bb2-a540-4a91-9c05-2aa3ae9a5e1e
+            object: unexpected_internal_error
+            detail: an internal error has led to the failure of this operation
+    Error_Unauthorized:
+      description: A request is unauthorized.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            id: 1dcf0f40-f0d1-4cf6-8c00-c3d019d32faf
+            object: authorization_error
+            detail: no valid authorization provided for this operation
+    Error_NotFound:
+      description: A requested resource isn't found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            id: 7a5972ba-0825-4360-b852-fa2430e47034
+            object: not_found_error
+            detail: resource not found
+    Error_BadRequest:
+      description: A request is not valid and can't be processed.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            id: 9e278238-d011-4e05-8327-1ce1d5d26254
+            object: bad_request_error
+            detail: Expected field 'foo' is missing.
+    Error_Forbidden:
+      description: A requested is forbidden.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            id: fe68cdd2-ee87-4dbf-8950-63c5cbca94c7
+            object: authorization_error
+            detail: you don't have the right permissions to perform this operation
   schemas:
-    ReportRequestListItem:
-      type: object
-      description: An individual Report Request in list of items.
-      properties:
-        account_name:
-          $ref: '#/components/schemas/AccountName'
-        create_date:
-          type: string
-          format: date-time
-          description: The timestamp the report was created.
-          example: '2023-01-01T23:00:00.000Z'
-        create_params:
-          type: object
-          description: Create params of the request
-          properties:
-            start_date:
-              type: string
-              description: The start date for the report query. **Note:** The time is interpreted as 00:00 in the US/Central timezone.
-              example: '2023-08-01'
-            end_date:
-              type: string
-              description: The end date for the report query. **Note:** The time is interpreted as 00:00 in the US/Central timezone.
-              example: '2023-08-30'
-            filter:
-              type: string
-              description: Filter to be used in report.
-              enum:
-              - business_unit
-              - project
-              - target_group
-              example: business_unit
-            filter_ids:
-              type: array
-              items:
-                type: string
-              description: List of unique identifiers corresponding to the selected filter type.
-              example:
-              - id1
-              - id2
-              - id3
-            report_options:
-              type:
-              - object
-              - 'null'
-              properties:
-                include_respondent_answers:
-                  type:
-                  - boolean
-                  - 'null'
-                  description: Include respondent answers in report.
-                link_type:
-                  type:
-                  - string
-                  - 'null'
-                  description: Link type
-                  enum:
-                  - all
-                  - api
-                  - offer
-                  - pass
-                  - target
-                  - yield
-        requestor:
-          type: object
-          description: Report Requestor Details
-          properties:
-            id:
-              type: string
-              format: uuid
-              description: ID of the requestor
-              example: 96C65204-90C2-4DCB-9393-B8226DD50C76
-            name:
-              type: string
-              description: Name of the requestor
-              example: John Doe
-            email:
-              type: string
-              format: email
-              description: Email of the requestor
-              example: JohnDoe@cint.com
-        report_id:
-          type: string
-          description: A unique identifier for the report in ULID format.
-          pattern: ^[0-9A-Z]{26}$
-          example: 01HY3NF37B6J2ABPA3H49C92YZ
-        report_type:
-          type: string
-          description: Report Type
-          example: sample-bought
-        report_url:
-          type: string
-          description: Report URL
-          example: https://example.com/completes-buyside-{accountname}.csv
-        status:
-          type: string
-          description: Status of the report
-          enum:
-          - pending
-          - completed
-          - failed
-          example: completed
-        level:
-          type: string
-          description: Filter level of the report
-          enum:
-          - Account
-          - Project
-          - Target Group
-          - Business Unit
-          example: Account
-    Traceparent:
-      type: string
-      description: 'The traceparent header carries essential trace context information. This includes the trace ID and parent span ID  as defined by the W3C trace context specification. It is used to pinpoint the position of an incoming request within  the trace graph, facilitating the tracking of distributed operations.
-
-        Note: This field is optional and will be automatically generated by the service if not provided in the request.  The generated value will be included in the response header.'
-      example: 00-0af7651916cd43dd8448eb211c80319c-b7ad6b7169203331-01
-    Level:
-      type: string
-      description: Filter level for the report generation request.
-      enum:
-      - account
-      - project
-      - target_group
-      - business_unit
-    Error:
-      type: object
-      description: The standard error object returned for all failed API requests.
-      required:
-      - object
-      - detail
-      properties:
-        id:
-          type: string
-          format: uuid
-          description: A unique identifier for this specific error instance.
-        object:
-          type: string
-          description: A short informative string identifying the type of the error
-          pattern: ^([a-z]*_)*([a-z]*)$
-        detail:
-          type: string
-          description: An error message provides a concise overview of the cause of the error.
-        invalid_params:
-          type:
-          - array
-          - 'null'
-          description: An optional field containing a list of invalid parameters may be presented in validation errors for additional information.
-          items:
-            $ref: '#/components/schemas/InvalidParam'
-    AccountName:
-      description: The name of the account.
-      type:
-      - string
-      - 'null'
-      example: Lucid Marketplace Services
-    InvalidParam:
-      type: object
-      description: Describes a single invalid parameter in a request.
-      properties:
-        name:
-          type: string
-          description: The name of the parameter that failed validation.
-        reason:
-          type: string
-          description: A short explanation of why the parameter was invalid.
-      required:
-      - name
-      - reason
     ReportShareResponse:
       type: object
       description: The response payload containing a shareable, pre-signed URL for a report.
@@ -529,6 +412,12 @@ components:
         report_pre_signed_url:
           type: string
           description: A temporary, pre-signed URL to access the report. This link is time-sensitive and will expire.
+    AccountName:
+      description: The name of the account.
+      type:
+      - string
+      - 'null'
+      example: Lucid Marketplace Services
     ReportGenerationResponse:
       type: object
       description: The response payload returned immediately after a report generation request has been accepted.
@@ -640,83 +529,6 @@ components:
               format: email
               description: Email of the requestor
               example: John.Doe@cint.com
-    Tracestate:
-      type: string
-      description: 'The tracestate header provides additional contextual information to the traceparent header.  This enriches the tracing context and offers more fine-grained control
-
-        Note: This field is optional and will be automatically generated by the service if not provided in the request.  The generated value will be included in the response header.'
-      example: ot=foo:bar;k1:13
-    ReportStatusResponse:
-      type: object
-      description: The response payload containing the status of a single report generation job.
-      properties:
-        report_id:
-          type: string
-          description: A unique identifier for the report in ULID format.
-          pattern: ^[0-9A-Z]{26}$
-          example: 01HY3NF37B6J2ABPA3H49C92YZ
-        status:
-          type: string
-          description: The current status of the report generation job.
-          enum:
-          - completed
-          - in_progress
-          example: completed
-        message:
-          type: string
-          example: Job successful
-          description: A message describing the status of the report.
-        start_date:
-          type: string
-          format: date-time
-          description: The timestamp indicating when the report start date (RFC3339 UTC format, 3 fractional digits).
-          example: '2023-01-01T23:00:00.000Z'
-        end_date:
-          type: string
-          format: date-time
-          description: The timestamp indicating when the report end date (RFC3339 UTC format, 3 fractional digits).
-          example: '2023-01-11T23:00:00.000Z'
-        report_url:
-          type: string
-          example: https://exchange.cint.com/download?file=1_completes_2024_02_29_22_26_03_Marketplace_Services.csv&download_url=%2Fdemand%2Faccounts%1F1%2Freports%2Fdownload%3Freport_type%3Dcompletes%26file%3D01HQVFK0PC5HWV2F4YQPJ5E%2F1__2024_02_29_22_26_03_Marketplace_Services.csv&type=report
-          description: The download URL of the report.
-        data_analysis:
-          type: boolean
-          description: Indicates if data analysis was included as an option in the report request.
-          example: false
-        survey_id:
-          type: string
-          description: The survey identifier associated with this report, if applicable.
-          example: '1341234'
-        respondent_answer:
-          type: boolean
-          description: Indicates if respondent answers were included as an option in the report request.
-          example: false
-    ReportType:
-      type: string
-      description: Report type to be generated.
-      enum:
-      - completes
-      - reconciliations-status
-      - reconciliation-eligible-rids
-      - sample-bought
-      - respondent-analysis
-      - term-details
-    NextCursor:
-      description: 'An identifier for pagination that indicates there are more items available.
-
-        When present, use this value to retrieve the next page of results.
-
-        '
-      type:
-      - string
-      - 'null'
-      example: bff6a669-a469-409d-8c94-dcf92258043a
-    AccountID:
-      description: The account's unique identifier.
-      type: integer
-      format: int32
-      example: 101
     ReportRequestList:
       type: object
       description: A paginated list of report requests.
@@ -730,6 +542,62 @@ components:
           description: An array of report request objects.
           items:
             $ref: '#/components/schemas/ReportRequestListItem'
+    Error:
+      type: object
+      description: The standard error object returned for all failed API requests.
+      required:
+      - object
+      - detail
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: A unique identifier for this specific error instance.
+        object:
+          type: string
+          description: A short informative string identifying the type of the error
+          pattern: ^([a-z]*_)*([a-z]*)$
+        detail:
+          type: string
+          description: An error message provides a concise overview of the cause of the error.
+        invalid_params:
+          type:
+          - array
+          - 'null'
+          description: An optional field containing a list of invalid parameters may be presented in validation errors for additional information.
+          items:
+            $ref: '#/components/schemas/InvalidParam'
+    ReportId:
+      type: string
+      description: A unique identifier for the report.
+      pattern: ^[0-9A-Z]{26}$
+      example: 01CTGNYV6HRNK8K8VKZASZCFP1
+    Level:
+      type: string
+      description: Filter level for the report generation request.
+      enum:
+      - account
+      - project
+      - target_group
+      - business_unit
+    AccountID:
+      description: The account's unique identifier.
+      type: integer
+      format: int32
+      example: 101
+    InvalidParam:
+      type: object
+      description: Describes a single invalid parameter in a request.
+      properties:
+        name:
+          type: string
+          description: The name of the parameter that failed validation.
+        reason:
+          type: string
+          description: A short explanation of why the parameter was invalid.
+      required:
+      - name
+      - reason
     ReportGenerationRequest:
       type: object
       description: The request body for generating a new report.
@@ -786,11 +654,148 @@ components:
           example:
           - y78d0r90-e174-4b05-5y67-8iof00018t17
           - t53u0r56-p132-1b05-5y67-5qvr17253n89
-    ReportId:
+    ReportType:
       type: string
-      description: A unique identifier for the report.
-      pattern: ^[0-9A-Z]{26}$
-      example: 01CTGNYV6HRNK8K8VKZASZCFP1
+      description: Report type to be generated.
+      enum:
+      - completes
+      - reconciliations-status
+      - reconciliation-eligible-rids
+      - sample-bought
+      - respondent-analysis
+      - term-details
+    NextCursor:
+      description: 'An identifier for pagination that indicates there are more items available.
+
+        When present, use this value to retrieve the next page of results.
+
+        '
+      type:
+      - string
+      - 'null'
+      example: bff6a669-a469-409d-8c94-dcf92258043a
+    Tracestate:
+      type: string
+      description: 'The tracestate header provides additional contextual information to the traceparent header.  This enriches the tracing context and offers more fine-grained control
+
+        Note: This field is optional and will be automatically generated by the service if not provided in the request.  The generated value will be included in the response header.'
+      example: ot=foo:bar;k1:13
+    Traceparent:
+      type: string
+      description: 'The traceparent header carries essential trace context information. This includes the trace ID and parent span ID  as defined by the W3C trace context specification. It is used to pinpoint the position of an incoming request within  the trace graph, facilitating the tracking of distributed operations.
+
+        Note: This field is optional and will be automatically generated by the service if not provided in the request.  The generated value will be included in the response header.'
+      example: 00-0af7651916cd43dd8448eb211c80319c-b7ad6b7169203331-01
+    ReportRequestListItem:
+      type: object
+      description: An individual Report Request in list of items.
+      properties:
+        account_name:
+          $ref: '#/components/schemas/AccountName'
+        create_date:
+          type: string
+          format: date-time
+          description: The timestamp the report was created.
+          example: '2023-01-01T23:00:00.000Z'
+        create_params:
+          type: object
+          description: Create params of the request
+          properties:
+            start_date:
+              type: string
+              description: The start date for the report query. **Note:** The time is interpreted as 00:00 in the US/Central timezone.
+              example: '2023-08-01'
+            end_date:
+              type: string
+              description: The end date for the report query. **Note:** The time is interpreted as 00:00 in the US/Central timezone.
+              example: '2023-08-30'
+            filter:
+              type: string
+              description: Filter to be used in report.
+              enum:
+              - business_unit
+              - project
+              - target_group
+              example: business_unit
+            filter_ids:
+              type: array
+              items:
+                type: string
+              description: List of unique identifiers corresponding to the selected filter type.
+              example:
+              - id1
+              - id2
+              - id3
+            report_options:
+              type:
+              - object
+              - 'null'
+              properties:
+                include_respondent_answers:
+                  type:
+                  - boolean
+                  - 'null'
+                  description: Include respondent answers in report.
+                link_type:
+                  type:
+                  - string
+                  - 'null'
+                  description: Link type
+                  enum:
+                  - all
+                  - api
+                  - offer
+                  - pass
+                  - target
+                  - yield
+        requestor:
+          type: object
+          description: Report Requestor Details
+          properties:
+            id:
+              type: string
+              format: uuid
+              description: ID of the requestor
+              example: 96C65204-90C2-4DCB-9393-B8226DD50C76
+            name:
+              type: string
+              description: Name of the requestor
+              example: John Doe
+            email:
+              type: string
+              format: email
+              description: Email of the requestor
+              example: JohnDoe@cint.com
+        report_id:
+          type: string
+          description: A unique identifier for the report in ULID format.
+          pattern: ^[0-9A-Z]{26}$
+          example: 01HY3NF37B6J2ABPA3H49C92YZ
+        report_type:
+          type: string
+          description: Report Type
+          example: sample-bought
+        report_url:
+          type: string
+          description: Report URL
+          example: https://example.com/completes-buyside-{accountname}.csv
+        status:
+          type: string
+          description: Status of the report
+          enum:
+          - pending
+          - completed
+          - failed
+          example: completed
+        level:
+          type: string
+          description: Filter level of the report
+          enum:
+          - Account
+          - Project
+          - Target Group
+          - Business Unit
+          example: Account
     Status:
       type: string
       description: Status of the report generation request.
@@ -798,13 +803,53 @@ components:
       - processing
       - failed
       - completed
+    ReportStatusResponse:
+      type: object
+      description: The response payload containing the status of a single report generation job.
+      properties:
+        report_id:
+          type: string
+          description: A unique identifier for the report in ULID format.
+          pattern: ^[0-9A-Z]{26}$
+          example: 01HY3NF37B6J2ABPA3H49C92YZ
+        status:
+          type: string
+          description: The current status of the report generation job.
+          enum:
+          - completed
+          - in_progress
+          example: completed
+        message:
+          type: string
+          example: Job successful
+          description: A message describing the status of the report.
+        start_date:
+          type: string
+          format: date-time
+          description: The timestamp indicating when the report start date (RFC3339 UTC format, 3 fractional digits).
+          example: '2023-01-01T23:00:00.000Z'
+        end_date:
+          type: string
+          format: date-time
+          description: The timestamp indicating when the report end date (RFC3339 UTC format, 3 fractional digits).
+          example: '2023-01-11T23:00:00.000Z'
+        report_url:
+          type: string
+          example: https://exchange.cint.com/download?file=1_completes_2024_02_29_22_26_03_Marketplace_Services.csv&download_url=%2Fdemand%2Faccounts%1F1%2Freports%2Fdownload%3Freport_type%3Dcompletes%26file%3D01HQVFK0PC5HWV2F4YQPJ5E%2F1__2024_02_29_22_26_03_Marketplace_Services.csv&type=report
+          description: The download URL of the report.
+        data_analysis:
+          type: boolean
+          description: Indicates if data analysis was included as an option in the report request.
+          example: false
+        survey_id:
+          type: string
+          description: The survey identifier associated with this report, if applicable.
+          example: '1341234'
+        respondent_answer:
+          type: boolean
+          description: Indicates if respondent answers were included as an option in the report request.
+          example: false
   parameters:
-    ReportTypeQuery:
-      name: report_type
-      in: query
-      required: false
-      schema:
-        $ref: '#/components/schemas/ReportType'
     ReportId:
       name: report_id
       in: path
@@ -812,36 +857,11 @@ components:
       required: true
       schema:
         $ref: '#/components/schemas/ReportId'
-    AccountID:
-      name: account_id
-      description: The account's unique identifier.
-      in: path
-      required: true
-      schema:
-        $ref: '#/components/schemas/AccountID'
     ParametersStatus:
       name: Status
       in: query
       schema:
         $ref: '#/components/schemas/Status'
-    ReportType:
-      name: report_type
-      in: path
-      required: true
-      schema:
-        $ref: '#/components/schemas/ReportType'
-    Level:
-      name: level
-      in: query
-      schema:
-        $ref: '#/components/schemas/Level'
-    StartAfter:
-      name: start_after
-      in: query
-      description: Returns a list of objects after the provided pagination cursor, using the next_cursor from the previous response.
-      schema:
-        type: string
-      example: bff6a669-a469-409d-8c94-dcf92258043a
     EndBefore:
       name: end_before
       in: query
@@ -857,6 +877,19 @@ components:
         type: integer
         default: 10
       example: 15
+    StartAfter:
+      name: start_after
+      in: query
+      description: Returns a list of objects after the provided pagination cursor, using the next_cursor from the previous response.
+      schema:
+        type: string
+      example: bff6a669-a469-409d-8c94-dcf92258043a
+    ReportTypeQuery:
+      name: report_type
+      in: query
+      required: false
+      schema:
+        $ref: '#/components/schemas/ReportType'
     CintAPIVersion-2025-12-18:
       name: Cint-API-Version
       in: header
@@ -867,57 +900,24 @@ components:
       description: 'This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.
 
         '
-  responses:
-    Error_NotFound:
-      description: A requested resource isn't found.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            id: 7a5972ba-0825-4360-b852-fa2430e47034
-            object: not_found_error
-            detail: resource not found
-    Error_Unauthorized:
-      description: A request is unauthorized.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            id: 1dcf0f40-f0d1-4cf6-8c00-c3d019d32faf
-            object: authorization_error
-            detail: no valid authorization provided for this operation
-    Error_BadRequest:
-      description: A request is not valid and can't be processed.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            id: 9e278238-d011-4e05-8327-1ce1d5d26254
-            object: bad_request_error
-            detail: Expected field 'foo' is missing.
-    Error_Internal:
-      description: A request failed due to an internal error.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            id: d94b8bb2-a540-4a91-9c05-2aa3ae9a5e1e
-            object: unexpected_internal_error
-            detail: an internal error has led to the failure of this operation
-    Error_Forbidden:
-      description: A requested is forbidden.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            id: fe68cdd2-ee87-4dbf-8950-63c5cbca94c7
-            object: authorization_error
-            detail: you don't have the right permissions to perform this operation
+    ReportType:
+      name: report_type
+      in: path
+      required: true
+      schema:
+        $ref: '#/components/schemas/ReportType'
+    AccountID:
+      name: account_id
+      description: The account's unique identifier.
+      in: path
+      required: true
+      schema:
+        $ref: '#/components/schemas/AccountID'
+    Level:
+      name: level
+      in: query
+      schema:
+        $ref: '#/components/schemas/Level'
   securitySchemes:
     BearerAuth:
       type: http

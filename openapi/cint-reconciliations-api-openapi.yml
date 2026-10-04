@@ -342,11 +342,152 @@ paths:
       - Reconciliations
 components:
   schemas:
+    RequestReconciliationsTargetGroup:
+      allOf:
+      - $ref: '#/components/schemas/ReconciliationsTargetGroup'
+      - description: Successfully returns a single target group associated to a reconciliation request id.
+    MonetaryAmount:
+      type: object
+      description: Represents a monetary value, including the amount and its currency.
+      properties:
+        value:
+          type: string
+          description: A decimal encapsulated in a string representing the value in the denomination indicated by the code.
+          example: '2.7352'
+        currency_code:
+          $ref: '#/components/schemas/CurrencyCode'
+        currency_scale:
+          allOf:
+          - {}
+          - type: integer
+            description: The number of digits after the decimal separator, as defined by ISO 4217.
+            example: 2
+    ReconciliationRequests:
+      type: object
+      properties:
+        id:
+          type: string
+          description: UniqueID generated for the reconciliation request
+          example: 01HW8HMCD3FHC985ZFMEERX0YY
+        name:
+          type: string
+          description: The name of the submitted reconciliation request
+          example: filename.csv
+        submitted_at:
+          type: string
+          format: date-time
+          description: The timestamp when the reconciliation file was submitted (RFC3339 UTC format).
+          example: '2023-01-01T23:00:00.000Z'
+        status:
+          type: string
+          example: processing
+          enum:
+          - complete
+          - processing
+        submitted_by_user_id:
+          type: string
+          description: LAS ID of the user who submitted the reconciliation request
+          example: c6eea0ec-fc9e-44de-bb0b-ed104022e576
+        result_counts:
+          $ref: '#/components/schemas/ReconciliationRequestSubmittedCount'
+        submission_type:
+          type: string
+          description: The type of submission.
+          enum:
+          - approved_rids
+          - rejected_rids
+    SubmitReconciliationsResponse:
+      description: response model of requested reconciliations data
+      type: object
+      properties:
+        name:
+          description: The name of the submitted reconciliation request
+          type: string
+        request_id:
+          description: UniqueID generated for the reconciliation request
+          type: string
+          format: ulid
+      example:
+        name: Reconciliation_file_name.csv
+        request_id: 01F8K8P3Z5KNYR5H0GQZAYGQJ9
+    NextCursorULID:
+      type: string
+      pattern: ^[0-9A-Z]{26}$
+      example: 01BTGNYV6HRNK8K8VKZASZCFP0
+      description: An ID of the next list of items and indicator that there are more items than currently viewable.
+    ReconciliationDownloadType:
+      type: string
+      description: Reconciliation file types available for download.
+      enum:
+      - submitted-rids
+      - expired-rids
+      - invalid-rids
+      - remaining-project-completes
+    RequestReconciliationsEligibleTargetGroups:
+      allOf:
+      - $ref: '#/components/schemas/ReconciliationsEligibleTargetGroupsResponse'
+      - description: Successfully returns a list of eligible target groups for reconciliation.
+    ProjectID:
+      description: The character string representing a unique project ID (ULID format).
+      type: string
+      pattern: ^[0-9A-Z]{26}$
+      example: 01BTGNYV6HRNK8K8VKZASZCFP0
+    ReconciliationReasonCodesResponse:
+      description: response model of requested reconciliations reason code data
+      type: object
+      properties:
+        reconciliation_reasons:
+          type: array
+          items:
+            $ref: '#/components/schemas/ReconciliationReasonCodes'
     TargetGroupID:
       description: A unique identifier for the target group, in ULID format.
       type: string
       pattern: ^[0-9A-Z]{26}$
       example: 01BTGNYV6HRNK8K8VKZASZCFP1
+    ReconciliationsEligibleTargetGroupsResponse:
+      type: object
+      properties:
+        target_groups:
+          type: array
+          items:
+            $ref: '#/components/schemas/ReconciliationsEligibleTargetGroups'
+        url:
+          type: string
+          description: URL related to the request
+          example: /accounts/1/reconciliations/eligible-target-groups
+        summary:
+          type: object
+          properties:
+            monetary_amount:
+              allOf:
+              - $ref: '#/components/schemas/MonetaryAmount'
+              - type: object
+                description: Summary of monetary amount
+            completes:
+              type: string
+              description: Completes summary
+              example: '100'
+            target_group_count:
+              type: string
+              description: Target group count
+              example: '123'
+        has_more:
+          type: boolean
+          description: Indicates if there are more pages of results
+          example: true
+        next_cursor:
+          type: string
+          description: Cursor for pagination. This field is optional and may be omitted if there are no more pages.
+          example: 01JBVVGBWXTC06F0J0W18CBE9R
+        page_size:
+          type: integer
+          description: Number of items per page
+          example: 10
+    CurrencyCode:
+      type: string
+      description: The three-letter ISO 4217 currency code, in uppercase. The code must correspond to a currency supported by Cint Exchange.
+      example: USD
     ReconciliationRequestSubmittedCount:
       type: object
       description: Counts of RIDs broken down by submitted, expired, invalid, positively reconciled, and negatively reconciled.
@@ -377,14 +518,55 @@ components:
           example: 10
     RequestReconciliationByID:
       $ref: '#/components/schemas/Reconciliation'
-    ReconciliationReasonCodesResponse:
-      description: response model of requested reconciliations reason code data
+    Error:
+      type: object
+      description: The standard error object returned for all failed API requests.
+      required:
+      - object
+      - detail
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: A unique identifier for this specific error instance.
+        object:
+          type: string
+          description: A short informative string identifying the type of the error
+          pattern: ^([a-z]*_)*([a-z]*)$
+        detail:
+          type: string
+          description: An error message provides a concise overview of the cause of the error.
+        invalid_params:
+          type:
+          - array
+          - 'null'
+          description: An optional field containing a list of invalid parameters may be presented in validation errors for additional information.
+          items:
+            $ref: '#/components/schemas/InvalidParam'
+    RequestReconciliationsTargetGroups:
+      description: Successfully returns a paginated list of target groups associated to a reconciliation request id.
       type: object
       properties:
-        reconciliation_reasons:
+        target_groups:
           type: array
           items:
-            $ref: '#/components/schemas/ReconciliationReasonCodes'
+            $ref: '#/components/schemas/ReconciliationsTargetGroup'
+        next_cursor:
+          $ref: '#/components/schemas/NextCursor'
+        page_size:
+          description: The number of target groups to return per page.
+          type: integer
+          example: 1
+    RequestID:
+      type: string
+      pattern: ^[0-9A-Z]{26}$
+      description: ULID that uniquely identifies a reconciliation record.
+      example: 01BX5DZKBKACTAV9WEVGEMMVS1
+    AccountID:
+      description: The account's unique identifier.
+      type: integer
+      format: int32
+      example: 101
     ReconciliationsEligibleTargetGroups:
       type: object
       properties:
@@ -428,6 +610,42 @@ components:
           - $ref: '#/components/schemas/MonetaryAmount'
           - type: object
             description: Cost of eligible completes
+    InvalidParam:
+      type: object
+      description: Describes a single invalid parameter in a request.
+      properties:
+        name:
+          type: string
+          description: The name of the parameter that failed validation.
+        reason:
+          type: string
+          description: A short explanation of why the parameter was invalid.
+      required:
+      - name
+      - reason
+    ReconciliationsFiles:
+      description: Response object for a list of reconciliations files.
+      type: object
+      properties:
+        reconciliation_requests:
+          type: array
+          items:
+            $ref: '#/components/schemas/ReconciliationRequests'
+        next_cursor:
+          $ref: '#/components/schemas/NextCursor'
+        page_size:
+          type: integer
+          example: 10
+    NextCursor:
+      description: 'An identifier for pagination that indicates there are more items available.
+
+        When present, use this value to retrieve the next page of results.
+
+        '
+      type:
+      - string
+      - 'null'
+      example: bff6a669-a469-409d-8c94-dcf92258043a
     UserID:
       type: string
       format: uuid
@@ -452,65 +670,6 @@ components:
           description: Indicates if the reason code can be used by customers. Once a reason code is phased out, this value will be set to 'false'.
           type: boolean
           example: true
-    responses-SubmitReconciliationsResponse:
-      allOf:
-      - $ref: '#/components/schemas/SubmitReconciliationsResponse'
-      - description: response model of validated bulk reconciliations data
-    Error:
-      type: object
-      description: The standard error object returned for all failed API requests.
-      required:
-      - object
-      - detail
-      properties:
-        id:
-          type: string
-          format: uuid
-          description: A unique identifier for this specific error instance.
-        object:
-          type: string
-          description: A short informative string identifying the type of the error
-          pattern: ^([a-z]*_)*([a-z]*)$
-        detail:
-          type: string
-          description: An error message provides a concise overview of the cause of the error.
-        invalid_params:
-          type:
-          - array
-          - 'null'
-          description: An optional field containing a list of invalid parameters may be presented in validation errors for additional information.
-          items:
-            $ref: '#/components/schemas/InvalidParam'
-    ReconciliationDownloadType:
-      type: string
-      description: Reconciliation file types available for download.
-      enum:
-      - submitted-rids
-      - expired-rids
-      - invalid-rids
-      - remaining-project-completes
-    RequestReconciliationsTargetGroup:
-      allOf:
-      - $ref: '#/components/schemas/ReconciliationsTargetGroup'
-      - description: Successfully returns a single target group associated to a reconciliation request id.
-    CurrencyCode:
-      type: string
-      description: The three-letter ISO 4217 currency code, in uppercase. The code must correspond to a currency supported by Cint Exchange.
-      example: USD
-    RequestReconciliationsTargetGroups:
-      description: Successfully returns a paginated list of target groups associated to a reconciliation request id.
-      type: object
-      properties:
-        target_groups:
-          type: array
-          items:
-            $ref: '#/components/schemas/ReconciliationsTargetGroup'
-        next_cursor:
-          $ref: '#/components/schemas/NextCursor'
-        page_size:
-          description: The number of target groups to return per page.
-          type: integer
-          example: 1
     Reconciliation:
       type: object
       properties:
@@ -561,72 +720,6 @@ components:
           enum:
           - approved_rids
           - rejected_rids
-    ReconciliationRequests:
-      type: object
-      properties:
-        id:
-          type: string
-          description: UniqueID generated for the reconciliation request
-          example: 01HW8HMCD3FHC985ZFMEERX0YY
-        name:
-          type: string
-          description: The name of the submitted reconciliation request
-          example: filename.csv
-        submitted_at:
-          type: string
-          format: date-time
-          description: The timestamp when the reconciliation file was submitted (RFC3339 UTC format).
-          example: '2023-01-01T23:00:00.000Z'
-        status:
-          type: string
-          example: processing
-          enum:
-          - complete
-          - processing
-        submitted_by_user_id:
-          type: string
-          description: LAS ID of the user who submitted the reconciliation request
-          example: c6eea0ec-fc9e-44de-bb0b-ed104022e576
-        result_counts:
-          $ref: '#/components/schemas/ReconciliationRequestSubmittedCount'
-        submission_type:
-          type: string
-          description: The type of submission.
-          enum:
-          - approved_rids
-          - rejected_rids
-    InvalidParam:
-      type: object
-      description: Describes a single invalid parameter in a request.
-      properties:
-        name:
-          type: string
-          description: The name of the parameter that failed validation.
-        reason:
-          type: string
-          description: A short explanation of why the parameter was invalid.
-      required:
-      - name
-      - reason
-    ProjectID:
-      description: The character string representing a unique project ID (ULID format).
-      type: string
-      pattern: ^[0-9A-Z]{26}$
-      example: 01BTGNYV6HRNK8K8VKZASZCFP0
-    RequestID:
-      type: string
-      pattern: ^[0-9A-Z]{26}$
-      description: ULID that uniquely identifies a reconciliation record.
-      example: 01BX5DZKBKACTAV9WEVGEMMVS1
-    RequestReconciliationsEligibleTargetGroups:
-      allOf:
-      - $ref: '#/components/schemas/ReconciliationsEligibleTargetGroupsResponse'
-      - description: Successfully returns a list of eligible target groups for reconciliation.
-    NextCursorULID:
-      type: string
-      pattern: ^[0-9A-Z]{26}$
-      example: 01BTGNYV6HRNK8K8VKZASZCFP0
-      description: An ID of the next list of items and indicator that there are more items than currently viewable.
     ReconciliationsTargetGroup:
       type: object
       properties:
@@ -658,104 +751,23 @@ components:
           type: integer
           description: the number of RIDs negatively reconciled
           example: 3
-    NextCursor:
-      description: 'An identifier for pagination that indicates there are more items available.
-
-        When present, use this value to retrieve the next page of results.
-
-        '
-      type:
-      - string
-      - 'null'
-      example: bff6a669-a469-409d-8c94-dcf92258043a
-    AccountID:
-      description: The account's unique identifier.
-      type: integer
-      format: int32
-      example: 101
-    ReconciliationsEligibleTargetGroupsResponse:
-      type: object
-      properties:
-        target_groups:
-          type: array
-          items:
-            $ref: '#/components/schemas/ReconciliationsEligibleTargetGroups'
-        url:
-          type: string
-          description: URL related to the request
-          example: /accounts/1/reconciliations/eligible-target-groups
-        summary:
-          type: object
-          properties:
-            monetary_amount:
-              allOf:
-              - $ref: '#/components/schemas/MonetaryAmount'
-              - type: object
-                description: Summary of monetary amount
-            completes:
-              type: string
-              description: Completes summary
-              example: '100'
-            target_group_count:
-              type: string
-              description: Target group count
-              example: '123'
-        has_more:
-          type: boolean
-          description: Indicates if there are more pages of results
-          example: true
-        next_cursor:
-          type: string
-          description: Cursor for pagination. This field is optional and may be omitted if there are no more pages.
-          example: 01JBVVGBWXTC06F0J0W18CBE9R
-        page_size:
-          type: integer
-          description: Number of items per page
-          example: 10
-    SubmitReconciliationsResponse:
-      description: response model of requested reconciliations data
-      type: object
-      properties:
-        name:
-          description: The name of the submitted reconciliation request
-          type: string
-        request_id:
-          description: UniqueID generated for the reconciliation request
-          type: string
-          format: ulid
-      example:
-        name: Reconciliation_file_name.csv
-        request_id: 01F8K8P3Z5KNYR5H0GQZAYGQJ9
-    ReconciliationsFiles:
-      description: Response object for a list of reconciliations files.
-      type: object
-      properties:
-        reconciliation_requests:
-          type: array
-          items:
-            $ref: '#/components/schemas/ReconciliationRequests'
-        next_cursor:
-          $ref: '#/components/schemas/NextCursor'
-        page_size:
-          type: integer
-          example: 10
-    MonetaryAmount:
-      type: object
-      description: Represents a monetary value, including the amount and its currency.
-      properties:
-        value:
-          type: string
-          description: A decimal encapsulated in a string representing the value in the denomination indicated by the code.
-          example: '2.7352'
-        currency_code:
-          $ref: '#/components/schemas/CurrencyCode'
-        currency_scale:
-          allOf:
-          - {}
-          - type: integer
-            description: The number of digits after the decimal separator, as defined by ISO 4217.
-            example: 2
+    responses-SubmitReconciliationsResponse:
+      allOf:
+      - $ref: '#/components/schemas/SubmitReconciliationsResponse'
+      - description: response model of validated bulk reconciliations data
   parameters:
+    NextCursor:
+      in: query
+      name: next_cursor
+      schema:
+        $ref: '#/components/schemas/NextCursorULID'
+    RequestID:
+      name: request_id
+      in: path
+      required: true
+      description: Request ID path parameter that uniquely identifies a reconciliation record.
+      schema:
+        $ref: '#/components/schemas/RequestID'
     ReconTGName:
       name: name
       in: query
@@ -763,65 +775,6 @@ components:
       description: Filter by target group name
       schema:
         type: string
-    ProjectID:
-      name: project_id
-      description: A unique identifier for the project, in ULID format.
-      in: path
-      required: true
-      schema:
-        $ref: '#/components/schemas/ProjectID'
-    ReconciliationDownloadType:
-      name: download_type
-      in: path
-      required: true
-      schema:
-        $ref: '#/components/schemas/ReconciliationDownloadType'
-    IdempotencyKeyUUID:
-      name: Idempotency-Key
-      in: header
-      schema:
-        type: string
-        description: A shallow unique ID used as part of the deduplication mechanism for mutable operations. Value should be UUIDv4.
-        example: 96C65204-90C2-4DCB-9393-B8226DD50C76
-    ReconProjectManagerID:
-      name: project_manager_id
-      in: query
-      required: false
-      description: Filter by project manager ID
-      schema:
-        type: string
-    NextCursor:
-      in: query
-      name: next_cursor
-      schema:
-        $ref: '#/components/schemas/NextCursorULID'
-    ReconTGStatus:
-      name: status
-      in: query
-      required: false
-      description: Filter by target group status
-      schema:
-        type: string
-    AccountID:
-      name: account_id
-      description: The account's unique identifier.
-      in: path
-      required: true
-      schema:
-        $ref: '#/components/schemas/AccountID'
-    ReconProjectName:
-      name: project_name
-      in: query
-      required: false
-      description: Filter by project name
-      schema:
-        type: string
-    SubmittedByUserID:
-      in: query
-      name: submitted_by_user_id
-      schema:
-        $ref: '#/components/schemas/UserID'
-      description: Uniquely identifies a user.
     DueMonth:
       name: due_month
       in: query
@@ -834,33 +787,13 @@ components:
         - next_month
         default: current_month
         example: current_month
-    StartAfter:
-      name: start_after
-      in: query
-      description: Returns a list of objects after the provided pagination cursor, using the next_cursor from the previous response.
+    IdempotencyKeyUUID:
+      name: Idempotency-Key
+      in: header
       schema:
         type: string
-      example: bff6a669-a469-409d-8c94-dcf92258043a
-    EndBefore:
-      name: end_before
-      in: query
-      description: Returns a list of objects that come before the provided pagination cursor. This is used for navigating to a previous page.
-      schema:
-        type: string
-      example: 7daa40ad-303b-40a2-89df-a9760400cde7
-    RequestID:
-      name: request_id
-      in: path
-      required: true
-      description: Request ID path parameter that uniquely identifies a reconciliation record.
-      schema:
-        $ref: '#/components/schemas/RequestID'
-    Status:
-      in: query
-      name: status
-      schema:
-        type: string
-      description: The character string representing search based on reversal file status.
+        description: A shallow unique ID used as part of the deduplication mechanism for mutable operations. Value should be UUIDv4.
+        example: 96C65204-90C2-4DCB-9393-B8226DD50C76
     ReconciliationFileName:
       description: The name of the file containing requests to reconcile.
       name: name
@@ -869,6 +802,68 @@ components:
         type: string
         required: true
       example: recon_file_name.csv
+    ProjectID:
+      name: project_id
+      description: A unique identifier for the project, in ULID format.
+      in: path
+      required: true
+      schema:
+        $ref: '#/components/schemas/ProjectID'
+    Status:
+      in: query
+      name: status
+      schema:
+        type: string
+      description: The character string representing search based on reversal file status.
+    EndBefore:
+      name: end_before
+      in: query
+      description: Returns a list of objects that come before the provided pagination cursor. This is used for navigating to a previous page.
+      schema:
+        type: string
+      example: 7daa40ad-303b-40a2-89df-a9760400cde7
+    PageSize:
+      name: page_size
+      in: query
+      description: A limit on the number of objects to be returned, between 1 and 100.
+      schema:
+        type: integer
+        default: 10
+      example: 15
+    StartAfter:
+      name: start_after
+      in: query
+      description: Returns a list of objects after the provided pagination cursor, using the next_cursor from the previous response.
+      schema:
+        type: string
+      example: bff6a669-a469-409d-8c94-dcf92258043a
+    ReconProjectName:
+      name: project_name
+      in: query
+      required: false
+      description: Filter by project name
+      schema:
+        type: string
+    ReconProjectManagerID:
+      name: project_manager_id
+      in: query
+      required: false
+      description: Filter by project manager ID
+      schema:
+        type: string
+    SubmittedByUserID:
+      in: query
+      name: submitted_by_user_id
+      schema:
+        $ref: '#/components/schemas/UserID'
+      description: Uniquely identifies a user.
+    ReconTGStatus:
+      name: status
+      in: query
+      required: false
+      description: Filter by target group status
+      schema:
+        type: string
     ReconPostContentType:
       name: Content-Type
       in: header
@@ -879,21 +874,6 @@ components:
         enum:
         - text/csv
         - application/csv
-    TargetGroupID:
-      name: target_group_id
-      description: A unique identifier for the target group, in ULID format.
-      in: path
-      required: true
-      schema:
-        $ref: '#/components/schemas/TargetGroupID'
-    PageSize:
-      name: page_size
-      in: query
-      description: A limit on the number of objects to be returned, between 1 and 100.
-      schema:
-        type: integer
-        default: 10
-      example: 15
     CintAPIVersion-2025-12-18:
       name: Cint-API-Version
       in: header
@@ -904,37 +884,27 @@ components:
       description: 'This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.
 
         '
+    ReconciliationDownloadType:
+      name: download_type
+      in: path
+      required: true
+      schema:
+        $ref: '#/components/schemas/ReconciliationDownloadType'
+    AccountID:
+      name: account_id
+      description: The account's unique identifier.
+      in: path
+      required: true
+      schema:
+        $ref: '#/components/schemas/AccountID'
+    TargetGroupID:
+      name: target_group_id
+      description: A unique identifier for the target group, in ULID format.
+      in: path
+      required: true
+      schema:
+        $ref: '#/components/schemas/TargetGroupID'
   responses:
-    Error_NotFound:
-      description: A requested resource isn't found.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            id: 7a5972ba-0825-4360-b852-fa2430e47034
-            object: not_found_error
-            detail: resource not found
-    Error_Unauthorized:
-      description: A request is unauthorized.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            id: 1dcf0f40-f0d1-4cf6-8c00-c3d019d32faf
-            object: authorization_error
-            detail: no valid authorization provided for this operation
-    Error_BadRequest:
-      description: A request is not valid and can't be processed.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            id: 9e278238-d011-4e05-8327-1ce1d5d26254
-            object: bad_request_error
-            detail: Expected field 'foo' is missing.
     Error_Internal:
       description: A request failed due to an internal error.
       content:
@@ -945,6 +915,36 @@ components:
             id: d94b8bb2-a540-4a91-9c05-2aa3ae9a5e1e
             object: unexpected_internal_error
             detail: an internal error has led to the failure of this operation
+    Error_Unauthorized:
+      description: A request is unauthorized.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            id: 1dcf0f40-f0d1-4cf6-8c00-c3d019d32faf
+            object: authorization_error
+            detail: no valid authorization provided for this operation
+    Error_NotFound:
+      description: A requested resource isn't found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            id: 7a5972ba-0825-4360-b852-fa2430e47034
+            object: not_found_error
+            detail: resource not found
+    Error_BadRequest:
+      description: A request is not valid and can't be processed.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            id: 9e278238-d011-4e05-8327-1ce1d5d26254
+            object: bad_request_error
+            detail: Expected field 'foo' is missing.
     Error_Forbidden:
       description: A requested is forbidden.
       content:

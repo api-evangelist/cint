@@ -381,42 +381,115 @@ paths:
         '500':
           $ref: '#/components/responses/Error_Internal'
 components:
-  parameters:
-    PageNumber:
-      name: page_number
-      in: query
-      description: The page number of the results to retrieve.
-      schema:
-        type: integer
-        minimum: 0
-        default: 0
-      example: 2
-    AccountID:
-      name: account_id
-      description: The account's unique identifier.
-      in: path
-      required: true
-      schema:
-        $ref: '#/components/schemas/AccountID'
-    PageSize:
-      name: page_size
-      in: query
-      description: A limit on the number of objects to be returned, between 1 and 100.
-      schema:
-        type: integer
-        default: 10
-      example: 15
-    CintAPIVersion-2025-12-18:
-      name: Cint-API-Version
-      in: header
-      required: true
-      schema:
-        type: string
-        example: 2025-12-18
-      description: 'This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.
-
-        '
   schemas:
+    SupplierDetailsItem:
+      type: object
+      description: Contains details for a single supplier.
+      readOnly: true
+      properties:
+        id:
+          type: integer
+          description: Unique identifier of the supplier.
+          example: 4321
+        code:
+          type: string
+          description: Unique text code of the supplier.
+          example: ACE
+        name:
+          type: string
+          description: A human-readable name for the supplier.
+          example: Acme Inc
+    CountryListItem:
+      type: object
+      description: Contains details for a single country.
+      readOnly: true
+      properties:
+        id:
+          type: integer
+          description: Unique identifier of the country.
+          example: 243
+        code:
+          type: string
+          description: Unique text code of the country.
+          example: GB
+        name:
+          type: string
+          description: A human-readable name for the country.
+          example: United Kingdom
+    IntegrationUseCaseListItem:
+      type: object
+      description: Contains details for a single integration use case.
+      readOnly: true
+      properties:
+        id:
+          type: string
+          description: A unique identifier for the use case.
+          example: manage_surveys
+        name:
+          type: string
+          description: A name for the use case.
+          example: Manage target groups
+        description:
+          type: string
+          description: A description for the use case.
+          example: Create, update, and retrieve surveys, allocations, groups, qualifications, and quotas.
+    BusinessUnit:
+      type: object
+      description: Contains details for a single business unit.
+      readOnly: true
+      properties:
+        id:
+          type: integer
+          description: Unique identifier of the business unit.
+          example: 1234
+        name:
+          type: string
+          description: A human-readable name for the business unit.
+          example: Example
+        currency_code:
+          type: string
+          description: The ISO 4217 currency code for the business unit.
+          example: GBP
+        pricing_models:
+          type: array
+          description: Contains available pricing models for the business unit.
+          items:
+            type: string
+            description: The pricing model assigned to the business unit.
+            enum:
+            - rate_card
+            - dynamic
+            example: rate_card
+    IndustryListItem:
+      type: object
+      description: Contains details for a single industry.
+      readOnly: true
+      properties:
+        id:
+          type: integer
+          description: Unique identifier of the industry.
+          example: 19
+        code:
+          type: string
+          description: Unique text code of the industry.
+          example: politics
+        name:
+          type: string
+          description: A human-readable name for the industry.
+          example: Politics
+    ClientListItem:
+      type: object
+      description: Contains details for a single client.
+      readOnly: true
+      properties:
+        id:
+          type: integer
+          description: Unique identifier of the client.
+          example: 1234
+        name:
+          type: string
+          description: A human-readable name for the client.
+          example: Acme Inc
     Error:
       type: object
       description: The standard error object returned for all failed API requests.
@@ -442,6 +515,11 @@ components:
           description: An optional field containing a list of invalid parameters may be presented in validation errors for additional information.
           items:
             $ref: '#/components/schemas/InvalidParam'
+    AccountID:
+      description: The account's unique identifier.
+      type: integer
+      format: int32
+      example: 101
     InvalidParam:
       type: object
       description: Describes a single invalid parameter in a request.
@@ -455,23 +533,6 @@ components:
       required:
       - name
       - reason
-    CountryListItem:
-      type: object
-      description: Contains details for a single country.
-      readOnly: true
-      properties:
-        id:
-          type: integer
-          description: Unique identifier of the country.
-          example: 243
-        code:
-          type: string
-          description: Unique text code of the country.
-          example: GB
-        name:
-          type: string
-          description: A human-readable name for the country.
-          example: United Kingdom
     StudyTypeListItem:
       type: object
       description: Contains details for a single study type.
@@ -552,89 +613,6 @@ components:
           - is_preferred: false
             name: Chinese Simplified
             code: chi
-    BusinessUnit:
-      type: object
-      description: Contains details for a single business unit.
-      readOnly: true
-      properties:
-        id:
-          type: integer
-          description: Unique identifier of the business unit.
-          example: 1234
-        name:
-          type: string
-          description: A human-readable name for the business unit.
-          example: Example
-        currency_code:
-          type: string
-          description: The ISO 4217 currency code for the business unit.
-          example: GBP
-        pricing_models:
-          type: array
-          description: Contains available pricing models for the business unit.
-          items:
-            type: string
-            description: The pricing model assigned to the business unit.
-            enum:
-            - rate_card
-            - dynamic
-            example: rate_card
-    IndustryListItem:
-      type: object
-      description: Contains details for a single industry.
-      readOnly: true
-      properties:
-        id:
-          type: integer
-          description: Unique identifier of the industry.
-          example: 19
-        code:
-          type: string
-          description: Unique text code of the industry.
-          example: politics
-        name:
-          type: string
-          description: A human-readable name for the industry.
-          example: Politics
-    AccountID:
-      description: The account's unique identifier.
-      type: integer
-      format: int32
-      example: 101
-    IntegrationUseCaseListItem:
-      type: object
-      description: Contains details for a single integration use case.
-      readOnly: true
-      properties:
-        id:
-          type: string
-          description: A unique identifier for the use case.
-          example: manage_surveys
-        name:
-          type: string
-          description: A name for the use case.
-          example: Manage target groups
-        description:
-          type: string
-          description: A description for the use case.
-          example: Create, update, and retrieve surveys, allocations, groups, qualifications, and quotas.
-    SupplierDetailsItem:
-      type: object
-      description: Contains details for a single supplier.
-      readOnly: true
-      properties:
-        id:
-          type: integer
-          description: Unique identifier of the supplier.
-          example: 4321
-        code:
-          type: string
-          description: Unique text code of the supplier.
-          example: ACE
-        name:
-          type: string
-          description: A human-readable name for the supplier.
-          example: Acme Inc
     IndustryLockoutItem:
       type: object
       description: Contains details for a single industry lockout.
@@ -652,20 +630,52 @@ components:
           type: string
           description: A human-readable name for the industry lockout.
           example: Past 90 Days / 3 Months
-    ClientListItem:
-      type: object
-      description: Contains details for a single client.
-      readOnly: true
-      properties:
-        id:
-          type: integer
-          description: Unique identifier of the client.
-          example: 1234
-        name:
-          type: string
-          description: A human-readable name for the client.
-          example: Acme Inc
+  parameters:
+    PageNumber:
+      name: page_number
+      in: query
+      description: The page number of the results to retrieve.
+      schema:
+        type: integer
+        minimum: 0
+        default: 0
+      example: 2
+    PageSize:
+      name: page_size
+      in: query
+      description: A limit on the number of objects to be returned, between 1 and 100.
+      schema:
+        type: integer
+        default: 10
+      example: 15
+    CintAPIVersion-2025-12-18:
+      name: Cint-API-Version
+      in: header
+      required: true
+      schema:
+        type: string
+        example: 2025-12-18
+      description: 'This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.
+
+        '
+    AccountID:
+      name: account_id
+      description: The account's unique identifier.
+      in: path
+      required: true
+      schema:
+        $ref: '#/components/schemas/AccountID'
   responses:
+    Error_Internal:
+      description: A request failed due to an internal error.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            id: d94b8bb2-a540-4a91-9c05-2aa3ae9a5e1e
+            object: unexpected_internal_error
+            detail: an internal error has led to the failure of this operation
     Error_Unauthorized:
       description: A request is unauthorized.
       content:
@@ -686,16 +696,6 @@ components:
             id: 9e278238-d011-4e05-8327-1ce1d5d26254
             object: bad_request_error
             detail: Expected field 'foo' is missing.
-    Error_Internal:
-      description: A request failed due to an internal error.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            id: d94b8bb2-a540-4a91-9c05-2aa3ae9a5e1e
-            object: unexpected_internal_error
-            detail: an internal error has led to the failure of this operation
     Error_Forbidden:
       description: A requested is forbidden.
       content:

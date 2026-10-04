@@ -150,80 +150,158 @@ paths:
           $ref: '#/components/responses/Error_Internal'
 components:
   schemas:
+    MonetaryAmount:
+      type: object
+      description: Represents a monetary value, including the amount and its currency.
+      properties:
+        value:
+          type: string
+          description: A decimal encapsulated in a string representing the value in the denomination indicated by the code.
+          example: '2.7352'
+        currency_code:
+          $ref: '#/components/schemas/CurrencyCode'
+        currency_scale:
+          allOf:
+          - {}
+          - type: integer
+            description: The number of digits after the decimal separator, as defined by ISO 4217.
+            example: 2
+    TargetGroupFeasibilityResponseAllocationSpecification:
+      type: object
+      description: Contains the feasibility results for the open and private exchange allocations.
+      required:
+      - open_exchange_allocations
+      properties:
+        open_exchange_allocations:
+          $ref: '#/components/schemas/TargetGroupFeasibilityResponseOpenExchangeAllocations'
+        private_exchange_allocations:
+          $ref: '#/components/schemas/TargetGroupFeasibilityResponsePrivateExchangeAllocations'
+    FeasibilityResponseDraftRegularProfileV3:
+      description: Contains the feasibility breakdown for a profiling quota. The `object` field distinguishes between `regular` and `blended` profiles.
+      oneOf:
+      - title: Regular Profile
+        type: object
+        required:
+        - object
+        - targets
+        properties:
+          object:
+            type: string
+            description: Object field to distinguish the operation.
+            enum:
+            - regular
+            example: regular
+          targets:
+            $ref: '#/components/schemas/FeasibilityQuotaV3'
+      - title: Blended Profile
+        type: object
+        required:
+        - object
+        - targets
+        properties:
+          object:
+            type: string
+            description: Object field to distinguish the operation.
+            enum:
+            - blended
+            example: blended
+          blended_type:
+            type: string
+            description: The blended_type field defines the functional behavior of the blended profile as either interlock or control. If omitted, the system defaults to interlock. This field distinguishes between profiles requiring a full matrix expansion (interlock) and those used for isolating specific demographic segments (control).
+            enum:
+            - interlock
+            - control
+            example: interlock
+          targets:
+            $ref: '#/components/schemas/FeasibilityQuotaV3'
+    ProjectID:
+      description: The character string representing a unique project ID (ULID format).
+      type: string
+      pattern: ^[0-9A-Z]{26}$
+      example: 01BTGNYV6HRNK8K8VKZASZCFP0
+    TargetGroupFieldingSpecification:
+      type: object
+      description: Contains Target Group fielding details.
+      required:
+      - start_at
+      - end_at
+      properties:
+        start_at:
+          type: string
+          format: date-time
+          description: The timestamp the Target Group is scheduled to start at (RFC3339 UTC format, 3 fractional digits).
+          example: '2023-01-01T23:00:00.000Z'
+        end_at:
+          type: string
+          format: date-time
+          description: The timestamp the Target Group is scheduled to end at (RFC3339 UTC format, 3 fractional digits).
+          example: '2023-01-01T23:00:00.000Z'
+    QuestionID:
+      type: integer
+      description: The unique identifier for a profiling question.
+      example: 12413
+    TargetGroupFeasibilityResponseOpenExchangeAllocations:
+      type: object
+      description: Contains the feasibility results for the Cint Open Exchange, including projected completes and group breakdowns.
+      required:
+      - min_completes
+      - max_completes
+      - groups
+      properties:
+        min_completes:
+          type: integer
+          description: The minimum number of completes projected to be achievable from the Cint Open Exchange.
+          example: 55
+        max_completes:
+          type: integer
+          description: The maximum number of completes projected to be achievable from the Cint Open Exchange.
+          example: 85
+        groups:
+          type: array
+          description: A breakdown of projected completes for each specific supplier group.
+          items:
+            $ref: '#/components/schemas/TargetGroupFeasibilityResponseOpenExchangeAllocationsGroup'
+    InterlockProfileConditionsV3:
+      description: A polymorphic object representing a single profiling condition, which can be a `selection`, `range`, or `open_ended` type.
+      oneOf:
+      - $ref: '#/components/schemas/ProfileTargetsSelectionConditionsV3'
+      - $ref: '#/components/schemas/ProfileTargetsRangeConditionsV3'
+      - $ref: '#/components/schemas/ProfileTargetsOpenEndedConditionsV3'
+    TargetGroupFeasibilityResponsePrivateExchangeAllocations:
+      type: object
+      description: Contains the feasibility results for Private Exchange allocation groups.
+      required:
+      - groups
+      properties:
+        groups:
+          type: array
+          items:
+            $ref: '#/components/schemas/TargetGroupFeasibilityResponsePrivateExchangeAllocationsGroup'
     TargetGroupID:
       description: A unique identifier for the target group, in ULID format.
       type: string
       pattern: ^[0-9A-Z]{26}$
       example: 01BTGNYV6HRNK8K8VKZASZCFP1
-    ProfileTargetsOpenEndedConditionsV3:
-      title: Open-ended condition
-      description: A profiling condition that targets open-ended text values.
-      oneOf:
-      - title: Allow All Values
-        description: If `allow_all_values` is true, `open_ended_values` must be null.
-        type: object
-        properties:
-          object:
-            type: string
-            description: The type of profiling condition. For this object, the value is always 'open_ended'.
-            enum:
-            - open_ended
-            example: open_ended
-          question_id:
-            $ref: '#/components/schemas/QuestionID'
-          allow_all_values:
-            type: boolean
-            enum:
-            - true
-            description: Flag to allow all values.
-          open_ended_values:
-            type:
-            - array
-            - 'null'
-            minItems: 0
-            maxItems: 0
-            items:
-              type: string
-            description: Must be null when `allow_all_values` is true.
-        required:
-        - object
-        - question_id
-        - allow_all_values
-        - open_ended_values
-      - title: Specific Open End Values
-        description: If `allow_all_values` is false, `open_ended_values` must contain at least one open end value.
-        type: object
-        properties:
-          object:
-            type: string
-            description: Object field to distinguish between different types of control selections.  Always is `open_ended`.
-            enum:
-            - open_ended
-            example: open_ended
-          question_id:
-            $ref: '#/components/schemas/QuestionID'
-          allow_all_values:
-            type: boolean
-            enum:
-            - false
-            description: Flag to allow only specific open end values.
-          open_ended_values:
-            type: array
-            items:
-              type: string
-            minItems: 1
-            maxItems: 10000
-            description: List of applicable open end values. Required when `allow_all_values` is false. Note that only 10,000 values may be provided. For more than 10,000, please contact your integration consultant.
-        required:
-        - object
-        - question_id
-        - allow_all_values
-        - open_ended_values
-      example:
-        object: open_ended
-        question_id: 45
-        open_ended_values: []
-        allow_all_values: true
+    CurrencyCode:
+      type: string
+      description: The three-letter ISO 4217 currency code, in uppercase. The code must correspond to a currency supported by Cint Exchange.
+      example: USD
+    TargetGroupFeasibilityResponsePrivateExchangeAllocationsGroup:
+      type: object
+      required:
+      - group_name
+      - min_completes
+      - max_completes
+      properties:
+        group_name:
+          type: string
+          example: Test group
+        min_completes:
+          type: integer
+          example: 55
+        max_completes:
+          type: integer
+          example: 85
     CalculateTargetGroupFeasibilityResponse:
       type: object
       description: Target Group feasibility information.
@@ -267,67 +345,11 @@ components:
             $ref: '#/components/schemas/FeasibilityResponseDraftRegularProfileV3'
         allocations:
           $ref: '#/components/schemas/TargetGroupFeasibilityResponseAllocationSpecification'
-    Traceparent:
-      type: string
-      description: 'The traceparent header carries essential trace context information. This includes the trace ID and parent span ID  as defined by the W3C trace context specification. It is used to pinpoint the position of an incoming request within  the trace graph, facilitating the tracking of distributed operations.
-
-        Note: This field is optional and will be automatically generated by the service if not provided in the request.  The generated value will be included in the response header.'
-      example: 00-0af7651916cd43dd8448eb211c80319c-b7ad6b7169203331-01
-    FeasibilityResponseDraftRegularProfileV3:
-      description: Contains the feasibility breakdown for a profiling quota. The `object` field distinguishes between `regular` and `blended` profiles.
-      oneOf:
-      - title: Regular Profile
-        type: object
-        required:
-        - object
-        - targets
-        properties:
-          object:
-            type: string
-            description: Object field to distinguish the operation.
-            enum:
-            - regular
-            example: regular
-          targets:
-            $ref: '#/components/schemas/FeasibilityQuotaV3'
-      - title: Blended Profile
-        type: object
-        required:
-        - object
-        - targets
-        properties:
-          object:
-            type: string
-            description: Object field to distinguish the operation.
-            enum:
-            - blended
-            example: blended
-          blended_type:
-            type: string
-            description: The blended_type field defines the functional behavior of the blended profile as either interlock or control. If omitted, the system defaults to interlock. This field distinguishes between profiles requiring a full matrix expansion (interlock) and those used for isolating specific demographic segments (control).
-            enum:
-            - interlock
-            - control
-            example: interlock
-          targets:
-            $ref: '#/components/schemas/FeasibilityQuotaV3'
-    TargetGroupFeasibilityRequestAllocationSpecification:
-      type: object
-      description: Defines the complete set of allocation settings for a feasibility request.
-      required:
-      - open_exchange_allocations
-      - private_exchange_allocations
-      properties:
-        open_exchange_allocations:
-          $ref: '#/components/schemas/TargetGroupFeasibilityRequestOpenExchangeAllocations'
-        private_exchange_allocations:
-          $ref: '#/components/schemas/TargetGroupFeasibilityRequestPrivateExchangeAllocations'
-    FeasibilityRequestQuotaV3:
+    FeasibilityQuotaV3:
       type: array
-      description: A list of quota definitions for a profile.
       minItems: 1
       items:
-        $ref: '#/components/schemas/FeasibilityRequestQuotaDetailsV3'
+        $ref: '#/components/schemas/FeasibilityQuotaDetailsV3'
     Error:
       type: object
       description: The standard error object returned for all failed API requests.
@@ -353,44 +375,6 @@ components:
           description: An optional field containing a list of invalid parameters may be presented in validation errors for additional information.
           items:
             $ref: '#/components/schemas/InvalidParam'
-    TargetGroupFieldingSpecification:
-      type: object
-      description: Contains Target Group fielding details.
-      required:
-      - start_at
-      - end_at
-      properties:
-        start_at:
-          type: string
-          format: date-time
-          description: The timestamp the Target Group is scheduled to start at (RFC3339 UTC format, 3 fractional digits).
-          example: '2023-01-01T23:00:00.000Z'
-        end_at:
-          type: string
-          format: date-time
-          description: The timestamp the Target Group is scheduled to end at (RFC3339 UTC format, 3 fractional digits).
-          example: '2023-01-01T23:00:00.000Z'
-    ProfileTargetsSelectionConditionsV3:
-      title: Selection condition
-      type: object
-      description: A profiling condition that targets a specific answer option (e.g. gender).
-      required:
-      - object
-      - question_id
-      - option
-      properties:
-        object:
-          type: string
-          description: The type of profiling condition. For this object, the value is always 'selection'.
-          enum:
-          - selection
-          example: selection
-        question_id:
-          $ref: '#/components/schemas/QuestionID'
-        option:
-          type: string
-          description: The unique identifier for the selected answer option.
-          example: '1'
     CalculateTargetGroupFeasibilityRequest:
       type: object
       description: The complete set of specifications for a new (draft) target group to calculate its feasibility.
@@ -489,37 +473,108 @@ components:
                 max: 34
               quota:
                 completes_goal_percentage: 50
-    CurrencyCode:
-      type: string
-      description: The three-letter ISO 4217 currency code, in uppercase. The code must correspond to a currency supported by Cint Exchange.
-      example: USD
-    TargetGroupFeasibilityResponsePrivateExchangeAllocations:
+    TargetGroupFeasibilityRequestPrivateExchangeAllocationsGroup:
       type: object
-      description: Contains the feasibility results for Private Exchange allocation groups.
+      description: Defines a single supplier group within a Private Exchange allocation.
       required:
-      - groups
+      - group_name
+      - min_percentage
+      - max_percentage
+      - supplier_id
       properties:
-        groups:
-          type: array
-          items:
-            $ref: '#/components/schemas/TargetGroupFeasibilityResponsePrivateExchangeAllocationsGroup'
-    TargetGroupFeasibilityRequestPrivateExchangeAllocations:
+        group_name:
+          type: string
+          example: Test group
+        min_percentage:
+          type: integer
+          example: 0
+        max_percentage:
+          type: integer
+          example: 100
+        supplier_id:
+          type: string
+          example: '43'
+    ProfileTargetsRangeConditionsV3:
+      title: Range condition
       type: object
-      description: Defines the allocation settings for Private Exchanges.
+      description: A profiling condition that targets a numeric range (e.g. age).
       required:
-      - blocked_supplier_ids
-      - groups
+      - object
+      - question_id
+      - min
+      - max
       properties:
-        blocked_supplier_ids:
+        object:
+          type: string
+          description: The type of profiling condition. For this object, the value is always 'range'.
+          enum:
+          - range
+          example: range
+        question_id:
+          $ref: '#/components/schemas/QuestionID'
+        min:
+          type: integer
+          format: int32
+          minimum: 1
+          maximum: 99
+          description: The minimum numeric value (inclusive).
+          example: 18
+        max:
+          type: integer
+          format: int32
+          minimum: 1
+          maximum: 99
+          description: The maximum numeric value (inclusive).
+          example: 24
+    FeasibilityQuotaDetailsV3:
+      type: object
+      description: Feasibility targets for provided conditions.
+      required:
+      - conditions
+      - quota
+      properties:
+        conditions:
           type: array
-          description: A list of supplier IDs to block from all Private Exchanges.
+          minItems: 1
+          description: List of conditions.
           items:
-            type: string
-            example: '435'
-        groups:
-          type: array
-          items:
-            $ref: '#/components/schemas/TargetGroupFeasibilityRequestPrivateExchangeAllocationsGroup'
+            $ref: '#/components/schemas/InterlockProfileConditionsV3'
+        quota:
+          type: object
+          required:
+          - min_completes
+          - max_completes
+          properties:
+            min_completes:
+              $ref: '#/components/schemas/FeasibilityCompletesProjection'
+            max_completes:
+              $ref: '#/components/schemas/FeasibilityCompletesProjection'
+    AccountID:
+      description: The account's unique identifier.
+      type: integer
+      format: int32
+      example: 101
+    ProfileTargetsSelectionConditionsV3:
+      title: Selection condition
+      type: object
+      description: A profiling condition that targets a specific answer option (e.g. gender).
+      required:
+      - object
+      - question_id
+      - option
+      properties:
+        object:
+          type: string
+          description: The type of profiling condition. For this object, the value is always 'selection'.
+          enum:
+          - selection
+          example: selection
+        question_id:
+          $ref: '#/components/schemas/QuestionID'
+        option:
+          type: string
+          description: The unique identifier for the selected answer option.
+          example: '1'
     CalculateTargetGroupFeasibilityByIdRequest:
       type: object
       description: Specifies the parameters to override when calculating feasibility for an existing target group.
@@ -594,84 +649,22 @@ components:
                 $ref: '#/components/schemas/FeasibilityRequestDraftRegularProfileV3'
         allocations:
           $ref: '#/components/schemas/TargetGroupFeasibilityRequestAllocationSpecification'
-    InvalidParam:
+    TargetGroupFeasibilityResponseOpenExchangeAllocationsGroup:
       type: object
-      description: Describes a single invalid parameter in a request.
-      properties:
-        name:
-          type: string
-          description: The name of the parameter that failed validation.
-        reason:
-          type: string
-          description: A short explanation of why the parameter was invalid.
-      required:
-      - name
-      - reason
-    FeasibilityQuotaDetailsV3:
-      type: object
-      description: Feasibility targets for provided conditions.
-      required:
-      - conditions
-      - quota
-      properties:
-        conditions:
-          type: array
-          minItems: 1
-          description: List of conditions.
-          items:
-            $ref: '#/components/schemas/InterlockProfileConditionsV3'
-        quota:
-          type: object
-          required:
-          - min_completes
-          - max_completes
-          properties:
-            min_completes:
-              $ref: '#/components/schemas/FeasibilityCompletesProjection'
-            max_completes:
-              $ref: '#/components/schemas/FeasibilityCompletesProjection'
-    ProjectID:
-      description: The character string representing a unique project ID (ULID format).
-      type: string
-      pattern: ^[0-9A-Z]{26}$
-      example: 01BTGNYV6HRNK8K8VKZASZCFP0
-    Tracestate:
-      type: string
-      description: 'The tracestate header provides additional contextual information to the traceparent header.  This enriches the tracing context and offers more fine-grained control
-
-        Note: This field is optional and will be automatically generated by the service if not provided in the request.  The generated value will be included in the response header.'
-      example: ot=foo:bar;k1:13
-    TargetGroupFeasibilityRequestOpenExchangeAllocationsGroup:
-      type: object
-      description: Defines a single supplier group within the Cint Open Exchange allocation.
       required:
       - group_name
-      - min_percentage
-      - max_percentage
-      - suppliers
+      - min_completes
+      - max_completes
       properties:
         group_name:
           type: string
-          description: A unique name for the allocation group. This name must be unique across all groups in both the open and private exchange allocations.
-          example: Unique Test group name
-        min_percentage:
+          example: Test group
+        min_completes:
           type: integer
-          description: The minimum percentage of the total completes that must come from this group.
-          example: 0
-        max_percentage:
+          example: 55
+        max_completes:
           type: integer
-          description: The maximum percentage of the total completes that can come from this group.
-          example: 100
-        suppliers:
-          type: array
-          description: A list of supplier IDs to include in this group.
-          items:
-            type: string
-            example: '434'
-        supplier_id:
-          type: string
-          description: The ID of the Private Exchange supplier for this group.
-          example: '43'
+          example: 85
     FeasibilityRequestQuotaDetailsV3:
       type: object
       description: Feasibility targets for provided conditions.
@@ -709,154 +702,53 @@ components:
                 minimum: 0
                 description: Total desired completes goal applied to this condition(s).
                 example: 40
-    TargetGroupFeasibilityResponsePrivateExchangeAllocationsGroup:
+    InvalidParam:
       type: object
-      required:
-      - group_name
-      - min_completes
-      - max_completes
+      description: Describes a single invalid parameter in a request.
       properties:
-        group_name:
+        name:
           type: string
-          example: Test group
-        min_completes:
-          type: integer
-          example: 55
-        max_completes:
-          type: integer
-          example: 85
-    TargetGroupFeasibilityRequestOpenExchangeAllocations:
-      type: object
-      description: Defines the allocation settings for the Cint Open Exchange.
-      required:
-      - blocked_supplier_ids
-      - exchange_min_percentage
-      - exchange_max_percentage
-      - groups
-      properties:
-        blocked_supplier_ids:
-          type: array
-          description: A list of supplier IDs to block from the Cint Open Exchange.
-          items:
-            type: string
-            example: '234'
-        exchange_min_percentage:
-          type: integer
-          description: The minimum percentage of completes that must come from the Cint Open Exchange.
-          example: 0
-        exchange_max_percentage:
-          type: integer
-          description: The maximum percentage of completes that can come from the Cint Open Exchange.
-          example: 100
-        groups:
-          type: array
-          description: A list of specific supplier groups within the Cint Open Exchange.
-          items:
-            $ref: '#/components/schemas/TargetGroupFeasibilityRequestOpenExchangeAllocationsGroup'
-    AccountID:
-      description: The account's unique identifier.
-      type: integer
-      format: int32
-      example: 101
-    ProfileTargetsRangeConditionsV3:
-      title: Range condition
-      type: object
-      description: A profiling condition that targets a numeric range (e.g. age).
-      required:
-      - object
-      - question_id
-      - min
-      - max
-      properties:
-        object:
+          description: The name of the parameter that failed validation.
+        reason:
           type: string
-          description: The type of profiling condition. For this object, the value is always 'range'.
-          enum:
-          - range
-          example: range
-        question_id:
-          $ref: '#/components/schemas/QuestionID'
-        min:
-          type: integer
+          description: A short explanation of why the parameter was invalid.
+      required:
+      - name
+      - reason
+    FeasibilityRequestQuotaV3:
+      type: array
+      description: A list of quota definitions for a profile.
+      minItems: 1
+      items:
+        $ref: '#/components/schemas/FeasibilityRequestQuotaDetailsV3'
+    FeasibilityCompletesProjection:
+      type: object
+      description: Projection of completes for feasibility condition.
+      properties:
+        projected_completes_percentage:
+          type: number
+          multipleOf: 0.01
+          minimum: 0
+          maximum: 100
+          description: Percentage of total projected completes applied to this condition(s).
+          example: 40
+        projected_completes_goal:
+          type: number
           format: int32
-          minimum: 1
-          maximum: 99
-          description: The minimum numeric value (inclusive).
-          example: 18
-        max:
-          type: integer
-          format: int32
-          minimum: 1
-          maximum: 99
-          description: The maximum numeric value (inclusive).
-          example: 24
-    MonetaryAmountRequestModel:
+          minimum: 0
+          description: Nominal of total projected completes applied to this condition(s).
+          example: 40
+    TargetGroupFeasibilityRequestAllocationSpecification:
       type: object
-      description: Represents a monetary value, including the amount and its currency.
-      properties:
-        value:
-          type: string
-          description: The monetary value, represented as a string to maintain precision.
-          example: '2.7352'
-        currency_code:
-          $ref: '#/components/schemas/CurrencyCode'
-    TargetGroupFeasibilityResponseOpenExchangeAllocationsGroup:
-      type: object
-      required:
-      - group_name
-      - min_completes
-      - max_completes
-      properties:
-        group_name:
-          type: string
-          example: Test group
-        min_completes:
-          type: integer
-          example: 55
-        max_completes:
-          type: integer
-          example: 85
-    TargetGroupFeasibilityRequestPrivateExchangeAllocationsGroup:
-      type: object
-      description: Defines a single supplier group within a Private Exchange allocation.
-      required:
-      - group_name
-      - min_percentage
-      - max_percentage
-      - supplier_id
-      properties:
-        group_name:
-          type: string
-          example: Test group
-        min_percentage:
-          type: integer
-          example: 0
-        max_percentage:
-          type: integer
-          example: 100
-        supplier_id:
-          type: string
-          example: '43'
-    InterlockProfileConditionsV3:
-      description: A polymorphic object representing a single profiling condition, which can be a `selection`, `range`, or `open_ended` type.
-      oneOf:
-      - $ref: '#/components/schemas/ProfileTargetsSelectionConditionsV3'
-      - $ref: '#/components/schemas/ProfileTargetsRangeConditionsV3'
-      - $ref: '#/components/schemas/ProfileTargetsOpenEndedConditionsV3'
-    TargetGroupFeasibilityResponseAllocationSpecification:
-      type: object
-      description: Contains the feasibility results for the open and private exchange allocations.
+      description: Defines the complete set of allocation settings for a feasibility request.
       required:
       - open_exchange_allocations
+      - private_exchange_allocations
       properties:
         open_exchange_allocations:
-          $ref: '#/components/schemas/TargetGroupFeasibilityResponseOpenExchangeAllocations'
+          $ref: '#/components/schemas/TargetGroupFeasibilityRequestOpenExchangeAllocations'
         private_exchange_allocations:
-          $ref: '#/components/schemas/TargetGroupFeasibilityResponsePrivateExchangeAllocations'
-    QuestionID:
-      type: integer
-      description: The unique identifier for a profiling question.
-      example: 12413
+          $ref: '#/components/schemas/TargetGroupFeasibilityRequestPrivateExchangeAllocations'
     FeasibilityRequestDraftRegularProfileV3:
       description: Defines the profiling criteria for a feasibility request. The `object` field distinguishes between `regular` and `blended` profiles.
       oneOf:
@@ -905,106 +797,174 @@ components:
             example: true
           targets:
             $ref: '#/components/schemas/FeasibilityRequestQuotaV3'
-    TargetGroupFeasibilityResponseOpenExchangeAllocations:
+    TargetGroupFeasibilityRequestOpenExchangeAllocationsGroup:
       type: object
-      description: Contains the feasibility results for the Cint Open Exchange, including projected completes and group breakdowns.
+      description: Defines a single supplier group within the Cint Open Exchange allocation.
       required:
-      - min_completes
-      - max_completes
+      - group_name
+      - min_percentage
+      - max_percentage
+      - suppliers
+      properties:
+        group_name:
+          type: string
+          description: A unique name for the allocation group. This name must be unique across all groups in both the open and private exchange allocations.
+          example: Unique Test group name
+        min_percentage:
+          type: integer
+          description: The minimum percentage of the total completes that must come from this group.
+          example: 0
+        max_percentage:
+          type: integer
+          description: The maximum percentage of the total completes that can come from this group.
+          example: 100
+        suppliers:
+          type: array
+          description: A list of supplier IDs to include in this group.
+          items:
+            type: string
+            example: '434'
+        supplier_id:
+          type: string
+          description: The ID of the Private Exchange supplier for this group.
+          example: '43'
+    ProfileTargetsOpenEndedConditionsV3:
+      title: Open-ended condition
+      description: A profiling condition that targets open-ended text values.
+      oneOf:
+      - title: Allow All Values
+        description: If `allow_all_values` is true, `open_ended_values` must be null.
+        type: object
+        properties:
+          object:
+            type: string
+            description: The type of profiling condition. For this object, the value is always 'open_ended'.
+            enum:
+            - open_ended
+            example: open_ended
+          question_id:
+            $ref: '#/components/schemas/QuestionID'
+          allow_all_values:
+            type: boolean
+            enum:
+            - true
+            description: Flag to allow all values.
+          open_ended_values:
+            type:
+            - array
+            - 'null'
+            minItems: 0
+            maxItems: 0
+            items:
+              type: string
+            description: Must be null when `allow_all_values` is true.
+        required:
+        - object
+        - question_id
+        - allow_all_values
+        - open_ended_values
+      - title: Specific Open End Values
+        description: If `allow_all_values` is false, `open_ended_values` must contain at least one open end value.
+        type: object
+        properties:
+          object:
+            type: string
+            description: Object field to distinguish between different types of control selections.  Always is `open_ended`.
+            enum:
+            - open_ended
+            example: open_ended
+          question_id:
+            $ref: '#/components/schemas/QuestionID'
+          allow_all_values:
+            type: boolean
+            enum:
+            - false
+            description: Flag to allow only specific open end values.
+          open_ended_values:
+            type: array
+            items:
+              type: string
+            minItems: 1
+            maxItems: 10000
+            description: List of applicable open end values. Required when `allow_all_values` is false. Note that only 10,000 values may be provided. For more than 10,000, please contact your integration consultant.
+        required:
+        - object
+        - question_id
+        - allow_all_values
+        - open_ended_values
+      example:
+        object: open_ended
+        question_id: 45
+        open_ended_values: []
+        allow_all_values: true
+    TargetGroupFeasibilityRequestOpenExchangeAllocations:
+      type: object
+      description: Defines the allocation settings for the Cint Open Exchange.
+      required:
+      - blocked_supplier_ids
+      - exchange_min_percentage
+      - exchange_max_percentage
       - groups
       properties:
-        min_completes:
+        blocked_supplier_ids:
+          type: array
+          description: A list of supplier IDs to block from the Cint Open Exchange.
+          items:
+            type: string
+            example: '234'
+        exchange_min_percentage:
           type: integer
-          description: The minimum number of completes projected to be achievable from the Cint Open Exchange.
-          example: 55
-        max_completes:
+          description: The minimum percentage of completes that must come from the Cint Open Exchange.
+          example: 0
+        exchange_max_percentage:
           type: integer
-          description: The maximum number of completes projected to be achievable from the Cint Open Exchange.
-          example: 85
+          description: The maximum percentage of completes that can come from the Cint Open Exchange.
+          example: 100
         groups:
           type: array
-          description: A breakdown of projected completes for each specific supplier group.
+          description: A list of specific supplier groups within the Cint Open Exchange.
           items:
-            $ref: '#/components/schemas/TargetGroupFeasibilityResponseOpenExchangeAllocationsGroup'
-    FeasibilityCompletesProjection:
-      type: object
-      description: Projection of completes for feasibility condition.
-      properties:
-        projected_completes_percentage:
-          type: number
-          multipleOf: 0.01
-          minimum: 0
-          maximum: 100
-          description: Percentage of total projected completes applied to this condition(s).
-          example: 40
-        projected_completes_goal:
-          type: number
-          format: int32
-          minimum: 0
-          description: Nominal of total projected completes applied to this condition(s).
-          example: 40
-    MonetaryAmount:
+            $ref: '#/components/schemas/TargetGroupFeasibilityRequestOpenExchangeAllocationsGroup'
+    MonetaryAmountRequestModel:
       type: object
       description: Represents a monetary value, including the amount and its currency.
       properties:
         value:
           type: string
-          description: A decimal encapsulated in a string representing the value in the denomination indicated by the code.
+          description: The monetary value, represented as a string to maintain precision.
           example: '2.7352'
         currency_code:
           $ref: '#/components/schemas/CurrencyCode'
-        currency_scale:
-          allOf:
-          - {}
-          - type: integer
-            description: The number of digits after the decimal separator, as defined by ISO 4217.
-            example: 2
-    FeasibilityQuotaV3:
-      type: array
-      minItems: 1
-      items:
-        $ref: '#/components/schemas/FeasibilityQuotaDetailsV3'
+    Traceparent:
+      type: string
+      description: 'The traceparent header carries essential trace context information. This includes the trace ID and parent span ID  as defined by the W3C trace context specification. It is used to pinpoint the position of an incoming request within  the trace graph, facilitating the tracking of distributed operations.
+
+        Note: This field is optional and will be automatically generated by the service if not provided in the request.  The generated value will be included in the response header.'
+      example: 00-0af7651916cd43dd8448eb211c80319c-b7ad6b7169203331-01
+    Tracestate:
+      type: string
+      description: 'The tracestate header provides additional contextual information to the traceparent header.  This enriches the tracing context and offers more fine-grained control
+
+        Note: This field is optional and will be automatically generated by the service if not provided in the request.  The generated value will be included in the response header.'
+      example: ot=foo:bar;k1:13
+    TargetGroupFeasibilityRequestPrivateExchangeAllocations:
+      type: object
+      description: Defines the allocation settings for Private Exchanges.
+      required:
+      - blocked_supplier_ids
+      - groups
+      properties:
+        blocked_supplier_ids:
+          type: array
+          description: A list of supplier IDs to block from all Private Exchanges.
+          items:
+            type: string
+            example: '435'
+        groups:
+          type: array
+          items:
+            $ref: '#/components/schemas/TargetGroupFeasibilityRequestPrivateExchangeAllocationsGroup'
   responses:
-    Error_InvalidState:
-      description: A request failed due to invalid state of the entity
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            id: d94b8bb2-a540-4a91-9c05-2aa3ae9a5e1e
-            object: invalid_state_error
-            detail: The entity does not meet the required state.
-    Error_NotFound:
-      description: A requested resource isn't found.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            id: 7a5972ba-0825-4360-b852-fa2430e47034
-            object: not_found_error
-            detail: resource not found
-    Error_Unauthorized:
-      description: A request is unauthorized.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            id: 1dcf0f40-f0d1-4cf6-8c00-c3d019d32faf
-            object: authorization_error
-            detail: no valid authorization provided for this operation
-    Error_BadRequest:
-      description: A request is not valid and can't be processed.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            id: 9e278238-d011-4e05-8327-1ce1d5d26254
-            object: bad_request_error
-            detail: Expected field 'foo' is missing.
     Error_Internal:
       description: A request failed due to an internal error.
       content:
@@ -1015,6 +975,46 @@ components:
             id: d94b8bb2-a540-4a91-9c05-2aa3ae9a5e1e
             object: unexpected_internal_error
             detail: an internal error has led to the failure of this operation
+    Error_Unauthorized:
+      description: A request is unauthorized.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            id: 1dcf0f40-f0d1-4cf6-8c00-c3d019d32faf
+            object: authorization_error
+            detail: no valid authorization provided for this operation
+    Error_NotFound:
+      description: A requested resource isn't found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            id: 7a5972ba-0825-4360-b852-fa2430e47034
+            object: not_found_error
+            detail: resource not found
+    Error_InvalidState:
+      description: A request failed due to invalid state of the entity
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            id: d94b8bb2-a540-4a91-9c05-2aa3ae9a5e1e
+            object: invalid_state_error
+            detail: The entity does not meet the required state.
+    Error_BadRequest:
+      description: A request is not valid and can't be processed.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            id: 9e278238-d011-4e05-8327-1ce1d5d26254
+            object: bad_request_error
+            detail: Expected field 'foo' is missing.
     Error_Forbidden:
       description: A requested is forbidden.
       content:
@@ -1033,6 +1033,16 @@ components:
       required: true
       schema:
         $ref: '#/components/schemas/ProjectID'
+    CintAPIVersion-2025-12-18:
+      name: Cint-API-Version
+      in: header
+      required: true
+      schema:
+        type: string
+        example: 2025-12-18
+      description: 'This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.
+
+        '
     AccountID:
       name: account_id
       description: The account's unique identifier.
@@ -1047,16 +1057,6 @@ components:
       required: true
       schema:
         $ref: '#/components/schemas/TargetGroupID'
-    CintAPIVersion-2025-12-18:
-      name: Cint-API-Version
-      in: header
-      required: true
-      schema:
-        type: string
-        example: 2025-12-18
-      description: 'This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.
-
-        '
   securitySchemes:
     BearerAuth:
       type: http

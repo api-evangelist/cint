@@ -128,91 +128,12 @@ paths:
         '500':
           $ref: '#/components/responses/Error_Internal'
 components:
-  responses:
-    Error_Internal:
-      description: A request failed due to an internal error.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            id: d94b8bb2-a540-4a91-9c05-2aa3ae9a5e1e
-            object: unexpected_internal_error
-            detail: an internal error has led to the failure of this operation
-    Error_Forbidden:
-      description: A requested is forbidden.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            id: fe68cdd2-ee87-4dbf-8950-63c5cbca94c7
-            object: authorization_error
-            detail: you don't have the right permissions to perform this operation
-    Error_BadRequest:
-      description: A request is not valid and can't be processed.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            id: 9e278238-d011-4e05-8327-1ce1d5d26254
-            object: bad_request_error
-            detail: Expected field 'foo' is missing.
-    Error_Unauthorized:
-      description: A request is unauthorized.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            id: 1dcf0f40-f0d1-4cf6-8c00-c3d019d32faf
-            object: authorization_error
-            detail: no valid authorization provided for this operation
-    Error_NotFound:
-      description: A requested resource isn't found.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            id: 7a5972ba-0825-4360-b852-fa2430e47034
-            object: not_found_error
-            detail: resource not found
-  parameters:
-    CintAPIVersion-2025-12-18:
-      name: Cint-API-Version
-      in: header
-      required: true
-      schema:
-        type: string
-        example: 2025-12-18
-      description: 'This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.
-
-        '
-    UserType:
-      name: user_type
-      in: query
-      description: Filters users by user type. Currently, only 'project_manager' is supported.
-      schema:
-        type: string
-        enum:
-        - project_manager
-    AccountID:
-      name: account_id
-      description: The account's unique identifier.
-      in: path
-      required: true
-      schema:
-        $ref: '#/components/schemas/AccountID'
-    UserID:
-      in: path
-      name: user_id
-      schema:
-        $ref: '#/components/schemas/UserID'
-      required: true
-      description: Uniquely identifies a user.
   schemas:
+    AccountID:
+      description: The account's unique identifier.
+      type: integer
+      format: int32
+      example: 101
     ServiceClientsList:
       type: object
       description: A list of all service clients for a specific account.
@@ -239,59 +160,6 @@ components:
           - id: 54736158-e90e-404c-bc32-4d938f8a9cfa
             email: john.doe@cint.com
             name: John Doe
-    UserAccountBusinessUnit:
-      type: object
-      description: A response containing the business unit of the user's account.
-      properties:
-        business_unit_id:
-          type: integer
-          description: Unique identifier of the business unit.
-          example: 1234
-    AccountsList:
-      type: object
-      description: A list of accounts the authenticated user can access.
-      readOnly: true
-      properties:
-        accounts:
-          type: array
-          description: A list of user accounts.
-          items:
-            type: object
-            properties:
-              id:
-                type: integer
-                description: A unique identifier for an account.
-              name:
-                type: string
-                description: The name of the account.
-          example:
-          - id: 1
-            name: Acme Inc.
-          - id: 2
-            name: Globex Corp.
-    UserID:
-      type: string
-      format: uuid
-      description: A unique identifier for the user.
-      example: b551326b-ac9d-4d32-8823-4f025787dab9
-    InvalidParam:
-      type: object
-      description: Describes a single invalid parameter in a request.
-      properties:
-        name:
-          type: string
-          description: The name of the parameter that failed validation.
-        reason:
-          type: string
-          description: A short explanation of why the parameter was invalid.
-      required:
-      - name
-      - reason
-    AccountID:
-      description: The account's unique identifier.
-      type: integer
-      format: int32
-      example: 101
     UsersList:
       type: object
       description: A list of all users for a specific account.
@@ -318,6 +186,27 @@ components:
           - id: 54736158-e90e-404c-bc32-4d938f8a9cfa
             email: john.doe@cint.com
             name: John Doe
+    UserAccountBusinessUnit:
+      type: object
+      description: A response containing the business unit of the user's account.
+      properties:
+        business_unit_id:
+          type: integer
+          description: Unique identifier of the business unit.
+          example: 1234
+    InvalidParam:
+      type: object
+      description: Describes a single invalid parameter in a request.
+      properties:
+        name:
+          type: string
+          description: The name of the parameter that failed validation.
+        reason:
+          type: string
+          description: A short explanation of why the parameter was invalid.
+      required:
+      - name
+      - reason
     Error:
       type: object
       description: The standard error object returned for all failed API requests.
@@ -343,6 +232,117 @@ components:
           description: An optional field containing a list of invalid parameters may be presented in validation errors for additional information.
           items:
             $ref: '#/components/schemas/InvalidParam'
+    UserID:
+      type: string
+      format: uuid
+      description: A unique identifier for the user.
+      example: b551326b-ac9d-4d32-8823-4f025787dab9
+    AccountsList:
+      type: object
+      description: A list of accounts the authenticated user can access.
+      readOnly: true
+      properties:
+        accounts:
+          type: array
+          description: A list of user accounts.
+          items:
+            type: object
+            properties:
+              id:
+                type: integer
+                description: A unique identifier for an account.
+              name:
+                type: string
+                description: The name of the account.
+          example:
+          - id: 1
+            name: Acme Inc.
+          - id: 2
+            name: Globex Corp.
+  responses:
+    Error_NotFound:
+      description: A requested resource isn't found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            id: 7a5972ba-0825-4360-b852-fa2430e47034
+            object: not_found_error
+            detail: resource not found
+    Error_Internal:
+      description: A request failed due to an internal error.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            id: d94b8bb2-a540-4a91-9c05-2aa3ae9a5e1e
+            object: unexpected_internal_error
+            detail: an internal error has led to the failure of this operation
+    Error_Unauthorized:
+      description: A request is unauthorized.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            id: 1dcf0f40-f0d1-4cf6-8c00-c3d019d32faf
+            object: authorization_error
+            detail: no valid authorization provided for this operation
+    Error_BadRequest:
+      description: A request is not valid and can't be processed.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            id: 9e278238-d011-4e05-8327-1ce1d5d26254
+            object: bad_request_error
+            detail: Expected field 'foo' is missing.
+    Error_Forbidden:
+      description: A requested is forbidden.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            id: fe68cdd2-ee87-4dbf-8950-63c5cbca94c7
+            object: authorization_error
+            detail: you don't have the right permissions to perform this operation
+  parameters:
+    AccountID:
+      name: account_id
+      description: The account's unique identifier.
+      in: path
+      required: true
+      schema:
+        $ref: '#/components/schemas/AccountID'
+    UserType:
+      name: user_type
+      in: query
+      description: Filters users by user type. Currently, only 'project_manager' is supported.
+      schema:
+        type: string
+        enum:
+        - project_manager
+    CintAPIVersion-2025-12-18:
+      name: Cint-API-Version
+      in: header
+      required: true
+      schema:
+        type: string
+        example: 2025-12-18
+      description: 'This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.
+
+        '
+    UserID:
+      in: path
+      name: user_id
+      schema:
+        $ref: '#/components/schemas/UserID'
+      required: true
+      description: Uniquely identifies a user.
   securitySchemes:
     BearerAuth:
       type: http
