@@ -1,0 +1,37 @@
+slug: cint
+provider: Cint
+generated_by: planning/capability-mapping/scripts/classify_capabilities.py
+model: claude-opus-5
+frame:
+- Software & Technology
+min_confidence: 0.7
+capability_model:
+  source: https://github.com/vincentmakes/turbo-ea-capabilities
+  license: CC-BY-4.0
+  attribution: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities,
+    CC BY 4.0
+  notice: NOTICE
+edge_count: 2
+edges:
+- tag: Fielding
+  spec_file: cint-fielding-api-openapi.yml
+  capability_id: BC-400.30
+  capability_id_l1: BC-400
+  capability_name: Market Intelligence Management
+  confidence: 0.7
+  evidence: POST .../fielding-runs/{fielding_run_id}/launch-now  Launches fielding run immediately; POST
+    .../pause  Pauses a fielding run
+  reason: Operations launch, pause, resume and complete survey fielding runs against target groups — the
+    execution of market research data collection, which realises Market Intelligence Management (market
+    research).
+- tag: Manage Profiles for Launched Target Groups
+  spec_file: cint-manage-profiles-for-launched-target-groups-api-openapi.yml
+  capability_id: BC-400.30
+  capability_id_l1: BC-400
+  capability_name: Market Intelligence Management
+  confidence: 0.7
+  evidence: '"List profiles for a target group", "Update completes goal on a target group and its profiles",
+    schemas RegularProfileV3 / QuotaV3 / ValidationStructureErrorResponseDemographics'
+  reason: Operations manage respondent targeting profiles and quota/completes goals for a market-research
+    sample target group — i.e. execution of market research sampling, which realises Market Intelligence
+    Management (market research). Not a generic customer-data or HR capability despite the word 'Profiles'.
