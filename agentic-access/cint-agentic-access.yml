@@ -1,17 +1,27 @@
-generated: '2026-07-18'
+generated: '2026-09-23'
 method: generated
-source: openapi/cint-demand-openapi.yml
+source: openapi/cint-accounts-api-openapi.yml, openapi/cint-allocation-templates-admin-api-openapi.yml,
+  openapi/cint-definitions-api-openapi.yml, openapi/cint-exclusive-endpoints-api-openapi.yml,
+  openapi/cint-feasibility-api-openapi.yml, openapi/cint-fielding-api-openapi.yml, openapi/cint-fielding-assistant-api-openapi.yml,
+  openapi/cint-fielding-batch-api-openapi.yml, openapi/cint-fulfillment-api-openapi.yml, openapi/cint-intelligent-calendar-api-openapi.yml,
+  openapi/cint-manage-profiles-for-launched-target-groups-api-openapi.yml, openapi/cint-notifications-webhooks-api-openapi.yml,
+  openapi/cint-profiling-helper-api-openapi.yml, openapi/cint-profiling-library-api-openapi.yml,
+  openapi/cint-profiling-quotas-by-supplier-api-openapi.yml, openapi/cint-profiling-templates-api-openapi.yml,
+  openapi/cint-projects-api-openapi.yml, openapi/cint-reconciliations-api-openapi.yml, openapi/cint-recontacts-api-openapi.yml,
+  openapi/cint-reports-api-openapi.yml, openapi/cint-respondent-exclusions-api-openapi.yml,
+  openapi/cint-respondent-unique-codes-api-openapi.yml, openapi/cint-target-group-allocations-api-openapi.yml,
+  openapi/cint-target-groups-api-openapi.yml, openapi/cint-target-groups-batch-api-openapi.yml
 description: Recommended x-agentic-access execution contracts, classified heuristically from
   the OpenAPI. A governance starting point for exposing this API to AI agents — review and bind
   audience per deployment. See research/curity/agentic-governance/.
 summary:
   operations: 158
   by_action_class:
-    connected: 93
-    acting: 65
+    connected: 94
+    acting: 64
   by_consequence:
-    read: 93
-    write: 64
+    read: 94
+    write: 63
     physical: 1
   human_in_the_loop_required: 0
 operations:
@@ -269,270 +279,6 @@ operations:
     token:
       max-ttl: 3600
     audit: none
-- path: /demand/accounts/{account_id}/exclusion-groups
-  method: get
-  operationId: get_exclusion_groups_by_account_id
-  x-agentic-access:
-    action-class: connected
-    consequence: read
-    subject: optional
-    token:
-      max-ttl: 3600
-    audit: none
-- path: /demand/accounts/{account_id}/exclusion-groups
-  method: post
-  operationId: create_exclusion_group
-  x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
-    token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
-- path: /demand/accounts/{account_id}/exclusion-groups/{exclusion_group_id}
-  method: get
-  operationId: get_exclusion_group_by_id
-  x-agentic-access:
-    action-class: connected
-    consequence: read
-    subject: optional
-    token:
-      max-ttl: 3600
-    audit: none
-- path: /demand/accounts/{account_id}/exclusion-groups/{exclusion_group_id}
-  method: put
-  operationId: update_exclusion_group_by_id
-  x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
-    token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
-- path: /demand/accounts/{account_id}/exclusion-groups/{exclusion_group_id}
-  method: delete
-  operationId: delete_exclusion_group_by_id
-  x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
-    token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
-- path: /demand/accounts/{account_id}/exclusion-groups/{exclusion_group_id}/target-groups
-  method: get
-  operationId: get_exclusion_group_target_group_exclusions
-  x-agentic-access:
-    action-class: connected
-    consequence: read
-    subject: optional
-    token:
-      max-ttl: 3600
-    audit: none
-- path: /demand/accounts/{account_id}/exclusion-groups/{exclusion_group_id}/target-groups/add
-  method: post
-  operationId: add_target_groups_to_exclusion_group
-  x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
-    token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
-- path: /demand/accounts/{account_id}/exclusion-groups/{exclusion_group_id}/target-groups/remove
-  method: post
-  operationId: remove_target_groups_from_exclusion_group
-  x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
-    token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
-- path: /demand/accounts/{account_id}/projects/{project_id}/exclusion-policies
-  method: put
-  operationId: update_bulk_target_group_exclusions_api
-  x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
-    token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
-- path: /demand/accounts/{account_id}/projects/{project_id}/exclusions
-  method: get
-  operationId: get_exclusion_by_project_api
-  x-agentic-access:
-    action-class: connected
-    consequence: read
-    subject: optional
-    token:
-      max-ttl: 3600
-    audit: none
-- path: /demand/accounts/{account_id}/projects/{project_id}/target-groups/{target_group_id}/exclusion-policy
-  method: get
-  operationId: get_target_group_exclusion_policy_api
-  x-agentic-access:
-    action-class: connected
-    consequence: read
-    subject: optional
-    token:
-      max-ttl: 3600
-    audit: none
-- path: /demand/accounts/{account_id}/projects/{project_id}/target-groups/{target_group_id}/exclusions/access-respondent-guid/paginated
-  method: get
-  operationId: get_target_group_access_respondent_guid_exclusion_list_api_paginated
-  x-agentic-access:
-    action-class: connected
-    consequence: read
-    subject: optional
-    token:
-      max-ttl: 3600
-    audit: none
-- path: /demand/accounts/{account_id}/projects/{project_id}/target-groups/{target_group_id}/exclusions/jobs/remove-all-respondents
-  method: post
-  operationId: exclusion_create_remove_all_respondents_job
-  x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
-    token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
-- path: /demand/accounts/{account_id}/projects/{project_id}/target-groups/{target_group_id}/exclusions/jobs/remove-all-respondents/{job_id}
-  method: get
-  operationId: get_all_respondent_exclusions_removal_job
-  x-agentic-access:
-    action-class: connected
-    consequence: read
-    subject: optional
-    token:
-      max-ttl: 3600
-    audit: none
-- path: /demand/accounts/{account_id}/projects/{project_id}/target-groups/{target_group_id}/exclusions/jobs/upload-respondents-by-file
-  method: post
-  operationId: exclusion_create_upload_rids_by_file_job
-  x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
-    token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
-- path: /demand/accounts/{account_id}/projects/{project_id}/target-groups/{target_group_id}/exclusions/jobs/upload-respondents-by-file/{job_id}
-  method: get
-  operationId: get_respondent_exclusions_upload_by_file_job
-  x-agentic-access:
-    action-class: connected
-    consequence: read
-    subject: optional
-    token:
-      max-ttl: 3600
-    audit: none
-- path: /demand/accounts/{account_id}/projects/{project_id}/target-groups/{target_group_id}/exclusions/overview
-  method: get
-  operationId: get_exclusions_overview
-  x-agentic-access:
-    action-class: connected
-    consequence: read
-    subject: optional
-    token:
-      max-ttl: 3600
-    audit: none
-- path: /demand/accounts/{account_id}/projects/{project_id}/target-groups/{target_group_id}/exclusions/rsid/paginated
-  method: get
-  operationId: get_target_group_rsid_exclusion_list_api_paginated
-  x-agentic-access:
-    action-class: connected
-    consequence: read
-    subject: optional
-    token:
-      max-ttl: 3600
-    audit: none
-- path: /demand/accounts/{account_id}/target-groups/{target_group_id}/exclusion-groups
-  method: get
-  operationId: get_exclusion_groups_for_target_group
-  x-agentic-access:
-    action-class: connected
-    consequence: read
-    subject: optional
-    token:
-      max-ttl: 3600
-    audit: none
-- path: /demand/accounts/{account_id}/projects/{project_id}/target-groups/{target_group_id}/respondent-activity-exclusions
-  method: get
-  operationId: get_target_group_respondent_activity_exclusions
-  x-agentic-access:
-    action-class: connected
-    consequence: read
-    subject: optional
-    token:
-      max-ttl: 3600
-    audit: none
-- path: /demand/accounts/{account_id}/projects/{project_id}/target-groups/{target_group_id}/respondent-activity-exclusions
-  method: put
-  operationId: set_target_group_respondent_activity_exclusions
-  x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
-    token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
 - path: /demand/accounts/{account_id}/business-units/{business_unit_id}/generate-price-prediction
   method: post
   operationId: generate_price_prediction
@@ -578,6 +324,174 @@ operations:
 - path: /demand/accounts/{account_id}/projects/{project_id}/target-groups/{target_group_id}/calculate-feasibility
   method: post
   operationId: calculate_target_group_feasibility_by_id
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /demand/accounts/{account_id}/projects/{project_id}/target-groups/{target_group_id}/fielding-run-jobs/launch-from-draft
+  method: post
+  operationId: create_launch_fielding_run_from_draft_job
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /demand/accounts/{account_id}/projects/{project_id}/target-groups/{target_group_id}/fielding-run-jobs/launch-from-draft/{job_id}
+  method: get
+  operationId: get_launch_fielding_run_from_draft_job
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /demand/accounts/{account_id}/projects/{project_id}/target-groups/{target_group_id}/fielding-run-jobs/schedule-from-draft
+  method: post
+  operationId: create_schedule_fielding_run_from_draft_job
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /demand/accounts/{account_id}/projects/{project_id}/target-groups/{target_group_id}/fielding-run-jobs/schedule-from-draft/{job_id}
+  method: get
+  operationId: get_schedule_fielding_run_from_draft_job
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /demand/accounts/{account_id}/projects/{project_id}/target-groups/{target_group_id}/fielding-runs
+  method: get
+  operationId: get_fielding_runs_by_target_group_id
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /demand/accounts/{account_id}/projects/{project_id}/target-groups/{target_group_id}/fielding-runs/{fielding_run_id}
+  method: get
+  operationId: get_fielding_run
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /demand/accounts/{account_id}/projects/{project_id}/target-groups/{target_group_id}/fielding-runs/{fielding_run_id}
+  method: put
+  operationId: update_fielding_run
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /demand/accounts/{account_id}/projects/{project_id}/target-groups/{target_group_id}/fielding-runs/{fielding_run_id}/complete
+  method: post
+  operationId: complete_fielding_run
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /demand/accounts/{account_id}/projects/{project_id}/target-groups/{target_group_id}/fielding-runs/{fielding_run_id}/launch-now
+  method: post
+  operationId: launch_now_fielding_run
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /demand/accounts/{account_id}/projects/{project_id}/target-groups/{target_group_id}/fielding-runs/{fielding_run_id}/pause
+  method: post
+  operationId: pause_fielding_run
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /demand/accounts/{account_id}/projects/{project_id}/target-groups/{target_group_id}/fielding-runs/{fielding_run_id}/relaunch
+  method: post
+  operationId: relaunch_fielding_run
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /demand/accounts/{account_id}/projects/{project_id}/target-groups/{target_group_id}/fielding-runs/{fielding_run_id}/resume
+  method: post
+  operationId: resume_fielding_run
   x-agentic-access:
     action-class: acting
     consequence: write
@@ -747,25 +661,9 @@ operations:
     token:
       max-ttl: 3600
     audit: none
-- path: /demand/accounts/{account_id}/projects/{project_id}/target-groups/{target_group_id}/fielding-run-jobs/launch-from-draft
-  method: post
-  operationId: create_launch_fielding_run_from_draft_job
-  x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
-    token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
-- path: /demand/accounts/{account_id}/projects/{project_id}/target-groups/{target_group_id}/fielding-run-jobs/launch-from-draft/{job_id}
+- path: /fulfillment/respondents/{RID}
   method: get
-  operationId: get_launch_fielding_run_from_draft_job
+  operationId: get_respondent_status
   x-agentic-access:
     action-class: connected
     consequence: read
@@ -773,142 +671,18 @@ operations:
     token:
       max-ttl: 3600
     audit: none
-- path: /demand/accounts/{account_id}/projects/{project_id}/target-groups/{target_group_id}/fielding-run-jobs/schedule-from-draft
+- path: /fulfillment/respondents/transition
   method: post
-  operationId: create_schedule_fielding_run_from_draft_job
+  operationId: update_respondent_status
   x-agentic-access:
     action-class: acting
-    consequence: write
+    consequence: physical
     subject: required
     audience: null
     token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
-- path: /demand/accounts/{account_id}/projects/{project_id}/target-groups/{target_group_id}/fielding-run-jobs/schedule-from-draft/{job_id}
-  method: get
-  operationId: get_schedule_fielding_run_from_draft_job
-  x-agentic-access:
-    action-class: connected
-    consequence: read
-    subject: optional
-    token:
-      max-ttl: 3600
-    audit: none
-- path: /demand/accounts/{account_id}/projects/{project_id}/target-groups/{target_group_id}/fielding-runs
-  method: get
-  operationId: get_fielding_runs_by_target_group_id
-  x-agentic-access:
-    action-class: connected
-    consequence: read
-    subject: optional
-    token:
-      max-ttl: 3600
-    audit: none
-- path: /demand/accounts/{account_id}/projects/{project_id}/target-groups/{target_group_id}/fielding-runs/{fielding_run_id}
-  method: get
-  operationId: get_fielding_run
-  x-agentic-access:
-    action-class: connected
-    consequence: read
-    subject: optional
-    token:
-      max-ttl: 3600
-    audit: none
-- path: /demand/accounts/{account_id}/projects/{project_id}/target-groups/{target_group_id}/fielding-runs/{fielding_run_id}
-  method: put
-  operationId: update_fielding_run
-  x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
-    token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
-- path: /demand/accounts/{account_id}/projects/{project_id}/target-groups/{target_group_id}/fielding-runs/{fielding_run_id}/complete
-  method: post
-  operationId: complete_fielding_run
-  x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
-    token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
-- path: /demand/accounts/{account_id}/projects/{project_id}/target-groups/{target_group_id}/fielding-runs/{fielding_run_id}/launch-now
-  method: post
-  operationId: launch_now_fielding_run
-  x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
-    token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
-- path: /demand/accounts/{account_id}/projects/{project_id}/target-groups/{target_group_id}/fielding-runs/{fielding_run_id}/pause
-  method: post
-  operationId: pause_fielding_run
-  x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
-    token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
-- path: /demand/accounts/{account_id}/projects/{project_id}/target-groups/{target_group_id}/fielding-runs/{fielding_run_id}/relaunch
-  method: post
-  operationId: relaunch_fielding_run
-  x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
-    token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
-- path: /demand/accounts/{account_id}/projects/{project_id}/target-groups/{target_group_id}/fielding-runs/{fielding_run_id}/resume
-  method: post
-  operationId: resume_fielding_run
-  x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
-    token:
-      max-ttl: 900
+      max-ttl: 300
+      exchange: true
+      purpose-required: true
     escalation:
       human-in-the-loop: conditional
       triggers:
@@ -1179,18 +953,12 @@ operations:
   method: post
   operationId: get_panel_distribution_draft
   x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
+    action-class: connected
+    consequence: read
+    subject: optional
     token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
+      max-ttl: 3600
+    audit: none
 - path: /demand/accounts/{account_id}/profiling-templates
   method: get
   operationId: list_profile_templates
@@ -1597,6 +1365,270 @@ operations:
       - abnormal
       - high-value
     audit: required
+- path: /demand/accounts/{account_id}/exclusion-groups
+  method: get
+  operationId: get_exclusion_groups_by_account_id
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /demand/accounts/{account_id}/exclusion-groups
+  method: post
+  operationId: create_exclusion_group
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /demand/accounts/{account_id}/exclusion-groups/{exclusion_group_id}
+  method: get
+  operationId: get_exclusion_group_by_id
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /demand/accounts/{account_id}/exclusion-groups/{exclusion_group_id}
+  method: put
+  operationId: update_exclusion_group_by_id
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /demand/accounts/{account_id}/exclusion-groups/{exclusion_group_id}
+  method: delete
+  operationId: delete_exclusion_group_by_id
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /demand/accounts/{account_id}/exclusion-groups/{exclusion_group_id}/target-groups
+  method: get
+  operationId: get_exclusion_group_target_group_exclusions
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /demand/accounts/{account_id}/exclusion-groups/{exclusion_group_id}/target-groups/add
+  method: post
+  operationId: add_target_groups_to_exclusion_group
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /demand/accounts/{account_id}/exclusion-groups/{exclusion_group_id}/target-groups/remove
+  method: post
+  operationId: remove_target_groups_from_exclusion_group
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /demand/accounts/{account_id}/projects/{project_id}/exclusion-policies
+  method: put
+  operationId: update_bulk_target_group_exclusions_api
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /demand/accounts/{account_id}/projects/{project_id}/exclusions
+  method: get
+  operationId: get_exclusion_by_project_api
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /demand/accounts/{account_id}/projects/{project_id}/target-groups/{target_group_id}/exclusion-policy
+  method: get
+  operationId: get_target_group_exclusion_policy_api
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /demand/accounts/{account_id}/projects/{project_id}/target-groups/{target_group_id}/exclusions/access-respondent-guid/paginated
+  method: get
+  operationId: get_target_group_access_respondent_guid_exclusion_list_api_paginated
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /demand/accounts/{account_id}/projects/{project_id}/target-groups/{target_group_id}/exclusions/jobs/remove-all-respondents
+  method: post
+  operationId: exclusion_create_remove_all_respondents_job
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /demand/accounts/{account_id}/projects/{project_id}/target-groups/{target_group_id}/exclusions/jobs/remove-all-respondents/{job_id}
+  method: get
+  operationId: get_all_respondent_exclusions_removal_job
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /demand/accounts/{account_id}/projects/{project_id}/target-groups/{target_group_id}/exclusions/jobs/upload-respondents-by-file
+  method: post
+  operationId: exclusion_create_upload_rids_by_file_job
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /demand/accounts/{account_id}/projects/{project_id}/target-groups/{target_group_id}/exclusions/jobs/upload-respondents-by-file/{job_id}
+  method: get
+  operationId: get_respondent_exclusions_upload_by_file_job
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /demand/accounts/{account_id}/projects/{project_id}/target-groups/{target_group_id}/exclusions/overview
+  method: get
+  operationId: get_exclusions_overview
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /demand/accounts/{account_id}/projects/{project_id}/target-groups/{target_group_id}/exclusions/rsid/paginated
+  method: get
+  operationId: get_target_group_rsid_exclusion_list_api_paginated
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /demand/accounts/{account_id}/target-groups/{target_group_id}/exclusion-groups
+  method: get
+  operationId: get_exclusion_groups_for_target_group
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /demand/accounts/{account_id}/projects/{project_id}/target-groups/{target_group_id}/respondent-activity-exclusions
+  method: get
+  operationId: get_target_group_respondent_activity_exclusions
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /demand/accounts/{account_id}/projects/{project_id}/target-groups/{target_group_id}/respondent-activity-exclusions
+  method: put
+  operationId: set_target_group_respondent_activity_exclusions
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
 - path: /demand/accounts/{account_id}/target-groups/{target_group_id}/respondent-unique-codes/live
   method: post
   operationId: upload_live_respondent_unique_codes
@@ -1681,34 +1713,6 @@ operations:
       - abnormal
       - high-value
     audit: required
-- path: /fulfillment/respondents/{RID}
-  method: get
-  operationId: get_respondent_status
-  x-agentic-access:
-    action-class: connected
-    consequence: read
-    subject: optional
-    token:
-      max-ttl: 3600
-    audit: none
-- path: /fulfillment/respondents/transition
-  method: post
-  operationId: update_respondent_status
-  x-agentic-access:
-    action-class: acting
-    consequence: physical
-    subject: required
-    audience: null
-    token:
-      max-ttl: 300
-      exchange: true
-      purpose-required: true
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
 - path: /demand/accounts/{account_id}/business-units/{business_unit_id}/account-allocation-templates/{template_id}
   method: get
   operationId: get_account_allocation_template_for_business_unit_id
@@ -1765,32 +1769,6 @@ operations:
       - abnormal
       - high-value
     audit: required
-- path: /demand/accounts/{account_id}/projects/{project_id}/batch-jobs/update-target-group-project-managers
-  method: post
-  operationId: create_bulk_update_target_group_project_manager_job
-  x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
-    token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
-- path: /demand/accounts/{account_id}/projects/{project_id}/batch-jobs/update-target-group-project-managers/{job_id}
-  method: get
-  operationId: get_bulk_update_target_group_project_manager_job
-  x-agentic-access:
-    action-class: connected
-    consequence: read
-    subject: optional
-    token:
-      max-ttl: 3600
-    audit: none
 - path: /demand/accounts/{account_id}/projects/{project_id}/target-groups
   method: get
   operationId: get_list_target_groups
@@ -1980,6 +1958,32 @@ operations:
 - path: /demand/accounts/{account_id}/projects/{project_id}/target-groups/{target_group_id}/changelog
   method: get
   operationId: get_target_group_changelog
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /demand/accounts/{account_id}/projects/{project_id}/batch-jobs/update-target-group-project-managers
+  method: post
+  operationId: create_bulk_update_target_group_project_manager_job
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /demand/accounts/{account_id}/projects/{project_id}/batch-jobs/update-target-group-project-managers/{job_id}
+  method: get
+  operationId: get_bulk_update_target_group_project_manager_job
   x-agentic-access:
     action-class: connected
     consequence: read

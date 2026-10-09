@@ -3,6 +3,17 @@ info:
   title: Launch a Cint Exchange Target Group
   version: 1.0.0
   summary: Create a project and target group, check feasibility, then launch a fielding run.
+  x-realizes-capability-ids:
+  - BC-400.30
+  x-capability-derivation:
+    method: 'deterministic join: sourceDescriptions -> per-tag OpenAPI -> tag/capability edge. No classification at this step.'
+    min_confidence: 0.7
+    sources:
+    - capability_id: BC-400.30
+      capability_name: Market Intelligence Management
+      spec: cint-fielding-api-openapi.yml
+      confidence: 0.7
+    model: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities, CC BY 4.0
 sourceDescriptions:
 - name: feasibilityApi
   url: ../openapi/cint-feasibility-api-openapi.yml
