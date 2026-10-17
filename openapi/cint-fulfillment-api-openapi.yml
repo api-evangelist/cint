@@ -113,22 +113,6 @@ components:
       required: true
       description: "The session ID of the respondent routed to your survey. \nThe ID is passed in the URL path as a parameter and is of type UUID4.\n"
   schemas:
-    respondent_fillfilment_transition_request:
-      title: Respondent Fulfillment Transition Request
-      type: object
-      description: Provides information on the transition request of a respondent's status.
-      properties:
-        id:
-          type: string
-          example: 6780395e-94fa-1eb7-612c-d2e19af42758
-          description: The session ID (RID) of the respondent.
-        status:
-          type: integer
-          example: 5
-          description: The status to which the respondent is being transitioned.
-      required:
-      - id
-      - status
     respondent_fillfilment_transition_result:
       title: Respondent fulfillment session id transition result
       type: object
@@ -161,6 +145,22 @@ components:
               href:
                 type: string
                 example: https://goo.gl/forms/yukKhXoZOxzw8p2w2?&fedResponseID=6780395e-94fa-1eb7-612c-d2e19af42758
+    respondent_fillfilment_transition_request:
+      title: Respondent Fulfillment Transition Request
+      type: object
+      description: Provides information on the transition request of a respondent's status.
+      properties:
+        id:
+          type: string
+          example: 6780395e-94fa-1eb7-612c-d2e19af42758
+          description: The session ID (RID) of the respondent.
+        status:
+          type: integer
+          example: 5
+          description: The status to which the respondent is being transitioned.
+      required:
+      - id
+      - status
   securitySchemes:
     BearerAuth:
       type: http

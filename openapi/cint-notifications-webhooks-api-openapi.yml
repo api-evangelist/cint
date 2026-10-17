@@ -302,6 +302,69 @@ paths:
           $ref: '#/components/responses/Error_Internal'
 components:
   schemas:
+    WebhookUpdatedAt:
+      type: string
+      format: date-time
+      description: The timestamp when the webhook was last updated, in RFC3339 UTC format.
+      example: '2023-01-01T23:05:00.000Z'
+    InvalidParam:
+      type: object
+      description: Describes a single invalid parameter in a request.
+      properties:
+        name:
+          type: string
+          description: The name of the parameter that failed validation.
+        reason:
+          type: string
+          description: A short explanation of why the parameter was invalid.
+      required:
+      - name
+      - reason
+    ETag:
+      type: string
+      description: The `ETag` header provides a unique identifier that represents the current version state of a particular resource.
+      example: W/"1234"
+    AccountID:
+      description: The account's unique identifier.
+      type: integer
+      format: int32
+      example: 101
+    NextCursor:
+      description: 'An identifier for pagination that indicates there are more items available.
+
+        When present, use this value to retrieve the next page of results.
+
+        '
+      type:
+      - string
+      - 'null'
+      example: bff6a669-a469-409d-8c94-dcf92258043a
+    TimeStamp:
+      type: string
+      description: RFC3339 formatted timestamp.
+      format: date-time
+      example: '2023-10-05T14:48:00.000Z'
+    Webhook:
+      type: object
+      description: Contains the details of a webhook subscription, excluding the secret.
+      properties:
+        id:
+          $ref: '#/components/schemas/WebhookID'
+        url:
+          $ref: '#/components/schemas/WebhookURL'
+        events:
+          $ref: '#/components/schemas/WebhookEventTypes'
+        created_at:
+          $ref: '#/components/schemas/WebhookCreatedAt'
+        updated_at:
+          $ref: '#/components/schemas/WebhookUpdatedAt'
+    IdempotencyKey:
+      type: string
+      description: 'A shallow unique ID used as part of the deduplication mechanism for mutable operations.
+
+        We suggest using UUIDv4 or another random string with sufficient entropy to avoid collisions.'
+      maxLength: 255
+      example: 01BTGNYV6HRNK8K8VKZASZCFP0
     WebhookEventsDeliveryStatus:
       type: string
       description: 'Delivery status of the webhook event.
@@ -332,27 +395,6 @@ components:
       - undelivered
       - bounced
       - expired
-    WebhookSecretRegenerated:
-      type: object
-      description: The response object returned when a webhook secret is successfully regenerated.
-      properties:
-        id:
-          $ref: '#/components/schemas/WebhookID'
-        url:
-          $ref: '#/components/schemas/WebhookURL'
-        events:
-          $ref: '#/components/schemas/WebhookEventTypes'
-        secret:
-          $ref: '#/components/schemas/WebhookSecret'
-        created_at:
-          $ref: '#/components/schemas/WebhookCreatedAt'
-        updated_at:
-          $ref: '#/components/schemas/WebhookUpdatedAt'
-    WebhookCreatedAt:
-      type: string
-      format: date-time
-      description: The timestamp when the webhook was created, in RFC3339 UTC format.
-      example: '2023-01-01T23:00:00.000Z'
     WebhooksList:
       type: object
       description: A list of all webhooks for a specific account.
@@ -406,11 +448,6 @@ components:
             type: las_user
         status: delivered
         created_at: 2026-01-23 10:04:44.562205+00:00
-    TimeStamp:
-      type: string
-      description: RFC3339 formatted timestamp.
-      format: date-time
-      example: '2023-10-05T14:48:00.000Z'
     WebhookID:
       type: string
       format: ulid
@@ -441,30 +478,6 @@ components:
           description: An optional field containing a list of invalid parameters may be presented in validation errors for additional information.
           items:
             $ref: '#/components/schemas/InvalidParam'
-    Webhook:
-      type: object
-      description: Contains the details of a webhook subscription, excluding the secret.
-      properties:
-        id:
-          $ref: '#/components/schemas/WebhookID'
-        url:
-          $ref: '#/components/schemas/WebhookURL'
-        events:
-          $ref: '#/components/schemas/WebhookEventTypes'
-        created_at:
-          $ref: '#/components/schemas/WebhookCreatedAt'
-        updated_at:
-          $ref: '#/components/schemas/WebhookUpdatedAt'
-    WebhookURL:
-      type: string
-      format: url
-      description: The HTTPS endpoint where webhook notifications will be sent.
-      example: https://example.com/webhook
-    AccountID:
-      description: The account's unique identifier.
-      type: integer
-      format: int32
-      example: 101
     WebhookEventTypesList:
       type: object
       description: A response containing a list of valid events for webhooks.
@@ -476,19 +489,13 @@ components:
       format: base64
       description: "This is your webhook's secret signing key. You must use it to verify the authenticity and integrity of incoming webhook requests.\n\nEach webhook request includes a `Cint-Signature` header with two components:\n\n- `t` (timestamp): A Unix timestamp representing the time of the webhook call.\n\n- `v1` (signature v1): An HMAC SHA256 hash of the payload, generated by signing it with the secret key.\n\nThe payload used to create the signature is the concatenation of the timestamp (`t`) and the request body, separated\nby a period (`.`). For example:\n\n- Payload: `1732526080.{\"foo\":\"bar\"}`\n\n- Example of `Cint-Signature` header:\n\n```text\nCint-Signature: t=1732526080,v1=6532d4777122acc32cd388763fc0c0ba8732698d09cf99eea086e5a86f8d3ebe\n``` \n\nTo verify the signature, you can use the following CLI command:\n\n```bash\n$ export PAYLOAD='1732526080.{\"foo\":\"bar\"}'\n$ export SECRET=FP7UPZpATKBcYJj4va95PYud+a3gCidRERiLO+9MoFE=\n$ echo -n $PAYLOAD | openssl dgst -sha256 -hmac $SECRET\n# => (stdin)= 6532d4777122acc32cd388763fc0c0ba8732698d09cf99eea086e5a86f8d3ebe\n```\n"
       example: FP7UPZpATKBcYJj4va95PYud+a3gCidRERiLO+9MoFE=
-    InvalidParam:
-      type: object
-      description: Describes a single invalid parameter in a request.
-      properties:
-        name:
-          type: string
-          description: The name of the parameter that failed validation.
-        reason:
-          type: string
-          description: A short explanation of why the parameter was invalid.
-      required:
-      - name
-      - reason
+    WebhookEventType:
+      type: string
+      description: Name of the event type that is valid for a webhook type notification.
+      enum:
+      - target-group-updated
+      - quota-fill-registered
+      - session-updated
     WebhookEventTypes:
       type: array
       description: An array of webhook event type names.
@@ -497,32 +504,32 @@ components:
       example:
       - target-group-updated
       - quota-fill-registered
-    WebhookEventType:
-      type: string
-      description: Name of the event type that is valid for a webhook type notification.
-      enum:
-      - target-group-updated
-      - quota-fill-registered
-      - session-updated
-    NextCursor:
-      description: 'An identifier for pagination that indicates there are more items available.
-
-        When present, use this value to retrieve the next page of results.
-
-        '
-      type:
-      - string
-      - 'null'
-      example: bff6a669-a469-409d-8c94-dcf92258043a
-    ETag:
-      type: string
-      description: The `ETag` header provides a unique identifier that represents the current version state of a particular resource.
-      example: W/"1234"
-    WebhookUpdatedAt:
+    WebhookCreatedAt:
       type: string
       format: date-time
-      description: The timestamp when the webhook was last updated, in RFC3339 UTC format.
-      example: '2023-01-01T23:05:00.000Z'
+      description: The timestamp when the webhook was created, in RFC3339 UTC format.
+      example: '2023-01-01T23:00:00.000Z'
+    WebhookSecretRegenerated:
+      type: object
+      description: The response object returned when a webhook secret is successfully regenerated.
+      properties:
+        id:
+          $ref: '#/components/schemas/WebhookID'
+        url:
+          $ref: '#/components/schemas/WebhookURL'
+        events:
+          $ref: '#/components/schemas/WebhookEventTypes'
+        secret:
+          $ref: '#/components/schemas/WebhookSecret'
+        created_at:
+          $ref: '#/components/schemas/WebhookCreatedAt'
+        updated_at:
+          $ref: '#/components/schemas/WebhookUpdatedAt'
+    WebhookURL:
+      type: string
+      format: url
+      description: The HTTPS endpoint where webhook notifications will be sent.
+      example: https://example.com/webhook
     WebhookCreated:
       type: object
       description: The response object returned when a webhook is successfully created.
@@ -539,32 +546,22 @@ components:
           $ref: '#/components/schemas/WebhookCreatedAt'
         updated_at:
           $ref: '#/components/schemas/WebhookUpdatedAt'
-    IdempotencyKey:
-      type: string
-      description: 'A shallow unique ID used as part of the deduplication mechanism for mutable operations.
-
-        We suggest using UUIDv4 or another random string with sufficient entropy to avoid collisions.'
-      maxLength: 255
-      example: 01BTGNYV6HRNK8K8VKZASZCFP0
   parameters:
-    WebhookEventsEndTime:
-      name: end_time
+    WebhookEventsOrder:
+      name: created_at_sort_order
       in: query
-      description: 'End time for retrieving webhook events. If not provided,
+      description: 'Sort order for webhook events based on creation time.
 
-        the current time will be used.
+        Use ''asc'' for ascending order or ''desc'' for descending order.
 
         '
       required: false
       schema:
-        $ref: '#/components/schemas/TimeStamp'
-    WebhookEventsStartTime:
-      name: start_time
-      in: query
-      description: Start time from which to retrieve webhook events.
-      required: true
-      schema:
-        $ref: '#/components/schemas/TimeStamp'
+        type: string
+        enum:
+        - asc
+        - desc
+        default: asc
     WebhookEventsTypes:
       name: type
       in: query
@@ -582,29 +579,6 @@ components:
       explode: true
       schema:
         $ref: '#/components/schemas/WebhookEventTypes'
-    EndBefore:
-      name: end_before
-      in: query
-      description: Returns a list of objects that come before the provided pagination cursor. This is used for navigating to a previous page.
-      schema:
-        type: string
-      example: 7daa40ad-303b-40a2-89df-a9760400cde7
-    IfMatch:
-      name: If-Match
-      description: The ETag value of the resource you intend to update. This is used for optimistic locking to prevent you from accidentally overwriting changes made by someone else. You can get the ETag from a GET request for the resource. The `ETag` value should always be wrapped in double quotes, whether it is part of a weak `ETag` or standalone.
-      in: header
-      schema:
-        type: string
-        format: etag
-        example: W/"1234"
-    PageSize:
-      name: page_size
-      in: query
-      description: A limit on the number of objects to be returned, between 1 and 100.
-      schema:
-        type: integer
-        default: 10
-      example: 15
     WebhookID:
       name: webhook_id
       in: path
@@ -612,21 +586,6 @@ components:
       required: true
       schema:
         $ref: '#/components/schemas/WebhookID'
-    WebhookEventsOrder:
-      name: created_at_sort_order
-      in: query
-      description: 'Sort order for webhook events based on creation time.
-
-        Use ''asc'' for ascending order or ''desc'' for descending order.
-
-        '
-      required: false
-      schema:
-        type: string
-        enum:
-        - asc
-        - desc
-        default: asc
     StartAfter:
       name: start_after
       in: query
@@ -634,6 +593,20 @@ components:
       schema:
         type: string
       example: bff6a669-a469-409d-8c94-dcf92258043a
+    EndBefore:
+      name: end_before
+      in: query
+      description: Returns a list of objects that come before the provided pagination cursor. This is used for navigating to a previous page.
+      schema:
+        type: string
+      example: 7daa40ad-303b-40a2-89df-a9760400cde7
+    AccountID:
+      name: account_id
+      description: The account's unique identifier.
+      in: path
+      required: true
+      schema:
+        $ref: '#/components/schemas/AccountID'
     CintAPIVersion-2025-12-18:
       name: Cint-API-Version
       in: header
@@ -644,13 +617,33 @@ components:
       description: 'This header is MANDATORY for all API requests. The API version format is `YYYY-MM-DD`.
 
         '
-    AccountID:
-      name: account_id
-      description: The account's unique identifier.
-      in: path
-      required: true
+    WebhookEventsEndTime:
+      name: end_time
+      in: query
+      description: 'End time for retrieving webhook events. If not provided,
+
+        the current time will be used.
+
+        '
+      required: false
       schema:
-        $ref: '#/components/schemas/AccountID'
+        $ref: '#/components/schemas/TimeStamp'
+    PageSize:
+      name: page_size
+      in: query
+      description: A limit on the number of objects to be returned, between 1 and 100.
+      schema:
+        type: integer
+        default: 10
+      example: 15
+    IfMatch:
+      name: If-Match
+      description: The ETag value of the resource you intend to update. This is used for optimistic locking to prevent you from accidentally overwriting changes made by someone else. You can get the ETag from a GET request for the resource. The `ETag` value should always be wrapped in double quotes, whether it is part of a weak `ETag` or standalone.
+      in: header
+      schema:
+        type: string
+        format: etag
+        example: W/"1234"
     WebhookEventsDeliveryStatuses:
       name: delivery_status
       in: query
@@ -674,96 +667,31 @@ components:
         type: array
         items:
           $ref: '#/components/schemas/WebhookEventsDeliveryStatus'
-  responses:
-    Error_Internal:
-      description: A request failed due to an internal error.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            id: d94b8bb2-a540-4a91-9c05-2aa3ae9a5e1e
-            object: unexpected_internal_error
-            detail: an internal error has led to the failure of this operation
-    Error_Unauthorized:
-      description: A request is unauthorized.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            id: 1dcf0f40-f0d1-4cf6-8c00-c3d019d32faf
-            object: authorization_error
-            detail: no valid authorization provided for this operation
-    Error_NotFound:
-      description: A requested resource isn't found.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            id: 7a5972ba-0825-4360-b852-fa2430e47034
-            object: not_found_error
-            detail: resource not found
-    WebhookEventsHistory:
-      description: A response containing webhook events history for replay and debugging.
+    WebhookEventsStartTime:
+      name: start_time
+      in: query
+      description: Start time from which to retrieve webhook events.
+      required: true
+      schema:
+        $ref: '#/components/schemas/TimeStamp'
+  requestBodies:
+    WebhookUpdate:
+      description: Update an existing webhook request body.
+      required: true
       content:
         application/json:
           schema:
             type: object
+            description: The updated configuration for an existing webhook. Both fields are optional.
             properties:
+              url:
+                $ref: '#/components/schemas/WebhookURL'
               events:
-                type: array
-                description: A list of webhook events
-                items:
-                  $ref: '#/components/schemas/WebhookEvent'
-              next_cursor:
-                $ref: '#/components/schemas/NextCursor'
-            additionalProperties: false
-    Error_BadRequest:
-      description: A request is not valid and can't be processed.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/WebhookEventTypes'
           example:
-            id: 9e278238-d011-4e05-8327-1ce1d5d26254
-            object: bad_request_error
-            detail: Expected field 'foo' is missing.
-    Error_Forbidden:
-      description: A requested is forbidden.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            id: fe68cdd2-ee87-4dbf-8950-63c5cbca94c7
-            object: authorization_error
-            detail: you don't have the right permissions to perform this operation
-  headers:
-    ETag:
-      description: The `ETag` header provides a unique identifier that represents the current version of a resource. It's used for caching and to prevent concurrent modification issues.
-      required: true
-      schema:
-        $ref: '#/components/schemas/ETag'
-    IdempotencyKey:
-      description: 'A unique key that you can provide to safely retry requests without accidentally performing the same operation twice.
-
-
-        We suggest using a UUID v4 or another random string with sufficient entropy to avoid collisions.
-
-
-        Examples:
-
-        - 96C65204-90C2-4DCB-9393-B8226DD50C76
-
-        - 01BTGNYV6HRNK8K8VKZASZCFP0
-
-        '
-      required: false
-      schema:
-        $ref: '#/components/schemas/IdempotencyKey'
-  requestBodies:
+            url: https://example.com/webhook
+            events:
+            - session-updated
     WebhookCreate:
       description: The request body for creating a new webhook subscription.
       required: true
@@ -784,23 +712,95 @@ components:
             url: https://example.com/webhook
             events:
             - target-group-updated
-    WebhookUpdate:
-      description: Update an existing webhook request body.
-      required: true
+  responses:
+    Error_Unauthorized:
+      description: A request is unauthorized.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            id: 1dcf0f40-f0d1-4cf6-8c00-c3d019d32faf
+            object: authorization_error
+            detail: no valid authorization provided for this operation
+    Error_NotFound:
+      description: A requested resource isn't found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            id: 7a5972ba-0825-4360-b852-fa2430e47034
+            object: not_found_error
+            detail: resource not found
+    Error_BadRequest:
+      description: A request is not valid and can't be processed.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            id: 9e278238-d011-4e05-8327-1ce1d5d26254
+            object: bad_request_error
+            detail: Expected field 'foo' is missing.
+    Error_Internal:
+      description: A request failed due to an internal error.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            id: d94b8bb2-a540-4a91-9c05-2aa3ae9a5e1e
+            object: unexpected_internal_error
+            detail: an internal error has led to the failure of this operation
+    WebhookEventsHistory:
+      description: A response containing webhook events history for replay and debugging.
       content:
         application/json:
           schema:
             type: object
-            description: The updated configuration for an existing webhook. Both fields are optional.
             properties:
-              url:
-                $ref: '#/components/schemas/WebhookURL'
               events:
-                $ref: '#/components/schemas/WebhookEventTypes'
+                type: array
+                description: A list of webhook events
+                items:
+                  $ref: '#/components/schemas/WebhookEvent'
+              next_cursor:
+                $ref: '#/components/schemas/NextCursor'
+            additionalProperties: false
+    Error_Forbidden:
+      description: A requested is forbidden.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
           example:
-            url: https://example.com/webhook
-            events:
-            - session-updated
+            id: fe68cdd2-ee87-4dbf-8950-63c5cbca94c7
+            object: authorization_error
+            detail: you don't have the right permissions to perform this operation
+  headers:
+    IdempotencyKey:
+      description: 'A unique key that you can provide to safely retry requests without accidentally performing the same operation twice.
+
+
+        We suggest using a UUID v4 or another random string with sufficient entropy to avoid collisions.
+
+
+        Examples:
+
+        - 96C65204-90C2-4DCB-9393-B8226DD50C76
+
+        - 01BTGNYV6HRNK8K8VKZASZCFP0
+
+        '
+      required: false
+      schema:
+        $ref: '#/components/schemas/IdempotencyKey'
+    ETag:
+      description: The `ETag` header provides a unique identifier that represents the current version of a resource. It's used for caching and to prevent concurrent modification issues.
+      required: true
+      schema:
+        $ref: '#/components/schemas/ETag'
   securitySchemes:
     BearerAuth:
       type: http
