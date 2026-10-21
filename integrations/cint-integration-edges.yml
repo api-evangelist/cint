@@ -3,6 +3,8 @@ method: searched
 checked:
 - https://vendor-list.consensu.org/v3/vendor-list.json
 - slack/integrations/slack-integration-edges.yml
+- https://www.insightsassociation.org/Membership/Our-Members
+- https://www.insightsassociation.org/cv5/cgi-bin/organizationdll.dll/List
 marketplace_apps: []
 edges:
 - partner_name: IAB Europe TCF Global Vendor List
@@ -55,5 +57,36 @@ edges:
   detected: '2026-10-18'
   detected_by: mirror-platform-listings.py
   category: Slack app
+- partner_name: Insights Association
+  partner: null
+  partner_match: register
+  type: register
+  channel: standard-directory
+  relationship: standard-participant
+  direction: partner-built
+  evidence: https://www.insightsassociation.org/Membership/Our-Members
+  category: market research trade association membership
+  contract_reference:
+    register: Insights Association member organisations (insightsassociation.org/Membership/Our-Members, organizationdll.dll/List)
+    standard: Insights Association Code of Standards
+    spec_file: null
+    role: insights-association-member
+    registered_name: Cint
+    partner_tier: Agency/Supplier
+    register_location: New Orleans, LA
+    matched_domain: cint.com
+    matched_by: domain
+    signal_note: 'participation: member organisation bound by the IA Code of Standards; CIRQ certifications -> certified_products
+      (one per certification type); GDQ Pledge / Privacy Framework are context, never counted'
+    detected_by: sweep-surveys-research.py
+    detected: '2026-10-20'
+    certified_products:
+    - product: ISO 20252 market, opinion and social research (CIRQ-certified)
+      certification: CIRQ/ISO 20252
+      lapsed: false
+    participation_signals:
+    - Privacy Framework
+  detected_by: sweep-surveys-research.py
+  first_seen: '2026-10-20'
 source:
 - slack/integrations/slack-integration-edges.yml
