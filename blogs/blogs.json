@@ -5,12 +5,19 @@
       "source": "https://www.cint.com/blog/",
       "feed_url": "https://www.cint.com/blog/feed/",
       "title": "",
-      "saved": 2,
+      "saved": 0,
       "method": "discovered"
     },
     {
       "source": "https://www.cint.com/feed/",
       "feed_url": "https://www.cint.com/feed/",
+      "title": "",
+      "saved": 0,
+      "method": "feed"
+    },
+    {
+      "source": "https://www.cint.com/blog/feed/",
+      "feed_url": "https://www.cint.com/blog/feed/",
       "title": "",
       "saved": 0,
       "method": "feed"
@@ -23,6 +30,6 @@
       "method": "none"
     }
   ],
-  "post_count": 2,
-  "fetched": "2026-10-10T13:15:00Z"
+  "post_count": 10,
+  "fetched": "2026-10-17T14:53:57Z"
 }
